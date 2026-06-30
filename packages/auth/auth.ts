@@ -17,7 +17,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { admin, magicLink, openAPI, organization, twoFactor } from "better-auth/plugins";
-import { parse as parseCookies } from "cookie";
+import { parseCookie as parseCookies } from "cookie";
 
 import { config } from "./config";
 import { updateSeatsInOrganizationSubscription } from "./lib/organization";
