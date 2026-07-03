@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-03
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.11`, `@ai-sdk/anthropic` to `^4.0.5`, `@ai-sdk/openai` to `^4.0.5`, `@ai-sdk/react` to `^4.0.12`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1078.0`, `@tanstack/react-router` to `^1.170.17`, `@tanstack/react-start` to `^1.168.27`, `@scalar/hono-api-reference` to `^0.11.7`, `lucide-react` to `^1.23.0`, `nuqs` to `^2.9.0`, `recharts` to `^3.9.1`, `nodemailer` to `^9.0.3`, `sharp` to `^0.35.3`, `use-intl` to `^4.13.1`, and `vite` to `^8.1.2`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `@types/node` to `26.1.0`, `turbo` to `^2.10.2`, and `oxlint-tsgolint` to `^0.24.0`.
+
+---
+
 ## 2026-07-01
 
 ### Changed
