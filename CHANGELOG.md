@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-04
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.14`, `@ai-sdk/anthropic` to `^4.0.7`, `@ai-sdk/openai` to `^4.0.7`, `@ai-sdk/react` to `^4.0.15`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1079.0`, `@scalar/hono-api-reference` to `^0.11.8`, `react-email` to `^6.6.6`, and `@react-email/ui` to `^6.6.6`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `vite` to `^8.1.3` and `tsx` to `^4.22.5`.
+
+---
+
 ## 2026-07-03
 
 ### Changed
