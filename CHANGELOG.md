@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-05
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `recharts` to `^3.9.2` and `resend` to `^6.17.1`.
+- **Development dependencies**: Bumped `@shikijs/rehype` to `^4.3.1`, `tsx` to `^4.23.0`, and `turbo` to `^2.10.3`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+---
+
 ## 2026-07-04
 
 ### Changed
