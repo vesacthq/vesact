@@ -17,6 +17,25 @@ import type {
 	WebhookHandler,
 } from "../../types";
 
+function getMetadataString(
+	metadata: Record<string, string | number | boolean | null> | null | undefined,
+	key: string,
+): string | null {
+	const value = metadata?.[key];
+	if (value == null) {
+		return null;
+	}
+
+	return String(value);
+}
+
+function getOptionalMetadataString(
+	metadata: Record<string, string | number | boolean | null> | null | undefined,
+	key: string,
+): string | undefined {
+	return getMetadataString(metadata, key) ?? undefined;
+}
+
 let dodoPaymentsClient: DodoPayments | null = null;
 
 export function getDodoPaymentsClient() {
@@ -175,8 +194,8 @@ export const webhookHandler: WebhookHandler = async (req) => {
 					if (subscription_id) {
 						await createPurchase({
 							subscriptionId: subscription_id,
-							organizationId: metadata?.organization_id || null,
-							userId: metadata?.user_id || null,
+							organizationId: getMetadataString(metadata, "organization_id"),
+							userId: getMetadataString(metadata, "user_id"),
 							customerId: customer?.customer_id || customer?.email,
 							type: "SUBSCRIPTION",
 							priceId,
@@ -184,21 +203,21 @@ export const webhookHandler: WebhookHandler = async (req) => {
 						});
 
 						await setCustomerIdToEntity(customer?.customer_id || customer?.email, {
-							organizationId: metadata?.organization_id,
-							userId: metadata?.user_id,
+							organizationId: getOptionalMetadataString(metadata, "organization_id"),
+							userId: getOptionalMetadataString(metadata, "user_id"),
 						});
 					} else {
 						await createPurchase({
-							organizationId: metadata?.organization_id || null,
-							userId: metadata?.user_id || null,
+							organizationId: getMetadataString(metadata, "organization_id"),
+							userId: getMetadataString(metadata, "user_id"),
 							customerId: customer?.customer_id || customer?.email,
 							type: "ONE_TIME",
 							priceId,
 						});
 
 						await setCustomerIdToEntity(customer?.customer_id || customer?.email, {
-							organizationId: metadata?.organization_id,
-							userId: metadata?.user_id,
+							organizationId: getOptionalMetadataString(metadata, "organization_id"),
+							userId: getOptionalMetadataString(metadata, "user_id"),
 						});
 					}
 					break;
@@ -216,8 +235,8 @@ export const webhookHandler: WebhookHandler = async (req) => {
 
 					await createPurchase({
 						subscriptionId: subscription_id,
-						organizationId: metadata?.organization_id || null,
-						userId: metadata?.user_id || null,
+						organizationId: getMetadataString(metadata, "organization_id"),
+						userId: getMetadataString(metadata, "user_id"),
 						customerId: customer?.customer_id || customer?.email,
 						type: "SUBSCRIPTION",
 						priceId: product_id,
@@ -225,8 +244,8 @@ export const webhookHandler: WebhookHandler = async (req) => {
 					});
 
 					await setCustomerIdToEntity(customer?.customer_id || customer?.email, {
-						organizationId: metadata?.organization_id,
-						userId: metadata?.user_id,
+						organizationId: getOptionalMetadataString(metadata, "organization_id"),
+						userId: getOptionalMetadataString(metadata, "user_id"),
 					});
 					break;
 				}
