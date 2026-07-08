@@ -13,7 +13,9 @@ const CROPPER_TEMPLATE =
 	'<div class="cropper-image-clip">' +
 	'<cropper-image initial-center-size="cover" rotatable scalable skewable translatable></cropper-image>' +
 	"</div>" +
+	'<div class="cropper-shade-clip">' +
 	"<cropper-shade hidden></cropper-shade>" +
+	"</div>" +
 	'<cropper-handle action="select" plain></cropper-handle>' +
 	'<cropper-selection aspect-ratio="1" initial-coverage="1" movable resizable outlined>' +
 	'<cropper-grid role="grid" bordered covered></cropper-grid>' +
@@ -226,7 +228,7 @@ export function CropImageDialog({
 				</DialogHeader>
 				<div
 					ref={cropperContainerRef}
-					className="p-2 [&_.cropper-image-clip]:inset-0 aspect-square w-full overflow-visible [&_.cropper-image-clip]:pointer-events-none [&_.cropper-image-clip]:absolute [&_.cropper-image-clip]:overflow-hidden [&_cropper-canvas]:block [&_cropper-canvas]:aspect-square [&_cropper-canvas]:h-full [&_cropper-canvas]:w-full [&_cropper-canvas]:overflow-visible"
+					className="p-2 [&_.cropper-image-clip]:inset-0 [&_.cropper-shade-clip]:inset-0 relative aspect-square w-full overflow-visible [&_.cropper-image-clip]:pointer-events-none [&_.cropper-image-clip]:absolute [&_.cropper-image-clip]:overflow-hidden [&_.cropper-shade-clip]:pointer-events-none [&_.cropper-shade-clip]:absolute [&_.cropper-shade-clip]:overflow-hidden [&_cropper-canvas]:relative [&_cropper-canvas]:block [&_cropper-canvas]:aspect-square [&_cropper-canvas]:h-full [&_cropper-canvas]:w-full [&_cropper-canvas]:overflow-visible"
 				>
 					{imageSrc && (
 						<img

@@ -12,6 +12,9 @@
 
 ### Changed
 
+- Replaced the separate "Delete avatar" and "Delete logo" text buttons with a trash icon button overlaid on the bottom-right corner of the avatar or organization logo image in account and organization settings.
+- Updated button hover backgrounds to use `color-mix` (current background blended with 5% foreground) instead of opacity-based fades. Added shared `--button-hover-*` theme variables in `tooling/tailwind/theme.css` and applied them across all `Button` variants.
+
 #### Dependencies
 
 - **Production dependencies**: Bumped `ai` to `^7.0.16`, `@ai-sdk/react` to `^4.0.17`, `@orpc/*` to `1.14.7`, `hono` to `^4.12.28`, `dodopayments` to `^2.42.0`, and `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1080.0`.

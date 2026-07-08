@@ -1,9 +1,11 @@
 import { useSession } from "@auth/hooks/use-session";
 import { authClient } from "@repo/auth/client";
 import { Spinner } from "@repo/ui";
+import { Button } from "@repo/ui/components/button";
 import { UserAvatar } from "@shared/components/UserAvatar";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation } from "@tanstack/react-query";
+import { TrashIcon } from "lucide-react";
 import { type HTMLAttributes, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
@@ -12,9 +14,15 @@ import { CropImageDialog } from "./CropImageDialog";
 export function UserAvatarUpload({
 	onSuccess,
 	onError,
+	onDelete,
+	isDeleting,
+	deleteLabel,
 }: {
 	onSuccess: () => void;
 	onError: () => void;
+	onDelete?: () => void;
+	isDeleting?: boolean;
+	deleteLabel?: string;
 }) {
 	const { user, reloadSession } = useSession();
 	const [uploading, setUploading] = useState(false);
@@ -94,6 +102,23 @@ export function UserAvatarUpload({
 					<div className="inset-0 absolute z-20 flex items-center justify-center bg-card/90">
 						<Spinner className="size-6" />
 					</div>
+				)}
+
+				{user.image && onDelete && (
+					<Button
+						variant="secondary"
+						size="icon"
+						className="bottom-0 right-0 size-7 shadow-sm absolute z-10"
+						aria-label={deleteLabel}
+						loading={isDeleting}
+						disabled={isDeleting || uploading}
+						onClick={(event) => {
+							event.stopPropagation();
+							onDelete();
+						}}
+					>
+						<TrashIcon className="size-3.5" />
+					</Button>
 				)}
 			</div>
 

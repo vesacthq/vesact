@@ -89,7 +89,7 @@ function RootError({ error }: { error: Error }) {
 				</Button>
 				<Link
 					to="/"
-					className="h-9 px-4 font-medium text-sm flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-primary/80"
+					className="h-9 px-4 font-medium text-sm flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-[var(--button-hover-primary)]"
 				>
 					Back to home
 				</Link>
@@ -107,7 +107,7 @@ function RootNotFound() {
 			</p>
 			<Link
 				to="/"
-				className="h-9 px-4 font-medium text-sm flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-primary/80"
+				className="h-9 px-4 font-medium text-sm flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-[var(--button-hover-primary)]"
 			>
 				Back to home
 			</Link>
