@@ -128,9 +128,7 @@ export function NotificationCenter({ className }: { className?: string }) {
 					{isLoading ? (
 						<p className="px-3 py-6 text-sm text-center text-muted-foreground">…</p>
 					) : orderedItems.length === 0 ? (
-						<p className="px-3 py-6 text-sm text-center text-muted-foreground">
-							{t("empty")}
-						</p>
+						<p className="px-3 py-6 text-sm text-center text-muted-foreground">{t("empty")}</p>
 					) : (
 						<ul className="space-y-0.5">
 							{orderedItems.map((n) => {
@@ -185,10 +183,7 @@ function NotificationRowBody({
 			<div className="min-w-0 flex-1">
 				<div className="gap-2 flex items-start">
 					{unread ? (
-						<span
-							className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary"
-							aria-hidden
-						/>
+						<span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" aria-hidden />
 					) : (
 						<span className="mt-1.5 h-1.5 w-1.5 shrink-0" aria-hidden />
 					)}

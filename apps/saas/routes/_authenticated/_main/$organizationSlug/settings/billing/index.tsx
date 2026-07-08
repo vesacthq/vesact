@@ -41,9 +41,7 @@ function OrgSettingsBillingPage() {
 
 	return (
 		<div>
-			<h2 className="mb-4 font-semibold text-lg">
-				{t("settings.menu.organization.billing")}
-			</h2>
+			<h2 className="mb-4 font-semibold text-lg">{t("settings.menu.organization.billing")}</h2>
 			<SettingsList>
 				<ActivePlan organizationId={data.id} />
 				<ChangePlan organizationId={data.id} />

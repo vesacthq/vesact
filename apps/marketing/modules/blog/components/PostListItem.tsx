@@ -22,10 +22,7 @@ export function PostListItem({ post }: { post: Post }) {
 			{tags && (
 				<div className="mb-2 gap-2 flex flex-wrap">
 					{tags.map((tag) => (
-						<span
-							key={tag}
-							className="font-semibold text-xs tracking-wider text-primary uppercase"
-						>
+						<span key={tag} className="font-semibold text-xs tracking-wider text-primary uppercase">
 							#{tag}
 						</span>
 					))}
@@ -56,9 +53,7 @@ export function PostListItem({ post }: { post: Post }) {
 				)}
 
 				<div className="mr-0 ml-auto">
-					<p className="text-sm opacity-30">
-						{Intl.DateTimeFormat(locale).format(new Date(date))}
-					</p>
+					<p className="text-sm opacity-30">{Intl.DateTimeFormat(locale).format(new Date(date))}</p>
 				</div>
 			</div>
 		</div>

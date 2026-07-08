@@ -13,9 +13,7 @@ export function HeroSection() {
 			<div className="py-8 md:py-16 relative z-20 container text-center">
 				<div className="mb-4 flex justify-center">
 					<div className="px-3 py-1 font-normal text-sm flex flex-wrap items-center justify-center rounded-full bg-muted p-px text-foreground">
-						<span className="gap-2 font-semibold flex items-center rounded-full">
-							{t("new")}
-						</span>
+						<span className="gap-2 font-semibold flex items-center rounded-full">{t("new")}</span>
 						<span className="ml-1 font-medium block">{t("featureBadge")}</span>
 					</div>
 				</div>
@@ -35,10 +33,7 @@ export function HeroSection() {
 						render={(props) => {
 							const { children: linkChildren, ...rest } = props;
 							return (
-								<a
-									href={config.saasUrl}
-									{...(rest as unknown as ComponentPropsWithoutRef<"a">)}
-								>
+								<a href={config.saasUrl} {...(rest as unknown as ComponentPropsWithoutRef<"a">)}>
 									{linkChildren}
 								</a>
 							);
@@ -54,10 +49,7 @@ export function HeroSection() {
 							render={(props) => {
 								const { children: linkChildren, ...rest } = props;
 								return (
-									<a
-										href={config.docsUrl}
-										{...(rest as unknown as ComponentPropsWithoutRef<"a">)}
-									>
+									<a href={config.docsUrl} {...(rest as unknown as ComponentPropsWithoutRef<"a">)}>
 										{linkChildren}
 									</a>
 								);

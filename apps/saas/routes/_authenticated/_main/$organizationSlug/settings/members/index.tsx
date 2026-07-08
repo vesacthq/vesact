@@ -33,9 +33,7 @@ function OrgSettingsMembersPage() {
 
 	return (
 		<div>
-			<h2 className="mb-4 font-semibold text-lg">
-				{t("settings.menu.organization.members")}
-			</h2>
+			<h2 className="mb-4 font-semibold text-lg">{t("settings.menu.organization.members")}</h2>
 			<InviteMemberForm organizationId={data.id} />
 			<div className="mt-6">
 				<OrganizationMembersBlock organizationId={data.id} />

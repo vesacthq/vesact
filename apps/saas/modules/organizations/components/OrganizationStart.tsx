@@ -67,9 +67,7 @@ export function OrganizationStart() {
 						dataKey="revenue"
 						chartConfig={revenueChartConfig}
 						gradientId="gradientRevenue"
-						tooltipFormatter={(value) =>
-							`$${Intl.NumberFormat("us").format(Number(value))}`
-						}
+						tooltipFormatter={(value) => `$${Intl.NumberFormat("us").format(Number(value))}`}
 					/>
 				</StatsTile>
 				<StatsTile title="Churn" value={0.03} valueFormat="percentage" trend={-0.3}>

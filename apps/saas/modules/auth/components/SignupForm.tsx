@@ -101,9 +101,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 				formApi.setErrorMap({
 					onSubmit: {
 						form: getAuthErrorMessage(
-							e && typeof e === "object" && "code" in e
-								? (e.code as string)
-								: undefined,
+							e && typeof e === "object" && "code" in e ? (e.code as string) : undefined,
 						),
 						fields: {},
 					},
@@ -227,10 +225,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 
 							<div className="gap-2 sm:grid-cols-2 grid grid-cols-1 items-stretch">
 								{Object.keys(oAuthProviders).map((providerId) => (
-									<SocialSigninButton
-										key={providerId}
-										provider={providerId as OAuthProvider}
-									/>
+									<SocialSigninButton key={providerId} provider={providerId as OAuthProvider} />
 								))}
 							</div>
 						</>

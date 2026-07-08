@@ -2,12 +2,16 @@
 
 ## 2026-07-08
 
+### Fixed
+
+- Removed the stale `cropperjs/dist/cropper.css` import from the SaaS app root route. Cropper.js v2 ships its styles inside its web components, and the CSS file no longer exists in the package, which broke the Vite/Rolldown build.
+
 ### Changed
 
 #### Dependencies
 
 - **Production dependencies**: Bumped `ai` to `^7.0.16`, `@ai-sdk/react` to `^4.0.17`, `@orpc/*` to `1.14.7`, `hono` to `^4.12.28`, `dodopayments` to `^2.42.0`, and `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1080.0`.
-- **Development dependencies**: Bumped `vitest` and `@vitest/coverage-v8` to `^4.1.10`, `turbo` to `^2.10.4`, `oxlint` to `1.73.0`, and `oxfmt` to `0.58.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `vitest` and `@vitest/coverage-v8` to `^4.1.10`, `turbo` to `^2.10.4`, `oxlint` to `1.73.0`, and `oxfmt` to `0.58.0`. Reformatted the workspace with the new `oxfmt` version and excluded `tooling/tailwind/tailwind-animate.css` from formatting (its slash-containing custom property names are not parseable by `oxfmt`). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
 
 ---
 

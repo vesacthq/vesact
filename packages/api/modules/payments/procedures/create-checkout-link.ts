@@ -72,9 +72,7 @@ export const createCheckoutLink = protectedProcedure
 			const trialPeriodDays =
 				price && "trialPeriodDays" in price ? price.trialPeriodDays : undefined;
 
-			const organization = organizationId
-				? await getOrganizationById(organizationId)
-				: undefined;
+			const organization = organizationId ? await getOrganizationById(organizationId) : undefined;
 
 			const seats =
 				organization && price && "seatBased" in price && price.seatBased

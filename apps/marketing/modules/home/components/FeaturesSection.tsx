@@ -109,10 +109,7 @@ export function FeaturesSection() {
 						const filteredHighlights = tab.highlights || [];
 						const isReversed = index % 2 === 1;
 						return (
-							<div
-								key={tab.id}
-								className="p-6 md:p-8 lg:p-12 rounded-4xl border bg-card"
-							>
+							<div key={tab.id} className="p-6 md:p-8 lg:p-12 rounded-4xl border bg-card">
 								<div className="gap-8 md:grid-cols-2 grid grid-cols-1 items-center">
 									<div
 										className={cn("flex justify-center", {
@@ -126,12 +123,9 @@ export function FeaturesSection() {
 													alt={tab.title}
 													width={1280}
 													height={720}
-													className={cn(
-														"aspect-video h-auto w-full rounded-xl object-cover",
-														{
-															"border-4": tab.imageBorder,
-														},
-													)}
+													className={cn("aspect-video h-auto w-full rounded-xl object-cover", {
+														"border-4": tab.imageBorder,
+													})}
 												/>
 											</div>
 										)}
@@ -148,9 +142,7 @@ export function FeaturesSection() {
 										</h3>
 
 										{tab.description && (
-											<p className="mt-4 text-foreground/60">
-												{tab.description}
-											</p>
+											<p className="mt-4 text-foreground/60">{tab.description}</p>
 										)}
 
 										{filteredStack?.length > 0 && (
@@ -164,9 +156,7 @@ export function FeaturesSection() {
 														rel="noreferrer"
 													>
 														<tool.icon className="size-6" />
-														<strong className="text-sm block">
-															{tool.title}
-														</strong>
+														<strong className="text-sm block">{tool.title}</strong>
 													</a>
 												))}
 											</div>
@@ -190,9 +180,7 @@ export function FeaturesSection() {
 													<strong className="mt-2 font-medium text-lg block">
 														{highlight.title}
 													</strong>
-													<p className="mt-1 text-sm">
-														{highlight.description}
-													</p>
+													<p className="mt-1 text-sm">{highlight.description}</p>
 												</div>
 											</div>
 										))}

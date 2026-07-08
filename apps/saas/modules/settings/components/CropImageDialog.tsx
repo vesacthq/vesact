@@ -226,7 +226,7 @@ export function CropImageDialog({
 				</DialogHeader>
 				<div
 					ref={cropperContainerRef}
-					className="aspect-square w-full overflow-visible p-2 [&_cropper-canvas]:block [&_cropper-canvas]:aspect-square [&_cropper-canvas]:h-full [&_cropper-canvas]:w-full [&_cropper-canvas]:overflow-visible [&_.cropper-image-clip]:pointer-events-none [&_.cropper-image-clip]:absolute [&_.cropper-image-clip]:inset-0 [&_.cropper-image-clip]:overflow-hidden"
+					className="p-2 [&_.cropper-image-clip]:inset-0 aspect-square w-full overflow-visible [&_.cropper-image-clip]:pointer-events-none [&_.cropper-image-clip]:absolute [&_.cropper-image-clip]:overflow-hidden [&_cropper-canvas]:block [&_cropper-canvas]:aspect-square [&_cropper-canvas]:h-full [&_cropper-canvas]:w-full [&_cropper-canvas]:overflow-visible"
 				>
 					{imageSrc && (
 						<img

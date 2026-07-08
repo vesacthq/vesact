@@ -23,9 +23,7 @@ type MainIndexOrganizations = Awaited<ReturnType<typeof getOrganizationList>>;
 
 export const Route = createFileRoute("/_authenticated/_main/")({
 	loader: async () => {
-		const session = unwrapServerFnResult<MainIndexSession>(
-			await loadSessionForMainIndexRouteFn(),
-		);
+		const session = unwrapServerFnResult<MainIndexSession>(await loadSessionForMainIndexRouteFn());
 
 		if (!session) {
 			throw redirect({ href: "/login" });
@@ -77,10 +75,7 @@ function DashboardHome() {
 }
 
 function unwrapServerFnResult<T>(value: T | { result: T }): T {
-	return value &&
-		typeof value === "object" &&
-		"result" in value &&
-		Object.keys(value).length === 1
+	return value && typeof value === "object" && "result" in value && Object.keys(value).length === 1
 		? value.result
 		: (value as T);
 }

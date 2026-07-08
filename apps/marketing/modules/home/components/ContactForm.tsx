@@ -132,12 +132,7 @@ export function ContactForm() {
 							)}
 						</FormField>
 
-						<Button
-							type="submit"
-							className="w-full"
-							variant="primary"
-							loading={isSubmitting}
-						>
+						<Button type="submit" className="w-full" variant="primary" loading={isSubmitting}>
 							{t("submit")}
 						</Button>
 					</form>

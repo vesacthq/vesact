@@ -63,9 +63,9 @@ describe("listPurchases", () => {
 		await expect(call(listPurchases, { organizationId: "org-1" }, context)).rejects.toThrow(
 			ORPCError,
 		);
-		await expect(
-			call(listPurchases, { organizationId: "org-1" }, context),
-		).rejects.toMatchObject({ code: "FORBIDDEN" });
+		await expect(call(listPurchases, { organizationId: "org-1" }, context)).rejects.toMatchObject({
+			code: "FORBIDDEN",
+		});
 		expect(getPurchasesByOrganizationId).not.toHaveBeenCalled();
 	});
 

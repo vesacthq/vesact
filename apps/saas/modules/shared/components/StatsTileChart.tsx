@@ -26,11 +26,7 @@ export function StatsTileChart({
 }: StatsTileChartProps) {
 	return (
 		<ChartContainer config={chartConfig} className={cn("h-32 w-full", className)}>
-			<AreaChart
-				accessibilityLayer
-				data={data}
-				margin={{ top: 0, right: 5, left: 5, bottom: 20 }}
-			>
+			<AreaChart accessibilityLayer data={data} margin={{ top: 0, right: 5, left: 5, bottom: 20 }}>
 				<defs>
 					<linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
 						<stop offset="0%" stopColor={`var(--color-${dataKey})`} stopOpacity={0.4} />

@@ -65,9 +65,7 @@ export function ForgotPasswordForm() {
 				formApi.setErrorMap({
 					onSubmit: {
 						form: getAuthErrorMessage(
-							e && typeof e === "object" && "code" in e
-								? (e.code as string)
-								: undefined,
+							e && typeof e === "object" && "code" in e ? (e.code as string) : undefined,
 						),
 						fields: {},
 					},
@@ -90,9 +88,7 @@ export function ForgotPasswordForm() {
 				<Alert variant="success">
 					<MailboxIcon />
 					<AlertTitle>{t("auth.forgotPassword.hints.linkSent.title")}</AlertTitle>
-					<AlertDescription>
-						{t("auth.forgotPassword.hints.linkSent.message")}
-					</AlertDescription>
+					<AlertDescription>{t("auth.forgotPassword.hints.linkSent.message")}</AlertDescription>
 				</Alert>
 			) : (
 				<Form form={form}>

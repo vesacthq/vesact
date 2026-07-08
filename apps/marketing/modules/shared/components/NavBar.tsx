@@ -125,10 +125,7 @@ export function NavBar() {
 					)}
 				>
 					<div className="flex flex-1 justify-start">
-						<LocaleLink
-							href="/"
-							className="block hover:no-underline active:no-underline"
-						>
+						<LocaleLink href="/" className="block hover:no-underline active:no-underline">
 							<Logo />
 						</LocaleLink>
 					</div>
@@ -140,9 +137,7 @@ export function NavBar() {
 								href={menuItem.href}
 								className={cn(
 									"px-3 py-2 font-medium text-sm block shrink-0 text-foreground/80",
-									isMenuItemActive(menuItem.href)
-										? "font-bold text-foreground"
-										: "",
+									isMenuItemActive(menuItem.href) ? "font-bold text-foreground" : "",
 								)}
 							>
 								{menuItem.label}
@@ -156,10 +151,7 @@ export function NavBar() {
 							<LocaleSwitch />
 						</Suspense>
 
-						<Sheet
-							open={mobileMenuOpen}
-							onOpenChange={(open) => setMobileMenuOpen(open)}
-						>
+						<Sheet open={mobileMenuOpen} onOpenChange={(open) => setMobileMenuOpen(open)}>
 							<SheetTrigger
 								render={
 									<Button
@@ -182,9 +174,7 @@ export function NavBar() {
 											onClick={handleMobileMenuClose}
 											className={cn(
 												"px-3 py-2 font-medium text-base block shrink-0 text-foreground/80",
-												isMenuItemActive(menuItem.href)
-													? "font-bold text-foreground"
-													: "",
+												isMenuItemActive(menuItem.href) ? "font-bold text-foreground" : "",
 											)}
 										>
 											{menuItem.label}

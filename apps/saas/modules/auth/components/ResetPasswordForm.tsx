@@ -62,9 +62,7 @@ export function ResetPasswordForm() {
 				formApi.setErrorMap({
 					onSubmit: {
 						form: getAuthErrorMessage(
-							e && typeof e === "object" && "code" in e
-								? (e.code as string)
-								: undefined,
+							e && typeof e === "object" && "code" in e ? (e.code as string) : undefined,
 						),
 						fields: {},
 					},

@@ -223,9 +223,7 @@ export const userNotificationPreferences = sqliteTable("user_notification_prefer
 		.primaryKey()
 		.references(() => user.id, { onDelete: "cascade" }),
 	emailNewsletter: integer("emailNewsletter", { mode: "boolean" }).notNull().default(true),
-	emailProductUpdates: integer("emailProductUpdates", { mode: "boolean" })
-		.notNull()
-		.default(true),
+	emailProductUpdates: integer("emailProductUpdates", { mode: "boolean" }).notNull().default(true),
 	emailAccountSecurity: integer("emailAccountSecurity", { mode: "boolean" })
 		.notNull()
 		.default(true),

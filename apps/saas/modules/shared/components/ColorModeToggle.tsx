@@ -82,9 +82,7 @@ export function ColorModeToggle() {
 											props.className,
 											"h-7 w-7 relative z-10 flex items-center justify-center rounded-full transition-colors",
 											"focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none",
-											isActive
-												? "text-foreground"
-												: "text-muted-foreground hover:text-foreground",
+											isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground",
 										)}
 										data-test={`color-mode-toggle-item-${option.value}`}
 										aria-label={`${label} mode`}

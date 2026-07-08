@@ -99,23 +99,15 @@ export function NewsletterSection() {
 													name={field.name}
 													value={field.state.value}
 													onBlur={field.handleBlur}
-													onChange={(e) =>
-														field.handleChange(e.target.value)
-													}
+													onChange={(e) => field.handleChange(e.target.value)}
 												/>
 
-												<Button
-													type="submit"
-													variant="primary"
-													loading={isSubmitting}
-												>
+												<Button type="submit" variant="primary" loading={isSubmitting}>
 													{t("submit")}
 												</Button>
 											</div>
 											{displayError ? (
-												<p className="mt-1 text-xs text-destructive">
-													{displayError}
-												</p>
+												<p className="mt-1 text-xs text-destructive">{displayError}</p>
 											) : null}
 										</>
 									);

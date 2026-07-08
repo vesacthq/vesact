@@ -59,10 +59,7 @@ function AuthenticatedLayout() {
 }
 
 function unwrapServerFnResult<T>(value: T | { result: T }): T {
-	return value &&
-		typeof value === "object" &&
-		"result" in value &&
-		Object.keys(value).length === 1
+	return value && typeof value === "object" && "result" in value && Object.keys(value).length === 1
 		? value.result
 		: (value as T);
 }
