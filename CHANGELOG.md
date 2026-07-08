@@ -2,6 +2,10 @@
 
 ## 2026-07-08
 
+### Changed
+
+- **Dependabot**: Removed the `.github/dependabot.yml` configuration. Dependency updates are now manual or can be automated with AI agent tools such as Cursor Automations or Claude Code Routines. `pnpm-workspace.yaml` still enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ### Fixed
 
 - Removed the stale `cropperjs/dist/cropper.css` import from the SaaS app root route. Cropper.js v2 ships its styles inside its web components, and the CSS file no longer exists in the package, which broke the Vite/Rolldown build.
