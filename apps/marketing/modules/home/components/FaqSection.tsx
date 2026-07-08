@@ -41,15 +41,9 @@ export function FaqSection({ className }: { className?: string }) {
 						<h1 className="font-medium text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight text-foreground">
 							{t("title")}
 						</h1>
-						<p className="text-sm sm:text-lg mt-2 text-foreground/60">
-							{t("description")}
-						</p>
+						<p className="text-sm sm:text-lg mt-2 text-foreground/60">{t("description")}</p>
 					</div>
-					<Accordion
-						className="space-y-2 w-full text-left"
-						defaultValue={[]}
-						multiple={false}
-					>
+					<Accordion className="space-y-2 w-full text-left" defaultValue={[]} multiple={false}>
 						{items.map((item, i) => (
 							<AccordionItem
 								key={`faq-item-${i}`}
@@ -59,9 +53,7 @@ export function FaqSection({ className }: { className?: string }) {
 								<AccordionTrigger className="font-medium text-base text-left hover:no-underline">
 									{item.question}
 								</AccordionTrigger>
-								<AccordionContent className="text-foreground/60">
-									{item.answer}
-								</AccordionContent>
+								<AccordionContent className="text-foreground/60">{item.answer}</AccordionContent>
 							</AccordionItem>
 						))}
 					</Accordion>

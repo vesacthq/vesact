@@ -13,10 +13,7 @@ export function AnalyticsScript() {
 
 	return (
 		<>
-			<script
-				async
-				src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}
-			/>
+			<script async src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`} />
 			<script
 				// biome-ignore lint/security/noDangerouslySetInnerHtml: analytics boot script
 				dangerouslySetInnerHTML={{

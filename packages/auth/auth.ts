@@ -17,7 +17,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { admin, magicLink, openAPI, organization, twoFactor } from "better-auth/plugins";
-import { parse as parseCookies } from "cookie";
+import { parseCookie as parseCookies } from "cookie";
 
 import { config } from "./config";
 import { updateSeatsInOrganizationSubscription } from "./lib/organization";
@@ -124,9 +124,7 @@ export const auth = betterAuth({
 				ctx.path.startsWith("/organization/update")
 			) {
 				const candidateSlug = (
-					ctx.path.startsWith("/organization/update")
-						? ctx.body?.data?.slug
-						: ctx.body?.slug
+					ctx.path.startsWith("/organization/update") ? ctx.body?.data?.slug : ctx.body?.slug
 				) as string | undefined;
 				if (
 					candidateSlug &&
@@ -141,10 +139,7 @@ export const auth = betterAuth({
 				}
 			}
 
-			if (
-				ctx.path.startsWith("/delete-user") ||
-				ctx.path.startsWith("/organization/delete")
-			) {
+			if (ctx.path.startsWith("/delete-user") || ctx.path.startsWith("/organization/delete")) {
 				const userId = ctx.context.session?.session.userId;
 				const { organizationId } = ctx.body;
 
@@ -153,8 +148,7 @@ export const auth = betterAuth({
 						? await getPurchasesByOrganizationId(organizationId)
 						: await getPurchasesByUserId(userId as string);
 					const subscriptions = purchases.filter(
-						(purchase) =>
-							purchase.type === "SUBSCRIPTION" && purchase.subscriptionId !== null,
+						(purchase) => purchase.type === "SUBSCRIPTION" && purchase.subscriptionId !== null,
 					);
 
 					if (subscriptions.length > 0) {

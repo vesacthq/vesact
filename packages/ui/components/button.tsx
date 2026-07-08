@@ -72,13 +72,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
 	}
 
 	return (
-		<button
-			ref={ref}
-			type="button"
-			className={mergedClassName}
-			disabled={isDisabled}
-			{...props}
-		>
+		<button ref={ref} type="button" className={mergedClassName} disabled={isDisabled} {...props}>
 			{loading && <Spinner className="mr-1.5 size-4 text-inherit" />}
 			{children}
 		</button>

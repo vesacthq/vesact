@@ -11,10 +11,7 @@ function AccountSettingsLayout() {
 
 	return (
 		<div>
-			<PageHeader
-				title={t("settings.account.title")}
-				subtitle={t("settings.account.subtitle")}
-			/>
+			<PageHeader title={t("settings.account.title")} subtitle={t("settings.account.subtitle")} />
 			<div className="mt-8">
 				<Outlet />
 			</div>

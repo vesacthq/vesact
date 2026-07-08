@@ -243,11 +243,7 @@ const FormDescription = ({ className, ...props }: React.HTMLAttributes<HTMLParag
 	const { formDescriptionId } = useFormField();
 
 	return (
-		<p
-			id={formDescriptionId}
-			className={cn("text-sm text-foreground/60", className)}
-			{...props}
-		/>
+		<p id={formDescriptionId} className={cn("text-sm text-foreground/60", className)} {...props} />
 	);
 };
 

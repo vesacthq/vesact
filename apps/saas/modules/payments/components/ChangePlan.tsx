@@ -18,11 +18,7 @@ export function ChangePlan({
 			title={t("settings.billing.changePlan.title")}
 			description={t("settings.billing.changePlan.description")}
 		>
-			<PricingTable
-				organizationId={organizationId}
-				userId={userId}
-				activePlanId={activePlanId}
-			/>
+			<PricingTable organizationId={organizationId} userId={userId} activePlanId={activePlanId} />
 		</SettingsItem>
 	);
 }

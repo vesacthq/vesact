@@ -148,12 +148,7 @@ export function OrganizationLogoForm() {
 
 				{activeOrganization.logo && (
 					<div className="flex justify-end">
-						<Button
-							variant="outline"
-							onClick={deleteLogo}
-							loading={isSaving}
-							disabled={isSaving}
-						>
+						<Button variant="outline" onClick={deleteLogo} loading={isSaving} disabled={isSaving}>
 							{t("organizations.settings.logo.delete")}
 						</Button>
 					</div>

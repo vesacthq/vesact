@@ -88,12 +88,7 @@ export function CreateOrganizationForm({ defaultName }: { defaultName?: string }
 						)}
 					</FormField>
 
-					<Button
-						className="mt-6 w-full"
-						type="submit"
-						variant="primary"
-						loading={isSubmitting}
-					>
+					<Button className="mt-6 w-full" type="submit" variant="primary" loading={isSubmitting}>
 						{t("organizations.createForm.submit")}
 					</Button>
 				</form>

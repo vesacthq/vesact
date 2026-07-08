@@ -38,10 +38,7 @@ const AlertTitle = ({
 		return null;
 	}
 	return (
-		<h5
-			className={cn("font-semibold text-sm leading-tight tracking-tight", className)}
-			{...props}
-		>
+		<h5 className={cn("font-semibold text-sm leading-tight tracking-tight", className)} {...props}>
 			{children}
 		</h5>
 	);

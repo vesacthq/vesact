@@ -62,9 +62,7 @@ export function OrganizationInvitationModal({
 
 	return (
 		<div>
-			<h1 className="font-bold text-xl md:text-2xl">
-				{t("organizations.invitationModal.title")}
-			</h1>
+			<h1 className="font-bold text-xl md:text-2xl">{t("organizations.invitationModal.title")}</h1>
 			<p className="mt-1 mb-6 text-foreground/60">
 				{t("organizations.invitationModal.description", {
 					organizationName,

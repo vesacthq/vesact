@@ -32,9 +32,7 @@ function createSitemap() {
 		...uniqueBasePaths(allPosts.filter((post) => post.published)).flatMap((postPath) =>
 			localizedUrls(`/blog/${postPath}`),
 		),
-		...uniqueBasePaths(allLegalPages).flatMap((legalPath) =>
-			localizedUrls(`/legal/${legalPath}`),
-		),
+		...uniqueBasePaths(allLegalPages).flatMap((legalPath) => localizedUrls(`/legal/${legalPath}`)),
 	];
 
 	return [

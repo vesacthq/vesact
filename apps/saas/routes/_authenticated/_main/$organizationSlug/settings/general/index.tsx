@@ -31,9 +31,7 @@ function OrgSettingsGeneralPage() {
 
 	return (
 		<div>
-			<h2 className="mb-4 font-semibold text-lg">
-				{t("settings.menu.organization.general")}
-			</h2>
+			<h2 className="mb-4 font-semibold text-lg">{t("settings.menu.organization.general")}</h2>
 			<SettingsList>
 				<OrganizationLogoForm />
 				<ChangeOrganizationNameForm />

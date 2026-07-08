@@ -69,9 +69,7 @@ export function ChangePasswordForm() {
 							{(field) => (
 								<FormItem>
 									<FormLabel>
-										{t(
-											"settings.account.security.changePassword.currentPassword",
-										)}
+										{t("settings.account.security.changePassword.currentPassword")}
 									</FormLabel>
 									<FormControl>
 										<PasswordInput
@@ -89,9 +87,7 @@ export function ChangePasswordForm() {
 						<FormField name="newPassword">
 							{(field) => (
 								<FormItem>
-									<FormLabel>
-										{t("settings.account.security.changePassword.newPassword")}
-									</FormLabel>
+									<FormLabel>{t("settings.account.security.changePassword.newPassword")}</FormLabel>
 									<FormControl>
 										<PasswordInput
 											name={field.name}

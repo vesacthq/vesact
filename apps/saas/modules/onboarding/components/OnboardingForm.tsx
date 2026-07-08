@@ -52,9 +52,7 @@ export function OnboardingForm() {
 
 	const parsedStep = stepSearchParam ? Number.parseInt(stepSearchParam, 10) : 1;
 	const onboardingStep =
-		Number.isInteger(parsedStep) && parsedStep >= 1 && parsedStep <= steps.length
-			? parsedStep
-			: 1;
+		Number.isInteger(parsedStep) && parsedStep >= 1 && parsedStep <= steps.length ? parsedStep : 1;
 
 	return (
 		<div>

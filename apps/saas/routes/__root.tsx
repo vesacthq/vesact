@@ -19,7 +19,6 @@ import {
 import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 
 import appCss from "./globals.css?url";
-import "cropperjs/dist/cropper.css";
 
 export const Route = createRootRoute({
 	head: () => ({

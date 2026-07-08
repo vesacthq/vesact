@@ -152,9 +152,7 @@ export function PricingSection() {
 						<div className="mb-8 flex justify-center">
 							<Tabs
 								value={interval}
-								onValueChange={(value) =>
-									setBillingInterval(value as "month" | "year")
-								}
+								onValueChange={(value) => setBillingInterval(value as "month" | "year")}
 								data-test="price-table-interval-tabs"
 							>
 								<TabsList className="border-foreground/10">
@@ -176,9 +174,7 @@ export function PricingSection() {
 							const isFree = !plan.prices && !plan.isEnterprise;
 							const price = isFree
 								? undefined
-								: plan.prices?.find(
-										(p) => p.type === "one-time" || p.interval === interval,
-									);
+								: plan.prices?.find((p) => p.type === "one-time" || p.interval === interval);
 							const trialPeriodDays =
 								price && "trialPeriodDays" in price && price.trialPeriodDays
 									? price.trialPeriodDays
@@ -201,9 +197,7 @@ export function PricingSection() {
 									)}
 									<div className="gap-4 flex h-full flex-col justify-between">
 										<div>
-											<h3 className="my-0 font-semibold text-2xl">
-												{plan.title}
-											</h3>
+											<h3 className="my-0 font-semibold text-2xl">{plan.title}</h3>
 											{plan.description && (
 												<div className="prose mt-2 text-sm text-foreground/60">
 													{plan.description}
@@ -213,10 +207,7 @@ export function PricingSection() {
 											{!!plan.features?.length && (
 												<ul className="mt-4 gap-2 text-sm grid list-none">
 													{plan.features.map((feature, key) => (
-														<li
-															key={key}
-															className="flex items-center justify-start"
-														>
+														<li key={key} className="flex items-center justify-start">
 															<CheckIcon className="mr-2 size-4 text-primary" />
 															<span>{feature}</span>
 														</li>
@@ -224,15 +215,14 @@ export function PricingSection() {
 												</ul>
 											)}
 
-											{trialPeriodDays !== undefined &&
-												trialPeriodDays > 0 && (
-													<div className="mt-4 font-medium text-sm flex items-center justify-start text-primary opacity-80">
-														<BadgePercentIcon className="mr-2 size-4" />
-														{t("trialPeriod", {
-															days: trialPeriodDays,
-														})}
-													</div>
-												)}
+											{trialPeriodDays !== undefined && trialPeriodDays > 0 && (
+												<div className="mt-4 font-medium text-sm flex items-center justify-start text-primary opacity-80">
+													<BadgePercentIcon className="mr-2 size-4" />
+													{t("trialPeriod", {
+														days: trialPeriodDays,
+													})}
+												</div>
+											)}
 										</div>
 
 										<div>
@@ -259,10 +249,7 @@ export function PricingSection() {
 													}).format(price.amount)}
 													{price.type === "subscription" && (
 														<span className="font-normal text-xs opacity-60">
-															/
-															{price.interval === "year"
-																? t("year")
-																: t("month")}
+															/{price.interval === "year" ? t("year") : t("month")}
 														</span>
 													)}
 												</strong>
@@ -271,14 +258,9 @@ export function PricingSection() {
 											{plan.to.startsWith("/") ? (
 												<Button
 													className="mt-4 w-full"
-													variant={
-														plan.recommended ? "primary" : "secondary"
-													}
+													variant={plan.recommended ? "primary" : "secondary"}
 													render={(props) => (
-														<LocaleLink
-															href={plan.to}
-															{...(props as Record<string, unknown>)}
-														/>
+														<LocaleLink href={plan.to} {...(props as Record<string, unknown>)} />
 													)}
 												>
 													{plan.cta}
@@ -287,12 +269,9 @@ export function PricingSection() {
 											) : (
 												<Button
 													className="mt-4 w-full"
-													variant={
-														plan.recommended ? "primary" : "secondary"
-													}
+													variant={plan.recommended ? "primary" : "secondary"}
 													render={(props) => {
-														const { children: linkChildren, ...rest } =
-															props;
+														const { children: linkChildren, ...rest } = props;
 														return (
 															<a
 																href={plan.to}

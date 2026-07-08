@@ -119,9 +119,7 @@ export function LoginForm() {
 				formApi.setErrorMap({
 					onSubmit: {
 						form: getAuthErrorMessage(
-							e && typeof e === "object" && "code" in e
-								? (e.code as string)
-								: undefined,
+							e && typeof e === "object" && "code" in e ? (e.code as string) : undefined,
 						),
 						fields: {},
 					},
@@ -214,10 +212,7 @@ export function LoginForm() {
 										<FormItem>
 											<div className="gap-4 flex justify-between">
 												<FormLabel>{t("auth.signup.password")}</FormLabel>
-												<Link
-													to="/forgot-password"
-													className="text-xs text-foreground/60"
-												>
+												<Link to="/forgot-password" className="text-xs text-foreground/60">
 													{t("auth.login.forgotPassword")}
 												</Link>
 											</div>
@@ -230,15 +225,11 @@ export function LoginForm() {
 														autoComplete="current-password"
 														value={field.state.value ?? ""}
 														onBlur={field.handleBlur}
-														onChange={(e) =>
-															field.handleChange(e.target.value)
-														}
+														onChange={(e) => field.handleChange(e.target.value)}
 													/>
 													<button
 														type="button"
-														onClick={() =>
-															setShowPassword(!showPassword)
-														}
+														onClick={() => setShowPassword(!showPassword)}
 														className="inset-y-0 right-0 pr-4 text-xl absolute flex items-center text-primary"
 													>
 														{showPassword ? (
@@ -254,12 +245,7 @@ export function LoginForm() {
 								</FormField>
 							)}
 
-							<Button
-								className="w-full"
-								type="submit"
-								variant="primary"
-								loading={isSubmitting}
-							>
+							<Button className="w-full" type="submit" variant="primary" loading={isSubmitting}>
 								{signinMode === "magic-link"
 									? t("auth.login.sendMagicLink")
 									: t("auth.login.submit")}
@@ -281,10 +267,7 @@ export function LoginForm() {
 								{authConfig.enableSignup &&
 									authConfig.enableSocialLogin &&
 									Object.keys(oAuthProviders).map((providerId) => (
-										<SocialSigninButton
-											key={providerId}
-											provider={providerId as OAuthProvider}
-										/>
+										<SocialSigninButton key={providerId} provider={providerId as OAuthProvider} />
 									))}
 
 								{authConfig.enablePasskeys && (
@@ -303,9 +286,7 @@ export function LoginForm() {
 
 					{authConfig.enableSignup && (
 						<div className="mt-6 text-sm text-center">
-							<span className="text-foreground/60">
-								{t("auth.login.dontHaveAnAccount")}{" "}
-							</span>
+							<span className="text-foreground/60">{t("auth.login.dontHaveAnAccount")} </span>
 							<Link to={withQuery("/signup", search)}>
 								{t("auth.login.createAnAccount")}
 								<ArrowRightIcon className="ml-1 size-4 inline align-middle" />

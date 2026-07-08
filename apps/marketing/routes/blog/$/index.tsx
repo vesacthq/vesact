@@ -95,11 +95,7 @@ function BlogPostPage() {
 			{image && (
 				<div className="mt-6 aspect-video p-4 lg:p-6 relative overflow-hidden rounded-4xl bg-primary/10">
 					<img
-						src={
-							image.startsWith("http")
-								? image
-								: new URL(image, getBaseUrl()).toString()
-						}
+						src={image.startsWith("http") ? image : new URL(image, getBaseUrl()).toString()}
 						alt={title}
 						width={1200}
 						height={630}

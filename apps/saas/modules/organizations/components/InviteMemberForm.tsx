@@ -49,13 +49,9 @@ export function InviteMemberForm({ organizationId }: { organizationId: string })
 					queryKey: fullOrganizationQueryKey(organizationId),
 				});
 
-				toastSuccess(
-					t("organizations.settings.members.inviteMember.notifications.success.title"),
-				);
+				toastSuccess(t("organizations.settings.members.inviteMember.notifications.success.title"));
 			} catch {
-				toastError(
-					t("organizations.settings.members.inviteMember.notifications.error.title"),
-				);
+				toastError(t("organizations.settings.members.inviteMember.notifications.error.title"));
 			}
 		},
 	});
@@ -81,9 +77,7 @@ export function InviteMemberForm({ organizationId }: { organizationId: string })
 							<FormField name="email">
 								{(field) => (
 									<FormItem>
-										<FormLabel>
-											{t("organizations.settings.members.inviteMember.email")}
-										</FormLabel>
+										<FormLabel>{t("organizations.settings.members.inviteMember.email")}</FormLabel>
 										<FormControl>
 											<Input
 												type="email"
@@ -102,9 +96,7 @@ export function InviteMemberForm({ organizationId }: { organizationId: string })
 							<FormField name="role">
 								{(field) => (
 									<FormItem>
-										<FormLabel>
-											{t("organizations.settings.members.inviteMember.role")}
-										</FormLabel>
+										<FormLabel>{t("organizations.settings.members.inviteMember.role")}</FormLabel>
 										<FormControl>
 											<OrganizationRoleSelect
 												value={field.state.value}
