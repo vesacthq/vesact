@@ -3,7 +3,6 @@ import { logger } from "@repo/logs";
 import { webhookHandler as paymentsWebhookHandler } from "@repo/payments";
 import { getTrustedOrigins } from "@repo/utils";
 import { Hono } from "hono";
-import type { MiddlewareHandler } from "hono";
 import { cors } from "hono/cors";
 import { logger as honoLogger } from "hono/logger";
 import { secureHeaders } from "hono/secure-headers";
@@ -15,41 +14,6 @@ export { router } from "./orpc/router";
 const allowedOrigins = getTrustedOrigins();
 const isProduction = process.env.NODE_ENV === "production";
 const enableApiDocs = process.env.ENABLE_API_DOCS === "true" || !isProduction;
-
-function createRateLimiter({
-	windowMs,
-	max,
-}: {
-	windowMs: number;
-	max: number;
-}): MiddlewareHandler {
-	const hits = new Map<string, { count: number; resetAt: number }>();
-
-	return async (c, next) => {
-		const now = Date.now();
-		const forwardedFor = c.req.header("x-forwarded-for")?.split(",")[0]?.trim();
-		const key = c.req.header("cf-connecting-ip") ?? forwardedFor ?? "anonymous";
-		const current = hits.get(key);
-
-		if (!current || current.resetAt <= now) {
-			hits.set(key, { count: 1, resetAt: now + windowMs });
-			await next();
-			return;
-		}
-
-		if (current.count >= max) {
-			return c.text("Too many requests", 429, {
-				"Retry-After": Math.ceil((current.resetAt - now) / 1000).toString(),
-			});
-		}
-
-		current.count += 1;
-		await next();
-	};
-}
-
-const authRateLimit = createRateLimiter({ windowMs: 60_000, max: 20 });
-const apiRateLimit = createRateLimiter({ windowMs: 60_000, max: 120 });
 
 export const app = new Hono()
 	.basePath("/api")
@@ -68,9 +32,6 @@ export const app = new Hono()
 	)
 	// Request logger
 	.use(honoLogger((message, ...rest) => logger.log(message, ...rest)))
-	.use("/auth/*", authRateLimit)
-	.use("/rpc/*", apiRateLimit)
-	.use("/webhooks/payments", apiRateLimit)
 	// CORS: allow the SaaS app and (optionally) the marketing site.
 	.use(
 		cors({
