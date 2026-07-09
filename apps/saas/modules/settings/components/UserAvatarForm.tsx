@@ -1,7 +1,6 @@
 import { useSession } from "@auth/hooks/use-session";
 import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
-import { Button } from "@repo/ui/components/button";
 import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { useMutation } from "@tanstack/react-query";
@@ -10,7 +9,7 @@ import { UserAvatarUpload } from "./UserAvatarUpload";
 
 export function UserAvatarForm() {
 	const t = useTranslations();
-	const { user, reloadSession } = useSession();
+	const { reloadSession } = useSession();
 	const deleteAvatarMutation = useMutation({
 		mutationFn: async () => {
 			const { error } = await authClient.updateUser({
@@ -35,29 +34,17 @@ export function UserAvatarForm() {
 			title={t("settings.account.avatar.title")}
 			description={t("settings.account.avatar.description")}
 		>
-			<div className="gap-4 flex flex-col">
-				<UserAvatarUpload
-					onSuccess={() => {
-						toastSuccess(t("settings.account.avatar.notifications.success"));
-					}}
-					onError={() => {
-						toastError(t("settings.account.avatar.notifications.error"));
-					}}
-				/>
-
-				{user?.image && (
-					<div className="flex justify-end">
-						<Button
-							variant="outline"
-							onClick={() => deleteAvatarMutation.mutate()}
-							loading={deleteAvatarMutation.isPending}
-							disabled={deleteAvatarMutation.isPending}
-						>
-							{t("settings.account.avatar.delete")}
-						</Button>
-					</div>
-				)}
-			</div>
+			<UserAvatarUpload
+				onSuccess={() => {
+					toastSuccess(t("settings.account.avatar.notifications.success"));
+				}}
+				onError={() => {
+					toastError(t("settings.account.avatar.notifications.error"));
+				}}
+				onDelete={() => deleteAvatarMutation.mutate()}
+				isDeleting={deleteAvatarMutation.isPending}
+				deleteLabel={t("settings.account.avatar.delete")}
+			/>
 		</SettingsItem>
 	);
 }

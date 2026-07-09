@@ -8,6 +8,7 @@ import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { TrashIcon } from "lucide-react";
 import { type HTMLAttributes, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
@@ -127,31 +128,38 @@ export function OrganizationLogoForm() {
 			title={t("organizations.settings.logo.title")}
 			description={t("organizations.settings.logo.description")}
 		>
-			<div className="gap-4 flex flex-col">
-				<div
-					className="size-24 relative rounded-full"
-					{...(getRootProps() as HTMLAttributes<HTMLDivElement>)}
-				>
-					<input {...getInputProps()} />
-					<OrganizationLogo
-						className="size-24 text-xl cursor-pointer"
-						logoUrl={activeOrganization.logo}
-						name={activeOrganization.name ?? ""}
-					/>
+			<div
+				className="size-24 relative rounded-full"
+				{...(getRootProps() as HTMLAttributes<HTMLDivElement>)}
+			>
+				<input {...getInputProps()} />
+				<OrganizationLogo
+					className="size-24 text-xl cursor-pointer"
+					logoUrl={activeOrganization.logo}
+					name={activeOrganization.name ?? ""}
+				/>
 
-					{isSaving && (
-						<div className="inset-0 absolute z-20 flex items-center justify-center bg-card/90">
-							<Spinner />
-						</div>
-					)}
-				</div>
+				{isSaving && (
+					<div className="inset-0 absolute z-20 flex items-center justify-center bg-card/90">
+						<Spinner />
+					</div>
+				)}
 
 				{activeOrganization.logo && (
-					<div className="flex justify-end">
-						<Button variant="outline" onClick={deleteLogo} loading={isSaving} disabled={isSaving}>
-							{t("organizations.settings.logo.delete")}
-						</Button>
-					</div>
+					<Button
+						variant="secondary"
+						size="icon"
+						className="bottom-0 right-0 size-7 shadow-sm absolute z-10"
+						aria-label={t("organizations.settings.logo.delete")}
+						loading={isSaving}
+						disabled={isSaving}
+						onClick={(event) => {
+							event.stopPropagation();
+							void deleteLogo();
+						}}
+					>
+						<TrashIcon className="size-3.5" />
+					</Button>
 				)}
 			</div>
 

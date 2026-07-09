@@ -13,11 +13,22 @@
 
 ## 2026-07-08
 
+### Changed
+
+- **Dependabot**: Removed the `.github/dependabot.yml` configuration. Dependency updates are now manual or can be automated with AI agent tools such as Cursor Automations or Claude Code Routines. `pnpm-workspace.yaml` still enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ### Fixed
 
 - Removed the stale `cropperjs/dist/cropper.css` import from the SaaS app root route. Cropper.js v2 ships its styles inside its web components, and the CSS file no longer exists in the package, which broke the Vite/Rolldown build.
 
+### Removed
+
+- **API rate limiting**: Removed the in-memory API rate limiting middleware from auth, RPC, and payment webhook routes so the API no longer returns 429 responses under load.
+
 ### Changed
+
+- Replaced the separate "Delete avatar" and "Delete logo" text buttons with a trash icon button overlaid on the bottom-right corner of the avatar or organization logo image in account and organization settings.
+- Updated button hover backgrounds to use `color-mix` (current background blended with 5% foreground) instead of opacity-based fades. Added shared `--button-hover-*` theme variables in `tooling/tailwind/theme.css` and applied them across all `Button` variants.
 
 #### Dependencies
 
@@ -37,6 +48,10 @@
 ---
 
 ## 2026-07-06
+
+### Fixed
+
+- **Dodo Payments webhooks**: Coerced webhook metadata values to strings before validation so payment events with non-string metadata are handled reliably.
 
 ### Changed
 

@@ -21,6 +21,10 @@
 		--popover-foreground: var(--color-stone-950);
 		--card: var(--color-white);
 		--card-foreground: var(--color-stone-950);
+		--button-hover-primary: color-mix(in oklab, var(--primary) 95%, var(--foreground) 5%);
+		--button-hover-secondary: color-mix(in oklab, var(--secondary) 95%, var(--foreground) 5%);
+		--button-hover-destructive: color-mix(in oklab, var(--destructive) 95%, var(--foreground) 5%);
+		--button-hover-transparent: color-mix(in oklab, transparent 95%, var(--foreground) 5%);
 		--radius: 0.75rem;
 		--font-sans: "Figtree", sans-serif;
 	}
