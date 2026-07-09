@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-09
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `dodopayments` to `^2.42.1`, `react-email` and `@react-email/ui` to `^6.6.8`, and `fumadocs-core` / `fumadocs-ui` to `16.11.1` and `fumadocs-mdx` to `15.1.0`.
+- **Development dependencies**: Skipped `@ai-sdk/anthropic` `4.0.9`, `ai` `7.0.17`, `@ai-sdk/react` `4.0.18`, and `@aws-sdk/*` `3.1081.0` because they were published within the last 24 hours, and `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+---
+
 ## 2026-07-08
 
 ### Fixed
