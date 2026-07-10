@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-10
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1083.0`, `@scalar/hono-api-reference` to `^0.11.9`, and `resend` to `^6.17.2`. Synced the lockfile for `dodopayments` `^2.42.1`, `react-email` / `@react-email/ui` `^6.6.8`, and `fumadocs-core` / `fumadocs-ui` `16.11.1` and `fumadocs-mdx` `15.1.0`.
+- **Development dependencies**: Bumped `@types/node` to `26.1.1`. Skipped `@ai-sdk/anthropic` `4.0.10`, `ai` `7.0.18`, `@ai-sdk/react` `4.0.19`, and `@aws-sdk/*` `3.1084.0` because they were published within the last 24 hours, and `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+---
+
 ## 2026-07-09
 
 ### Changed

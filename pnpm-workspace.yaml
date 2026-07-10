@@ -10,8 +10,8 @@ catalog:
   "@ai-sdk/anthropic": ^4.0.8
   "@ai-sdk/openai": ^4.0.8
   "@ai-sdk/react": ^4.0.17
-  "@aws-sdk/client-s3": 3.1080.0
-  "@aws-sdk/s3-request-presigner": 3.1080.0
+  "@aws-sdk/client-s3": 3.1083.0
+  "@aws-sdk/s3-request-presigner": 3.1083.0
   "@base-ui/react": ^1.6.0
   "@better-auth/passkey": 1.6.23
   "@bprogress/react": 1.2.7
@@ -23,7 +23,7 @@ catalog:
   "@orpc/tanstack-query": 1.14.7
   "@orpc/zod": 1.14.7
   "@playwright/test": ^1.61.1
-  "@scalar/hono-api-reference": ^0.11.8
+  "@scalar/hono-api-reference": ^0.11.9
   "@shikijs/rehype": ^4.3.1
   "@sindresorhus/slugify": ^3.0.0
   "@tailwindcss/vite": ^4.3.2
@@ -34,7 +34,7 @@ catalog:
   "@tanstack/react-table": ^8.21.3
   "@types/js-cookie": ^3.0.6
   "@types/mdx": ^2.0.14
-  "@types/node": 26.1.0
+  "@types/node": 26.1.1
   "@types/nodemailer": ^8.0.1
   "@types/nprogress": ^0.2.3
   "@types/react": 19.2.17
