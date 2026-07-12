@@ -9,10 +9,10 @@
 		"format": "oxfmt --write"
 	},
 	"dependencies": {
-		"@react-email/ui": "^6.6.9",
+		"@react-email/ui": "^6.7.0",
 		"@repo/mail": "workspace:*",
 		"react": "catalog:",
-		"react-email": "^6.6.9"
+		"react-email": "^6.7.0"
 	},
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",
