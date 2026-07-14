@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-14
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@orpc/*` to `1.14.8`, `hono` to `^4.12.30`, `nanoid` to `^6.0.0`, and `react-dropzone` to `^17.0.0`. Synced the lockfile for catalog upgrades from previous runs. Skipped `typescript` `7.x` (major upgrade pending ecosystem support) and `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `postcss` to `8.5.18` and `tsx` to `^4.23.1`.
+
+---
+
 ## 2026-07-13
 
 ### Changed
