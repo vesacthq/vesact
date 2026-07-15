@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-15
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@tanstack/react-form` to `^1.33.2`, `@tanstack/react-router` to `^1.170.18`, `@tanstack/react-start` to `^1.168.28`, `fumadocs-core` and `fumadocs-ui` to `16.11.4`, `fumadocs-mdx` to `15.1.1`, `react-email` to `^6.8.1`, and `@react-email/ui` to `^6.8.1`. Skipped `ai` `7.0.26`, `@ai-sdk/*` `4.0.13`/`4.0.14`/`4.0.27`, and `@aws-sdk/*` `3.1086.0` because they were published within the last 24 hours, plus `typescript` `7.x` (major upgrade pending ecosystem support) and `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `postcss` to `8.5.19`. Skipped `turbo` `2.10.5` because it was published within the last 24 hours.
+
+---
+
 ## 2026-07-14
 
 ### Changed
