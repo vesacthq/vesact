@@ -512,7 +512,7 @@ export function NavBar() {
 								</Link>
 							</div>
 
-							<NotificationCenter className="md:flex shrink-0 hidden" />
+							<NotificationCenter className="md:flex hidden shrink-0" />
 						</div>
 
 						{authConfig.organizations.enable && !authConfig.organizations.hideOrganization && (
@@ -578,10 +578,10 @@ export function NavBar() {
 				onPointerUp={handleSidebarEdgePointerUp}
 				onClick={handleSidebarEdgeClick}
 				className={cn(
-					"group pointer-events-auto max-md:hidden",
+					"group max-md:hidden pointer-events-auto",
 					"md:absolute md:top-0 md:right-0 md:bottom-0 md:z-50 md:min-h-0",
 					"md:w-4 md:shrink-0 md:translate-x-1/2",
-					"m-0 cursor-col-resize border-0 bg-transparent p-0 outline-none",
+					"m-0 p-0 cursor-col-resize border-0 bg-transparent outline-none",
 				)}
 				aria-label={
 					isCollapsedEffective ? t("app.menu.expandSidebar") : t("app.menu.collapseSidebar")
@@ -589,7 +589,7 @@ export function NavBar() {
 			>
 				<span
 					className={cn(
-						"top-1/2 left-1/2 absolute inline-flex h-7 w-7 -translate-x-1/2 -translate-y-1/2",
+						"h-7 w-7 absolute top-1/2 left-1/2 inline-flex -translate-x-1/2 -translate-y-1/2",
 						"items-center justify-center",
 						"rounded-full border border-border bg-background text-muted-foreground",
 						"shadow-sm",

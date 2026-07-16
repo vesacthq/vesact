@@ -151,7 +151,7 @@ export function LoginForm() {
 	return (
 		<div>
 			<h1 className="font-bold text-xl md:text-2xl text-center">{t("auth.login.title")}</h1>
-			<p className="mt-1 mb-6 text-foreground/60 text-center">{t("auth.login.subtitle")}</p>
+			<p className="mt-1 mb-6 text-center text-foreground/60">{t("auth.login.subtitle")}</p>
 
 			{magicLinkSent ? (
 				<Alert variant="success">

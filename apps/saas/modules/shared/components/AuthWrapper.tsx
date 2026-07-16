@@ -27,11 +27,7 @@ export function AuthWrapper({
 				</div>
 
 				<div className="container flex justify-center">
-					<main
-						className={cn("max-w-md w-full ", contentClass)}
-					>
-						{children}
-					</main>
+					<main className={cn("max-w-md w-full", contentClass)}>{children}</main>
 				</div>
 
 				<Footer />

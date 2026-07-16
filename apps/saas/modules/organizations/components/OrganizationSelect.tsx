@@ -33,7 +33,7 @@ function PersonalAccountIcon({ className }: { className?: string }) {
 	return (
 		<span
 			className={cn(
-				"size-8 shrink-0 flex items-center justify-center rounded-md bg-primary/10 text-primary",
+				"size-8 flex shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary",
 				className,
 			)}
 		>
@@ -90,7 +90,7 @@ export function OrganzationSelect({
 							className={cn("size-8 shrink-0 rounded-md")}
 						/>
 						{!collapsed && (
-							<div className="min-w-0 flex flex-1 flex-col leading-none gap-1">
+							<div className="min-w-0 gap-1 flex flex-1 flex-col leading-none">
 								<span className="text-sm font-semibold leading-4 truncate text-foreground">
 									{activeOrganization.name}
 								</span>

@@ -32,10 +32,7 @@ export function ConnectedAccountsBlock() {
 					const isLinked = isProviderLinked(provider as OAuthProvider);
 
 					return (
-						<div
-							key={provider}
-							className="gap-2 flex items-center justify-between"
-						>
+						<div key={provider} className="gap-2 flex items-center justify-between">
 							<div className="gap-2 flex items-center">
 								<providerData.icon className="size-4 text-primary/50" />
 								<span className="text-sm">{providerData.name}</span>

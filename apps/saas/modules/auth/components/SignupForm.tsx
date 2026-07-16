@@ -124,7 +124,9 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 	return (
 		<div>
 			<h1 className="font-bold text-xl md:text-2xl text-center">{t("auth.signup.title")}</h1>
-			<p className="mt-1 mb-6 text-foreground/60 text-center text-balance">{t("auth.signup.message")}</p>
+			<p className="mt-1 mb-6 text-center text-balance text-foreground/60">
+				{t("auth.signup.message")}
+			</p>
 
 			{isSubmitSuccessful && !invitationOnlyMode ? (
 				<Alert variant="success">

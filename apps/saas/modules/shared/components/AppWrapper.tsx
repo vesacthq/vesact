@@ -16,7 +16,7 @@ function AppContent({ children }: PropsWithChildren) {
 					"md:ml-[80px]": isCollapsed,
 				})}
 			>
-				<main className="md:border-l md:border-t-0 md:overflow-y-auto border-t py-4 h-full w-full">
+				<main className="md:border-l md:border-t-0 md:overflow-y-auto py-4 h-full w-full border-t">
 					<div className="container">{children}</div>
 				</main>
 			</div>
