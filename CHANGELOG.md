@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-16
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.28`, `@ai-sdk/anthropic` to `^4.0.15`, `@ai-sdk/openai` to `^4.0.14`, `@ai-sdk/react` to `^4.0.30`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1087.0`, `openai` to `^6.47.0`, and `autoprefixer` to `10.5.3`. Skipped `typescript` `7.x` (major upgrade pending ecosystem support) and `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `oxlint` to `1.74.0`, `oxfmt` to `0.59.0`, and `turbo` to `^2.10.5`.
+
+---
+
 ## 2026-07-15
 
 ### Changed
