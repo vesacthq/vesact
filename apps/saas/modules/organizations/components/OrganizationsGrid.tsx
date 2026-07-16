@@ -32,7 +32,7 @@ export function OrganizationsGrid() {
 						<OrganizationLogo
 							name={organization.name}
 							logoUrl={organization.logo}
-							className="size-12"
+							className="size-12 rounded-xl"
 						/>
 						<span className="gap-1 text-base leading-tight flex items-center">
 							<span className="font-medium block">{organization.name}</span>

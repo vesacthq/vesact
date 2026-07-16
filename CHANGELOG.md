@@ -2,6 +2,10 @@
 
 ## 2026-07-16
 
+### Fixed
+
+- **Avatar crop dialog**: Contained the Cropper.js canvas and shade inside the dialog so resizing the crop area no longer overflows the modal. The initial crop selection is 95% of the available area so drag handles stay visible by default.
+
 ### Changed
 
 #### Theme and UI
