@@ -32,7 +32,7 @@ const AlertDialogContent = ({
 		<AlertDialogOverlay />
 		<AlertDialogPrimitive.Popup
 			className={cn(
-				"data-[closed]:fade-out-0 data-[open]:fade-in-0 data-[closed]:zoom-out-95 data-[open]:zoom-in-95 data-[closed]:slide-out-to-left-1/2 data-[closed]:slide-out-to-top-[48%] data-[open]:slide-in-from-left-1/2 data-[open]:slide-in-from-top-[48%] max-w-lg gap-4 p-6 shadow-lg data-[closed]:animate-out data-[open]:animate-in sm:rounded-lg fixed top-[50%] left-[50%] z-[100] grid w-full translate-x-[-50%] translate-y-[-50%] border bg-background duration-200",
+				"data-[closed]:fade-out-0 data-[open]:fade-in-0 data-[closed]:zoom-out-95 data-[open]:zoom-in-95 data-[closed]:slide-out-to-left-1/2 data-[closed]:slide-out-to-top-[48%] data-[open]:slide-in-from-left-1/2 data-[open]:slide-in-from-top-[48%] max-w-lg gap-4 p-6 shadow-lg data-[closed]:animate-out data-[open]:animate-in sm:rounded-2xl fixed top-[50%] left-[50%] z-[100] grid w-full translate-x-[-50%] translate-y-[-50%] border bg-card duration-200",
 				className,
 			)}
 			{...props}

@@ -63,7 +63,7 @@ export function ActiveSessionsBlock() {
 			title={t("settings.account.security.activeSessions.title")}
 			description={t("settings.account.security.activeSessions.description")}
 		>
-			<div className="gap-2 grid grid-cols-1">
+			<div className="gap-4 grid grid-cols-1">
 				{isPending ? (
 					<div className="gap-2 flex">
 						<Skeleton className="size-6 shrink-0" />
@@ -75,7 +75,7 @@ export function ActiveSessionsBlock() {
 					</div>
 				) : (
 					sessions?.map((session) => (
-						<div key={session.id} className="gap-4 p-4 flex justify-between rounded-2xl border">
+						<div key={session.id} className="gap-4 flex justify-between">
 							<div className="gap-2 flex">
 								<ComputerIcon className="size-6 shrink-0 text-primary/50" />
 								<div>

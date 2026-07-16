@@ -27,15 +27,12 @@ export function ConnectedAccountsBlock() {
 
 	return (
 		<SettingsItem title={t("settings.account.security.connectedAccounts.title")}>
-			<div className="gap-2 grid grid-cols-1">
+			<div className="gap-4 grid grid-cols-1">
 				{Object.entries(oAuthProviders).map(([provider, providerData]) => {
 					const isLinked = isProviderLinked(provider as OAuthProvider);
 
 					return (
-						<div
-							key={provider}
-							className="gap-2 p-4 flex items-center justify-between rounded-2xl border"
-						>
+						<div key={provider} className="gap-2 flex items-center justify-between">
 							<div className="gap-2 flex items-center">
 								<providerData.icon className="size-4 text-primary/50" />
 								<span className="text-sm">{providerData.name}</span>

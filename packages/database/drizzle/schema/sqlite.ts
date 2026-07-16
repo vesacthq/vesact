@@ -111,6 +111,8 @@ export const twoFactor = sqliteTable("twoFactor", {
 	userId: text("userId")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),
+	failedVerificationCount: integer("failedVerificationCount").default(0),
+	lockedUntil: integer("lockedUntil", { mode: "timestamp" }),
 });
 
 export const organization = sqliteTable(

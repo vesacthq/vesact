@@ -24,11 +24,23 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@repo/ui/components/tooltip";
-import { UserAvatar } from "@shared/components/UserAvatar";
 import { Link, useRouter } from "@tanstack/react-router";
-import { ChevronsUpDownIcon, PlusIcon } from "lucide-react";
+import { ChevronsUpDownIcon, PlusIcon, UserIcon } from "lucide-react";
 
 import { OrganizationLogo } from "./OrganizationLogo";
+
+function PersonalAccountIcon({ className }: { className?: string }) {
+	return (
+		<span
+			className={cn(
+				"size-8 flex shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary",
+				className,
+			)}
+		>
+			<UserIcon className="size-4" />
+		</span>
+	);
+}
 
 export function OrganzationSelect({
 	className,
@@ -59,11 +71,8 @@ export function OrganzationSelect({
 	};
 
 	const triggerClassName = cn(
-		"gap-3 flex w-full items-center justify-between text-left transition-colors outline-none",
-		{
-			"justify-center": collapsed,
-			"p-1 rounded-lg hover:bg-muted/50": collapsed,
-		},
+		"gap-3 flex w-full items-center justify-between rounded-lg border border-border bg-card text-left transition-colors outline-none",
+		collapsed ? "p-1.5 justify-center" : "py-1.5 pr-2.5 pl-1.5",
 	);
 
 	const triggerBody = (
@@ -78,15 +87,15 @@ export function OrganzationSelect({
 						<OrganizationLogo
 							name={activeOrganization.name}
 							logoUrl={activeOrganization.logo}
-							className={cn("size-10 shrink-0 rounded-md")}
+							className={cn("size-8 shrink-0 rounded-md")}
 						/>
 						{!collapsed && (
-							<div className="min-w-0 flex flex-1 flex-col">
-								<span className="text-sm font-semibold truncate text-foreground">
+							<div className="min-w-0 gap-1 flex flex-1 flex-col leading-none">
+								<span className="text-sm font-semibold leading-4 truncate text-foreground">
 									{activeOrganization.name}
 								</span>
 								{paymentsConfig.billingAttachedTo === "organization" && orgActivePlan && (
-									<span className="text-xs font-medium truncate text-primary">
+									<span className="text-xs font-medium leading-3 truncate text-primary">
 										{getPlanTitle(orgActivePlan.id)}
 									</span>
 								)}
@@ -95,18 +104,14 @@ export function OrganzationSelect({
 					</>
 				) : (
 					<>
-						<UserAvatar
-							className={cn("size-10 shrink-0 rounded-md")}
-							name={user.name ?? ""}
-							avatarUrl={user.image}
-						/>
+						<PersonalAccountIcon />
 						{!collapsed && (
-							<div className="min-w-0 flex flex-1 flex-col">
-								<span className="text-sm font-semibold truncate text-foreground">
+							<div className="min-w-0 flex flex-1 flex-col leading-none">
+								<span className="text-sm font-semibold leading-4 truncate text-foreground">
 									{t("organizations.organizationSelect.personalAccount")}
 								</span>
 								{paymentsConfig.billingAttachedTo === "user" && userActivePlan && (
-									<span className="text-xs font-medium truncate text-primary">
+									<span className="text-xs font-medium leading-3 truncate text-primary">
 										{getPlanTitle(userActivePlan.id)}
 									</span>
 								)}
@@ -161,37 +166,32 @@ export function OrganzationSelect({
 	);
 
 	const dropdownContent = (
-		<DropdownMenuContent className="w-full">
+		<DropdownMenuContent
+			side={collapsed ? "right" : "bottom"}
+			align={collapsed ? "start" : "center"}
+			className="w-56 min-w-[var(--anchor-width)]"
+		>
 			{!authConfig.organizations.requireOrganization && (
 				<>
-					<DropdownMenuGroup>
-						<DropdownMenuLabel className="text-xs text-foreground/60">
-							{t("organizations.organizationSelect.personalAccount")}
-						</DropdownMenuLabel>
-						<DropdownMenuRadioGroup
-							value={activeOrganization?.id ?? user.id}
-							onValueChange={async (value: string) => {
-								if (value === user.id) {
-									await setActiveOrganization(null);
-									void router.navigate({ to: "/", replace: true });
-								}
-							}}
+					<DropdownMenuRadioGroup
+						value={activeOrganization?.id ?? user.id}
+						onValueChange={async (value: string) => {
+							if (value === user.id) {
+								await setActiveOrganization(null);
+								void router.navigate({ to: "/", replace: true });
+							}
+						}}
+					>
+						<DropdownMenuRadioItem
+							value={user.id}
+							className="gap-2 pl-3 flex cursor-pointer items-center justify-center"
 						>
-							<DropdownMenuRadioItem
-								value={user.id}
-								className="gap-2 pl-3 flex cursor-pointer items-center justify-center"
-							>
-								<div className="gap-2 flex flex-1 items-center justify-start">
-									<UserAvatar
-										className="size-8 rounded-md"
-										name={user.name ?? ""}
-										avatarUrl={user.image}
-									/>
-									{user.name}
-								</div>
-							</DropdownMenuRadioItem>
-						</DropdownMenuRadioGroup>
-					</DropdownMenuGroup>
+							<div className="gap-2 flex flex-1 items-center justify-start">
+								<PersonalAccountIcon />
+								{t("organizations.organizationSelect.personalAccount")}
+							</div>
+						</DropdownMenuRadioItem>
+					</DropdownMenuRadioGroup>
 					<DropdownMenuSeparator />
 				</>
 			)}
