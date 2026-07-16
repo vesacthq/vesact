@@ -117,6 +117,8 @@ export const twoFactor = mysqlTable("twoFactor", {
 	userId: text("userId")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),
+	failedVerificationCount: int("failedVerificationCount").default(0),
+	lockedUntil: timestamp("lockedUntil"),
 });
 
 export const organization = mysqlTable(

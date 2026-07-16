@@ -59,11 +59,8 @@ export function OrganzationSelect({
 	};
 
 	const triggerClassName = cn(
-		"gap-3 flex w-full items-center justify-between text-left transition-colors outline-none",
-		{
-			"justify-center": collapsed,
-			"p-1 rounded-lg hover:bg-muted/50": collapsed,
-		},
+		"gap-3 flex w-full items-center justify-between rounded-xl border border-border bg-card text-left transition-colors outline-none",
+		collapsed ? "justify-center p-1.5" : "py-1.5 pr-2.5 pl-1.5",
 	);
 
 	const triggerBody = (
@@ -78,7 +75,7 @@ export function OrganzationSelect({
 						<OrganizationLogo
 							name={activeOrganization.name}
 							logoUrl={activeOrganization.logo}
-							className={cn("size-10 shrink-0 rounded-md")}
+							className={cn("size-8 shrink-0 rounded-md")}
 						/>
 						{!collapsed && (
 							<div className="min-w-0 flex flex-1 flex-col">
@@ -96,7 +93,7 @@ export function OrganzationSelect({
 				) : (
 					<>
 						<UserAvatar
-							className={cn("size-10 shrink-0 rounded-md")}
+							className={cn("size-8 shrink-0 rounded-md")}
 							name={user.name ?? ""}
 							avatarUrl={user.image}
 						/>
@@ -161,7 +158,11 @@ export function OrganzationSelect({
 	);
 
 	const dropdownContent = (
-		<DropdownMenuContent className="w-full">
+		<DropdownMenuContent
+			side={collapsed ? "right" : "bottom"}
+			align={collapsed ? "start" : "center"}
+			className="w-56 min-w-[var(--anchor-width)]"
+		>
 			{!authConfig.organizations.requireOrganization && (
 				<>
 					<DropdownMenuGroup>

@@ -33,16 +33,15 @@ import { UserMenu } from "@shared/components/UserMenu";
 import { Link } from "@tanstack/react-router";
 import {
 	BotMessageSquareIcon,
+	ChevronLeftIcon,
 	ChevronRightIcon,
 	HomeIcon,
 	MenuIcon,
-	PanelLeftCloseIcon,
-	PanelLeftOpenIcon,
 	SettingsIcon,
 	ShieldUserIcon,
 	UserCogIcon,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { type MouseEvent, type PointerEvent, useMemo, useRef, useState } from "react";
 
 import { OrganzationSelect } from "../../organizations/components/OrganizationSelect";
 import { useIsMobile } from "../hooks/use-media-query";
@@ -85,9 +84,9 @@ function NavMenuList({
 			<ul className={listClassName}>
 				{menuItems.map((menuItem) => {
 					const parentClasses = cn(
-						"gap-3 px-3 py-2 text-sm flex w-full items-center rounded-lg border border-transparent whitespace-nowrap transition-colors",
+						"gap-3 px-3 py-2 text-sm flex w-full items-center rounded-lg whitespace-nowrap transition-colors",
 						{
-							"font-semibold border-border bg-card": menuItem.isActive,
+							"font-semibold bg-muted": menuItem.isActive,
 							"hover:bg-accent/50": !menuItem.isActive,
 							"md:justify-center md:px-2": isCollapsedEffective,
 						},
@@ -302,9 +301,39 @@ export function NavBar() {
 	const { isCollapsed, toggleCollapsed } = useSidebar();
 	const isMobile = useIsMobile();
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+	/** Avoid double-toggle when a pointer gesture fires both `pointerup` and `click`. */
+	const skipClickAfterPointerRef = useRef(false);
 
 	// Never use collapsed style on mobile - always show expanded
 	const isCollapsedEffective = isCollapsed && !isMobile;
+
+	function handleSidebarEdgePointerDown(event: PointerEvent<HTMLButtonElement>) {
+		if (event.button !== 0) {
+			return;
+		}
+		event.currentTarget.setPointerCapture(event.pointerId);
+	}
+
+	function handleSidebarEdgePointerUp(event: PointerEvent<HTMLButtonElement>) {
+		if (event.button !== 0) {
+			return;
+		}
+		const buttonElement = event.currentTarget;
+		if (buttonElement.hasPointerCapture(event.pointerId)) {
+			buttonElement.releasePointerCapture(event.pointerId);
+		}
+		skipClickAfterPointerRef.current = true;
+		toggleCollapsed();
+	}
+
+	function handleSidebarEdgeClick(event: MouseEvent<HTMLButtonElement>) {
+		if (skipClickAfterPointerRef.current) {
+			event.preventDefault();
+			skipClickAfterPointerRef.current = false;
+			return;
+		}
+		toggleCollapsed();
+	}
 
 	const basePath = activeOrganization ? `/${activeOrganization.slug}` : "";
 	/** Home for the current context: org dashboard or `/` when no org is selected. */
@@ -479,31 +508,11 @@ export function NavBar() {
 									</SheetContent>
 								</Sheet>
 								<Link to="/" className="block shrink-0">
-									<Logo withLabel={false} />
+									<Logo withLabel={!isCollapsedEffective} />
 								</Link>
 							</div>
 
-							<div
-								className={cn(
-									"md:flex gap-2 hidden items-center",
-									isCollapsedEffective ? "flex-col" : "flex-row",
-								)}
-							>
-								<Button
-									variant="ghost"
-									size="icon"
-									onClick={toggleCollapsed}
-									aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-								>
-									{isCollapsed ? (
-										<PanelLeftOpenIcon className="size-4 opacity-40!" />
-									) : (
-										<PanelLeftCloseIcon className="size-4 opacity-40!" />
-									)}
-								</Button>
-
-								<NotificationCenter className="shrink-0" />
-							</div>
+							<NotificationCenter className="md:flex shrink-0 hidden" />
 						</div>
 
 						{authConfig.organizations.enable && !authConfig.organizations.hideOrganization && (
@@ -516,7 +525,7 @@ export function NavBar() {
 
 								<OrganzationSelect
 									className={cn(
-										isCollapsedEffective ? "md:mt-2" : "md:mt-3 md:mb-1.5",
+										isCollapsedEffective ? "md:mt-2" : "md:mt-3",
 										isCollapsedEffective && "md:flex md:justify-center",
 									)}
 									collapsed={isCollapsedEffective}
@@ -536,7 +545,7 @@ export function NavBar() {
 						menuItems={menuItems}
 						isCollapsedEffective={isCollapsedEffective}
 						listClassName={cn(
-							"md:mx-0 md:my-6 md:flex md:flex-col md:flex-nowrap md:items-stretch md:gap-1 md:px-0 md:overflow-visible hidden list-none",
+							"md:mx-0 md:mt-3 md:mb-6 md:flex md:flex-col md:flex-nowrap md:items-stretch md:gap-1 md:px-0 md:overflow-visible hidden list-none",
 							isCollapsedEffective && "md:items-center",
 						)}
 					/>
@@ -558,6 +567,46 @@ export function NavBar() {
 					</div>
 				</div>
 			</div>
+
+			{/*
+				Vercel-style: ~8px to each side of the border (16px = w-4) toggles; chip is
+				hidden until the strip is hovered or the control is focused.
+			*/}
+			<button
+				type="button"
+				onPointerDown={handleSidebarEdgePointerDown}
+				onPointerUp={handleSidebarEdgePointerUp}
+				onClick={handleSidebarEdgeClick}
+				className={cn(
+					"group pointer-events-auto max-md:hidden",
+					"md:absolute md:top-0 md:right-0 md:bottom-0 md:z-50 md:min-h-0",
+					"md:w-4 md:shrink-0 md:translate-x-1/2",
+					"m-0 cursor-col-resize border-0 bg-transparent p-0 outline-none",
+				)}
+				aria-label={
+					isCollapsedEffective ? t("app.menu.expandSidebar") : t("app.menu.collapseSidebar")
+				}
+			>
+				<span
+					className={cn(
+						"top-1/2 left-1/2 absolute inline-flex h-7 w-7 -translate-x-1/2 -translate-y-1/2",
+						"items-center justify-center",
+						"rounded-full border border-border bg-background text-muted-foreground",
+						"shadow-sm",
+						"pointer-events-none",
+						"opacity-0 transition-opacity",
+						"group-hover:opacity-100",
+						"group-focus-within:opacity-100",
+					)}
+					aria-hidden
+				>
+					{isCollapsedEffective ? (
+						<ChevronRightIcon className="size-3.5" />
+					) : (
+						<ChevronLeftIcon className="size-3.5" />
+					)}
+				</span>
+			</button>
 		</nav>
 	);
 }

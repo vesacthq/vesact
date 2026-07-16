@@ -14,7 +14,7 @@ const DialogOverlay = ({
 }: React.ComponentProps<typeof DialogPrimitive.Backdrop>) => (
 	<DialogPrimitive.Backdrop
 		className={cn(
-			"data-[closed]:fade-out-0 data-[open]:fade-in-0 inset-0 backdrop-blur-xs data-[closed]:animate-out data-[open]:animate-in fixed z-[100] bg-background/80",
+			"data-[closed]:fade-out-0 data-[open]:fade-in-0 inset-0 backdrop-blur-xs data-[closed]:animate-out data-[open]:animate-in fixed z-[100] bg-card",
 			className,
 		)}
 		{...props}
@@ -30,7 +30,7 @@ const DialogContent = ({
 		<DialogOverlay />
 		<DialogPrimitive.Popup
 			className={cn(
-				"data-[closed]:fade-out-0 data-[open]:fade-in-0 data-[closed]:zoom-out-95 data-[open]:zoom-in-95 data-[closed]:slide-out-to-left-1/2 data-[closed]:slide-out-to-top-[48%] data-[open]:slide-in-from-left-1/2 data-[open]:slide-in-from-top-[48%] max-w-lg gap-4 p-6 shadow-lg data-[closed]:animate-out data-[open]:animate-in md:w-full fixed top-[50%] left-[50%] z-[100] grid w-full translate-x-[-50%] translate-y-[-50%] rounded-lg border bg-background duration-200",
+				"data-[closed]:fade-out-0 data-[open]:fade-in-0 data-[closed]:zoom-out-95 data-[open]:zoom-in-95 data-[closed]:slide-out-to-left-1/2 data-[closed]:slide-out-to-top-[48%] data-[open]:slide-in-from-left-1/2 data-[open]:slide-in-from-top-[48%] max-w-lg gap-4 p-6 shadow-lg data-[closed]:animate-out data-[open]:animate-in md:w-full fixed top-[50%] left-[50%] z-[100] grid w-full translate-x-[-50%] translate-y-[-50%] rounded-2xl border bg-background duration-200",
 				className,
 			)}
 			{...props}

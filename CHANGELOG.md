@@ -4,6 +4,31 @@
 
 ### Changed
 
+#### Theme and UI
+
+- **Color tokens**: Switched the shared theme from stone to zinc neutrals, with slate primary accents in light and dark mode (`tooling/tailwind/theme.css`). App font switched to Plus Jakarta Sans.
+- **Buttons**: Hover states use `color-mix` for primary/secondary/destructive via CSS variables, and outline buttons use foreground-based borders and hover fills.
+- **Dialogs and menus**: Alert dialogs use `bg-card` with larger radius; dialogs use `rounded-2xl`; dropdown menus use `rounded-xl`.
+- **Logo**: Slightly smaller default logo mark (`size-8`).
+
+#### SaaS app
+
+- **App shell**: Removed the floating content card. Navbar and main content share the same background and are separated by a border; content padding aligns with the navbar.
+- **Navbar collapse**: Replaced the header toggle with a Vercel-style edge drag strip (hover chip) to expand/collapse the sidebar. Active nav items use a muted background instead of a bordered card. Expanded mode shows the logo label.
+- **Organization select**: Card-styled trigger with tighter padding; dropdown uses a regular width with the trigger as min-width, and opens to the right when the sidebar is collapsed.
+- **User menu**: Dropdown uses a regular width with the trigger as min-width; opens above (expanded), to the right (collapsed desktop), or below and right-aligned (mobile).
+- **Auth screens**: Removed the bordered auth card wrapper; titles and subtitles are centered. Login/signup divider labels use `bg-background`.
+- **Settings**: Simplified active sessions and connected accounts rows (no bordered cards); settings item headers get consistent bottom padding on wide layouts.
+
+#### Marketing
+
+- **Hero**: Dropped the primary-tinted gradient background; hero media frame uses `bg-muted`.
+- **Consent banner**: Allow action uses the primary button variant explicitly.
+
+#### Database
+
+- **Two-factor authentication**: Added `failedVerificationCount` and `lockedUntil` to the PostgreSQL, MySQL, and SQLite Drizzle schemas. Apply with your usual database push/migrate workflow.
+
 #### Dependencies
 
 - **Production dependencies**: Bumped `ai` to `^7.0.28`, `@ai-sdk/anthropic` to `^4.0.15`, `@ai-sdk/openai` to `^4.0.14`, `@ai-sdk/react` to `^4.0.30`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1087.0`, `openai` to `^6.47.0`, and `autoprefixer` to `10.5.3`. Skipped `typescript` `7.x` (major upgrade pending ecosystem support) and `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.

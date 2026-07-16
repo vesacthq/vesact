@@ -81,8 +81,8 @@ export function ForgotPasswordForm() {
 
 	return (
 		<>
-			<h1 className="font-bold text-xl md:text-2xl">{t("auth.forgotPassword.title")}</h1>
-			<p className="mt-1 mb-6 text-foreground/60">{t("auth.forgotPassword.message")} </p>
+			<h1 className="font-bold text-xl md:text-2xl text-center">{t("auth.forgotPassword.title")}</h1>
+			<p className="mt-1 mb-6 text-foreground/60 text-center text-balance">{t("auth.forgotPassword.message")} </p>
 
 			{isSubmitSuccessful ? (
 				<Alert variant="success">
@@ -125,7 +125,7 @@ export function ForgotPasswordForm() {
 							)}
 						</FormField>
 
-						<Button type="submit" loading={isSubmitting}>
+						<Button type="submit" variant="primary" loading={isSubmitting}>
 							{t("auth.forgotPassword.submit")}
 						</Button>
 					</form>

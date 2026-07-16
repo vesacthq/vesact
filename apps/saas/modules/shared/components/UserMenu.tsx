@@ -16,11 +16,13 @@ import { UserAvatar } from "@shared/components/UserAvatar";
 import { Link } from "@tanstack/react-router";
 import { BookIcon, HomeIcon, LogOutIcon, MoreVerticalIcon, SettingsIcon } from "lucide-react";
 
+import { useIsMobile } from "../hooks/use-media-query";
 import { ColorModeToggle } from "./ColorModeToggle";
 
 export function UserMenu({ showUserName }: { showUserName?: boolean }) {
 	const t = useTranslations();
 	const { user } = useSession();
+	const isMobile = useIsMobile();
 
 	const onLogout = async () => {
 		await authClient.signOut({
@@ -40,6 +42,8 @@ export function UserMenu({ showUserName }: { showUserName?: boolean }) {
 	}
 
 	const { name, email, image } = user;
+	const dropdownSide = isMobile ? "bottom" : showUserName ? "top" : "right";
+	const dropdownAlign = isMobile || !showUserName ? "end" : "start";
 
 	return (
 		<DropdownMenu modal={false}>
@@ -69,7 +73,11 @@ export function UserMenu({ showUserName }: { showUserName?: boolean }) {
 				)}
 			/>
 
-			<DropdownMenuContent align="end">
+			<DropdownMenuContent
+				side={dropdownSide}
+				align={dropdownAlign}
+				className="w-56 min-w-[var(--anchor-width)]"
+			>
 				<DropdownMenuGroup>
 					<DropdownMenuLabel>
 						{name}

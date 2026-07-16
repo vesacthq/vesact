@@ -123,8 +123,8 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 
 	return (
 		<div>
-			<h1 className="font-bold text-xl md:text-2xl">{t("auth.signup.title")}</h1>
-			<p className="mt-1 mb-6 text-foreground/60">{t("auth.signup.message")}</p>
+			<h1 className="font-bold text-xl md:text-2xl text-center">{t("auth.signup.title")}</h1>
+			<p className="mt-1 mb-6 text-foreground/60 text-center text-balance">{t("auth.signup.message")}</p>
 
 			{isSubmitSuccessful && !invitationOnlyMode ? (
 				<Alert variant="success">
@@ -218,7 +218,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 						<>
 							<div className="my-6 h-4 relative">
 								<hr className="top-2 relative" />
-								<p className="top-0 h-4 px-2 font-medium text-sm leading-tight absolute left-1/2 mx-auto inline-block -translate-x-1/2 bg-card text-center text-foreground/60">
+								<p className="top-0 h-4 px-2 font-medium text-sm leading-tight absolute left-1/2 mx-auto inline-block -translate-x-1/2 bg-background text-center text-foreground/60">
 									{t("auth.login.continueWith")}
 								</p>
 							</div>

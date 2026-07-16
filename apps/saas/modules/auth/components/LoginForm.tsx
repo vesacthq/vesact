@@ -150,8 +150,8 @@ export function LoginForm() {
 
 	return (
 		<div>
-			<h1 className="font-bold text-xl md:text-2xl">{t("auth.login.title")}</h1>
-			<p className="mt-1 mb-6 text-foreground/60">{t("auth.login.subtitle")}</p>
+			<h1 className="font-bold text-xl md:text-2xl text-center">{t("auth.login.title")}</h1>
+			<p className="mt-1 mb-6 text-foreground/60 text-center">{t("auth.login.subtitle")}</p>
 
 			{magicLinkSent ? (
 				<Alert variant="success">
@@ -258,7 +258,7 @@ export function LoginForm() {
 						<>
 							<div className="my-6 h-4 relative">
 								<hr className="top-2 relative" />
-								<p className="top-0 h-4 px-2 font-medium text-sm leading-tight absolute left-1/2 mx-auto inline-block -translate-x-1/2 bg-card text-center text-foreground/60">
+								<p className="top-0 h-4 px-2 font-medium text-sm leading-tight absolute left-1/2 mx-auto inline-block -translate-x-1/2 bg-background text-center text-foreground/60">
 									{t("auth.login.continueWith")}
 								</p>
 							</div>
