@@ -21,6 +21,7 @@
 - **App shell**: Removed the floating content card. Navbar and main content share the same background and are separated by a border; content padding aligns with the navbar.
 - **Navbar collapse**: Replaced the header toggle with a Vercel-style edge drag strip (hover chip) to expand/collapse the sidebar. Active nav items use a muted background instead of a bordered card. Expanded mode shows the logo label.
 - **Organization select**: Card-styled trigger with tighter padding; dropdown uses a regular width with the trigger as min-width, and opens to the right when the sidebar is collapsed. Plan label line-height is tightened so the trigger height stays stable. Personal account uses a user icon (instead of the profile photo), drops the group title, and shows the “Personal account” label as the row text.
+- **Organization grid**: Organization logos use rounded corners to match the refreshed card styling.
 - **User menu**: Dropdown uses a regular width with the trigger as min-width; opens above (expanded), to the right (collapsed desktop), or below and right-aligned (mobile).
 - **Auth screens**: Removed the bordered auth card wrapper; titles and subtitles are centered. Login/signup divider labels use `bg-background`.
 - **Settings**: Simplified active sessions and connected accounts rows (no bordered cards); settings item headers get consistent bottom padding on wide layouts.
