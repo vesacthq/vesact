@@ -9,7 +9,7 @@ export function HeroSection() {
 	const imageAlt = t("imageAlt");
 
 	return (
-		<div className="relative max-w-full overflow-x-hidden bg-linear-to-t from-background via-primary/5 to-background">
+		<div className="relative max-w-full overflow-x-hidden">
 			<div className="py-8 md:py-16 relative z-20 container text-center">
 				<div className="mb-4 flex justify-center">
 					<div className="px-3 py-1 font-normal text-sm flex flex-wrap items-center justify-center rounded-full bg-muted p-px text-foreground">
@@ -60,7 +60,7 @@ export function HeroSection() {
 					)}
 				</div>
 
-				<div className="mt-12 lg:mt-16 lg:flex-1 p-4 mx-auto rounded-4xl border border-primary/10 bg-primary/5">
+				<div className="mt-12 lg:mt-16 lg:flex-1 p-4 mx-auto rounded-4xl bg-muted">
 					<img
 						src="/images/hero-image.png"
 						alt={imageAlt}

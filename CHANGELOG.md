@@ -2,11 +2,43 @@
 
 ## 2026-07-16
 
+### Fixed
+
+- **Avatar crop dialog**: Contained the Cropper.js canvas and shade inside the dialog so resizing the crop area no longer overflows the modal. The initial crop selection is 95% of the available area so drag handles stay visible by default.
+
 ### Changed
+
+#### Theme and UI
+
+- **Font**: Replaced Figtree with Plus Jakarta Sans in the SaaS and marketing app layouts.
+- **Color tokens**: Switched the shared theme from stone to zinc neutrals, with slate primary accents in light and dark mode (`tooling/tailwind/theme.css`).
+- **Buttons**: Hover states use `color-mix` for primary/secondary/destructive via CSS variables, and outline buttons use foreground-based borders and hover fills.
+- **Dialogs and menus**: Alert dialogs use `bg-card` with larger radius; dialogs use `rounded-2xl`; dropdown menus use `rounded-xl`.
+- **Logo**: Slightly smaller default logo mark (`size-8`).
+
+#### SaaS app
+
+- **App shell**: Removed the floating content card. Navbar and main content share the same background and are separated by a border; content padding aligns with the navbar.
+- **Navbar collapse**: Replaced the header toggle with a Vercel-style edge drag strip (hover chip) to expand/collapse the sidebar. Active nav items use a muted background instead of a bordered card. Expanded mode shows the logo label.
+- **Organization select**: Card-styled trigger with tighter padding; dropdown uses a regular width with the trigger as min-width, and opens to the right when the sidebar is collapsed. Plan label line-height is tightened so the trigger height stays stable. Personal account uses a user icon (instead of the profile photo), drops the group title, and shows the “Personal account” label as the row text.
+- **Organization grid**: Organization logos use rounded corners to match the refreshed card styling.
+- **User menu**: Dropdown uses a regular width with the trigger as min-width; opens above (expanded), to the right (collapsed desktop), or below and right-aligned (mobile).
+- **Auth screens**: Removed the bordered auth card wrapper; titles and subtitles are centered. Login/signup divider labels use `bg-background`.
+- **Settings**: Simplified active sessions and connected accounts rows (no bordered cards); settings item headers get consistent bottom padding on wide layouts.
+
+#### Marketing
+
+- **Hero**: Dropped the primary-tinted gradient background; hero media frame uses `bg-muted`.
+- **Consent banner**: Allow action uses the primary button variant explicitly.
+
+#### Database
+
+- **Two-factor authentication**: Added `failedVerificationCount` and `lockedUntil` to the PostgreSQL, MySQL, and SQLite Drizzle schemas. Apply with your usual database push/migrate workflow.
 
 #### Apps
 
 - **Favicon**: Wired the shared rocket `icon.png` favicon for SaaS, marketing, and docs via `public/icon.png` and root head links (previously unused route assets / missing docs icon).
+
 
 #### Dependencies
 
