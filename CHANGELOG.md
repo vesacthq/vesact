@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-18
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.30`, `@ai-sdk/openai` to `^4.0.15`, `@ai-sdk/react` to `^4.0.33`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1089.0`, `fumadocs-core` and `fumadocs-ui` to `16.11.5`, `fumadocs-mdx` to `15.2.0`, `openai` to `^6.48.0`, `react-email` and `@react-email/ui` to `^6.9.0`, `stripe` to `^22.3.2`, and `@scalar/hono-api-reference` to `^0.11.11`. Skipped `typescript` `7.x` (major upgrade pending ecosystem support) and `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `@tailwindcss/vite` to `^4.3.3`, `autoprefixer` to `10.5.4`, `tailwindcss` to `4.3.3`, `vite` to `^8.1.5`, and `oxlint-tsgolint` to `^0.25.0`.
+
+---
+
 ## 2026-07-16
 
 ### Fixed
