@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-19
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.31`, `@ai-sdk/anthropic` to `^4.0.16`, `@ai-sdk/openai` to `^4.0.16`, `@ai-sdk/react` to `^4.0.34`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1090.0`, `@tanstack/react-start` to `^1.168.30`, and `lucide-react` to `^1.25.0`. Synced the lockfile for catalog upgrades from the previous run (including `fumadocs` 16.11.5/15.2.0, `openai` 6.48.0, `react-email` 6.9.0, `stripe` 22.3.2, `@scalar/hono-api-reference` 0.11.11, `autoprefixer` 10.5.4, `vite` 8.1.5, and `tailwindcss` 4.3.3). Skipped `typescript` `7.x` (major upgrade pending ecosystem support) and `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Synced `oxlint-tsgolint` to `^0.25.0`.
+
+---
+
 ## 2026-07-18
 
 ### Changed
