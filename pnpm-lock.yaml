@@ -157,8 +157,8 @@ catalogs:
       specifier: ^1.49.0
       version: 1.49.0
     hono:
-      specifier: ^4.12.30
-      version: 4.12.30
+      specifier: ^4.12.31
+      version: 4.12.31
     input-otp:
       specifier: ^1.4.2
       version: 1.4.2
@@ -208,8 +208,8 @@ catalogs:
       specifier: 19.2.7
       version: 19.2.7
     react-dropzone:
-      specifier: ^17.0.0
-      version: 17.0.0
+      specifier: ^19.0.2
+      version: 19.0.2
     react-qr-code:
       specifier: ^2.2.0
       version: 2.2.0
@@ -607,7 +607,7 @@ importers:
         version: 1.49.0
       hono:
         specifier: 'catalog:'
-        version: 4.12.30
+        version: 4.12.31
       input-otp:
         specifier: 'catalog:'
         version: 1.4.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -637,7 +637,7 @@ importers:
         version: 19.2.7(react@19.2.7)
       react-dropzone:
         specifier: 'catalog:'
-        version: 17.0.0(react@19.2.7)
+        version: 19.0.2(@types/react@19.2.17)(react@19.2.7)
       react-qr-code:
         specifier: 'catalog:'
         version: 2.2.0(react@19.2.7)
@@ -819,13 +819,13 @@ importers:
         version: link:../utils
       '@scalar/hono-api-reference':
         specifier: 'catalog:'
-        version: 0.11.11(hono@4.12.30)
+        version: 0.11.11(hono@4.12.31)
       cookie:
         specifier: 'catalog:'
         version: 2.0.1
       hono:
         specifier: 'catalog:'
-        version: 4.12.30
+        version: 4.12.31
       nanoid:
         specifier: 'catalog:'
         version: 6.0.0
@@ -5128,9 +5128,9 @@ packages:
   fetchdts@0.1.7:
     resolution: {integrity: sha512-YoZjBdafyLIop9lSxXVI33oLD5kN31q4Td+CasofLLYeLXRFeOsuOw0Uo+XNRi9PZlbfdlN2GmRtm4tCEQ9/KA==}
 
-  file-selector@2.1.2:
-    resolution: {integrity: sha512-QgXo+mXTe8ljeqUFaX3QVHc5osSItJ/Km+xpocx0aSqWGMSCf6qYs/VnzZgS864Pjn5iceMRFigeAV7AfTlaig==}
-    engines: {node: '>= 12'}
+  file-selector@4.0.2:
+    resolution: {integrity: sha512-gG5a3fIH+jVZY3AZeupJBjYnRd65YUTCO26gKhfE24LvmGPmBAx0peyxrjUkX6PhKfTUl9UPi7UYwvDS6RI2Jg==}
+    engines: {node: '>= 20'}
 
   find-up@1.1.2:
     resolution: {integrity: sha512-jvElSjyuo4EMQGoTwo1uJU5pQMwTW5lS1x05zzfJuTIyLR3zwO27LYrxNg+dlvKpGOuGy/MzBdXh80g0ve5+HA==}
@@ -5421,8 +5421,8 @@ packages:
   hastscript@9.0.1:
     resolution: {integrity: sha512-g7df9rMFX/SPi34tyGCyUBREQoKkapwdY/T04Qn9TDWfHhAYt4/I0gMVirzK5wEzeUqIjEB+LXC/ypb7Aqno5w==}
 
-  hono@4.12.30:
-    resolution: {integrity: sha512-emn+JoJjrN9YTpRDS5it/UI2SO9BAE37T6I3d963RxcZ81G9A4pr2SZTEiiaiKbzx+NKRg5BZ89fCL7gCJCUog==}
+  hono@4.12.31:
+    resolution: {integrity: sha512-zJIHFrl6bq3RDd2YusFNCDlM8qUprxKswyi/OPzPyzKDdyBXDqWx8bZlZ7R+saTdSTatUmb3O7K4SspGPaEOQg==}
     engines: {node: '>=16.9.0'}
 
   hookable@6.1.1:
@@ -6473,11 +6473,15 @@ packages:
     peerDependencies:
       react: ^19.2.7
 
-  react-dropzone@17.0.0:
-    resolution: {integrity: sha512-yedj9VzdC/boq15u0XfzWRGX0Mqpb8dxy/TRDqOIFlISl8nhh38R9QKbztyFqxqLMwLdViVtLbXkv6x/b8gP8A==}
+  react-dropzone@19.0.2:
+    resolution: {integrity: sha512-WZI5Dgg2xvmP7WcKWlmTDIDT2C8VTHfe/CEZp5adWG5vzii3tSDdiZAEzBMmYxrAQay7U6lsehF75HlisW6bVQ==}
     engines: {node: '>= 20'}
     peerDependencies:
+      '@types/react': '*'
       react: '>= 18'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
 
   react-email@6.9.0:
     resolution: {integrity: sha512-72jV+VkeeXgNWDycNDn2tIlHFLg4Hevi3pC77g63FAY1+bDgTs4b56jbZfHF1t5d+GVGb02sGS8bOwoptgvI1w==}
@@ -9480,10 +9484,10 @@ snapshots:
 
   '@scalar/helpers@0.9.2': {}
 
-  '@scalar/hono-api-reference@0.11.11(hono@4.12.30)':
+  '@scalar/hono-api-reference@0.11.11(hono@4.12.31)':
     dependencies:
       '@scalar/client-side-rendering': 0.3.4
-      hono: 4.12.30
+      hono: 4.12.31
 
   '@scalar/schemas@0.7.4':
     dependencies:
@@ -11309,9 +11313,7 @@ snapshots:
 
   fetchdts@0.1.7: {}
 
-  file-selector@2.1.2:
-    dependencies:
-      tslib: 2.8.1
+  file-selector@4.0.2: {}
 
   find-up@1.1.2:
     dependencies:
@@ -11653,7 +11655,7 @@ snapshots:
       property-information: 7.2.0
       space-separated-tokens: 2.0.2
 
-  hono@4.12.30: {}
+  hono@4.12.31: {}
 
   hookable@6.1.1: {}
 
@@ -12977,11 +12979,13 @@ snapshots:
       react: 19.2.7
       scheduler: 0.27.0
 
-  react-dropzone@17.0.0(react@19.2.7):
+  react-dropzone@19.0.2(@types/react@19.2.17)(react@19.2.7):
     dependencies:
       attr-accept: 2.2.5
-      file-selector: 2.1.2
+      file-selector: 4.0.2
       react: 19.2.7
+    optionalDependencies:
+      '@types/react': 19.2.17
 
   react-email@6.9.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:

@@ -57,7 +57,7 @@ catalog:
   drizzle-orm: ^0.45.2
   drizzle-zod: 0.8.3
   es-toolkit: ^1.49.0
-  hono: ^4.12.30
+  hono: ^4.12.31
   input-otp: ^1.4.2
   js-cookie: ^3.0.8
   lucide-react: ^1.25.0
@@ -75,7 +75,7 @@ catalog:
   prettier: 3.9.4
   react: 19.2.7
   react-dom: 19.2.7
-  react-dropzone: ^17.0.0
+  react-dropzone: ^19.0.2
   react-qr-code: ^2.2.0
   recharts: ^3.9.2
   sharp: ^0.35.3
