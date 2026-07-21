@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-21
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@tanstack/react-start` to `^1.168.32`, `nuqs` to `^2.9.1`, `postcss` to `8.5.20`, and `react-dropzone` to `^19.1.1`. Skipped `@types/uuid` (deprecated).
+- **Development dependencies**: Upgraded `typescript` to `7.0.2` (major upgrade). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+---
+
 ## 2026-07-20
 
 ### Changed
