@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-23
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.34`, `@ai-sdk/anthropic` to `^4.0.18`, `@ai-sdk/openai` to `^4.0.17`, `@ai-sdk/react` to `^4.0.37`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1092.0`, `@tanstack/react-query` to `^5.101.4`, `postcss` to `8.5.21`, `react` and `react-dom` to `19.2.8`, `use-intl` to `^4.13.3`, and `resend` to `^6.18.0`. Skipped `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `oxlint` to `1.75.0`, `oxfmt` to `0.60.0`, and `oxlint-tsgolint` to `^7.0.2001` (major upgrade).
+
+---
+
 ## 2026-07-22
 
 ### Changed
