@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-25
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.37`, `@ai-sdk/anthropic` to `^4.0.19`, `@ai-sdk/openai` to `^4.0.20`, `@ai-sdk/react` to `^4.0.40`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1094.0`, `better-auth` to `1.6.25`, `@better-auth/passkey` to `1.6.25`, `lucide-react` to `^1.26.0`, `use-intl` to `^4.13.4`, `openai` to `^6.49.0`, `fumadocs-core` / `fumadocs-ui` to `16.12.1`, and `react-email` / `@react-email/ui` to `^6.9.1`. Skipped `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Synced `postcss` to `8.5.22`, `@vitejs/plugin-react` to `^6.0.4`, and `turbo` to `^2.10.6` in the lockfile.
+
+---
+
 ## 2026-07-24
 
 ### Changed
