@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-27
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@ai-sdk/anthropic` to `^4.0.21`, `lucide-react` to `^1.27.0`, and `recharts` to `^3.10.1`. Synced the lockfile to the catalog (including prior bumps for `ai` `^7.0.37`, `@aws-sdk/client-s3` / `@aws-sdk/s3-request-presigner` `3.1095.0`, `better-auth` `1.6.25`, `hono` `^4.12.32`, `dodopayments` `^2.43.0`, `es-toolkit` to `^1.50.0`, `nuqs` `^2.9.2`, `openai` `^6.49.0`, `fumadocs-core` / `fumadocs-ui` `16.12.1`, and `react-email` / `@react-email/ui` `^6.9.1`). Skipped `@types/uuid` (deprecated), `@orpc/*` `1.14.10`, and `turbo` `2.10.7` (published within the one-day `minimumReleaseAge` window). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+---
+
 ## 2026-07-26
 
 ### Changed
