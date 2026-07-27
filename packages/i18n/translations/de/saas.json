@@ -271,11 +271,6 @@
 			"admin": "Administration",
 			"member": "Mitglied",
 			"owner": "Eigentümer",
-			"descriptions": {
-				"admin": "Kann Organisationseinstellungen, Mitglieder, Einladungen und Abrechnung verwalten – gleicher Zugriff wie Eigentümer im Alltag. Weitere Berechtigungen können im Code ergänzt werden.",
-				"member": "Kann den Organisationsbereich nutzen. Kein Zugriff auf Organisationseinstellungen, Mitgliederverwaltung oder Abrechnung.",
-				"owner": "Höchste Stufe: gleiche Verwaltungsrechte wie Admins, plus geschütztes Eigentum. Die Eigentümerrolle kann hier nicht geändert werden; mindestens ein Eigentümer ist erforderlich."
-			},
 			"info": {
 				"description": "Rollen sind nach Zugriffsstufe sortiert (wenig bis viel):",
 				"title": "Rollenberechtigungen"
