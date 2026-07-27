@@ -272,11 +272,6 @@
 			"admin": "Administrateur",
 			"member": "Membre",
 			"owner": "Propriétaire",
-			"descriptions": {
-				"admin": "Peut gérer les paramètres de l'organisation, les membres, les invitations et la facturation — le même accès quotidien que les propriétaires. Vous pouvez étendre les permissions dans le code.",
-				"member": "Peut utiliser l'espace de travail de l'organisation. Pas d'accès aux paramètres, à la gestion des membres ni à la facturation.",
-				"owner": "Niveau d'accès le plus élevé : mêmes permissions de gestion que les administrateurs, avec une propriété protégée. Le rôle de propriétaire ne peut pas être modifié ici et au moins un propriétaire est requis."
-			},
 			"info": {
 				"description": "Les rôles sont classés du moins au plus d'accès :",
 				"title": "Permissions des rôles"

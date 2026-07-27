@@ -272,11 +272,6 @@
 			"admin": "Admin",
 			"member": "Member",
 			"owner": "Owner",
-			"descriptions": {
-				"admin": "Can manage organization settings, members, invitations, and billing—the same day-to-day access as owners. You can extend permissions further in code.",
-				"member": "Can use the organization workspace. Cannot access organization settings, manage members, or billing.",
-				"owner": "Highest access level: same management permissions as admins, with protected ownership. The owner role cannot be changed here, and at least one owner is required."
-			},
 			"info": {
 				"description": "Roles are listed from least to most access:",
 				"title": "Role permissions"

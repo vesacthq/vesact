@@ -16,6 +16,5 @@ export function useOrganizationMemberRoleOptions() {
 	return organizationMemberRoleOrder.map((role) => ({
 		value: role,
 		label: t(`organizations.roles.${role}`),
-		description: t(`organizations.roles.descriptions.${role}`),
 	}));
 }
