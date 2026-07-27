@@ -1,5 +1,48 @@
 # Changelog
 
+## 2026-07-27
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@ai-sdk/anthropic` to `^4.0.21`, `lucide-react` to `^1.27.0`, and `recharts` to `^3.10.1`. Synced the lockfile to the catalog (including prior bumps for `ai` `^7.0.37`, `@aws-sdk/client-s3` / `@aws-sdk/s3-request-presigner` `3.1095.0`, `better-auth` `1.6.25`, `hono` `^4.12.32`, `dodopayments` `^2.43.0`, `es-toolkit` to `^1.50.0`, `nuqs` `^2.9.2`, `openai` `^6.49.0`, `fumadocs-core` / `fumadocs-ui` `16.12.1`, and `react-email` / `@react-email/ui` `^6.9.1`). Skipped `@types/uuid` (deprecated), `@orpc/*` `1.14.10`, and `turbo` `2.10.7` (published within the one-day `minimumReleaseAge` window). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+---
+
+## 2026-07-26
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1095.0`, `hono` to `^4.12.32`, `@ai-sdk/anthropic` to `^4.0.20`, `dodopayments` to `^2.43.0`, `es-toolkit` to `^1.50.0`, and `nuqs` to `^2.9.2`. Synced the lockfile to the catalog (including prior bumps for `ai` `^7.0.37`, `@ai-sdk/openai` `^4.0.20`, `@ai-sdk/react` `^4.0.40`, `better-auth` `1.6.25`, `lucide-react` `^1.26.0`, `use-intl` `^4.13.4`, `openai` `^6.49.0`, `fumadocs-core` / `fumadocs-ui` `16.12.1`, and `react-email` / `@react-email/ui` `^6.9.1`). Skipped `@types/uuid` (deprecated), `@ai-sdk/anthropic` `4.0.21`, and `turbo` `2.10.7` (published within the one-day `minimumReleaseAge` window). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `postcss` to `8.5.23` and `@playwright/test` to `^1.62.0`.
+
+---
+
+## 2026-07-25
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.37`, `@ai-sdk/anthropic` to `^4.0.19`, `@ai-sdk/openai` to `^4.0.20`, `@ai-sdk/react` to `^4.0.40`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1094.0`, `better-auth` to `1.6.25`, `@better-auth/passkey` to `1.6.25`, `lucide-react` to `^1.26.0`, `use-intl` to `^4.13.4`, `openai` to `^6.49.0`, `fumadocs-core` / `fumadocs-ui` to `16.12.1`, and `react-email` / `@react-email/ui` to `^6.9.1`. Skipped `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Synced `postcss` to `8.5.22`, `@vitejs/plugin-react` to `^6.0.4`, and `turbo` to `^2.10.6` in the lockfile.
+
+---
+
+## 2026-07-24
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.35`, `@ai-sdk/openai` to `^4.0.18`, `@ai-sdk/react` to `^4.0.38`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1093.0`, `better-auth` to `1.6.24`, `@better-auth/passkey` to `1.6.24`, `postcss` to `8.5.22`, `fumadocs-core` / `fumadocs-ui` to `16.12.0`, and `@vitejs/plugin-react` to `^6.0.4`. Skipped `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `turbo` to `^2.10.6`.
+
+---
+
 ## 2026-07-23
 
 ### Changed

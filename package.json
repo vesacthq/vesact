@@ -22,7 +22,7 @@
 		"oxfmt": "catalog:",
 		"oxlint": "catalog:",
 		"oxlint-tsgolint": "^7.0.2001",
-		"turbo": "^2.10.5",
+		"turbo": "^2.10.6",
 		"typescript": "catalog:"
 	},
 	"engines": {
