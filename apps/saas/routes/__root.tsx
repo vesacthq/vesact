@@ -6,6 +6,8 @@ import { Button, cn, ThemeProvider, Toaster } from "@repo/ui";
 // Button is used by the error boundary to render a "Try again" action.
 import { ApiClientProvider } from "@shared/components/ApiClientProvider";
 import { ClientProviders } from "@shared/components/ClientProviders";
+import { ConsentBanner } from "@shared/components/ConsentBanner";
+import { ConsentProvider } from "@shared/components/ConsentProvider";
 import {
 	createRootRoute,
 	ErrorComponent,
@@ -67,8 +69,11 @@ function RootLayout() {
 							<SessionProvider>
 								<ClientProviders>
 									<I18nProvider>
-										<Outlet />
-										<Toaster position="top-right" />
+										<ConsentProvider>
+											<Outlet />
+											<ConsentBanner />
+											<Toaster position="top-right" />
+										</ConsentProvider>
 									</I18nProvider>
 								</ClientProviders>
 							</SessionProvider>

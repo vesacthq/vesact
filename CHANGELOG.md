@@ -2,6 +2,12 @@
 
 ## 2026-07-28
 
+### Added
+
+#### Marketing site & SaaS app
+
+- **Consent banner**: Mounted the existing `ConsentProvider` and `ConsentBanner` in both root layouts. The consent choice is now read back from the `consent` cookie on load, so the banner stays hidden after a user allows or declines.
+
 ### Changed
 
 #### Dependencies
