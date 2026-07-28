@@ -1,5 +1,5 @@
 import { ORPCError } from "@orpc/server";
-import { getPurchasesByOrganizationId, getPurchasesByUserId } from "@repo/database";
+import { getPurchasesByOrganizationId, getPurchasesByUserId, PurchaseSchema } from "@repo/database";
 import { getPlanIdByProviderPriceId, getPlanPriceByProviderPriceId } from "@repo/payments";
 import { z } from "zod";
 
@@ -18,6 +18,32 @@ export const listPurchases = protectedProcedure
 		z.object({
 			organizationId: z.string().optional(),
 		}),
+	)
+	.output(
+		z.array(
+			PurchaseSchema.extend({
+				planId: z.string().nullable(),
+				planPrice: z
+					.discriminatedUnion("type", [
+						z.object({
+							type: z.literal("one-time"),
+							amount: z.number(),
+							currency: z.string(),
+							priceId: z.string().optional(),
+						}),
+						z.object({
+							type: z.literal("subscription"),
+							amount: z.number(),
+							currency: z.string(),
+							priceId: z.string().optional(),
+							interval: z.enum(["month", "year"]),
+							seatBased: z.boolean().optional(),
+							trialPeriodDays: z.number().int().nonnegative().optional(),
+						}),
+					])
+					.nullable(),
+			}),
+		),
 	)
 	.handler(async ({ input: { organizationId }, context: { user } }) => {
 		if (organizationId) {

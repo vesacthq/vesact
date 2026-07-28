@@ -1,4 +1,4 @@
-import { ORPCError } from "@orpc/client";
+import { ORPCError } from "@orpc/server";
 import { getOrganizationMembership, getPurchaseById } from "@repo/database";
 import { logger } from "@repo/logs";
 import { createCustomerPortalLink as createCustomerPortalLinkFn } from "@repo/payments";
@@ -6,6 +6,7 @@ import { z } from "zod";
 
 import { localeMiddleware } from "../../../orpc/middleware/locale-middleware";
 import { protectedProcedure } from "../../../orpc/procedures";
+import { paymentRedirectUrlSchema } from "../redirect-url";
 
 export const createCustomerPortalLink = protectedProcedure
 	.use(localeMiddleware)
@@ -20,14 +21,19 @@ export const createCustomerPortalLink = protectedProcedure
 	.input(
 		z.object({
 			purchaseId: z.string(),
-			redirectUrl: z.string().optional(),
+			redirectUrl: paymentRedirectUrlSchema,
+		}),
+	)
+	.output(
+		z.object({
+			customerPortalLink: z.url(),
 		}),
 	)
 	.handler(async ({ input: { purchaseId, redirectUrl }, context: { user } }) => {
 		const purchase = await getPurchaseById(purchaseId);
 
 		if (!purchase) {
-			throw new ORPCError("FORBIDDEN");
+			throw new ORPCError("NOT_FOUND");
 		}
 
 		if (purchase.organizationId) {
@@ -36,12 +42,12 @@ export const createCustomerPortalLink = protectedProcedure
 				user.id,
 			);
 			if (userOrganizationMembership?.role !== "owner") {
-				throw new ORPCError("FORBIDDEN");
+				throw new ORPCError("NOT_FOUND");
 			}
 		}
 
 		if (purchase.userId && purchase.userId !== user.id) {
-			throw new ORPCError("FORBIDDEN");
+			throw new ORPCError("NOT_FOUND");
 		}
 
 		try {
@@ -56,8 +62,8 @@ export const createCustomerPortalLink = protectedProcedure
 			}
 
 			return { customerPortalLink };
-		} catch (e) {
-			logger.error("Could not create customer portal link", e);
+		} catch (error) {
+			logger.error("Could not create customer portal link", error);
 			throw new ORPCError("INTERNAL_SERVER_ERROR");
 		}
 	});

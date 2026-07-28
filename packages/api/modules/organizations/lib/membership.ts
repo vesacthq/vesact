@@ -12,3 +12,13 @@ export async function verifyOrganizationMembership(organizationId: string, userI
 		role: membership.role,
 	};
 }
+
+export async function verifyOrganizationBillingManagement(organizationId: string, userId: string) {
+	const membership = await verifyOrganizationMembership(organizationId, userId);
+
+	if (!membership || (membership.role !== "owner" && membership.role !== "admin")) {
+		return null;
+	}
+
+	return membership;
+}

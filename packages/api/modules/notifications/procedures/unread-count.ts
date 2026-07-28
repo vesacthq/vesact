@@ -11,6 +11,11 @@ export const unreadCount = protectedProcedure
 		summary: "Count unread notifications",
 	})
 	.input(z.object({}).optional())
+	.output(
+		z.object({
+			count: z.number().int().nonnegative(),
+		}),
+	)
 	.handler(async ({ context: { user } }) => {
 		const count = await getUnreadNotificationCountByUserId(user.id);
 		return { count };

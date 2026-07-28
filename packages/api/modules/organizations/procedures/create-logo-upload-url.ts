@@ -1,7 +1,7 @@
 import { ORPCError } from "@orpc/server";
 import { getOrganizationById } from "@repo/database";
 import { getSignedUploadUrl } from "@repo/storage";
-import z from "zod";
+import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
 import { verifyOrganizationMembership } from "../lib/membership";
@@ -17,6 +17,12 @@ export const createLogoUploadUrl = protectedProcedure
 	.input(
 		z.object({
 			organizationId: z.string(),
+		}),
+	)
+	.output(
+		z.object({
+			signedUploadUrl: z.url(),
+			path: z.string().min(1),
 		}),
 	)
 	.handler(async ({ context: { user }, input: { organizationId } }) => {

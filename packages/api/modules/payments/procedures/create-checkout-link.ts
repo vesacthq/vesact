@@ -6,13 +6,14 @@ import {
 	findPriceByPlanId,
 	getCustomerIdFromEntity,
 	getProviderPriceIdByPlanId,
-	type PlanId,
+	isPlanId,
 } from "@repo/payments";
 import { z } from "zod";
 
 import { localeMiddleware } from "../../../orpc/middleware/locale-middleware";
 import { protectedProcedure } from "../../../orpc/procedures";
-import { verifyOrganizationMembership } from "../../organizations/lib/membership";
+import { verifyOrganizationBillingManagement } from "../../organizations/lib/membership";
+import { paymentRedirectUrlSchema } from "../redirect-url";
 
 export const createCheckoutLink = protectedProcedure
 	.use(localeMiddleware)
@@ -28,8 +29,13 @@ export const createCheckoutLink = protectedProcedure
 			planId: z.string(),
 			type: z.enum(["one-time", "subscription"]),
 			interval: z.enum(["month", "year"]).optional(),
-			redirectUrl: z.string().optional(),
+			redirectUrl: paymentRedirectUrlSchema,
 			organizationId: z.string().optional(),
+		}),
+	)
+	.output(
+		z.object({
+			checkoutLink: z.url(),
 		}),
 	)
 	.handler(
@@ -37,11 +43,11 @@ export const createCheckoutLink = protectedProcedure
 			input: { planId, redirectUrl, type, interval, organizationId },
 			context: { user },
 		}) => {
-			const membership = organizationId
-				? await verifyOrganizationMembership(organizationId, user.id)
+			const organizationBillingAccess = organizationId
+				? await verifyOrganizationBillingManagement(organizationId, user.id)
 				: null;
 
-			if (organizationId && !membership) {
+			if (organizationId && !organizationBillingAccess) {
 				throw new ORPCError("FORBIDDEN");
 			}
 
@@ -56,11 +62,16 @@ export const createCheckoutLink = protectedProcedure
 			);
 
 			const normalizedType = type === "subscription" ? "subscription" : "one-time";
-			const price = findPriceByPlanId(planId as PlanId, {
+
+			if (!isPlanId(planId)) {
+				throw new ORPCError("NOT_FOUND");
+			}
+
+			const price = findPriceByPlanId(planId, {
 				type: normalizedType,
 				interval,
 			});
-			const priceId = getProviderPriceIdByPlanId(planId as PlanId, {
+			const priceId = getProviderPriceIdByPlanId(planId, {
 				type: normalizedType,
 				interval,
 			});
@@ -97,8 +108,8 @@ export const createCheckoutLink = protectedProcedure
 				}
 
 				return { checkoutLink };
-			} catch (e) {
-				logger.error(e);
+			} catch (error) {
+				logger.error(error);
 				throw new ORPCError("INTERNAL_SERVER_ERROR");
 			}
 		},

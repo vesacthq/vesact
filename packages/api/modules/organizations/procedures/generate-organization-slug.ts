@@ -1,4 +1,4 @@
-import { ORPCError } from "@orpc/client";
+import { ORPCError } from "@orpc/server";
 import { getOrganizationBySlug } from "@repo/database";
 import { nanoid } from "nanoid";
 import slugify from "slugify";
@@ -16,7 +16,12 @@ export const generateOrganizationSlug = publicProcedure
 	})
 	.input(
 		z.object({
-			name: z.string(),
+			name: z.string().trim().min(1).max(100),
+		}),
+	)
+	.output(
+		z.object({
+			slug: z.string().min(1),
 		}),
 	)
 	.handler(async ({ input: { name } }) => {
@@ -27,7 +32,7 @@ export const generateOrganizationSlug = publicProcedure
 		let slug = baseSlug;
 		let hasAvailableSlug = false;
 
-		for (let i = 0; i < 3; i++) {
+		for (let attemptIndex = 0; attemptIndex < 3; attemptIndex++) {
 			const existing = await getOrganizationBySlug(slug);
 
 			if (!existing) {

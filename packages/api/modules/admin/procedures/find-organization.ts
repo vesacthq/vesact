@@ -1,5 +1,10 @@
-import { ORPCError } from "@orpc/client";
-import { getOrganizationById as getOrganizationByIdFn } from "@repo/database";
+import { ORPCError } from "@orpc/server";
+import {
+	getOrganizationById as getOrganizationByIdFn,
+	InvitationSchema,
+	MemberSchema,
+	OrganizationSchema,
+} from "@repo/database";
 import { z } from "zod";
 
 import { adminProcedure } from "../../../orpc/procedures";
@@ -14,6 +19,12 @@ export const findOrganization = adminProcedure
 	.input(
 		z.object({
 			id: z.string(),
+		}),
+	)
+	.output(
+		OrganizationSchema.extend({
+			members: z.array(MemberSchema),
+			invitations: z.array(InvitationSchema),
 		}),
 	)
 	.handler(async ({ input: { id } }) => {

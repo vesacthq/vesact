@@ -1,4 +1,4 @@
-import { countAllOrganizations, getOrganizations } from "@repo/database";
+import { countAllOrganizations, getOrganizations, OrganizationSchema } from "@repo/database";
 import { z } from "zod";
 
 import { adminProcedure } from "../../../orpc/procedures";
@@ -15,6 +15,16 @@ export const listOrganizations = adminProcedure
 			query: z.string().optional(),
 			limit: z.number().min(1).max(100).default(10),
 			offset: z.number().min(0).default(0),
+		}),
+	)
+	.output(
+		z.object({
+			organizations: z.array(
+				OrganizationSchema.extend({
+					membersCount: z.number().int().nonnegative(),
+				}),
+			),
+			total: z.number().int().nonnegative(),
 		}),
 	)
 	.handler(async ({ input: { query, limit, offset } }) => {

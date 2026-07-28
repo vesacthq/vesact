@@ -13,7 +13,19 @@
 
 ## 2026-07-27
 
+### Fixed
+
+#### API
+
+- **Organization billing authorization**: Require organization membership when listing purchases and an owner or administrator role when creating organization checkout sessions. Inaccessible customer portal purchases now return `NOT_FOUND` to prevent resource enumeration.
+- **Payment redirects**: Restrict checkout and customer portal return URLs to the configured SaaS application origin.
+- **AI message validation**: Validate incoming UI messages with the AI SDK before converting them or invoking the model.
+
 ### Changed
+
+#### API
+
+- **Response contracts**: Added explicit, co-located Zod output schemas to source-equivalent oRPC procedures while preserving existing TanStack response shapes.
 
 #### SaaS app
 

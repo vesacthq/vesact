@@ -12,10 +12,15 @@ export const markNotificationsRead = protectedProcedure
 	})
 	.input(
 		z.object({
-			ids: z.array(z.string()).max(100),
+			ids: z.array(z.string()).min(1).max(100),
+		}),
+	)
+	.output(
+		z.object({
+			ok: z.literal(true),
 		}),
 	)
 	.handler(async ({ input: { ids }, context: { user } }) => {
 		await Promise.all(ids.map((id) => markNotificationAsReadById(id, user.id)));
-		return { ok: true as const };
+		return { ok: true };
 	});

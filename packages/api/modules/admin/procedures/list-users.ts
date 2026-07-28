@@ -1,4 +1,4 @@
-import { countAllUsers, getUsers } from "@repo/database";
+import { countAllUsers, getUsers, UserSchema } from "@repo/database";
 import { z } from "zod";
 
 import { adminProcedure } from "../../../orpc/procedures";
@@ -15,6 +15,12 @@ export const listUsers = adminProcedure
 			query: z.string().optional(),
 			limit: z.number().min(1).max(100).default(10),
 			offset: z.number().min(0).default(0),
+		}),
+	)
+	.output(
+		z.object({
+			users: z.array(UserSchema),
+			total: z.number().int().nonnegative(),
 		}),
 	)
 	.handler(async ({ input: { query, limit, offset } }) => {

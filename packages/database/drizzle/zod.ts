@@ -38,4 +38,6 @@ export const VerificationSchema = createSelectSchema(verification);
 export const PasskeySchema = createSelectSchema(passkey);
 export const NotificationSchema = createSelectSchema(notification);
 export const UserNotificationPreferenceSchema = createSelectSchema(userNotificationPreference);
+export const NotificationTypeSchema = UserNotificationPreferenceSchema.shape.type;
+export const NotificationTargetSchema = UserNotificationPreferenceSchema.shape.target;
 export const UserNotificationPreferencesSchema = createSelectSchema(userNotificationPreferences);

@@ -1,8 +1,12 @@
 import { config } from "../config";
-import type { PaidPlan, PlanPrice } from "../types";
+import type { PlanPrice } from "../types";
 
 export type PlanId = keyof typeof config.plans;
 export type RecurringInterval = Extract<PlanPrice, { type: "subscription" }>["interval"];
+
+export function isPlanId(planId: string): planId is PlanId {
+	return Object.prototype.hasOwnProperty.call(config.plans, planId);
+}
 
 export function getPaidPlan(planId: PlanId) {
 	const plan = config.plans[planId];
@@ -11,7 +15,7 @@ export function getPaidPlan(planId: PlanId) {
 		return null;
 	}
 
-	return plan as PaidPlan;
+	return plan;
 }
 
 export function findPriceByPlanId(

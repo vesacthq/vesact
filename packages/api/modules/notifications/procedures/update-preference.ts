@@ -1,10 +1,8 @@
+import { NotificationTargetSchema, NotificationTypeSchema } from "@repo/database";
 import { setNotificationDisabled } from "@repo/notifications";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
-
-const notificationTypeSchema = z.enum(["WELCOME", "APP_UPDATE"]);
-const notificationTargetSchema = z.enum(["IN_APP", "EMAIL"]);
 
 export const updatePreference = protectedProcedure
 	.route({
@@ -15,12 +13,17 @@ export const updatePreference = protectedProcedure
 	})
 	.input(
 		z.object({
-			type: notificationTypeSchema,
-			target: notificationTargetSchema,
+			type: NotificationTypeSchema,
+			target: NotificationTargetSchema,
 			disabled: z.boolean(),
+		}),
+	)
+	.output(
+		z.object({
+			ok: z.literal(true),
 		}),
 	)
 	.handler(async ({ input: { type, target, disabled }, context: { user } }) => {
 		await setNotificationDisabled(user.id, type, target, disabled);
-		return { ok: true as const };
+		return { ok: true };
 	});

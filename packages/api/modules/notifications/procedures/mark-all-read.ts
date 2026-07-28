@@ -11,7 +11,12 @@ export const markAllNotificationsRead = protectedProcedure
 		summary: "Mark all notifications as read",
 	})
 	.input(z.object({}).optional())
+	.output(
+		z.object({
+			ok: z.literal(true),
+		}),
+	)
 	.handler(async ({ context: { user } }) => {
 		await markAllNotificationsAsReadForUser(user.id);
-		return { ok: true as const };
+		return { ok: true };
 	});
