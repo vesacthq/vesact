@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-28
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@orpc/client`, `@orpc/json-schema`, `@orpc/openapi`, `@orpc/server`, `@orpc/tanstack-query`, and `@orpc/zod` to `1.14.10`. Upgraded `prisma-zod-generator` to `3.0.1` (major) and regenerated Prisma Zod schemas. Skipped `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `turbo` to `^2.10.7`.
+
+---
+
 ## 2026-07-27
 
 ### Changed

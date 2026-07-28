@@ -25,9 +25,7 @@ export function OrganizationRoleSelect({
 			value={value}
 			items={roleOptions}
 			onValueChange={(selectedValue) => {
-				const matchingRole = organizationMemberRoleOrder.find(
-					(role) => role === selectedValue,
-				);
+				const matchingRole = organizationMemberRoleOrder.find((role) => role === selectedValue);
 				if (matchingRole === undefined) {
 					return;
 				}
