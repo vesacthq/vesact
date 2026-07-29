@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-29
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.40`, `@ai-sdk/anthropic` to `^4.0.23`, `@ai-sdk/openai` to `^4.0.22`, `@ai-sdk/react` to `^4.0.43`, `@orpc/client`, `@orpc/json-schema`, `@orpc/openapi`, `@orpc/server`, `@orpc/tanstack-query`, and `@orpc/zod` to `1.14.12`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1096.0`, `fumadocs-core` / `fumadocs-ui` to `16.13.0`, and upgraded `openai` to `^7.0.0` (major; no direct SDK usage in the repo). Skipped `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `@types/node` to `26.1.2`, `oxlint` to `1.76.0`, and `oxfmt` to `0.61.0`.
+
+---
+
 ## 2026-07-28
 
 ### Added
