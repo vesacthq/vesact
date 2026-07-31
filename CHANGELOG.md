@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026-07-31
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.42`, `@ai-sdk/anthropic` to `^4.0.24`, `@ai-sdk/openai` to `^4.0.24`, `@ai-sdk/react` to `^4.0.45`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1098.0`, `@tanstack/react-start` to `^1.168.33`, `nuqs` to `^2.9.3`, `postcss` to `8.5.25`, and `stripe` to `^22.4.0`. Skipped `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+---
+
+## 2026-07-30
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.41`, `@ai-sdk/openai` to `^4.0.23`, `@ai-sdk/react` to `^4.0.44`, `@orpc/client`, `@orpc/json-schema`, `@orpc/openapi`, `@orpc/server`, `@orpc/tanstack-query`, and `@orpc/zod` to `1.14.13`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1097.0`, `openai` to `^7.1.0`, and `postcss` to `8.5.24`. Synced the lockfile to the catalog (including prior bumps for `@ai-sdk/anthropic` `^4.0.23`, `fumadocs-core` / `fumadocs-ui` `16.13.0`, and `@types/node` `26.1.2`). Skipped `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `resend` to `^6.18.1` in `@repo/mail`.
+
+---
+
 ## 2026-07-29
 
 ### Changed
