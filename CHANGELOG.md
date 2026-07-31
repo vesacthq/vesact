@@ -2,6 +2,11 @@
 
 ## 2026-07-31
 
+### Fixed
+
+- **Auth redirects**: Hardened `getSafeRedirectPath` to normalize root-relative SaaS paths only, preventing untrusted `redirectTo` values from navigating users to external sites.
+- **SaaS indexing**: Added app-wide `noindex, nofollow` robots metadata so authentication and protected SaaS pages are not included in search results.
+
 ### Changed
 
 #### Dependencies
