@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-08-01
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.44`, `@ai-sdk/anthropic` to `^4.0.25`, `@ai-sdk/openai` to `^4.0.25`, `@ai-sdk/react` to `^4.0.47`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1100.0`, `@tanstack/react-start` to `^1.168.34`, `lucide-react` to `^1.28.0`, `openai` to `^7.2.0`, and `vite` to `^8.2.0`. Skipped `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `@playwright/test` to `^1.62.1`, `@scalar/hono-api-reference` to `^0.11.12`, `@types/react` to `19.2.18`, `@types/react-dom` to `19.2.4`, and `@vitejs/plugin-react` to `^6.0.5`.
+- **Docs dependencies**: Bumped `fumadocs-core` and `fumadocs-ui` to `16.14.0` and `fumadocs-mdx` to `15.2.1`.
+
+---
+
 ## 2026-07-31
 
 ### Fixed
