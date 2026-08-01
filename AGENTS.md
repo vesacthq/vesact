@@ -40,18 +40,18 @@ pnpm dev
 
 ### Root commands
 
-| Command | Purpose |
-| --- | --- |
-| `pnpm dev` | Start development tasks |
-| `pnpm build` | Build the workspace |
-| `pnpm start` | Start built applications |
-| `pnpm lint` / `pnpm lint:fix` | Check / fix Oxlint issues |
-| `pnpm format` / `pnpm format:check` | Write / check Oxfmt formatting |
-| `pnpm type-check` | Run workspace type checks |
-| `pnpm test` | Run workspace tests |
-| `pnpm verify` | Run CI-style Oxlint and Oxfmt checks |
-| `pnpm check` | Apply Oxlint and Oxfmt fixes |
-| `pnpm clean` | Clear Turbo outputs |
+| Command                             | Purpose                                                      |
+| ----------------------------------- | ------------------------------------------------------------ |
+| `pnpm dev`                          | Start development tasks                                      |
+| `pnpm build`                        | Build the workspace                                          |
+| `pnpm start`                        | Start built applications                                     |
+| `pnpm lint` / `pnpm lint:fix`       | Check / fix Oxlint issues                                    |
+| `pnpm format` / `pnpm format:check` | Write / check Oxfmt formatting                               |
+| `pnpm type-check`                   | Run workspace type checks                                    |
+| `pnpm test`                         | Run Vitest workspace tests                                   |
+| `pnpm verify`                       | Generate marketing content, then run Oxlint and Oxfmt checks |
+| `pnpm check`                        | Apply Oxlint and Oxfmt fixes                                 |
+| `pnpm clean`                        | Clear Turbo outputs                                          |
 
 Required gates:
 
@@ -59,6 +59,7 @@ Required gates:
 2. Before every commit, run `pnpm type-check`.
 3. Run the relevant tests before considering the change complete.
 
+The root test task runs Vitest in `apps/saas` and `packages/api`.
 Playwright tests are in `apps/marketing/tests` and `apps/saas/e2e`. E2E scripts
 are per app: use `pnpm --filter marketing e2e`, `pnpm --filter marketing e2e:ci`,
 `pnpm --filter saas e2e`, or `pnpm --filter saas e2e:ci`. E2E requires a running
@@ -73,12 +74,22 @@ apps/
 ├── marketing/     # Public site, blog, and content
 └── saas/          # Authenticated product
 packages/
-├── ai/            ├── api/             ├── auth/
-├── database/      ├── i18n/           ├── logs/
-├── mail/          ├── notifications/  ├── payments/
-├── storage/       ├── ui/             └── utils/
+├── ai/
+├── api/
+├── auth/
+├── database/
+├── i18n/
+├── logs/
+├── mail/
+├── notifications/
+├── payments/
+├── storage/
+├── ui/
+└── utils/
 tooling/
-├── scripts/       ├── tailwind/       └── typescript/
+├── scripts/
+├── tailwind/
+└── typescript/
 ```
 
 ## Imports & path aliases
@@ -91,31 +102,31 @@ Only app-local aliases are configured in the app `tsconfig.json` files.
 
 ### `apps/saas/tsconfig.json`
 
-| Alias | Target |
-| --- | --- |
-| `@config` | `./config` |
-| `@auth/*` | `./modules/auth/*` |
+| Alias              | Target                      |
+| ------------------ | --------------------------- |
+| `@config`          | `./config`                  |
+| `@auth/*`          | `./modules/auth/*`          |
 | `@organizations/*` | `./modules/organizations/*` |
-| `@settings/*` | `./modules/settings/*` |
-| `@payments/*` | `./modules/payments/*` |
-| `@i18n/*` | `./modules/i18n/*` |
-| `@admin/*` | `./modules/admin/*` |
-| `@ai/*` | `./modules/ai/*` |
-| `@onboarding/*` | `./modules/onboarding/*` |
-| `@shared/*` | `./modules/shared/*` |
+| `@settings/*`      | `./modules/settings/*`      |
+| `@payments/*`      | `./modules/payments/*`      |
+| `@i18n/*`          | `./modules/i18n/*`          |
+| `@admin/*`         | `./modules/admin/*`         |
+| `@ai/*`            | `./modules/ai/*`            |
+| `@onboarding/*`    | `./modules/onboarding/*`    |
+| `@shared/*`        | `./modules/shared/*`        |
 
 ### `apps/marketing/tsconfig.json`
 
-| Alias | Target |
-| --- | --- |
-| `@config` | `./config` |
-| `@analytics` | `./modules/analytics` |
-| `@home/*` | `./modules/home/*` |
-| `@blog/*` | `./modules/blog/*` |
-| `@i18n/*` | `./modules/i18n/*` |
-| `@changelog/*` | `./modules/changelog/*` |
-| `@legal/*` | `./modules/legal/*` |
-| `@shared/*` | `./modules/shared/*` |
+| Alias                 | Target                             |
+| --------------------- | ---------------------------------- |
+| `@config`             | `./config`                         |
+| `@analytics`          | `./modules/analytics`              |
+| `@home/*`             | `./modules/home/*`                 |
+| `@blog/*`             | `./modules/blog/*`                 |
+| `@i18n/*`             | `./modules/i18n/*`                 |
+| `@changelog/*`        | `./modules/changelog/*`            |
+| `@legal/*`            | `./modules/legal/*`                |
+| `@shared/*`           | `./modules/shared/*`               |
 | `content-collections` | `./.content-collections/generated` |
 
 ## API & data layer
@@ -138,6 +149,13 @@ Do not hand-edit generated Drizzle migration files or route trees:
 `apps/marketing/routeTree.gen.ts`, `apps/saas/routeTree.gen.ts`, and
 `apps/docs/src/routeTree.gen.ts` are generated. Marketing content collections under
 `apps/marketing/.content-collections/` are also generated.
+
+### Notifications
+
+Create server-side notifications with `createNotification` from
+`packages/notifications/src/create-notification.ts`. Types and kinds live in
+`packages/notifications/src/types.ts`, and the settings catalog lives in
+`packages/notifications/src/catalog.ts`; keep the database enum, catalog, and i18n labels in sync.
 
 For client data fetching, use the oRPC helpers in
 `apps/saas/modules/shared/lib/orpc-query-utils.ts` with TanStack Query.
