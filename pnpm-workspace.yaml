@@ -7,11 +7,11 @@ packages:
 minimumReleaseAge: 1440
 
 catalog:
-  "@ai-sdk/anthropic": ^4.0.25
-  "@ai-sdk/openai": ^4.0.25
-  "@ai-sdk/react": ^4.0.47
-  "@aws-sdk/client-s3": 3.1100.0
-  "@aws-sdk/s3-request-presigner": 3.1100.0
+  "@ai-sdk/anthropic": ^4.0.27
+  "@ai-sdk/openai": ^4.0.27
+  "@ai-sdk/react": ^4.0.50
+  "@aws-sdk/client-s3": 3.1101.0
+  "@aws-sdk/s3-request-presigner": 3.1101.0
   "@base-ui/react": ^1.6.0
   "@better-auth/passkey": 1.6.25
   "@bprogress/react": 1.2.7
@@ -24,7 +24,7 @@ catalog:
   "@orpc/zod": 1.14.13
   "@playwright/test": ^1.62.1
   "@scalar/hono-api-reference": ^0.11.12
-  "@shikijs/rehype": ^4.3.1
+  "@shikijs/rehype": ^4.4.1
   "@sindresorhus/slugify": ^3.0.0
   "@tailwindcss/vite": ^4.3.3
   "@tanstack/react-form": ^1.33.2
@@ -42,7 +42,7 @@ catalog:
   "@types/uuid": ^11.0.0
   "@vitejs/plugin-react": ^6.0.5
   "@vitest/coverage-v8": ^4.1.10
-  ai: ^7.0.44
+  ai: ^7.0.47
   autoprefixer: 10.5.4
   better-auth: 1.6.25
   boring-avatars: ^2.0.4
@@ -57,7 +57,7 @@ catalog:
   drizzle-orm: ^0.45.2
   drizzle-zod: 0.8.3
   es-toolkit: ^1.50.0
-  hono: ^4.12.32
+  hono: ^4.12.33
   input-otp: ^1.4.2
   js-cookie: ^3.0.8
   lucide-react: ^1.28.0
@@ -66,8 +66,8 @@ catalog:
   nanoid: ^6.0.0
   nodemailer: ^9.0.3
   nprogress: ^0.2.0
-  nuqs: ^2.9.3
-  openai: ^7.2.0
+  nuqs: ^2.9.4
+  openai: ^7.3.0
   oxfmt: 0.61.0
   oxlint: 1.76.0
   pg: ^8.22.0

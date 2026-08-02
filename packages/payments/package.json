@@ -20,7 +20,7 @@
 		"@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
 		"@polar-sh/sdk": "^0.49.0",
 		"@repo/logs": "workspace:*",
-		"dodopayments": "^2.43.0",
+		"dodopayments": "^2.44.0",
 		"stripe": "^22.4.0",
 		"ufo": "catalog:",
 		"zod": "catalog:"
