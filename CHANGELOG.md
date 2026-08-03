@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-03
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.48`, `@ai-sdk/react` to `^4.0.51`, `@tanstack/react-form` to `^1.33.3`, and `react-dropzone` to `^19.2.0`. Synced the lockfile to the catalog (including prior bumps for `ai` `^7.0.47`, `@ai-sdk/anthropic` and `@ai-sdk/openai` `^4.0.27`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` `3.1101.0`, `dodopayments` `^2.44.0`, `hono` `^4.12.33`, `nuqs` `^2.9.4`, and `openai` `^7.3.0`). Skipped `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `start-server-and-test` to `^3.0.12`. Synced the lockfile (including prior bumps for `@shikijs/rehype` `^4.4.1` and `turbo` `^2.10.8`).
+
+---
+
 ## 2026-08-02
 
 ### Changed
