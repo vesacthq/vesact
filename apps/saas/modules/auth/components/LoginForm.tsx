@@ -209,13 +209,8 @@ export function LoginForm() {
 							{authConfig.enablePasswordLogin && signinMode === "password" && (
 								<FormField name="password">
 									{(field) => (
-										<FormItem>
-											<div className="gap-4 flex justify-between">
-												<FormLabel>{t("auth.signup.password")}</FormLabel>
-												<Link to="/forgot-password" className="text-xs text-foreground/60">
-													{t("auth.login.forgotPassword")}
-												</Link>
-											</div>
+										<FormItem className="relative">
+											<FormLabel>{t("auth.signup.password")}</FormLabel>
 											<FormControl>
 												<div className="relative">
 													<Input
@@ -240,6 +235,12 @@ export function LoginForm() {
 													</button>
 												</div>
 											</FormControl>
+											<Link
+												to="/forgot-password"
+												className="top-0 right-0 text-xs absolute text-foreground/60"
+											>
+												{t("auth.login.forgotPassword")}
+											</Link>
 										</FormItem>
 									)}
 								</FormField>
