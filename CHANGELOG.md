@@ -2,6 +2,12 @@
 
 ## 2026-08-03
 
+### Fixed
+
+#### Auth
+
+- **Login tab order**: Repositioned the forgot-password link so keyboard navigation moves from the password field to the password visibility toggle before leaving the field group.
+
 ### Changed
 
 #### Dependencies
