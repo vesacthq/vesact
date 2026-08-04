@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-04
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `hono` to `^4.12.34` and `react-dropzone` to `^20.0.0` (major upgrade: Node.js 22+ required, ESM-first package layout). Synced the lockfile for `fumadocs-mdx` `15.2.2`. Skipped `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `tsx` to `^4.23.5`.
+
+---
+
 ## 2026-08-03
 
 ### Changed
