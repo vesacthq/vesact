@@ -42,6 +42,39 @@
 		},
 		"title": "Administración",
 		"users": {
+			"ban": {
+				"actions": {
+					"ban": "Bloquear usuario",
+					"banning": "Bloqueando usuario...",
+					"confirmBan": "Bloquear usuario",
+					"unban": "Desbloquear usuario"
+				},
+				"dialog": {
+					"description": "Impide que {name} inicie sesión y revoca todas sus sesiones activas.",
+					"title": "Bloquear usuario"
+				},
+				"fields": {
+					"expiration": "Fecha de vencimiento (opcional)",
+					"reason": "Motivo"
+				},
+				"notifications": {
+					"banError": "No se pudo bloquear al usuario. Inténtalo de nuevo.",
+					"banSuccess": "El usuario ha sido bloqueado.",
+					"unbanError": "No se pudo desbloquear al usuario. Inténtalo de nuevo.",
+					"unbanSuccess": "El usuario ha sido desbloqueado.",
+					"unbanning": "Desbloqueando usuario..."
+				},
+				"status": {
+					"banned": "Bloqueado",
+					"expires": "Vence: {date}",
+					"permanent": "Bloqueo permanente",
+					"reason": "Motivo: {reason}"
+				},
+				"validation": {
+					"expirationFuture": "Elige hoy o una fecha futura.",
+					"reasonRequired": "Introduce un motivo para el bloqueo."
+				}
+			},
 			"confirmDelete": {
 				"confirm": "Eliminar",
 				"message": "¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.",

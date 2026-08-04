@@ -42,6 +42,39 @@
 		},
 		"title": "Administration",
 		"users": {
+			"ban": {
+				"actions": {
+					"ban": "Ban user",
+					"banning": "Banning user...",
+					"confirmBan": "Ban user",
+					"unban": "Unban user"
+				},
+				"dialog": {
+					"description": "Prevent {name} from signing in and revoke all active sessions.",
+					"title": "Ban user"
+				},
+				"fields": {
+					"expiration": "Expiration date (optional)",
+					"reason": "Reason"
+				},
+				"notifications": {
+					"banError": "User could not be banned. Please try again.",
+					"banSuccess": "User has been banned.",
+					"unbanError": "User could not be unbanned. Please try again.",
+					"unbanSuccess": "User has been unbanned.",
+					"unbanning": "Unbanning user..."
+				},
+				"status": {
+					"banned": "Banned",
+					"expires": "Expires: {date}",
+					"permanent": "Permanent ban",
+					"reason": "Reason: {reason}"
+				},
+				"validation": {
+					"expirationFuture": "Choose today or a future date.",
+					"reasonRequired": "Enter a reason for the ban."
+				}
+			},
 			"confirmDelete": {
 				"confirm": "Delete",
 				"message": "Are you sure you want to delete this user? This action cannot be undone.",

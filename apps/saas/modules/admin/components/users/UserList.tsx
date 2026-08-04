@@ -1,6 +1,9 @@
-import { useTranslations } from "@i18n/intl";
+import { useSession } from "@auth/hooks/use-session";
+import { useFormatter, useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
+import type { UserSchema } from "@repo/database";
 import { Spinner } from "@repo/ui";
+import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { Card } from "@repo/ui/components/card";
 import {
@@ -12,6 +15,12 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { Table, TableBody, TableCell, TableRow } from "@repo/ui/components/table";
 import { dismiss, toastLoading, toastPromise } from "@repo/ui/components/toast";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { Pagination } from "@shared/components/Pagination";
 import { UserAvatar } from "@shared/components/UserAvatar";
@@ -25,6 +34,7 @@ import {
 	useReactTable,
 } from "@tanstack/react-table";
 import {
+	BanIcon,
 	MoreVerticalIcon,
 	Repeat1Icon,
 	ShieldCheckIcon,
@@ -33,17 +43,75 @@ import {
 	TrashIcon,
 } from "lucide-react";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
+import type { z } from "zod";
 
 import { EmailVerified } from "../EmailVerified";
+import { BanUserDialog } from "./BanUserDialog";
 
 const ITEMS_PER_PAGE = 10;
+const BAN_STATUS_REFRESH_INTERVAL = 30_000;
+
+type AdminUser = z.infer<typeof UserSchema>;
+
+function isUserActivelyBanned(user: AdminUser, currentTime: number) {
+	if (user.banned !== true) {
+		return false;
+	}
+
+	if (!user.banExpires) {
+		return true;
+	}
+
+	return new Date(user.banExpires).getTime() > currentTime;
+}
+
+function UserBanStatus({ user, currentTime }: { user: AdminUser; currentTime: number }) {
+	const translations = useTranslations();
+	const formatter = useFormatter();
+
+	if (!isUserActivelyBanned(user, currentTime)) {
+		return null;
+	}
+
+	return (
+		<TooltipProvider delay={0}>
+			<Tooltip>
+				<TooltipTrigger>
+					<Badge status="error">{translations("admin.users.ban.status.banned")}</Badge>
+				</TooltipTrigger>
+				<TooltipContent>
+					<div className="space-y-1">
+						<p>
+							{translations("admin.users.ban.status.reason", {
+								reason: user.banReason ?? "",
+							})}
+						</p>
+						<p>
+							{user.banExpires
+								? translations("admin.users.ban.status.expires", {
+										date: formatter.dateTime(new Date(user.banExpires), {
+											dateStyle: "medium",
+											timeStyle: "short",
+										}),
+									})
+								: translations("admin.users.ban.status.permanent")}
+						</p>
+					</div>
+				</TooltipContent>
+			</Tooltip>
+		</TooltipProvider>
+	);
+}
 
 export function UserList() {
 	const t = useTranslations();
+	const { user: currentUser } = useSession();
 	const queryClient = useQueryClient();
 	const { confirm } = useConfirmationAlert();
+	const [userToBan, setUserToBan] = useState<AdminUser | null>(null);
+	const [banStatusTime, setBanStatusTime] = useState(Date.now);
 	const [currentPage, setCurrentPage] = useQueryState("currentPage", parseAsInteger.withDefault(1));
 	const [searchTerm, setSearchTerm] = useQueryState("query", parseAsString.withDefault(""));
 	const [debouncedSearchTerm, setDebouncedSearchTerm] = useDebounceValue(searchTerm, 300, {
@@ -54,6 +122,14 @@ export function UserList() {
 	useEffect(() => {
 		setDebouncedSearchTerm(searchTerm);
 	}, [searchTerm]); // oxlint-disable-line eslint-plugin-react-hooks/exhaustive-deps
+
+	useEffect(() => {
+		const refreshInterval = window.setInterval(() => {
+			setBanStatusTime(Date.now());
+		}, BAN_STATUS_REFRESH_INTERVAL);
+
+		return () => window.clearInterval(refreshInterval);
+	}, []);
 
 	const { data, isLoading, refetch } = useQuery(
 		orpc.admin.users.list.queryOptions({
@@ -150,9 +226,30 @@ export function UserList() {
 		});
 	};
 
-	const columns: ColumnDef<
-		NonNullable<Awaited<ReturnType<typeof authClient.admin.listUsers>>["data"]>["users"][number]
-	>[] = useMemo(
+	const unbanUser = (userId: string) => {
+		toastPromise(
+			async () => {
+				const { error } = await authClient.admin.unbanUser({
+					userId,
+				});
+
+				if (error) {
+					throw error;
+				}
+
+				await queryClient.invalidateQueries({
+					queryKey: orpc.admin.users.list.key(),
+				});
+			},
+			{
+				loading: t("admin.users.ban.notifications.unbanning"),
+				success: t("admin.users.ban.notifications.unbanSuccess"),
+				error: t("admin.users.ban.notifications.unbanError"),
+			},
+		);
+	};
+
+	const columns: ColumnDef<AdminUser>[] = useMemo(
 		() => [
 			{
 				accessorKey: "user",
@@ -170,6 +267,7 @@ export function UserList() {
 								<span className="block">{!!row.original.name && row.original.email}</span>
 								<EmailVerified verified={row.original.emailVerified} />
 								<strong className="block">{row.original.role === "admin" ? "Admin" : ""}</strong>
+								<UserBanStatus user={row.original} currentTime={banStatusTime} />
 							</small>
 						</div>
 					</div>
@@ -208,6 +306,20 @@ export function UserList() {
 										</DropdownMenuItem>
 									)}
 
+									{isUserActivelyBanned(row.original, banStatusTime) ? (
+										<DropdownMenuItem onClick={() => unbanUser(row.original.id)}>
+											<ShieldCheckIcon className="mr-2 size-4" />
+											{t("admin.users.ban.actions.unban")}
+										</DropdownMenuItem>
+									) : (
+										currentUser?.id !== row.original.id && (
+											<DropdownMenuItem onClick={() => setUserToBan(row.original)}>
+												<BanIcon className="mr-2 size-4" />
+												{t("admin.users.ban.actions.ban")}
+											</DropdownMenuItem>
+										)
+									)}
+
 									{row.original.role !== "admin" ? (
 										<DropdownMenuItem onClick={() => assignAdminRole(row.original.id)}>
 											<ShieldCheckIcon className="mr-2 size-4" />
@@ -243,7 +355,7 @@ export function UserList() {
 				},
 			},
 		],
-		[], // oxlint-disable-line eslint-plugin-react-hooks/exhaustive-deps
+		[banStatusTime, currentUser?.id], // oxlint-disable-line eslint-plugin-react-hooks/exhaustive-deps
 	);
 
 	const users = useMemo(() => data?.users ?? [], [data?.users]);
@@ -314,6 +426,16 @@ export function UserList() {
 					onChangeCurrentPage={setCurrentPage}
 				/>
 			)}
+
+			<BanUserDialog
+				open={userToBan !== null}
+				onOpenChange={(open) => {
+					if (!open) {
+						setUserToBan(null);
+					}
+				}}
+				user={userToBan}
+			/>
 		</Card>
 	);
 }

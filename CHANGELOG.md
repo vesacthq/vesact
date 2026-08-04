@@ -2,6 +2,12 @@
 
 ## 2026-08-04
 
+### Added
+
+#### Admin
+
+- **User bans**: Added admin controls to ban users with an internal reason and optional expiration, review active ban details, and unban users.
+
 ### Changed
 
 #### Dependencies
