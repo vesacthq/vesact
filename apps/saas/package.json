@@ -84,7 +84,6 @@
 		"@types/nprogress": "catalog:",
 		"@types/react": "catalog:",
 		"@types/react-dom": "catalog:",
-		"@types/uuid": "catalog:",
 		"@vitest/coverage-v8": "catalog:",
 		"autoprefixer": "catalog:",
 		"dotenv": "catalog:",
