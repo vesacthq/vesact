@@ -8,6 +8,10 @@
 
 - **User bans**: Added admin controls to ban users with an internal reason and optional expiration, review active ban details, and unban users.
 
+#### Developer tooling
+
+- **Agent skills**: Added repository-scoped agent skills for common feature, auth, payments, database, docs, testing, and verification workflows.
+
 ### Changed
 
 #### Dependencies
