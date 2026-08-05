@@ -7,21 +7,21 @@ packages:
 minimumReleaseAge: 1440
 
 catalog:
-  "@ai-sdk/anthropic": ^4.0.27
-  "@ai-sdk/openai": ^4.0.27
-  "@ai-sdk/react": ^4.0.51
-  "@aws-sdk/client-s3": 3.1101.0
-  "@aws-sdk/s3-request-presigner": 3.1101.0
+  "@ai-sdk/anthropic": ^4.0.28
+  "@ai-sdk/openai": ^4.0.28
+  "@ai-sdk/react": ^4.0.53
+  "@aws-sdk/client-s3": 3.1102.0
+  "@aws-sdk/s3-request-presigner": 3.1102.0
   "@base-ui/react": ^1.6.0
   "@better-auth/passkey": 1.6.25
   "@bprogress/react": 1.2.7
   "@mdx-js/mdx": ^3.1.1
-  "@orpc/client": 1.14.13
-  "@orpc/json-schema": 1.14.13
-  "@orpc/openapi": 1.14.13
-  "@orpc/server": 1.14.13
-  "@orpc/tanstack-query": 1.14.13
-  "@orpc/zod": 1.14.13
+  "@orpc/client": 1.14.14
+  "@orpc/json-schema": 1.14.14
+  "@orpc/openapi": 1.14.14
+  "@orpc/server": 1.14.14
+  "@orpc/tanstack-query": 1.14.14
+  "@orpc/zod": 1.14.14
   "@playwright/test": ^1.62.1
   "@scalar/hono-api-reference": ^0.11.12
   "@shikijs/rehype": ^4.4.1
@@ -30,7 +30,7 @@ catalog:
   "@tanstack/react-form": ^1.33.3
   "@tanstack/react-query": ^5.101.4
   "@tanstack/react-router": ^1.170.18
-  "@tanstack/react-start": ^1.168.34
+  "@tanstack/react-start": ^1.168.35
   "@tanstack/react-table": ^8.21.3
   "@types/js-cookie": ^3.0.6
   "@types/mdx": ^2.0.14
@@ -42,7 +42,7 @@ catalog:
   "@types/uuid": ^11.0.0
   "@vitejs/plugin-react": ^6.0.5
   "@vitest/coverage-v8": ^4.1.10
-  ai: ^7.0.48
+  ai: ^7.0.50
   autoprefixer: 10.5.4
   better-auth: 1.6.25
   boring-avatars: ^2.0.4
@@ -57,19 +57,19 @@ catalog:
   drizzle-orm: ^0.45.2
   drizzle-zod: 0.8.3
   es-toolkit: ^1.50.0
-  hono: ^4.12.34
+  hono: ^4.13.0
   input-otp: ^1.4.2
   js-cookie: ^3.0.8
   lucide-react: ^1.28.0
   mdx: ^0.3.1
   mdx-bundler: ^10.1.1
-  nanoid: ^6.0.0
+  nanoid: ^6.0.1
   nodemailer: ^9.0.3
   nprogress: ^0.2.0
   nuqs: ^2.9.4
-  openai: ^7.3.0
-  oxfmt: 0.61.0
-  oxlint: 1.76.0
+  openai: ^7.4.0
+  oxfmt: 0.62.0
+  oxlint: 1.77.0
   pg: ^8.22.0
   postcss: 8.5.25
   prettier: 3.9.4
