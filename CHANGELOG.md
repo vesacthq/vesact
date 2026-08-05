@@ -10,7 +10,7 @@
 
 #### Developer tooling
 
-- **Agent skills**: Added repository-scoped Cursor agent skills for common feature, auth, payments, database, docs, testing, and verification workflows.
+- **Agent skills**: Added repository-scoped agent skills for common feature, auth, payments, database, docs, testing, and verification workflows.
 
 ### Changed
 
