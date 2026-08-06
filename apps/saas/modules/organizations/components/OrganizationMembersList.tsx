@@ -17,14 +17,14 @@ import { toastPromise } from "@repo/ui/components/toast";
 import { UserAvatar } from "@shared/components/UserAvatar";
 import { useQueryClient } from "@tanstack/react-query";
 import type { ColumnDef, ColumnFiltersState, SortingState } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 import {
-	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
-	useReactTable,
-} from "@tanstack/react-table";
+	useLegacyTable,
+} from "@tanstack/react-table/legacy";
 import { LogOutIcon, MoreVerticalIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -164,7 +164,7 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 		},
 	];
 
-	const table = useReactTable({
+	const table = useLegacyTable({
 		data: organization?.members ?? [],
 		columns,
 		manualPagination: true,

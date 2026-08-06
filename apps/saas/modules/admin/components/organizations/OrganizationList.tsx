@@ -21,12 +21,12 @@ import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 import {
-	flexRender,
 	getCoreRowModel,
 	getPaginationRowModel,
-	useReactTable,
-} from "@tanstack/react-table";
+	useLegacyTable,
+} from "@tanstack/react-table/legacy";
 import { EditIcon, MoreVerticalIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 import { useEffect, useMemo, useRef, type Ref } from "react";
@@ -193,7 +193,7 @@ export function OrganizationList() {
 
 	const organizations = useMemo(() => data?.organizations ?? [], [data?.organizations]);
 
-	const table = useReactTable({
+	const table = useLegacyTable({
 		data: organizations,
 		columns,
 		getCoreRowModel: getCoreRowModel(),

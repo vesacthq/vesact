@@ -16,14 +16,14 @@ import { Table, TableBody, TableCell, TableRow } from "@repo/ui/components/table
 import { toastPromise } from "@repo/ui/components/toast";
 import { useQueryClient } from "@tanstack/react-query";
 import type { ColumnDef } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 import {
-	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
-	useReactTable,
-} from "@tanstack/react-table";
+	useLegacyTable,
+} from "@tanstack/react-table/legacy";
 import { CheckIcon, ClockIcon, MailXIcon, MoreVerticalIcon, XIcon } from "lucide-react";
 import { useMemo } from "react";
 
@@ -155,7 +155,7 @@ export function OrganizationInvitationsList({ organizationId }: { organizationId
 		},
 	];
 
-	const table = useReactTable({
+	const table = useLegacyTable({
 		data: invitations ?? [],
 		columns,
 		getCoreRowModel: getCoreRowModel(),

@@ -27,12 +27,12 @@ import { UserAvatar } from "@shared/components/UserAvatar";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ColumnDef } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 import {
-	flexRender,
 	getCoreRowModel,
 	getPaginationRowModel,
-	useReactTable,
-} from "@tanstack/react-table";
+	useLegacyTable,
+} from "@tanstack/react-table/legacy";
 import {
 	BanIcon,
 	MoreVerticalIcon,
@@ -360,7 +360,7 @@ export function UserList() {
 
 	const users = useMemo(() => data?.users ?? [], [data?.users]);
 
-	const table = useReactTable({
+	const table = useLegacyTable({
 		data: users,
 		columns,
 		getCoreRowModel: getCoreRowModel(),

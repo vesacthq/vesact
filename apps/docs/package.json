@@ -15,7 +15,7 @@
 	"dependencies": {
 		"@repo/ui": "workspace:*",
 		"@tanstack/react-router": "catalog:",
-		"@tanstack/react-router-devtools": "1.167.0",
+		"@tanstack/react-router-devtools": "1.167.1",
 		"@tanstack/react-start": "catalog:",
 		"fumadocs-core": "16.14.0",
 		"fumadocs-mdx": "15.2.2",
