@@ -15,8 +15,8 @@ import {
 import { Table, TableBody, TableCell, TableRow } from "@repo/ui/components/table";
 import { toastPromise } from "@repo/ui/components/toast";
 import { useQueryClient } from "@tanstack/react-query";
-import type { ColumnDef } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
+import type { LegacyColumnDef } from "@tanstack/react-table/legacy";
 import {
 	getCoreRowModel,
 	getFilteredRowModel,
@@ -73,7 +73,7 @@ export function OrganizationInvitationsList({ organizationId }: { organizationId
 		);
 	};
 
-	const columns: ColumnDef<NonNullable<ActiveOrganization["invitations"]>[number]>[] = [
+	const columns: LegacyColumnDef<NonNullable<ActiveOrganization["invitations"]>[number]>[] = [
 		{
 			accessorKey: "email",
 			accessorFn: (row) => row.email,

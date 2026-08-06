@@ -16,8 +16,9 @@ import { Table, TableBody, TableCell, TableRow } from "@repo/ui/components/table
 import { toastPromise } from "@repo/ui/components/toast";
 import { UserAvatar } from "@shared/components/UserAvatar";
 import { useQueryClient } from "@tanstack/react-query";
-import type { ColumnDef, ColumnFiltersState, SortingState } from "@tanstack/react-table";
+import type { ColumnFiltersState, SortingState } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
+import type { LegacyColumnDef } from "@tanstack/react-table/legacy";
 import {
 	getCoreRowModel,
 	getFilteredRowModel,
@@ -90,7 +91,7 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 		);
 	};
 
-	const columns: ColumnDef<NonNullable<typeof organization>["members"][number]>[] = [
+	const columns: LegacyColumnDef<NonNullable<typeof organization>["members"][number]>[] = [
 		{
 			accessorKey: "user",
 			header: "",

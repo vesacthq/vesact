@@ -26,8 +26,8 @@ import { Pagination } from "@shared/components/Pagination";
 import { UserAvatar } from "@shared/components/UserAvatar";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import type { ColumnDef } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
+import type { LegacyColumnDef } from "@tanstack/react-table/legacy";
 import {
 	getCoreRowModel,
 	getPaginationRowModel,
@@ -249,7 +249,7 @@ export function UserList() {
 		);
 	};
 
-	const columns: ColumnDef<AdminUser>[] = useMemo(
+	const columns: LegacyColumnDef<AdminUser>[] = useMemo(
 		() => [
 			{
 				accessorKey: "user",

@@ -20,8 +20,8 @@ import { Pagination } from "@shared/components/Pagination";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import type { ColumnDef } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
+import type { LegacyColumnDef } from "@tanstack/react-table/legacy";
 import {
 	getCoreRowModel,
 	getPaginationRowModel,
@@ -107,7 +107,7 @@ export function OrganizationList() {
 		);
 	};
 
-	const columns: ColumnDef<NonNullable<typeof data>["organizations"][number]>[] = useMemo(
+	const columns: LegacyColumnDef<NonNullable<typeof data>["organizations"][number]>[] = useMemo(
 		() => [
 			{
 				accessorKey: "user",
