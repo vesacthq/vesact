@@ -25,14 +25,10 @@ import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvid
 import { Pagination } from "@shared/components/Pagination";
 import { UserAvatar } from "@shared/components/UserAvatar";
 import { orpc } from "@shared/lib/orpc-query-utils";
+import { manualPaginationTableFeatures } from "@shared/lib/table-features";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { flexRender } from "@tanstack/react-table";
-import type { LegacyColumnDef } from "@tanstack/react-table/legacy";
-import {
-	getCoreRowModel,
-	getPaginationRowModel,
-	useLegacyTable,
-} from "@tanstack/react-table/legacy";
+import type { ColumnDef } from "@tanstack/react-table";
+import { flexRender, useTable } from "@tanstack/react-table";
 import {
 	BanIcon,
 	MoreVerticalIcon,
@@ -249,7 +245,7 @@ export function UserList() {
 		);
 	};
 
-	const columns: LegacyColumnDef<AdminUser>[] = useMemo(
+	const columns: ColumnDef<typeof manualPaginationTableFeatures, AdminUser>[] = useMemo(
 		() => [
 			{
 				accessorKey: "user",
@@ -360,11 +356,10 @@ export function UserList() {
 
 	const users = useMemo(() => data?.users ?? [], [data?.users]);
 
-	const table = useLegacyTable({
+	const table = useTable({
+		features: manualPaginationTableFeatures,
 		data: users,
 		columns,
-		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
 		manualPagination: true,
 	});
 
@@ -384,11 +379,7 @@ export function UserList() {
 					<TableBody>
 						{table.getRowModel().rows?.length ? (
 							table.getRowModel().rows.map((row) => (
-								<TableRow
-									key={row.id}
-									data-state={row.getIsSelected() && "selected"}
-									className="group"
-								>
+								<TableRow key={row.id} className="group">
 									{row.getVisibleCells().map((cell) => (
 										<TableCell
 											key={cell.id}
