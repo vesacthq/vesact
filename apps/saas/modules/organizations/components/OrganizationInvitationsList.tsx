@@ -14,16 +14,10 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Table, TableBody, TableCell, TableRow } from "@repo/ui/components/table";
 import { toastPromise } from "@repo/ui/components/toast";
+import { clientDataTableFeatures } from "@shared/lib/table-features";
 import { useQueryClient } from "@tanstack/react-query";
 import type { ColumnDef } from "@tanstack/react-table";
-import {
-	flexRender,
-	getCoreRowModel,
-	getFilteredRowModel,
-	getPaginationRowModel,
-	getSortedRowModel,
-	useReactTable,
-} from "@tanstack/react-table";
+import { flexRender, useTable } from "@tanstack/react-table";
 import { CheckIcon, ClockIcon, MailXIcon, MoreVerticalIcon, XIcon } from "lucide-react";
 import { useMemo } from "react";
 
@@ -73,7 +67,10 @@ export function OrganizationInvitationsList({ organizationId }: { organizationId
 		);
 	};
 
-	const columns: ColumnDef<NonNullable<ActiveOrganization["invitations"]>[number]>[] = [
+	const columns: ColumnDef<
+		typeof clientDataTableFeatures,
+		NonNullable<ActiveOrganization["invitations"]>[number]
+	>[] = [
 		{
 			accessorKey: "email",
 			accessorFn: (row) => row.email,
@@ -155,13 +152,10 @@ export function OrganizationInvitationsList({ organizationId }: { organizationId
 		},
 	];
 
-	const table = useReactTable({
+	const table = useTable({
+		features: clientDataTableFeatures,
 		data: invitations ?? [],
 		columns,
-		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
-		getSortedRowModel: getSortedRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
 	});
 
 	return (
@@ -170,7 +164,7 @@ export function OrganizationInvitationsList({ organizationId }: { organizationId
 				<TableBody>
 					{table.getRowModel().rows?.length ? (
 						table.getRowModel().rows.map((row) => (
-							<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+							<TableRow key={row.id}>
 								{row.getVisibleCells().map((cell) => (
 									<TableCell key={cell.id}>
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}

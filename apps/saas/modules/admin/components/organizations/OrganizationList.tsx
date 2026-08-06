@@ -18,15 +18,11 @@ import { toastPromise } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { Pagination } from "@shared/components/Pagination";
 import { orpc } from "@shared/lib/orpc-query-utils";
+import { manualPaginationTableFeatures } from "@shared/lib/table-features";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
-import {
-	flexRender,
-	getCoreRowModel,
-	getPaginationRowModel,
-	useReactTable,
-} from "@tanstack/react-table";
+import { flexRender, useTable } from "@tanstack/react-table";
 import { EditIcon, MoreVerticalIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 import { useEffect, useMemo, useRef, type Ref } from "react";
@@ -107,7 +103,10 @@ export function OrganizationList() {
 		);
 	};
 
-	const columns: ColumnDef<NonNullable<typeof data>["organizations"][number]>[] = useMemo(
+	const columns: ColumnDef<
+		typeof manualPaginationTableFeatures,
+		NonNullable<typeof data>["organizations"][number]
+	>[] = useMemo(
 		() => [
 			{
 				accessorKey: "user",
@@ -193,11 +192,10 @@ export function OrganizationList() {
 
 	const organizations = useMemo(() => data?.organizations ?? [], [data?.organizations]);
 
-	const table = useReactTable({
+	const table = useTable({
+		features: manualPaginationTableFeatures,
 		data: organizations,
 		columns,
-		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
 		manualPagination: true,
 	});
 
@@ -256,11 +254,7 @@ export function OrganizationList() {
 							))
 						) : table.getRowModel().rows?.length ? (
 							table.getRowModel().rows.map((row) => (
-								<TableRow
-									key={row.id}
-									data-state={row.getIsSelected() && "selected"}
-									className="group"
-								>
+								<TableRow key={row.id} className="group">
 									{row.getVisibleCells().map((cell) => (
 										<TableCell
 											key={cell.id}

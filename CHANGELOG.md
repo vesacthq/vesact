@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-06
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.52`, `@ai-sdk/anthropic` to `^4.0.30`, `@ai-sdk/openai` to `^4.0.30`, `@ai-sdk/react` to `^4.0.55`, `better-auth` and `@better-auth/passkey` to `1.6.26`, `@tanstack/react-router` to `^1.170.19`, `@tanstack/react-start` to `^1.168.36`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1103.0`, `@base-ui/react` to `^1.7.0`, `nodemailer` to `^9.0.4`, `use-intl` to `^4.13.5`, and `@tanstack/react-table` to `^9.0.0` (migrated table components to `useTable` with explicit `tableFeatures`). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `@shikijs/rehype` to `^4.4.2`, `@tanstack/react-router-devtools` to `1.167.1`, and `tsx` to `^4.23.6`.
+
+---
+
 ## 2026-08-05
 
 ### Changed

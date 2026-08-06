@@ -15,16 +15,10 @@ import {
 import { Table, TableBody, TableCell, TableRow } from "@repo/ui/components/table";
 import { toastPromise } from "@repo/ui/components/toast";
 import { UserAvatar } from "@shared/components/UserAvatar";
+import { clientDataTableFeatures } from "@shared/lib/table-features";
 import { useQueryClient } from "@tanstack/react-query";
 import type { ColumnDef, ColumnFiltersState, SortingState } from "@tanstack/react-table";
-import {
-	flexRender,
-	getCoreRowModel,
-	getFilteredRowModel,
-	getPaginationRowModel,
-	getSortedRowModel,
-	useReactTable,
-} from "@tanstack/react-table";
+import { flexRender, useTable } from "@tanstack/react-table";
 import { LogOutIcon, MoreVerticalIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -90,7 +84,10 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 		);
 	};
 
-	const columns: ColumnDef<NonNullable<typeof organization>["members"][number]>[] = [
+	const columns: ColumnDef<
+		typeof clientDataTableFeatures,
+		NonNullable<typeof organization>["members"][number]
+	>[] = [
 		{
 			accessorKey: "user",
 			header: "",
@@ -164,16 +161,13 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 		},
 	];
 
-	const table = useReactTable({
+	const table = useTable({
+		features: clientDataTableFeatures,
 		data: organization?.members ?? [],
 		columns,
 		manualPagination: true,
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
-		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
-		getSortedRowModel: getSortedRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
 		state: {
 			sorting,
 			columnFilters,
@@ -186,7 +180,7 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 				<TableBody>
 					{table.getRowModel().rows?.length ? (
 						table.getRowModel().rows.map((row) => (
-							<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+							<TableRow key={row.id}>
 								{row.getVisibleCells().map((cell) => (
 									<TableCell key={cell.id}>
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}
