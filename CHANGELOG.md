@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-07
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.54`, `@ai-sdk/anthropic` to `^4.0.32`, `@ai-sdk/openai` to `^4.0.31`, `@ai-sdk/react` to `^4.0.57`, `@tanstack/react-router` to `^1.170.20`, `@tanstack/react-start` to `^1.168.37`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1104.0`, `dodopayments` to `^2.45.0`, and `nuqs` to `^2.9.5`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `tsx` to `^4.23.8`.
+
+---
+
 ## 2026-08-06
 
 ### Changed
