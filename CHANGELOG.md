@@ -2,6 +2,12 @@
 
 ## 2026-08-07
 
+### Fixed
+
+#### Organizations
+
+- **Invitation accept button**: The organization invitation modal Accept action now uses the primary button variant so it is visually distinct from Decline.
+
 ### Changed
 
 #### Dependencies
