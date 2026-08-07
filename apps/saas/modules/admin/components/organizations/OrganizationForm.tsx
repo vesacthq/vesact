@@ -4,6 +4,7 @@ import { InviteMemberForm } from "@organizations/components/InviteMemberForm";
 import { OrganizationMembersBlock } from "@organizations/components/OrganizationMembersBlock";
 import {
 	fullOrganizationQueryKey,
+	organizationListQueryKey,
 	useCreateOrganizationMutation,
 	useFullOrganizationQuery,
 	useUpdateOrganizationMutation,
@@ -63,9 +64,14 @@ export function OrganizationForm({ organizationId }: { organizationId: string })
 
 				queryClient.setQueryData(fullOrganizationQueryKey(organizationId), newOrganization);
 
-				await queryClient.invalidateQueries({
-					queryKey: orpc.admin.organizations.list.key(),
-				});
+				await Promise.all([
+					queryClient.invalidateQueries({
+						queryKey: orpc.admin.organizations.list.key(),
+					}),
+					queryClient.invalidateQueries({
+						queryKey: organizationListQueryKey,
+					}),
+				]);
 
 				toastSuccess(t("admin.organizations.form.notifications.success"));
 

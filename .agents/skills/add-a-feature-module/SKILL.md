@@ -14,7 +14,7 @@ Use when behavior needs multiple components, hooks/lib code, and routes. Do not 
 1. Choose the owning app and create `apps/saas/modules/<feature>/` or `apps/marketing/modules/<feature>/` with only needed `components/`, `hooks/`, and `lib/` directories.
 2. Add an app-local alias such as `"@feature/*": ["./modules/feature/*"]` to that app's `tsconfig.json` only when several files need it. `@repo/*` names are workspace packages, not aliases.
 3. Add file routes under the owning app's `routes/` tree with `createFileRoute`. Use route `loader`/`beforeLoad` for loading/guards, `throw redirect()`/`throw notFound()` for control flow, and `createServerFn` for server-only work.
-4. Keep async client state in TanStack Query (prefer oRPC query/mutation options) and forms in `@tanstack/react-form`; invalidate scoped query keys or router data after writes.
+4. Keep async client state in TanStack Query (prefer oRPC query/mutation options) and forms in `@tanstack/react-form`.
 5. Add navigation in the owning shell when required, such as `apps/saas/modules/shared/components/NavBar.tsx`, and translate every label. When adding an account-level top-level route under `apps/saas/routes/_authenticated/_main/`, append its slug to `organizations.forbiddenOrganizationSlugs` in `packages/auth/config.ts` so it cannot collide with an organization slug.
 6. Keep shared persistence/API behavior in `packages/database` and `packages/api`; do not import server-only modules into browser components.
 7. Let the TanStack Router Vite plugin regenerate `routeTree.gen.ts` during dev/build; never edit it. Run the owning app:

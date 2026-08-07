@@ -19,7 +19,7 @@ export function ChangeOrganizationNameForm() {
 	const t = useTranslations();
 	const router = useRouter();
 	const queryClient = useQueryClient();
-	const { activeOrganization } = useActiveOrganization();
+	const { activeOrganization, refetchActiveOrganization } = useActiveOrganization();
 
 	const form = useForm({
 		defaultValues: {
@@ -44,6 +44,7 @@ export function ChangeOrganizationNameForm() {
 				}
 
 				await queryClient.invalidateQueries({ queryKey: organizationListQueryKey });
+				await refetchActiveOrganization();
 				void router.invalidate();
 
 				toastSuccess(t("organizations.settings.changeName.notifications.success"));

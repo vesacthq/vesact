@@ -160,6 +160,23 @@ Create server-side notifications with `createNotification` from
 For client data fetching, use the oRPC helpers in
 `apps/saas/modules/shared/lib/orpc-query-utils.ts` with TanStack Query.
 
+### Client cache invalidation
+
+After every successful mutation that affects a list or detail query—whether
+oRPC, `authClient`, or any other write—invalidate the matching TanStack Query
+keys before showing success UI. Do not rely on a full page reload.
+
+- Prefer `queryClient.invalidateQueries({ queryKey: orpc.<module>.list.key() })`
+  for oRPC lists. Prefix keys refresh every filtered/paginated page.
+- For non-oRPC lists, invalidate the same key the list query uses (for example
+  `organizationListQueryKey`, `userPasskeyQueryKey`, `["active-sessions"]`).
+- When one mutation changes multiple cached views, invalidate every affected key
+  (admin org CRUD also refreshes `organizationListQueryKey`; member leave
+  refreshes both the members query and the org switcher list).
+- Canonical examples: admin user delete in
+  `apps/saas/modules/admin/components/users/UserList.tsx`, invitation revoke in
+  `OrganizationInvitationsList.tsx`, and passkey CRUD in `PasskeysBlock.tsx`.
+
 ## Framework patterns
 
 - TanStack Start does not use React Server Components or `"use client"`.

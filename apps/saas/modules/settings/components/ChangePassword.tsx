@@ -14,6 +14,7 @@ import { passwordSchema } from "@repo/utils";
 import { PasswordInput } from "@shared/components/PasswordInput";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { useForm, useStore } from "@tanstack/react-form";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { z } from "zod";
 
@@ -25,6 +26,7 @@ const formSchema = z.object({
 export function ChangePasswordForm() {
 	const t = useTranslations();
 	const router = useRouter();
+	const queryClient = useQueryClient();
 
 	const form = useForm({
 		defaultValues: {
@@ -44,6 +46,10 @@ export function ChangePasswordForm() {
 				toastError(t("settings.account.security.changePassword.notifications.error"));
 				return;
 			}
+
+			await queryClient.invalidateQueries({
+				queryKey: ["active-sessions"],
+			});
 
 			toastSuccess(t("settings.account.security.changePassword.notifications.success"));
 			formApi.reset({ currentPassword: "", newPassword: "" });

@@ -16,7 +16,7 @@ Use when records, routes, or actions belong to an organization. Do not infer ten
 3. Accept a stable `organizationId` in the oRPC Zod input, use `protectedProcedure`, then call `verifyOrganizationMembership()` or the owner/admin-only `verifyOrganizationBillingManagement()` before reading/mutating protected data.
 4. Enforce roles server-side. Use owner/admin checks for management writes; never trust `isOrganizationAdmin` from React.
 5. Place organization UI routes under `apps/saas/routes/_authenticated/_main/$organizationSlug/`. The slug selects UI context; resolve it through authenticated loader/context or `useActiveOrganizationQuery({ slug }, { enabled: true })` and handle loading/missing/error states.
-6. Use `useActiveOrganization()` only for display, navigation, and optimistic affordances. Include ID/slug in every TanStack Query key (`activeOrganizationQueryKey()` is the model) and invalidate only the affected tenant after writes.
+6. Use `useActiveOrganization()` only for display, navigation, and optimistic affordances. Include ID/slug in every TanStack Query key (`activeOrganizationQueryKey()` is the model).
 7. Add tests proving a member of organization A cannot access organization B, and that denied calls do not perform database/provider effects.
 8. Generate/apply the Drizzle migration and run API tests, SaaS type-check, and relevant E2E.
 

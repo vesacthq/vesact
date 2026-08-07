@@ -1,6 +1,7 @@
 import { getAdminPath } from "@admin/lib/links";
 import { useTranslations } from "@i18n/intl";
 import { OrganizationLogo } from "@organizations/components/OrganizationLogo";
+import { organizationListQueryKey } from "@organizations/lib/api";
 import { authClient } from "@repo/auth/client";
 import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
@@ -89,15 +90,19 @@ export function OrganizationList() {
 				if (error) {
 					throw error;
 				}
+
+				await Promise.all([
+					queryClient.invalidateQueries({
+						queryKey: orpc.admin.organizations.list.key(),
+					}),
+					queryClient.invalidateQueries({
+						queryKey: organizationListQueryKey,
+					}),
+				]);
 			},
 			{
 				loading: t("admin.organizations.deleteOrganization.deleting"),
-				success: () => {
-					void queryClient.invalidateQueries({
-						queryKey: orpc.admin.organizations.list.key(),
-					});
-					return t("admin.organizations.deleteOrganization.deleted");
-				},
+				success: t("admin.organizations.deleteOrganization.deleted"),
 				error: t("admin.organizations.deleteOrganization.notDeleted"),
 			},
 		);

@@ -7,6 +7,16 @@
 #### Admin
 
 - **User list after delete**: Invalidate the admin users query after removing a user so the deleted row leaves the list without a manual refresh.
+- **Organization list caches**: Admin organization create/update/delete also invalidates the user organization switcher list.
+
+#### Organizations
+
+- **Leave organization**: Removing a member (including leave) refreshes both the members query and the organization list used by the switcher.
+- **Organization name change**: Renaming an organization also refetches the active organization cache.
+
+#### Settings
+
+- **Active sessions after password change**: Changing a password with `revokeOtherSessions` invalidates the active sessions list.
 
 #### Organizations
 

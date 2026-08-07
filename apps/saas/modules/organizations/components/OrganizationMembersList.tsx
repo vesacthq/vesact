@@ -1,7 +1,11 @@
 import { useSession } from "@auth/hooks/use-session";
 import { useTranslations } from "@i18n/intl";
 import { useOrganizationMemberRoles } from "@organizations/hooks/member-roles";
-import { fullOrganizationQueryKey, useFullOrganizationQuery } from "@organizations/lib/api";
+import {
+	fullOrganizationQueryKey,
+	organizationListQueryKey,
+	useFullOrganizationQuery,
+} from "@organizations/lib/api";
 import type { OrganizationMemberRole } from "@repo/auth";
 import { authClient } from "@repo/auth/client";
 import { isOrganizationAdmin } from "@repo/auth/lib/helper";
@@ -69,16 +73,19 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 					memberIdOrEmail: memberId,
 					organizationId,
 				});
+
+				await Promise.all([
+					queryClient.invalidateQueries({
+						queryKey: fullOrganizationQueryKey(organizationId),
+					}),
+					queryClient.invalidateQueries({
+						queryKey: organizationListQueryKey,
+					}),
+				]);
 			},
 			{
 				loading: t("organizations.settings.members.notifications.removeMember.loading.description"),
-				success: () => {
-					void queryClient.invalidateQueries({
-						queryKey: fullOrganizationQueryKey(organizationId),
-					});
-
-					return t("organizations.settings.members.notifications.removeMember.success.description");
-				},
+				success: t("organizations.settings.members.notifications.removeMember.success.description"),
 				error: t("organizations.settings.members.notifications.removeMember.error.description"),
 			},
 		);
