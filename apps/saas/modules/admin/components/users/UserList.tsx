@@ -168,6 +168,10 @@ export function UserList() {
 				if (error) {
 					throw error;
 				}
+
+				await queryClient.invalidateQueries({
+					queryKey: orpc.admin.users.list.key(),
+				});
 			},
 			{
 				loading: t("admin.users.deleteUser.deleting"),
