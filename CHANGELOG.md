@@ -4,15 +4,13 @@
 
 ### Fixed
 
-<<<<<<< HEAD
-#### Organizations
-
-- **Invitation accept button**: The organization invitation modal Accept action now uses the primary button variant so it is visually distinct from Decline.
-=======
 #### Admin
 
 - **User list after delete**: Invalidate the admin users query after removing a user so the deleted row leaves the list without a manual refresh.
->>>>>>> origin/main
+
+#### Organizations
+
+- **Invitation accept button**: The organization invitation modal Accept action now uses the primary button variant so it is visually distinct from Decline.
 
 ### Changed
 
