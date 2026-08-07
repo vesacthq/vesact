@@ -89,6 +89,7 @@ export function OrganizationInvitationModal({
 				</Button>
 				<Button
 					className="flex-1"
+					variant="primary"
 					onClick={() => onSelectAnswer(true)}
 					disabled={!!submitting}
 					loading={submitting === "accept"}
