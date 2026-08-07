@@ -2,6 +2,12 @@
 
 ## 2026-08-07
 
+### Fixed
+
+#### Admin
+
+- **User list after delete**: Invalidate the admin users query after removing a user so the deleted row leaves the list without a manual refresh.
+
 ### Changed
 
 #### Dependencies
