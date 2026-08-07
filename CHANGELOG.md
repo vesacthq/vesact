@@ -4,6 +4,10 @@
 
 ### Fixed
 
+#### Auth
+
+- **Social sign-in errors**: Failed OAuth/social sign-in API calls on the login and signup pages now show an error toast instead of failing silently.
+
 #### Admin
 
 - **User list after delete**: Invalidate the admin users query after removing a user so the deleted row leaves the list without a manual refresh.

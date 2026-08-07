@@ -192,6 +192,7 @@
 			"forgotPassword": "¿Olvidaste tu contraseña?",
 			"hints": {
 				"invalidCredentials": "El correo o la contraseña que ingresaste no son válidos. Por favor, inténtalo de nuevo.",
+				"socialSigninFailed": "No se pudo iniciar sesión. Por favor, inténtalo de nuevo.",
 				"linkSent": {
 					"message": "Te hemos enviado un enlace para continuar. Por favor, revisa tu bandeja de entrada.",
 					"title": "Enlace enviado"

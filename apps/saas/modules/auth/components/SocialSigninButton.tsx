@@ -1,6 +1,8 @@
 import { config } from "@config";
+import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
+import { toastError } from "@repo/ui/components/toast";
 import { parseAsString, useQueryState } from "nuqs";
 
 import { oAuthProviders } from "../constants/oauth-providers";
@@ -12,6 +14,7 @@ export function SocialSigninButton({
 	provider: keyof typeof oAuthProviders;
 	className?: string;
 }) {
+	const t = useTranslations();
 	const [invitationId] = useQueryState("invitationId", parseAsString);
 	const providerData = oAuthProviders[provider];
 
@@ -21,10 +24,14 @@ export function SocialSigninButton({
 
 	const onSignin = async () => {
 		const callbackURL = new URL(redirectPath, window.location.origin);
-		await authClient.signIn.social({
+		const { error } = await authClient.signIn.social({
 			provider,
 			callbackURL: callbackURL.toString(),
 		});
+
+		if (error) {
+			toastError(t("auth.login.hints.socialSigninFailed"));
+		}
 	};
 
 	return (

@@ -192,6 +192,7 @@
 			"forgotPassword": "Passwort vergessen?",
 			"hints": {
 				"invalidCredentials": "Die von dir eingegebenen Anmeldeinformationen sind ungültig. \nBitte versuche es erneut.",
+				"socialSigninFailed": "Anmeldung fehlgeschlagen. Bitte versuche es erneut.",
 				"linkSent": {
 					"message": "Wir haben dir einen Link zum Fortfahren gesendet. \nBitte überprüfe deinen Posteingang.",
 					"title": "Link gesendet"
