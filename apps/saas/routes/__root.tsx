@@ -2,14 +2,16 @@ import { SessionProvider } from "@auth/components/SessionProvider";
 import { config } from "@config";
 import { I18nProvider } from "@i18n/provider";
 import { getCurrentLocale } from "@repo/i18n/runtime";
+import type { PermissionsDefinition } from "@repo/permissions";
 import { Button, cn, ThemeProvider, Toaster } from "@repo/ui";
-// Button is used by the error boundary to render a "Try again" action.
 import { ApiClientProvider } from "@shared/components/ApiClientProvider";
 import { ClientProviders } from "@shared/components/ClientProviders";
 import { ConsentBanner } from "@shared/components/ConsentBanner";
 import { ConsentProvider } from "@shared/components/ConsentProvider";
+import { PermixProvider } from "@shared/components/PermixProvider";
+import { getPermixState } from "@shared/lib/get-permix-state";
 import {
-	createRootRoute,
+	createRootRouteWithContext,
 	ErrorComponent,
 	HeadContent,
 	Link,
@@ -19,10 +21,20 @@ import {
 	useRouterState,
 } from "@tanstack/react-router";
 import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
+import type { Permix } from "permix";
 
 import appCss from "./globals.css?url";
 
-export const Route = createRootRoute({
+export interface RouterContext {
+	permix: Permix<PermissionsDefinition>;
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
+	beforeLoad: async ({ context }) => {
+		const state = await getPermixState();
+		context.permix.hydrate(state);
+		return { permixState: state };
+	},
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -58,8 +70,9 @@ export const Route = createRootRoute({
 });
 
 function RootLayout() {
-	useRouterState({ select: (s) => s.location.pathname });
+	useRouterState({ select: (routerState) => routerState.location.pathname });
 	const locale = getCurrentLocale();
+	const { permix, permixState } = Route.useRouteContext();
 
 	return (
 		<html lang={locale} suppressHydrationWarning>
@@ -71,15 +84,17 @@ function RootLayout() {
 					<ThemeProvider defaultTheme={config.defaultTheme}>
 						<ApiClientProvider>
 							<SessionProvider>
-								<ClientProviders>
-									<I18nProvider>
-										<ConsentProvider>
-											<Outlet />
-											<ConsentBanner />
-											<Toaster position="top-right" />
-										</ConsentProvider>
-									</I18nProvider>
-								</ClientProviders>
+								<PermixProvider permix={permix} state={permixState}>
+									<ClientProviders>
+										<I18nProvider>
+											<ConsentProvider>
+												<Outlet />
+												<ConsentBanner />
+												<Toaster position="top-right" />
+											</ConsentProvider>
+										</I18nProvider>
+									</ClientProviders>
+								</PermixProvider>
 							</SessionProvider>
 						</ApiClientProvider>
 					</ThemeProvider>

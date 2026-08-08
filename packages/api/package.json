@@ -23,6 +23,7 @@
 		"@repo/mail": "workspace:*",
 		"@repo/notifications": "workspace:*",
 		"@repo/payments": "workspace:*",
+		"@repo/permissions": "workspace:*",
 		"@repo/storage": "workspace:*",
 		"@repo/utils": "workspace:*",
 		"@scalar/hono-api-reference": "catalog:",
@@ -30,6 +31,7 @@
 		"hono": "catalog:",
 		"nanoid": "catalog:",
 		"openai": "catalog:",
+		"permix": "catalog:",
 		"slugify": "catalog:",
 		"zod": "catalog:"
 	},

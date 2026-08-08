@@ -13,7 +13,6 @@ export const useActiveOrganization = () => {
 			setActiveOrganization: () => Promise.resolve(),
 			refetchActiveOrganization: () => Promise.resolve(),
 			activeOrganizationUserRole: null,
-			isOrganizationAdmin: false,
 			loaded: true,
 		} satisfies ActiveOrganizationContextType;
 	}

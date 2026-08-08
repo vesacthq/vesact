@@ -8,7 +8,7 @@ import {
 } from "@organizations/lib/api";
 import type { OrganizationMemberRole } from "@repo/auth";
 import { authClient } from "@repo/auth/client";
-import { isOrganizationAdmin } from "@repo/auth/lib/helper";
+import { checkPermission } from "@repo/permissions";
 import { Button } from "@repo/ui/components/button";
 import {
 	DropdownMenu,
@@ -37,7 +37,14 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const memberRoles = useOrganizationMemberRoles();
 
-	const userIsOrganizationAdmin = isOrganizationAdmin(organization, user);
+	const membershipRole = organization?.members.find((member) => member.userId === user?.id)?.role;
+	const canManageOrganization = checkPermission(
+		{
+			user,
+			membershipRole,
+		},
+		"organization.manage",
+	);
 
 	const updateMemberRole = async (memberId: string, role: OrganizationMemberRole) => {
 		toastPromise(
@@ -119,12 +126,12 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 			cell: ({ row }) => {
 				return (
 					<div className="gap-2 flex flex-row justify-end">
-						{userIsOrganizationAdmin ? (
+						{canManageOrganization ? (
 							<>
 								<OrganizationRoleSelect
 									value={row.original.role}
 									onSelect={async (value) => updateMemberRole(row.original.id, value)}
-									disabled={!userIsOrganizationAdmin || row.original.role === "owner"}
+									disabled={!canManageOrganization || row.original.role === "owner"}
 								/>
 								<DropdownMenu>
 									<DropdownMenuTrigger
@@ -137,7 +144,7 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 									<DropdownMenuContent>
 										{row.original.userId !== user?.id && (
 											<DropdownMenuItem
-												disabled={!isOrganizationAdmin(organization, user)}
+												disabled={!canManageOrganization}
 												className="text-destructive"
 												onClick={async () => removeMember(row.original.id)}
 											>

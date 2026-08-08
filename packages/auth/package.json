@@ -15,6 +15,7 @@
 		"@repo/mail": "workspace:*",
 		"@repo/notifications": "workspace:*",
 		"@repo/payments": "workspace:*",
+		"@repo/permissions": "workspace:*",
 		"@repo/utils": "workspace:*",
 		"better-auth": "catalog:",
 		"cookie": "catalog:"

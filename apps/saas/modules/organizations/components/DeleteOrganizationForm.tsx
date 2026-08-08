@@ -1,7 +1,9 @@
+import { useSession } from "@auth/hooks/use-session";
 import { useTranslations } from "@i18n/intl";
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { useOrganizationListQuery } from "@organizations/lib/api";
 import { authClient } from "@repo/auth/client";
+import { checkPermission } from "@repo/permissions";
 import { Button } from "@repo/ui/components/button";
 import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
@@ -15,8 +17,18 @@ export function DeleteOrganizationForm() {
 	const { refetch: reloadOrganizations } = useOrganizationListQuery();
 	const { activeOrganization, activeOrganizationUserRole, setActiveOrganization } =
 		useActiveOrganization();
+	const { user } = useSession();
 
-	if (!activeOrganization || activeOrganizationUserRole !== "owner") {
+	if (
+		!activeOrganization ||
+		!checkPermission(
+			{
+				user,
+				membershipRole: activeOrganizationUserRole,
+			},
+			"organization.delete",
+		)
+	) {
 		return null;
 	}
 

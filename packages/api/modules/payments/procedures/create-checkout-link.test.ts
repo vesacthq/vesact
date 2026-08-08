@@ -18,6 +18,7 @@ vi.mock("@repo/logs", () => ({
 
 vi.mock("@repo/database", () => ({
 	getOrganizationById: vi.fn(),
+	getOrganizationMembership: vi.fn(),
 }));
 
 vi.mock("@repo/payments", () => ({

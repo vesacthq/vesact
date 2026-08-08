@@ -15,7 +15,7 @@ const loadActiveOrganizationForAuthenticatedRouteFn = createServerFn({
 	method: "GET",
 	strict: false,
 })
-	.inputValidator((organizationId: string) => organizationId)
+	.validator((organizationId: string) => organizationId)
 	.handler(async ({ data: organizationId }) => ({
 		result: await getActiveOrganizationById(organizationId),
 	}));

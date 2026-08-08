@@ -10,7 +10,7 @@ export default defineConfig({
 		port: 3002,
 	},
 	plugins: [
-		mdx(await import("./source.config")),
+		mdx(await import("./source.config.ts")),
 		tailwindcss(),
 		tanstackStart({
 			prerender: {

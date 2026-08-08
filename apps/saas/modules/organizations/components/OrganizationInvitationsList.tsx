@@ -3,7 +3,7 @@ import { useFormatter, useTranslations } from "@i18n/intl";
 import { fullOrganizationQueryKey, useFullOrganizationQuery } from "@organizations/lib/api";
 import type { ActiveOrganization } from "@repo/auth";
 import { authClient } from "@repo/auth/client";
-import { isOrganizationAdmin } from "@repo/auth/lib/helper";
+import { checkPermission } from "@repo/permissions";
 import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -29,7 +29,14 @@ export function OrganizationInvitationsList({ organizationId }: { organizationId
 	const formatter = useFormatter();
 	const { data: organization } = useFullOrganizationQuery(organizationId);
 
-	const canUserEditInvitations = isOrganizationAdmin(organization, user);
+	const membershipRole = organization?.members.find((member) => member.userId === user?.id)?.role;
+	const canManageOrganization = checkPermission(
+		{
+			user,
+			membershipRole,
+		},
+		"organization.manage",
+	);
 
 	const invitations = useMemo(
 		() =>
@@ -126,7 +133,7 @@ export function OrganizationInvitationsList({ organizationId }: { organizationId
 							}}
 						/>
 
-						{canUserEditInvitations && (
+						{canManageOrganization && (
 							<DropdownMenu>
 								<DropdownMenuTrigger
 									render={(props) => (

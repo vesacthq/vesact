@@ -15,6 +15,10 @@
 
 ### Fixed
 
+#### Permissions
+
+- **Admin access gate**: Evaluate `admin.access` with `checkPermission({ user })` instead of `permix.getOrThrow(context)`, so the admin route does not depend on request-middleware Permix setup.
+
 #### Auth
 
 - **Social sign-in errors**: Failed OAuth/social sign-in API calls on the login and signup pages now show an error toast instead of failing silently.
@@ -28,14 +32,11 @@
 
 - **Leave organization**: Removing a member (including leave) refreshes both the members query and the organization list used by the switcher.
 - **Organization name change**: Renaming an organization also refetches the active organization cache.
+- **Invitation accept button**: The organization invitation modal Accept action now uses the primary button variant so it is visually distinct from Decline.
 
 #### Settings
 
 - **Active sessions after password change**: Changing a password with `revokeOtherSessions` invalidates the active sessions list.
-
-#### Organizations
-
-- **Invitation accept button**: The organization invitation modal Accept action now uses the primary button variant so it is visually distinct from Decline.
 
 ### Changed
 
@@ -72,6 +73,10 @@
 
 ### Added
 
+#### Permissions
+
+- **Permix authorization**: Introduced `@repo/permissions` with a typed permission matrix and `createPermissionRules` / `checkPermission` helpers. Wired Permix into oRPC (`permix/orpc`) for `adminProcedure` and organization/payment gates, and into the SaaS app via `permix/tanstack-start` (app-root `start.ts` request middleware with an explicit `createMiddleware().server()` boundary — required because SaaS uses `srcDirectory: "."` and server-only setup imports must be compiler-visible), router-context hydration via `createServerFn`, and client `PermixProvider`. UI guards now check permissions instead of scattered role string comparisons. Better Auth `organization.*` client endpoints stay on Better Auth's own access control.
+
 #### Admin
 
 - **User bans**: Added admin controls to ban users with an internal reason and optional expiration, review active ban details, and unban users.
@@ -84,7 +89,7 @@
 
 #### Dependencies
 
-- **Production dependencies**: Bumped `hono` to `^4.12.34` and `react-dropzone` to `^20.0.0` (major upgrade: Node.js 22+ required, ESM-first package layout). Synced the lockfile for `fumadocs-mdx` `15.2.2`. Skipped `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Production dependencies**: Added `permix` `^4.1.2`. Bumped `hono` to `^4.12.34` and `react-dropzone` to `^20.0.0` (major upgrade: Node.js 22+ required, ESM-first package layout). Synced the lockfile for `fumadocs-mdx` `15.2.2`. Skipped `@types/uuid` (deprecated). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
 - **Development dependencies**: Bumped `tsx` to `^4.23.5`.
 
 ---

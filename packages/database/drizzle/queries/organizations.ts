@@ -14,7 +14,7 @@ export async function getOrganizations({
 	offset: number;
 	query?: string;
 }) {
-	return db.query.organization.findMany({
+	const organizations = await db.query.organization.findMany({
 		where: query ? (org, { ilike, or }) => or(ilike(org.name, `%${query}%`)) : undefined,
 		limit,
 		offset,
@@ -25,6 +25,11 @@ export async function getOrganizations({
 				),
 		},
 	});
+
+	return organizations.map((organizationRecord) => ({
+		...organizationRecord,
+		membersCount: Number(organizationRecord.membersCount),
+	}));
 }
 
 export async function countAllOrganizations({ query }: { query?: string }) {
@@ -71,7 +76,7 @@ export async function getOrganizationMembership(organizationId: string, userId: 
 }
 
 export async function getOrganizationWithPurchasesAndMembersCount(organizationId: string) {
-	return db.query.organization.findFirst({
+	const organizationRecord = await db.query.organization.findFirst({
 		where: (org, { eq }) => eq(org.id, organizationId),
 		with: {
 			purchases: true,
@@ -83,6 +88,15 @@ export async function getOrganizationWithPurchasesAndMembersCount(organizationId
 				),
 		},
 	});
+
+	if (!organizationRecord) {
+		return organizationRecord;
+	}
+
+	return {
+		...organizationRecord,
+		membersCount: Number(organizationRecord.membersCount),
+	};
 }
 
 export async function getPendingInvitationByEmail(email: string) {

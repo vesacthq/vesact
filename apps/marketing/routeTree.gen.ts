@@ -9,32 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ContactIndexRouteImport } from './routes/contact/index'
-import { Route as ChangelogIndexRouteImport } from './routes/changelog/index'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
-import { Route as LegalSlugIndexRouteImport } from './routes/legal/$slug/index'
+import { Route as ChangelogIndexRouteImport } from './routes/changelog/index'
+import { Route as ContactIndexRouteImport } from './routes/contact/index'
 import { Route as BlogSplatIndexRouteImport } from './routes/blog/$/index'
+import { Route as LegalSlugIndexRouteImport } from './routes/legal/$slug/index'
 
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ContactIndexRoute = ContactIndexRouteImport.update({
-  id: '/contact/',
-  path: '/contact/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ChangelogIndexRoute = ChangelogIndexRouteImport.update({
-  id: '/changelog/',
-  path: '/changelog/',
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -42,14 +32,24 @@ const BlogIndexRoute = BlogIndexRouteImport.update({
   path: '/blog/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LegalSlugIndexRoute = LegalSlugIndexRouteImport.update({
-  id: '/legal/$slug/',
-  path: '/legal/$slug/',
+const ChangelogIndexRoute = ChangelogIndexRouteImport.update({
+  id: '/changelog/',
+  path: '/changelog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactIndexRoute = ContactIndexRouteImport.update({
+  id: '/contact/',
+  path: '/contact/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSplatIndexRoute = BlogSplatIndexRouteImport.update({
   id: '/blog/$/',
   path: '/blog/$/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalSlugIndexRoute = LegalSlugIndexRouteImport.update({
+  id: '/legal/$slug/',
+  path: '/legal/$slug/',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -123,13 +123,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -137,18 +130,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/contact/': {
-      id: '/contact/'
-      path: '/contact'
-      fullPath: '/contact/'
-      preLoaderRoute: typeof ContactIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/changelog/': {
-      id: '/changelog/'
-      path: '/changelog'
-      fullPath: '/changelog/'
-      preLoaderRoute: typeof ChangelogIndexRouteImport
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -158,11 +144,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/legal/$slug/': {
-      id: '/legal/$slug/'
-      path: '/legal/$slug'
-      fullPath: '/legal/$slug/'
-      preLoaderRoute: typeof LegalSlugIndexRouteImport
+    '/changelog/': {
+      id: '/changelog/'
+      path: '/changelog'
+      fullPath: '/changelog/'
+      preLoaderRoute: typeof ChangelogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact/': {
+      id: '/contact/'
+      path: '/contact'
+      fullPath: '/contact/'
+      preLoaderRoute: typeof ContactIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/$/': {
@@ -170,6 +163,13 @@ declare module '@tanstack/react-router' {
       path: '/blog/$'
       fullPath: '/blog/$/'
       preLoaderRoute: typeof BlogSplatIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/$slug/': {
+      id: '/legal/$slug/'
+      path: '/legal/$slug'
+      fullPath: '/legal/$slug/'
+      preLoaderRoute: typeof LegalSlugIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }

@@ -10,62 +10,51 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
-import { Route as VerifyIndexRouteImport } from './routes/verify/index'
-import { Route as SignupIndexRouteImport } from './routes/signup/index'
-import { Route as ResetPasswordIndexRouteImport } from './routes/reset-password/index'
-import { Route as LoginIndexRouteImport } from './routes/login/index'
+import { Route as AuthenticatedMainRouteRouteImport } from './routes/_authenticated/_main/route'
+import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as ForgotPasswordIndexRouteImport } from './routes/forgot-password/index'
 import { Route as ImageProxySplatRouteImport } from './routes/image-proxy/$'
-import { Route as ApiSplatRouteImport } from './routes/api/$'
-import { Route as AuthenticatedMainRouteRouteImport } from './routes/_authenticated/_main/route'
-import { Route as AuthenticatedOnboardingIndexRouteImport } from './routes/_authenticated/onboarding/index'
-import { Route as AuthenticatedNewOrganizationIndexRouteImport } from './routes/_authenticated/new-organization/index'
-import { Route as AuthenticatedChoosePlanIndexRouteImport } from './routes/_authenticated/choose-plan/index'
-import { Route as AuthenticatedCheckoutReturnIndexRouteImport } from './routes/_authenticated/checkout-return/index'
+import { Route as LoginIndexRouteImport } from './routes/login/index'
+import { Route as ResetPasswordIndexRouteImport } from './routes/reset-password/index'
+import { Route as SignupIndexRouteImport } from './routes/signup/index'
+import { Route as VerifyIndexRouteImport } from './routes/verify/index'
 import { Route as AuthenticatedMainIndexRouteImport } from './routes/_authenticated/_main/index'
-import { Route as AuthenticatedMainSettingsRouteRouteImport } from './routes/_authenticated/_main/settings/route'
 import { Route as AuthenticatedMainAdminRouteRouteImport } from './routes/_authenticated/_main/admin/route'
-import { Route as AuthenticatedOrganizationInvitationInvitationIdIndexRouteImport } from './routes/_authenticated/organization-invitation/$invitationId/index'
-import { Route as AuthenticatedMainSettingsIndexRouteImport } from './routes/_authenticated/_main/settings/index'
-import { Route as AuthenticatedMainChatbotIndexRouteImport } from './routes/_authenticated/_main/chatbot/index'
-import { Route as AuthenticatedMainAdminIndexRouteImport } from './routes/_authenticated/_main/admin/index'
+import { Route as AuthenticatedMainSettingsRouteRouteImport } from './routes/_authenticated/_main/settings/route'
+import { Route as AuthenticatedCheckoutReturnIndexRouteImport } from './routes/_authenticated/checkout-return/index'
+import { Route as AuthenticatedChoosePlanIndexRouteImport } from './routes/_authenticated/choose-plan/index'
+import { Route as AuthenticatedNewOrganizationIndexRouteImport } from './routes/_authenticated/new-organization/index'
+import { Route as AuthenticatedOnboardingIndexRouteImport } from './routes/_authenticated/onboarding/index'
 import { Route as AuthenticatedMainOrganizationSlugIndexRouteImport } from './routes/_authenticated/_main/$organizationSlug/index'
 import { Route as AuthenticatedMainOrganizationSlugSettingsRouteRouteImport } from './routes/_authenticated/_main/$organizationSlug/settings/route'
-import { Route as AuthenticatedMainSettingsSecurityIndexRouteImport } from './routes/_authenticated/_main/settings/security/index'
-import { Route as AuthenticatedMainSettingsNotificationsIndexRouteImport } from './routes/_authenticated/_main/settings/notifications/index'
-import { Route as AuthenticatedMainSettingsGeneralIndexRouteImport } from './routes/_authenticated/_main/settings/general/index'
-import { Route as AuthenticatedMainSettingsBillingIndexRouteImport } from './routes/_authenticated/_main/settings/billing/index'
-import { Route as AuthenticatedMainAdminUsersIndexRouteImport } from './routes/_authenticated/_main/admin/users/index'
-import { Route as AuthenticatedMainAdminOrganizationsIndexRouteImport } from './routes/_authenticated/_main/admin/organizations/index'
+import { Route as AuthenticatedMainAdminIndexRouteImport } from './routes/_authenticated/_main/admin/index'
+import { Route as AuthenticatedMainChatbotIndexRouteImport } from './routes/_authenticated/_main/chatbot/index'
+import { Route as AuthenticatedMainSettingsIndexRouteImport } from './routes/_authenticated/_main/settings/index'
+import { Route as AuthenticatedOrganizationInvitationInvitationIdIndexRouteImport } from './routes/_authenticated/organization-invitation/$invitationId/index'
 import { Route as AuthenticatedMainOrganizationSlugSettingsIndexRouteImport } from './routes/_authenticated/_main/$organizationSlug/settings/index'
-import { Route as AuthenticatedMainAdminOrganizationsNewIndexRouteImport } from './routes/_authenticated/_main/admin/organizations/new/index'
-import { Route as AuthenticatedMainAdminOrganizationsOrganizationIdIndexRouteImport } from './routes/_authenticated/_main/admin/organizations/$organizationId/index'
-import { Route as AuthenticatedMainOrganizationSlugSettingsMembersIndexRouteImport } from './routes/_authenticated/_main/$organizationSlug/settings/members/index'
-import { Route as AuthenticatedMainOrganizationSlugSettingsGeneralIndexRouteImport } from './routes/_authenticated/_main/$organizationSlug/settings/general/index'
+import { Route as AuthenticatedMainAdminOrganizationsIndexRouteImport } from './routes/_authenticated/_main/admin/organizations/index'
+import { Route as AuthenticatedMainAdminUsersIndexRouteImport } from './routes/_authenticated/_main/admin/users/index'
+import { Route as AuthenticatedMainSettingsBillingIndexRouteImport } from './routes/_authenticated/_main/settings/billing/index'
+import { Route as AuthenticatedMainSettingsGeneralIndexRouteImport } from './routes/_authenticated/_main/settings/general/index'
+import { Route as AuthenticatedMainSettingsNotificationsIndexRouteImport } from './routes/_authenticated/_main/settings/notifications/index'
+import { Route as AuthenticatedMainSettingsSecurityIndexRouteImport } from './routes/_authenticated/_main/settings/security/index'
 import { Route as AuthenticatedMainOrganizationSlugSettingsBillingIndexRouteImport } from './routes/_authenticated/_main/$organizationSlug/settings/billing/index'
+import { Route as AuthenticatedMainOrganizationSlugSettingsGeneralIndexRouteImport } from './routes/_authenticated/_main/$organizationSlug/settings/general/index'
+import { Route as AuthenticatedMainOrganizationSlugSettingsMembersIndexRouteImport } from './routes/_authenticated/_main/$organizationSlug/settings/members/index'
+import { Route as AuthenticatedMainAdminOrganizationsOrganizationIdIndexRouteImport } from './routes/_authenticated/_main/admin/organizations/$organizationId/index'
+import { Route as AuthenticatedMainAdminOrganizationsNewIndexRouteImport } from './routes/_authenticated/_main/admin/organizations/new/index'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const VerifyIndexRoute = VerifyIndexRouteImport.update({
-  id: '/verify/',
-  path: '/verify/',
-  getParentRoute: () => rootRouteImport,
+const AuthenticatedMainRouteRoute = AuthenticatedMainRouteRouteImport.update({
+  id: '/_main',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const SignupIndexRoute = SignupIndexRouteImport.update({
-  id: '/signup/',
-  path: '/signup/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordIndexRoute = ResetPasswordIndexRouteImport.update({
-  id: '/reset-password/',
-  path: '/reset-password/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginIndexRoute = LoginIndexRouteImport.update({
-  id: '/login/',
-  path: '/login/',
+const ApiSplatRoute = ApiSplatRouteImport.update({
+  id: '/api/$',
+  path: '/api/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForgotPasswordIndexRoute = ForgotPasswordIndexRouteImport.update({
@@ -78,25 +67,47 @@ const ImageProxySplatRoute = ImageProxySplatRouteImport.update({
   path: '/image-proxy/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiSplatRoute = ApiSplatRouteImport.update({
-  id: '/api/$',
-  path: '/api/$',
+const LoginIndexRoute = LoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedMainRouteRoute = AuthenticatedMainRouteRouteImport.update({
-  id: '/_main',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const ResetPasswordIndexRoute = ResetPasswordIndexRouteImport.update({
+  id: '/reset-password/',
+  path: '/reset-password/',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedOnboardingIndexRoute =
-  AuthenticatedOnboardingIndexRouteImport.update({
-    id: '/onboarding/',
-    path: '/onboarding/',
-    getParentRoute: () => AuthenticatedRouteRoute,
+const SignupIndexRoute = SignupIndexRouteImport.update({
+  id: '/signup/',
+  path: '/signup/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyIndexRoute = VerifyIndexRouteImport.update({
+  id: '/verify/',
+  path: '/verify/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedMainIndexRoute = AuthenticatedMainIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedMainRouteRoute,
+} as any)
+const AuthenticatedMainAdminRouteRoute =
+  AuthenticatedMainAdminRouteRouteImport.update({
+    id: '/admin',
+    path: '/admin',
+    getParentRoute: () => AuthenticatedMainRouteRoute,
   } as any)
-const AuthenticatedNewOrganizationIndexRoute =
-  AuthenticatedNewOrganizationIndexRouteImport.update({
-    id: '/new-organization/',
-    path: '/new-organization/',
+const AuthenticatedMainSettingsRouteRoute =
+  AuthenticatedMainSettingsRouteRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedMainRouteRoute,
+  } as any)
+const AuthenticatedCheckoutReturnIndexRoute =
+  AuthenticatedCheckoutReturnIndexRouteImport.update({
+    id: '/checkout-return/',
+    path: '/checkout-return/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedChoosePlanIndexRoute =
@@ -105,52 +116,17 @@ const AuthenticatedChoosePlanIndexRoute =
     path: '/choose-plan/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedCheckoutReturnIndexRoute =
-  AuthenticatedCheckoutReturnIndexRouteImport.update({
-    id: '/checkout-return/',
-    path: '/checkout-return/',
+const AuthenticatedNewOrganizationIndexRoute =
+  AuthenticatedNewOrganizationIndexRouteImport.update({
+    id: '/new-organization/',
+    path: '/new-organization/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedMainIndexRoute = AuthenticatedMainIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthenticatedMainRouteRoute,
-} as any)
-const AuthenticatedMainSettingsRouteRoute =
-  AuthenticatedMainSettingsRouteRouteImport.update({
-    id: '/settings',
-    path: '/settings',
-    getParentRoute: () => AuthenticatedMainRouteRoute,
-  } as any)
-const AuthenticatedMainAdminRouteRoute =
-  AuthenticatedMainAdminRouteRouteImport.update({
-    id: '/admin',
-    path: '/admin',
-    getParentRoute: () => AuthenticatedMainRouteRoute,
-  } as any)
-const AuthenticatedOrganizationInvitationInvitationIdIndexRoute =
-  AuthenticatedOrganizationInvitationInvitationIdIndexRouteImport.update({
-    id: '/organization-invitation/$invitationId/',
-    path: '/organization-invitation/$invitationId/',
+const AuthenticatedOnboardingIndexRoute =
+  AuthenticatedOnboardingIndexRouteImport.update({
+    id: '/onboarding/',
+    path: '/onboarding/',
     getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedMainSettingsIndexRoute =
-  AuthenticatedMainSettingsIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthenticatedMainSettingsRouteRoute,
-  } as any)
-const AuthenticatedMainChatbotIndexRoute =
-  AuthenticatedMainChatbotIndexRouteImport.update({
-    id: '/chatbot/',
-    path: '/chatbot/',
-    getParentRoute: () => AuthenticatedMainRouteRoute,
-  } as any)
-const AuthenticatedMainAdminIndexRoute =
-  AuthenticatedMainAdminIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthenticatedMainAdminRouteRoute,
   } as any)
 const AuthenticatedMainOrganizationSlugIndexRoute =
   AuthenticatedMainOrganizationSlugIndexRouteImport.update({
@@ -164,16 +140,52 @@ const AuthenticatedMainOrganizationSlugSettingsRouteRoute =
     path: '/$organizationSlug/settings',
     getParentRoute: () => AuthenticatedMainRouteRoute,
   } as any)
-const AuthenticatedMainSettingsSecurityIndexRoute =
-  AuthenticatedMainSettingsSecurityIndexRouteImport.update({
-    id: '/security/',
-    path: '/security/',
+const AuthenticatedMainAdminIndexRoute =
+  AuthenticatedMainAdminIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedMainAdminRouteRoute,
+  } as any)
+const AuthenticatedMainChatbotIndexRoute =
+  AuthenticatedMainChatbotIndexRouteImport.update({
+    id: '/chatbot/',
+    path: '/chatbot/',
+    getParentRoute: () => AuthenticatedMainRouteRoute,
+  } as any)
+const AuthenticatedMainSettingsIndexRoute =
+  AuthenticatedMainSettingsIndexRouteImport.update({
+    id: '/',
+    path: '/',
     getParentRoute: () => AuthenticatedMainSettingsRouteRoute,
   } as any)
-const AuthenticatedMainSettingsNotificationsIndexRoute =
-  AuthenticatedMainSettingsNotificationsIndexRouteImport.update({
-    id: '/notifications/',
-    path: '/notifications/',
+const AuthenticatedOrganizationInvitationInvitationIdIndexRoute =
+  AuthenticatedOrganizationInvitationInvitationIdIndexRouteImport.update({
+    id: '/organization-invitation/$invitationId/',
+    path: '/organization-invitation/$invitationId/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMainOrganizationSlugSettingsIndexRoute =
+  AuthenticatedMainOrganizationSlugSettingsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedMainOrganizationSlugSettingsRouteRoute,
+  } as any)
+const AuthenticatedMainAdminOrganizationsIndexRoute =
+  AuthenticatedMainAdminOrganizationsIndexRouteImport.update({
+    id: '/organizations/',
+    path: '/organizations/',
+    getParentRoute: () => AuthenticatedMainAdminRouteRoute,
+  } as any)
+const AuthenticatedMainAdminUsersIndexRoute =
+  AuthenticatedMainAdminUsersIndexRouteImport.update({
+    id: '/users/',
+    path: '/users/',
+    getParentRoute: () => AuthenticatedMainAdminRouteRoute,
+  } as any)
+const AuthenticatedMainSettingsBillingIndexRoute =
+  AuthenticatedMainSettingsBillingIndexRouteImport.update({
+    id: '/billing/',
+    path: '/billing/',
     getParentRoute: () => AuthenticatedMainSettingsRouteRoute,
   } as any)
 const AuthenticatedMainSettingsGeneralIndexRoute =
@@ -182,46 +194,22 @@ const AuthenticatedMainSettingsGeneralIndexRoute =
     path: '/general/',
     getParentRoute: () => AuthenticatedMainSettingsRouteRoute,
   } as any)
-const AuthenticatedMainSettingsBillingIndexRoute =
-  AuthenticatedMainSettingsBillingIndexRouteImport.update({
-    id: '/billing/',
-    path: '/billing/',
+const AuthenticatedMainSettingsNotificationsIndexRoute =
+  AuthenticatedMainSettingsNotificationsIndexRouteImport.update({
+    id: '/notifications/',
+    path: '/notifications/',
     getParentRoute: () => AuthenticatedMainSettingsRouteRoute,
   } as any)
-const AuthenticatedMainAdminUsersIndexRoute =
-  AuthenticatedMainAdminUsersIndexRouteImport.update({
-    id: '/users/',
-    path: '/users/',
-    getParentRoute: () => AuthenticatedMainAdminRouteRoute,
+const AuthenticatedMainSettingsSecurityIndexRoute =
+  AuthenticatedMainSettingsSecurityIndexRouteImport.update({
+    id: '/security/',
+    path: '/security/',
+    getParentRoute: () => AuthenticatedMainSettingsRouteRoute,
   } as any)
-const AuthenticatedMainAdminOrganizationsIndexRoute =
-  AuthenticatedMainAdminOrganizationsIndexRouteImport.update({
-    id: '/organizations/',
-    path: '/organizations/',
-    getParentRoute: () => AuthenticatedMainAdminRouteRoute,
-  } as any)
-const AuthenticatedMainOrganizationSlugSettingsIndexRoute =
-  AuthenticatedMainOrganizationSlugSettingsIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthenticatedMainOrganizationSlugSettingsRouteRoute,
-  } as any)
-const AuthenticatedMainAdminOrganizationsNewIndexRoute =
-  AuthenticatedMainAdminOrganizationsNewIndexRouteImport.update({
-    id: '/organizations/new/',
-    path: '/organizations/new/',
-    getParentRoute: () => AuthenticatedMainAdminRouteRoute,
-  } as any)
-const AuthenticatedMainAdminOrganizationsOrganizationIdIndexRoute =
-  AuthenticatedMainAdminOrganizationsOrganizationIdIndexRouteImport.update({
-    id: '/organizations/$organizationId/',
-    path: '/organizations/$organizationId/',
-    getParentRoute: () => AuthenticatedMainAdminRouteRoute,
-  } as any)
-const AuthenticatedMainOrganizationSlugSettingsMembersIndexRoute =
-  AuthenticatedMainOrganizationSlugSettingsMembersIndexRouteImport.update({
-    id: '/members/',
-    path: '/members/',
+const AuthenticatedMainOrganizationSlugSettingsBillingIndexRoute =
+  AuthenticatedMainOrganizationSlugSettingsBillingIndexRouteImport.update({
+    id: '/billing/',
+    path: '/billing/',
     getParentRoute: () => AuthenticatedMainOrganizationSlugSettingsRouteRoute,
   } as any)
 const AuthenticatedMainOrganizationSlugSettingsGeneralIndexRoute =
@@ -230,11 +218,23 @@ const AuthenticatedMainOrganizationSlugSettingsGeneralIndexRoute =
     path: '/general/',
     getParentRoute: () => AuthenticatedMainOrganizationSlugSettingsRouteRoute,
   } as any)
-const AuthenticatedMainOrganizationSlugSettingsBillingIndexRoute =
-  AuthenticatedMainOrganizationSlugSettingsBillingIndexRouteImport.update({
-    id: '/billing/',
-    path: '/billing/',
+const AuthenticatedMainOrganizationSlugSettingsMembersIndexRoute =
+  AuthenticatedMainOrganizationSlugSettingsMembersIndexRouteImport.update({
+    id: '/members/',
+    path: '/members/',
     getParentRoute: () => AuthenticatedMainOrganizationSlugSettingsRouteRoute,
+  } as any)
+const AuthenticatedMainAdminOrganizationsOrganizationIdIndexRoute =
+  AuthenticatedMainAdminOrganizationsOrganizationIdIndexRouteImport.update({
+    id: '/organizations/$organizationId/',
+    path: '/organizations/$organizationId/',
+    getParentRoute: () => AuthenticatedMainAdminRouteRoute,
+  } as any)
+const AuthenticatedMainAdminOrganizationsNewIndexRoute =
+  AuthenticatedMainAdminOrganizationsNewIndexRouteImport.update({
+    id: '/organizations/new/',
+    path: '/organizations/new/',
+    getParentRoute: () => AuthenticatedMainAdminRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -463,32 +463,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/verify/': {
-      id: '/verify/'
-      path: '/verify'
-      fullPath: '/verify/'
-      preLoaderRoute: typeof VerifyIndexRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/_main': {
+      id: '/_authenticated/_main'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedMainRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/signup/': {
-      id: '/signup/'
-      path: '/signup'
-      fullPath: '/signup/'
-      preLoaderRoute: typeof SignupIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password/': {
-      id: '/reset-password/'
-      path: '/reset-password'
-      fullPath: '/reset-password/'
-      preLoaderRoute: typeof ResetPasswordIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login/': {
-      id: '/login/'
-      path: '/login'
-      fullPath: '/login/'
-      preLoaderRoute: typeof LoginIndexRouteImport
+    '/api/$': {
+      id: '/api/$'
+      path: '/api/$'
+      fullPath: '/api/$'
+      preLoaderRoute: typeof ApiSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password/': {
@@ -505,60 +491,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ImageProxySplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/$': {
-      id: '/api/$'
-      path: '/api/$'
-      fullPath: '/api/$'
-      preLoaderRoute: typeof ApiSplatRouteImport
+    '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login/'
+      preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/_main': {
-      id: '/_authenticated/_main'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedMainRouteRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/reset-password/': {
+      id: '/reset-password/'
+      path: '/reset-password'
+      fullPath: '/reset-password/'
+      preLoaderRoute: typeof ResetPasswordIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/onboarding/': {
-      id: '/_authenticated/onboarding/'
-      path: '/onboarding'
-      fullPath: '/onboarding/'
-      preLoaderRoute: typeof AuthenticatedOnboardingIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/signup/': {
+      id: '/signup/'
+      path: '/signup'
+      fullPath: '/signup/'
+      preLoaderRoute: typeof SignupIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/new-organization/': {
-      id: '/_authenticated/new-organization/'
-      path: '/new-organization'
-      fullPath: '/new-organization/'
-      preLoaderRoute: typeof AuthenticatedNewOrganizationIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/choose-plan/': {
-      id: '/_authenticated/choose-plan/'
-      path: '/choose-plan'
-      fullPath: '/choose-plan/'
-      preLoaderRoute: typeof AuthenticatedChoosePlanIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/checkout-return/': {
-      id: '/_authenticated/checkout-return/'
-      path: '/checkout-return'
-      fullPath: '/checkout-return/'
-      preLoaderRoute: typeof AuthenticatedCheckoutReturnIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/verify/': {
+      id: '/verify/'
+      path: '/verify'
+      fullPath: '/verify/'
+      preLoaderRoute: typeof VerifyIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/_main/': {
       id: '/_authenticated/_main/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedMainIndexRouteImport
-      parentRoute: typeof AuthenticatedMainRouteRoute
-    }
-    '/_authenticated/_main/settings': {
-      id: '/_authenticated/_main/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AuthenticatedMainSettingsRouteRouteImport
       parentRoute: typeof AuthenticatedMainRouteRoute
     }
     '/_authenticated/_main/admin': {
@@ -568,33 +533,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMainAdminRouteRouteImport
       parentRoute: typeof AuthenticatedMainRouteRoute
     }
-    '/_authenticated/organization-invitation/$invitationId/': {
-      id: '/_authenticated/organization-invitation/$invitationId/'
-      path: '/organization-invitation/$invitationId'
-      fullPath: '/organization-invitation/$invitationId/'
-      preLoaderRoute: typeof AuthenticatedOrganizationInvitationInvitationIdIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/_main/settings/': {
-      id: '/_authenticated/_main/settings/'
-      path: '/'
-      fullPath: '/settings/'
-      preLoaderRoute: typeof AuthenticatedMainSettingsIndexRouteImport
-      parentRoute: typeof AuthenticatedMainSettingsRouteRoute
-    }
-    '/_authenticated/_main/chatbot/': {
-      id: '/_authenticated/_main/chatbot/'
-      path: '/chatbot'
-      fullPath: '/chatbot/'
-      preLoaderRoute: typeof AuthenticatedMainChatbotIndexRouteImport
+    '/_authenticated/_main/settings': {
+      id: '/_authenticated/_main/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedMainSettingsRouteRouteImport
       parentRoute: typeof AuthenticatedMainRouteRoute
     }
-    '/_authenticated/_main/admin/': {
-      id: '/_authenticated/_main/admin/'
-      path: '/'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AuthenticatedMainAdminIndexRouteImport
-      parentRoute: typeof AuthenticatedMainAdminRouteRoute
+    '/_authenticated/checkout-return/': {
+      id: '/_authenticated/checkout-return/'
+      path: '/checkout-return'
+      fullPath: '/checkout-return/'
+      preLoaderRoute: typeof AuthenticatedCheckoutReturnIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/choose-plan/': {
+      id: '/_authenticated/choose-plan/'
+      path: '/choose-plan'
+      fullPath: '/choose-plan/'
+      preLoaderRoute: typeof AuthenticatedChoosePlanIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/new-organization/': {
+      id: '/_authenticated/new-organization/'
+      path: '/new-organization'
+      fullPath: '/new-organization/'
+      preLoaderRoute: typeof AuthenticatedNewOrganizationIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/onboarding/': {
+      id: '/_authenticated/onboarding/'
+      path: '/onboarding'
+      fullPath: '/onboarding/'
+      preLoaderRoute: typeof AuthenticatedOnboardingIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/_main/$organizationSlug/': {
       id: '/_authenticated/_main/$organizationSlug/'
@@ -610,18 +582,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMainOrganizationSlugSettingsRouteRouteImport
       parentRoute: typeof AuthenticatedMainRouteRoute
     }
-    '/_authenticated/_main/settings/security/': {
-      id: '/_authenticated/_main/settings/security/'
-      path: '/security'
-      fullPath: '/settings/security/'
-      preLoaderRoute: typeof AuthenticatedMainSettingsSecurityIndexRouteImport
+    '/_authenticated/_main/admin/': {
+      id: '/_authenticated/_main/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedMainAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedMainAdminRouteRoute
+    }
+    '/_authenticated/_main/chatbot/': {
+      id: '/_authenticated/_main/chatbot/'
+      path: '/chatbot'
+      fullPath: '/chatbot/'
+      preLoaderRoute: typeof AuthenticatedMainChatbotIndexRouteImport
+      parentRoute: typeof AuthenticatedMainRouteRoute
+    }
+    '/_authenticated/_main/settings/': {
+      id: '/_authenticated/_main/settings/'
+      path: '/'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof AuthenticatedMainSettingsIndexRouteImport
       parentRoute: typeof AuthenticatedMainSettingsRouteRoute
     }
-    '/_authenticated/_main/settings/notifications/': {
-      id: '/_authenticated/_main/settings/notifications/'
-      path: '/notifications'
-      fullPath: '/settings/notifications/'
-      preLoaderRoute: typeof AuthenticatedMainSettingsNotificationsIndexRouteImport
+    '/_authenticated/organization-invitation/$invitationId/': {
+      id: '/_authenticated/organization-invitation/$invitationId/'
+      path: '/organization-invitation/$invitationId'
+      fullPath: '/organization-invitation/$invitationId/'
+      preLoaderRoute: typeof AuthenticatedOrganizationInvitationInvitationIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/_main/$organizationSlug/settings/': {
+      id: '/_authenticated/_main/$organizationSlug/settings/'
+      path: '/'
+      fullPath: '/$organizationSlug/settings/'
+      preLoaderRoute: typeof AuthenticatedMainOrganizationSlugSettingsIndexRouteImport
+      parentRoute: typeof AuthenticatedMainOrganizationSlugSettingsRouteRoute
+    }
+    '/_authenticated/_main/admin/organizations/': {
+      id: '/_authenticated/_main/admin/organizations/'
+      path: '/organizations'
+      fullPath: '/admin/organizations/'
+      preLoaderRoute: typeof AuthenticatedMainAdminOrganizationsIndexRouteImport
+      parentRoute: typeof AuthenticatedMainAdminRouteRoute
+    }
+    '/_authenticated/_main/admin/users/': {
+      id: '/_authenticated/_main/admin/users/'
+      path: '/users'
+      fullPath: '/admin/users/'
+      preLoaderRoute: typeof AuthenticatedMainAdminUsersIndexRouteImport
+      parentRoute: typeof AuthenticatedMainAdminRouteRoute
+    }
+    '/_authenticated/_main/settings/billing/': {
+      id: '/_authenticated/_main/settings/billing/'
+      path: '/billing'
+      fullPath: '/settings/billing/'
+      preLoaderRoute: typeof AuthenticatedMainSettingsBillingIndexRouteImport
       parentRoute: typeof AuthenticatedMainSettingsRouteRoute
     }
     '/_authenticated/_main/settings/general/': {
@@ -631,53 +645,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMainSettingsGeneralIndexRouteImport
       parentRoute: typeof AuthenticatedMainSettingsRouteRoute
     }
-    '/_authenticated/_main/settings/billing/': {
-      id: '/_authenticated/_main/settings/billing/'
-      path: '/billing'
-      fullPath: '/settings/billing/'
-      preLoaderRoute: typeof AuthenticatedMainSettingsBillingIndexRouteImport
+    '/_authenticated/_main/settings/notifications/': {
+      id: '/_authenticated/_main/settings/notifications/'
+      path: '/notifications'
+      fullPath: '/settings/notifications/'
+      preLoaderRoute: typeof AuthenticatedMainSettingsNotificationsIndexRouteImport
       parentRoute: typeof AuthenticatedMainSettingsRouteRoute
     }
-    '/_authenticated/_main/admin/users/': {
-      id: '/_authenticated/_main/admin/users/'
-      path: '/users'
-      fullPath: '/admin/users/'
-      preLoaderRoute: typeof AuthenticatedMainAdminUsersIndexRouteImport
-      parentRoute: typeof AuthenticatedMainAdminRouteRoute
+    '/_authenticated/_main/settings/security/': {
+      id: '/_authenticated/_main/settings/security/'
+      path: '/security'
+      fullPath: '/settings/security/'
+      preLoaderRoute: typeof AuthenticatedMainSettingsSecurityIndexRouteImport
+      parentRoute: typeof AuthenticatedMainSettingsRouteRoute
     }
-    '/_authenticated/_main/admin/organizations/': {
-      id: '/_authenticated/_main/admin/organizations/'
-      path: '/organizations'
-      fullPath: '/admin/organizations/'
-      preLoaderRoute: typeof AuthenticatedMainAdminOrganizationsIndexRouteImport
-      parentRoute: typeof AuthenticatedMainAdminRouteRoute
-    }
-    '/_authenticated/_main/$organizationSlug/settings/': {
-      id: '/_authenticated/_main/$organizationSlug/settings/'
-      path: '/'
-      fullPath: '/$organizationSlug/settings/'
-      preLoaderRoute: typeof AuthenticatedMainOrganizationSlugSettingsIndexRouteImport
-      parentRoute: typeof AuthenticatedMainOrganizationSlugSettingsRouteRoute
-    }
-    '/_authenticated/_main/admin/organizations/new/': {
-      id: '/_authenticated/_main/admin/organizations/new/'
-      path: '/organizations/new'
-      fullPath: '/admin/organizations/new/'
-      preLoaderRoute: typeof AuthenticatedMainAdminOrganizationsNewIndexRouteImport
-      parentRoute: typeof AuthenticatedMainAdminRouteRoute
-    }
-    '/_authenticated/_main/admin/organizations/$organizationId/': {
-      id: '/_authenticated/_main/admin/organizations/$organizationId/'
-      path: '/organizations/$organizationId'
-      fullPath: '/admin/organizations/$organizationId/'
-      preLoaderRoute: typeof AuthenticatedMainAdminOrganizationsOrganizationIdIndexRouteImport
-      parentRoute: typeof AuthenticatedMainAdminRouteRoute
-    }
-    '/_authenticated/_main/$organizationSlug/settings/members/': {
-      id: '/_authenticated/_main/$organizationSlug/settings/members/'
-      path: '/members'
-      fullPath: '/$organizationSlug/settings/members/'
-      preLoaderRoute: typeof AuthenticatedMainOrganizationSlugSettingsMembersIndexRouteImport
+    '/_authenticated/_main/$organizationSlug/settings/billing/': {
+      id: '/_authenticated/_main/$organizationSlug/settings/billing/'
+      path: '/billing'
+      fullPath: '/$organizationSlug/settings/billing/'
+      preLoaderRoute: typeof AuthenticatedMainOrganizationSlugSettingsBillingIndexRouteImport
       parentRoute: typeof AuthenticatedMainOrganizationSlugSettingsRouteRoute
     }
     '/_authenticated/_main/$organizationSlug/settings/general/': {
@@ -687,12 +673,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMainOrganizationSlugSettingsGeneralIndexRouteImport
       parentRoute: typeof AuthenticatedMainOrganizationSlugSettingsRouteRoute
     }
-    '/_authenticated/_main/$organizationSlug/settings/billing/': {
-      id: '/_authenticated/_main/$organizationSlug/settings/billing/'
-      path: '/billing'
-      fullPath: '/$organizationSlug/settings/billing/'
-      preLoaderRoute: typeof AuthenticatedMainOrganizationSlugSettingsBillingIndexRouteImport
+    '/_authenticated/_main/$organizationSlug/settings/members/': {
+      id: '/_authenticated/_main/$organizationSlug/settings/members/'
+      path: '/members'
+      fullPath: '/$organizationSlug/settings/members/'
+      preLoaderRoute: typeof AuthenticatedMainOrganizationSlugSettingsMembersIndexRouteImport
       parentRoute: typeof AuthenticatedMainOrganizationSlugSettingsRouteRoute
+    }
+    '/_authenticated/_main/admin/organizations/$organizationId/': {
+      id: '/_authenticated/_main/admin/organizations/$organizationId/'
+      path: '/organizations/$organizationId'
+      fullPath: '/admin/organizations/$organizationId/'
+      preLoaderRoute: typeof AuthenticatedMainAdminOrganizationsOrganizationIdIndexRouteImport
+      parentRoute: typeof AuthenticatedMainAdminRouteRoute
+    }
+    '/_authenticated/_main/admin/organizations/new/': {
+      id: '/_authenticated/_main/admin/organizations/new/'
+      path: '/organizations/new'
+      fullPath: '/admin/organizations/new/'
+      preLoaderRoute: typeof AuthenticatedMainAdminOrganizationsNewIndexRouteImport
+      parentRoute: typeof AuthenticatedMainAdminRouteRoute
     }
   }
 }
@@ -839,10 +839,11 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

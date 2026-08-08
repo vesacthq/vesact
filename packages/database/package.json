@@ -6,9 +6,9 @@
 	"scripts": {
 		"clean": "git clean -xdf .cache .turbo dist node_modules",
 		"push": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit push",
-		"db:generate": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit generate",
-		"db:migrate": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit migrate",
-		"db:studio": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit studio",
+		"generate": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit generate",
+		"migrate": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit migrate",
+		"studio": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit studio",
 		"type-check": "tsc --noEmit"
 	},
 	"dependencies": {

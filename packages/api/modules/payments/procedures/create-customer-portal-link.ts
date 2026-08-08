@@ -2,6 +2,7 @@ import { ORPCError } from "@orpc/server";
 import { getOrganizationMembership, getPurchaseById } from "@repo/database";
 import { logger } from "@repo/logs";
 import { createCustomerPortalLink as createCustomerPortalLinkFn } from "@repo/payments";
+import { checkPermission } from "@repo/permissions";
 import { z } from "zod";
 
 import { localeMiddleware } from "../../../orpc/middleware/locale-middleware";
@@ -41,7 +42,15 @@ export const createCustomerPortalLink = protectedProcedure
 				purchase.organizationId,
 				user.id,
 			);
-			if (userOrganizationMembership?.role !== "owner") {
+			if (
+				!checkPermission(
+					{
+						user,
+						membershipRole: userOrganizationMembership?.role,
+					},
+					"organization.accessBillingPortal",
+				)
+			) {
 				throw new ORPCError("NOT_FOUND");
 			}
 		}

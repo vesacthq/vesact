@@ -1,4 +1,5 @@
 import { useTranslations } from "@i18n/intl";
+import { checkPermission } from "@repo/permissions";
 import { PageHeader } from "@shared/components/PageHeader";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
@@ -14,7 +15,9 @@ const requireAdminAccessFn = createServerFn({
 		throw redirect({ href: "/login" });
 	}
 
-	if (session.user.role !== "admin") {
+	// admin.access is user-scoped — do not depend on request-middleware Permix
+	// context (getOrThrow) for this gate.
+	if (!checkPermission({ user: session.user }, "admin.access")) {
 		throw redirect({ href: "/" });
 	}
 });

@@ -1,4 +1,3 @@
-import { useSession } from "@auth/hooks/use-session";
 import { config } from "@config";
 import { useTranslations } from "@i18n/intl";
 import { useLocalePathname } from "@i18n/routing";
@@ -29,8 +28,9 @@ import {
 	TooltipTrigger,
 } from "@repo/ui/components/tooltip";
 import { NotificationCenter } from "@shared/components/NotificationCenter";
+import { usePermissions } from "@shared/components/PermixProvider";
 import { UserMenu } from "@shared/components/UserMenu";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouteContext } from "@tanstack/react-router";
 import {
 	BotMessageSquareIcon,
 	ChevronLeftIcon,
@@ -296,11 +296,15 @@ function NavMenuList({
 export function NavBar() {
 	const t = useTranslations();
 	const pathname = useLocalePathname();
-	const { user } = useSession();
-	const { activeOrganization, isOrganizationAdmin } = useActiveOrganization();
+	const { permix } = useRouteContext({ from: "__root__" });
+	const { check } = usePermissions(permix);
+	const { activeOrganization } = useActiveOrganization();
 	const { isCollapsed, toggleCollapsed } = useSidebar();
 	const isMobile = useIsMobile();
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+	const canAccessAdmin = check("admin.access");
+	const canManageOrganization = check("organization.manage");
+	const canManageOrganizationBilling = check("organization.manageBilling");
 	/** Avoid double-toggle when a pointer gesture fires both `pointerup` and `click`. */
 	const skipClickAfterPointerRef = useRef(false);
 
@@ -365,7 +369,7 @@ export function NavBar() {
 
 		const orgSettingsPrefix = `${basePath}/settings`;
 		const organizationSubItems: Array<NavSubItem> | undefined =
-			authConfig.organizations.enable && activeOrganization && isOrganizationAdmin
+			authConfig.organizations.enable && activeOrganization && canManageOrganization
 				? [
 						{
 							label: t("settings.menu.organization.general"),
@@ -375,7 +379,7 @@ export function NavBar() {
 							label: t("settings.menu.organization.members"),
 							href: `${orgSettingsPrefix}/members`,
 						},
-						...(paymentsConfig.billingAttachedTo === "organization" && isOrganizationAdmin
+						...(paymentsConfig.billingAttachedTo === "organization" && canManageOrganizationBilling
 							? [
 									{
 										label: t("settings.menu.organization.billing"),
@@ -435,7 +439,7 @@ export function NavBar() {
 				isActive: pathname.startsWith("/settings/"),
 				subItems: accountSubItems,
 			},
-			...(user?.role === "admin"
+			...(canAccessAdmin
 				? [
 						{
 							label: t("app.menu.admin"),
@@ -447,7 +451,16 @@ export function NavBar() {
 					]
 				: []),
 		];
-	}, [activeOrganization, basePath, isOrganizationAdmin, pathname, startHref, t, user?.role]);
+	}, [
+		activeOrganization,
+		basePath,
+		canAccessAdmin,
+		canManageOrganization,
+		canManageOrganizationBilling,
+		pathname,
+		startHref,
+		t,
+	]);
 
 	return (
 		<nav

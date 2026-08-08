@@ -3,11 +3,11 @@ import { sessionQueryKey } from "@auth/lib/api";
 import { activeOrganizationQueryKey, useActiveOrganizationQuery } from "@organizations/lib/api";
 import type { ActiveOrganization } from "@repo/auth";
 import { authClient } from "@repo/auth/client";
-import { isOrganizationAdmin } from "@repo/auth/lib/helper";
 import { config as paymentsConfig } from "@repo/payments/config";
+import { createPermissionRules } from "@repo/permissions";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQueryClient } from "@tanstack/react-query";
-import { useParams } from "@tanstack/react-router";
+import { useParams, useRouteContext } from "@tanstack/react-router";
 import nProgress from "nprogress";
 import { type ReactNode, useEffect, useState } from "react";
 
@@ -109,6 +109,16 @@ export function ActiveOrganizationProvider({
 	const activeOrganizationUserRole = activeOrganization?.members.find(
 		(member) => member.userId === session?.userId,
 	)?.role;
+	const { permix } = useRouteContext({ from: "__root__" });
+
+	useEffect(() => {
+		permix.setup(
+			createPermissionRules({
+				user,
+				membershipRole: activeOrganizationUserRole ?? null,
+			}),
+		);
+	}, [activeOrganizationUserRole, permix, user]);
 
 	return (
 		<ActiveOrganizationContext.Provider
@@ -116,8 +126,6 @@ export function ActiveOrganizationProvider({
 				loaded,
 				activeOrganization: activeOrganization ?? null,
 				activeOrganizationUserRole: activeOrganizationUserRole ?? null,
-				isOrganizationAdmin:
-					!!activeOrganization && !!user && isOrganizationAdmin(activeOrganization, user),
 				setActiveOrganization,
 				refetchActiveOrganization,
 			}}

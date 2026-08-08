@@ -1,4 +1,4 @@
-# AGENTS.md
+# [AGENTS.md](http://AGENTS.md)
 
 This file applies to the whole `supastarter-tanstack-start` repository.
 Mirror existing conventions and prefer nearby canonical implementations.
@@ -83,6 +83,7 @@ packages/
 ├── mail/
 ├── notifications/
 ├── payments/
+├── permissions/ # Permix definitions + rule builder
 ├── storage/
 ├── ui/
 └── utils/
@@ -140,9 +141,9 @@ and use the database package scripts:
 
 ```bash
 pnpm --filter @repo/database push
-pnpm --filter @repo/database db:generate
-pnpm --filter @repo/database db:migrate
-pnpm --filter @repo/database db:studio
+pnpm --filter @repo/database generate
+pnpm --filter @repo/database migrate
+pnpm --filter @repo/database studio
 ```
 
 Do not hand-edit generated Drizzle migration files or route trees:
@@ -197,6 +198,27 @@ keys before showing success UI. Do not rely on a full page reload.
 Canonical auth example:
 `apps/saas/modules/auth/lib/auth-server.server.ts`.
 
+## Permissions (Permix)
+
+- Definitions and rule builder: `@repo/permissions` (`createPermissionRules`,
+  `checkPermission`, `PermissionsDefinition`).
+- oRPC: `packages/api/orpc/permix.ts` + permissions attached in
+  `packages/api/orpc/procedures.ts`.
+- SaaS server: `apps/saas/start.ts` (app-root `start.ts` because
+  `srcDirectory: "."`) registers Permix via `createMiddleware().server(...)`
+  so server-only auth/DB imports are stripped from the client graph. Shared
+  helpers live in `apps/saas/modules/shared/lib/permix.ts`.
+- Router context + hydrate in `apps/saas/routes/__root.tsx` via
+  `get-permix-state.ts` (`createServerFn`, not a `*.server.*` module);
+  client `PermixProvider` / `usePermissions()`.
+- Prefer `checkPermission(...)` / `usePermissions().check(...)` over
+  `isOrganizationAdmin` and inline `role === "..."` comparisons. Keep
+  `@repo/auth/lib/helper` wrappers only for backwards compatibility.
+- For user-scoped gates like `admin.access`, prefer `checkPermission({ user })`
+  over `permix.getOrThrow(context).check(...)` so the gate does not depend on
+  request-middleware setup having completed.
+- Better Auth `organization.*` client endpoints are not covered by Permix.
+
 ## UI, forms, and i18n
 
 - Use components from `@repo/ui/components`; compose with Base UI primitives.
@@ -238,4 +260,4 @@ dependencies to the workspace package that imports them.
 - [ ] User-facing strings have translations
 - [ ] Relevant docs and `CHANGELOG.md` are updated
 
-More documentation: https://supastarter.dev/docs/tanstack-start
+More documentation: [https://supastarter.dev/docs/tanstack-start](https://supastarter.dev/docs/tanstack-start)
