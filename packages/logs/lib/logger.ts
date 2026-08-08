@@ -1,4 +1,4 @@
-import { createConsola } from "consola";
+import { createConsola } from "consola/core";
 
 export const logger = createConsola({
 	formatOptions: {

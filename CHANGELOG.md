@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-08
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.56`, `@ai-sdk/anthropic` to `^4.0.34`, `@ai-sdk/openai` to `^4.0.34`, `@ai-sdk/react` to `^4.0.59`, `@orpc/*` to `1.14.15`, `@tanstack/react-router` to `^1.170.21`, `@tanstack/react-start` to `^1.168.38`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1105.0`, and `lucide-react` to `^1.29.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `fumadocs-core` and `fumadocs-ui` to `16.14.1`, `postcss` to `8.5.26`, `tsx` to `^4.23.9`, `vite` to `^8.2.1`, and confirmed `typescript` at `7.0.2`. Updated `@repo/logs` to import `createConsola` from `consola/core` for stricter TypeScript 7 module resolution.
+
+---
+
 ## 2026-08-07
 
 ### Fixed
