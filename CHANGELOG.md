@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026-08-10
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@orpc/*` to `1.15.0`, `pg` to `^8.23.0`, `@tanstack/react-form` to `^1.33.4`, and `@tanstack/react-table` to `^9.1.2`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+---
+
+## 2026-08-09
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.58`, `@ai-sdk/anthropic` to `^4.0.36`, `@ai-sdk/openai` to `^4.0.36`, `@ai-sdk/react` to `^4.0.61`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1106.0`, `@scalar/hono-api-reference` to `^0.11.13`, `@tanstack/react-router` to `^1.170.23`, `@tanstack/react-start` to `^1.168.40`, `@tanstack/react-table` to `^9.1.0`, `dodopayments` to `^2.45.1`, `hono` to `^4.13.1`, `lucide-react` to `^1.30.0`, `nodemailer` to `^9.0.5`, and `react-email` to `^6.9.2`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `fumadocs-core` and `fumadocs-ui` to `16.14.2`, `@types/node` to `26.2.0`, `tsx` to `^4.23.11`, `turbo` to `^2.10.9`, and `vite` to `^8.2.1`.
+
+---
+
 ## 2026-08-08
 
 ### Changed
