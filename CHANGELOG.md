@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-11
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@tanstack/react-router` to `^1.170.25`, `@tanstack/react-start` to `^1.168.42`, `lucide-react` to `^1.31.0`, `react-dropzone` to `^20.1.0`, and `sonner` to `^2.0.8`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `fumadocs-core` and `fumadocs-ui` to `16.14.3`, `fumadocs-mdx` to `15.2.3`, and `tsx` to `^4.23.12`.
+
+---
+
 ## 2026-08-10
 
 ### Changed
