@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-12
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.59`, `@ai-sdk/anthropic` to `^4.0.37`, `@ai-sdk/openai` to `^4.0.37`, `@ai-sdk/react` to `^4.0.62`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1107.0`, `use-intl` to `^4.13.6`, `resend` to `^6.19.0`, and `stripe` to `^22.5.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Development dependencies**: Bumped `@shikijs/rehype` to `^4.4.3`, `oxlint` to `1.78.0`, and `oxfmt` to `0.63.0`.
+
+---
+
 ## 2026-08-11
 
 ### Changed

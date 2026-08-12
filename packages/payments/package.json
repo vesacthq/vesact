@@ -21,7 +21,7 @@
 		"@polar-sh/sdk": "^0.49.0",
 		"@repo/logs": "workspace:*",
 		"dodopayments": "^2.45.1",
-		"stripe": "^22.4.0",
+		"stripe": "^22.5.0",
 		"ufo": "catalog:",
 		"zod": "catalog:"
 	},
