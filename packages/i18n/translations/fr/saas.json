@@ -670,6 +670,9 @@
 			"upperAndLowercase": "Majuscules et minuscules",
 			"number": "Chiffre",
 			"specialCharacter": "Caractère spécial"
+		},
+		"aria": {
+			"language": "Langue"
 		}
 	}
 }

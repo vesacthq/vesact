@@ -1,87 +1,18 @@
 import { config } from "@config";
+import { SectionHeader } from "@home/components/SectionHeader";
 import { LocaleLink } from "@i18n/routing";
-import { getCurrentLocale } from "@repo/i18n/runtime";
 import { config as paymentsConfig } from "@repo/payments/config";
 import type { PaidPlan } from "@repo/payments/types";
 import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import { Tabs, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
-import { ArrowRightIcon, BadgePercentIcon, CheckIcon, StarIcon } from "lucide-react";
+import { ArrowRightIcon, BadgePercentIcon, CheckIcon } from "lucide-react";
 import { useMemo, useState, type ComponentPropsWithoutRef } from "react";
-import { useTranslations } from "use-intl";
-
-type Translator = ReturnType<typeof useTranslations>;
-
-function productFeatures(t: Translator, planId: string): string[] {
-	switch (planId) {
-		case "free":
-			return [
-				t("products.free.features.anotherFeature"),
-				t("products.free.features.limitedSupport"),
-			];
-		case "basic":
-			return [
-				t("products.basic.features.anotherFeature"),
-				t("products.basic.features.limitedSupport"),
-			];
-		case "pro":
-			return [
-				t("products.pro.features.anotherFeature"),
-				t("products.pro.features.fiveMembers"),
-				t("products.pro.features.fullSupport"),
-			];
-		case "enterprise":
-			return [
-				t("products.enterprise.features.enterpriseSupport"),
-				t("products.enterprise.features.unlimitedProjects"),
-			];
-		case "lifetime":
-			return [
-				t("products.lifetime.features.extendSupport"),
-				t("products.lifetime.features.noRecurringCosts"),
-			];
-		default:
-			return [];
-	}
-}
-
-function productTitle(t: Translator, planId: string): string {
-	switch (planId) {
-		case "free":
-			return t("products.free.title");
-		case "basic":
-			return t("products.basic.title");
-		case "pro":
-			return t("products.pro.title");
-		case "enterprise":
-			return t("products.enterprise.title");
-		case "lifetime":
-			return t("products.lifetime.title");
-		default:
-			return planId;
-	}
-}
-
-function productDescription(t: Translator, planId: string): string {
-	switch (planId) {
-		case "free":
-			return t("products.free.description");
-		case "basic":
-			return t("products.basic.description");
-		case "pro":
-			return t("products.pro.description");
-		case "enterprise":
-			return t("products.enterprise.description");
-		case "lifetime":
-			return t("products.lifetime.description");
-		default:
-			return "";
-	}
-}
+import { useFormatter, useTranslations } from "use-intl";
 
 export function PricingSection() {
-	const t = useTranslations("pricing");
-	const locale = getCurrentLocale();
+	const t = useTranslations();
+	const format = useFormatter();
 	const [interval, setBillingInterval] = useState<"month" | "year">("month");
 
 	const signupUrl = useMemo(
@@ -105,10 +36,12 @@ export function PricingSection() {
 		if (!paymentsConfig.requireActiveSubscription) {
 			result.push({
 				id: "free",
-				title: productTitle(t, "free"),
-				description: productDescription(t, "free"),
-				features: productFeatures(t, "free"),
-				cta: t("getStarted"),
+				title: t("pricing.products.free.title") ?? "",
+				description: t("pricing.products.free.description") ?? "",
+				features: Object.values(
+					(t.raw("pricing.products.free.features") as Record<string, string>) ?? {},
+				),
+				cta: t("pricing.getStarted") ?? "",
 				to: signupUrl ?? "#",
 			});
 		}
@@ -119,10 +52,12 @@ export function PricingSection() {
 
 			result.push({
 				id: planId,
-				title: productTitle(t, planId),
-				description: productDescription(t, planId),
-				features: productFeatures(t, planId),
-				cta: isEnterprise ? t("contactSales") : t("getStarted"),
+				title: t(`pricing.products.${planId}.title`) ?? "",
+				description: t(`pricing.products.${planId}.description`) ?? "",
+				features: Object.values(
+					(t.raw(`pricing.products.${planId}.features`) as Record<string, string>) ?? {},
+				),
+				cta: isEnterprise ? (t("pricing.contactSales") ?? "") : (t("pricing.getStarted") ?? ""),
 				recommended: plan.recommended,
 				isEnterprise,
 				prices,
@@ -131,40 +66,39 @@ export function PricingSection() {
 		}
 
 		return result;
-	}, [signupUrl, t]);
+	}, [t, signupUrl]);
 
-	const hasSubscriptions = plans.some((p) =>
-		p.prices?.some((price) => price.type === "subscription"),
+	const hasSubscriptions = plans.some((plan) =>
+		plan.prices?.some((price) => price.type === "subscription"),
 	);
 
 	return (
-		<section id="pricing" className="scroll-mt-16 py-12 lg:py-16 border-y">
+		<section id="pricing" className="scroll-mt-16 py-28 lg:py-40 border-y border-border/60">
 			<div className="container">
-				<div className="mb-6 max-w-3xl mx-auto text-center">
-					<h1 className="font-medium text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight text-foreground">
-						{t("title")}
-					</h1>
-					<p className="mt-2 text-sm sm:text-lg text-foreground/60">{t("description")}</p>
-				</div>
+				<SectionHeader
+					eyebrow={t("pricing.badge")}
+					title={t("pricing.title")}
+					description={t("pricing.description")}
+				/>
 
 				<div className="@container">
 					{hasSubscriptions && (
-						<div className="mb-8 flex justify-center">
+						<div className="mb-10">
 							<Tabs
 								value={interval}
 								onValueChange={(value) => setBillingInterval(value as "month" | "year")}
 								data-test="price-table-interval-tabs"
 							>
 								<TabsList className="border-foreground/10">
-									<TabsTrigger value="month">{t("monthly")}</TabsTrigger>
-									<TabsTrigger value="year">{t("yearly")}</TabsTrigger>
+									<TabsTrigger value="month">{t("pricing.monthly")}</TabsTrigger>
+									<TabsTrigger value="year">{t("pricing.yearly")}</TabsTrigger>
 								</TabsList>
 							</Tabs>
 						</div>
 					)}
 					<div
 						className={cn(
-							"gap-4 grid grid-cols-1",
+							"grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border/60 bg-border/60",
 							plans.length >= 2 && "@xl:grid-cols-2",
 							plans.length >= 3 && "@3xl:grid-cols-3",
 							plans.length >= 4 && "@4xl:grid-cols-4",
@@ -174,7 +108,9 @@ export function PricingSection() {
 							const isFree = !plan.prices && !plan.isEnterprise;
 							const price = isFree
 								? undefined
-								: plan.prices?.find((p) => p.type === "one-time" || p.interval === interval);
+								: plan.prices?.find(
+										(planPrice) => planPrice.type === "one-time" || planPrice.interval === interval,
+									);
 							const trialPeriodDays =
 								price && "trialPeriodDays" in price && price.trialPeriodDays
 									? price.trialPeriodDays
@@ -184,109 +120,114 @@ export function PricingSection() {
 								<div
 									key={plan.id}
 									className={cn(
-										"p-6 relative rounded-3xl border bg-card",
-										plan.recommended ? "border-primary" : "border-primary/20",
+										"p-8 lg:p-10 relative flex h-full flex-col bg-background",
+										plan.recommended && "bg-touch/6",
 									)}
 									data-test="price-table-plan"
 								>
-									{plan.recommended && (
-										<div className="-top-3 px-2 py-1 font-semibold text-xs absolute left-1/2 flex -translate-x-1/2 items-center justify-center rounded-full bg-primary text-center text-primary-foreground">
-											<StarIcon className="mr-1.5 size-3 inline-block" />
-											{t("recommended")}
-										</div>
-									)}
-									<div className="gap-4 flex h-full flex-col justify-between">
-										<div>
-											<h3 className="my-0 font-semibold text-2xl">{plan.title}</h3>
-											{plan.description && (
-												<div className="prose mt-2 text-sm text-foreground/60">
-													{plan.description}
-												</div>
-											)}
-
-											{!!plan.features?.length && (
-												<ul className="mt-4 gap-2 text-sm grid list-none">
-													{plan.features.map((feature, key) => (
-														<li key={key} className="flex items-center justify-start">
-															<CheckIcon className="mr-2 size-4 text-primary" />
-															<span>{feature}</span>
-														</li>
-													))}
-												</ul>
-											)}
-
-											{trialPeriodDays !== undefined && trialPeriodDays > 0 && (
-												<div className="mt-4 font-medium text-sm flex items-center justify-start text-primary opacity-80">
-													<BadgePercentIcon className="mr-2 size-4" />
-													{t("trialPeriod", {
-														days: trialPeriodDays,
-													})}
-												</div>
+									<div className="mb-8">
+										<div className="gap-2 flex items-baseline justify-between">
+											<h3 className="my-0 font-medium text-lg tracking-tight">{plan.title}</h3>
+											{plan.recommended && (
+												<p className="font-medium tracking-wide text-xs text-touch">
+													{t("pricing.recommended")}
+												</p>
 											)}
 										</div>
 
-										<div>
-											{isFree && (
-												<strong
-													className="font-medium text-2xl lg:text-3xl block"
-													data-test="price-table-plan-price"
-												>
-													{new Intl.NumberFormat(locale, {
-														style: "currency",
-														currency: "USD",
-													}).format(0)}
-												</strong>
-											)}
+										{isFree && (
+											<strong
+												className="mt-3 font-medium text-3xl tracking-tight block"
+												data-test="price-table-plan-price"
+											>
+												{format.number(0, {
+													style: "currency",
+													currency: "USD",
+												})}
+											</strong>
+										)}
 
-											{price && (
-												<strong
-													className="font-medium text-2xl lg:text-3xl block"
-													data-test="price-table-plan-price"
-												>
-													{new Intl.NumberFormat(locale, {
-														style: "currency",
-														currency: price.currency,
-													}).format(price.amount)}
-													{price.type === "subscription" && (
-														<span className="font-normal text-xs opacity-60">
-															/{price.interval === "year" ? t("year") : t("month")}
-														</span>
-													)}
-												</strong>
-											)}
+										{price && (
+											<strong
+												className="mt-3 font-medium text-3xl tracking-tight block"
+												data-test="price-table-plan-price"
+											>
+												{format.number(price.amount, {
+													style: "currency",
+													currency: price.currency,
+												})}
+												{price.type === "subscription" && (
+													<span className="ml-1 font-normal text-sm text-foreground/45">
+														/
+														{price.interval === "year"
+															? t("pricing.year", {
+																	count: 1,
+																})
+															: t("pricing.month", {
+																	count: 1,
+																})}
+													</span>
+												)}
+											</strong>
+										)}
 
-											{plan.to.startsWith("/") ? (
-												<Button
-													className="mt-4 w-full"
-													variant={plan.recommended ? "primary" : "secondary"}
-													render={(props) => (
-														<LocaleLink href={plan.to} {...(props as Record<string, unknown>)} />
-													)}
-												>
-													{plan.cta}
-													<ArrowRightIcon className="ml-2 size-4" />
-												</Button>
-											) : (
-												<Button
-													className="mt-4 w-full"
-													variant={plan.recommended ? "primary" : "secondary"}
-													render={(props) => {
-														const { children: linkChildren, ...rest } = props;
-														return (
-															<a
-																href={plan.to}
-																{...(rest as unknown as ComponentPropsWithoutRef<"a">)}
-															>
-																{linkChildren}
-															</a>
-														);
-													}}
-												>
-													{plan.cta}
-													<ArrowRightIcon className="ml-2 size-4" />
-												</Button>
-											)}
-										</div>
+										{plan.description && (
+											<p className="mt-2 text-sm leading-relaxed text-foreground/55">
+												{plan.description}
+											</p>
+										)}
+									</div>
+
+									<div className="mt-auto">
+										{!!plan.features?.length && (
+											<ul className="mb-8 gap-3 text-sm grid list-none">
+												{plan.features.map((feature) => (
+													<li key={feature} className="flex items-start justify-start">
+														<CheckIcon className="mt-0.5 mr-2 size-3.5 shrink-0 text-touch" />
+														<span className="text-foreground/70">{feature}</span>
+													</li>
+												))}
+											</ul>
+										)}
+
+										{trialPeriodDays !== undefined && trialPeriodDays > 0 && (
+											<div className="mb-4 font-medium text-sm flex items-center justify-start text-foreground/55">
+												<BadgePercentIcon className="mr-2 size-4 text-touch" />
+												{t("pricing.trialPeriod", {
+													days: trialPeriodDays,
+												})}
+											</div>
+										)}
+
+										{plan.to.startsWith("/") ? (
+											<Button
+												className="w-full"
+												variant={plan.recommended ? "primary" : "outline"}
+												render={(props) => <LocaleLink {...props} href={plan.to} />}
+											>
+												{plan.cta}
+												<ArrowRightIcon className="ml-2 size-4" />
+											</Button>
+										) : (
+											<Button
+												className="w-full"
+												variant={plan.recommended ? "primary" : "outline"}
+												render={(props) => {
+													const { children: linkChildren, ...rest } = props;
+													return (
+														<a
+															href={plan.to}
+															{...(rest as unknown as ComponentPropsWithoutRef<"a">)}
+														>
+															{linkChildren}
+														</a>
+													);
+												}}
+											>
+												{plan.cta}
+												<ArrowRightIcon className="ml-2 size-4" />
+											</Button>
+										)}
 									</div>
 								</div>
 							);

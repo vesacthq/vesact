@@ -1,9 +1,9 @@
 import { PostContent } from "@blog/components/PostContent";
+import { PostTagLink } from "@blog/components/PostTagLink";
 import { getPostBySlug } from "@blog/lib/posts";
 import { LocaleLink, localeRedirect } from "@i18n/routing";
 import { deLocalizeHref } from "@repo/i18n/routing";
 import { getCurrentLocale } from "@repo/i18n/runtime";
-import { getBaseUrl } from "@shared/lib/base-url";
 import { getActivePathFromUrlParam } from "@shared/lib/content";
 import { createFileRoute } from "@tanstack/react-router";
 import { useTranslations } from "use-intl";
@@ -33,6 +33,7 @@ export const Route = createFileRoute("/blog/$/")({
 function BlogPostPage() {
 	const { post } = Route.useLoaderData();
 	const t = useTranslations("blog");
+	const locale = getCurrentLocale();
 
 	if (!post) {
 		return null;
@@ -41,66 +42,52 @@ function BlogPostPage() {
 	const { title, date, authorName, authorImage, tags, image, body } = post;
 
 	return (
-		<div className="py-16 container">
-			<div className="">
-				<div className="mb-12">
-					<LocaleLink href="/blog">&larr; {t("back")}</LocaleLink>
-				</div>
+		<div className="py-20 md:py-24 lg:py-28 lg:pb-40 container">
+			<div className="mb-10">
+				<LocaleLink
+					href="/blog"
+					className="text-sm text-foreground/50 transition-colors hover:text-touch"
+				>
+					&larr; {t("back")}
+				</LocaleLink>
+			</div>
 
-				<div className="max-w-2xl mx-auto text-center">
-					<h1 className="font-bold text-4xl">{title}</h1>
+			<div className="max-w-2xl">
+				<h1 className="font-medium text-3xl md:text-4xl lg:text-[2.875rem] tracking-tight leading-[1.12] text-pretty text-foreground">
+					{title}
+				</h1>
 
-					<div className="mt-4 gap-6 flex items-center justify-center">
-						{authorName && (
-							<div className="flex items-center">
-								{authorImage && (
-									<div className="mr-2 size-8 relative overflow-hidden rounded-full">
-										<img
-											src={authorImage}
-											alt={authorName}
-											width={32}
-											height={32}
-											className="size-full object-cover object-center"
-										/>
-									</div>
-								)}
-								<div>
-									<p className="font-semibold text-sm opacity-50">{authorName}</p>
+				<div className="mt-5 gap-4 text-sm flex flex-wrap items-center text-foreground/50">
+					{authorName && (
+						<div className="gap-2 flex items-center">
+							{authorImage && (
+								<div className="size-7 relative overflow-hidden rounded-full">
+									<img
+										src={authorImage}
+										alt={authorName}
+										className="size-full object-cover object-center"
+									/>
 								</div>
-							</div>
-						)}
-
-						<div className="mr-0">
-							<p className="text-sm opacity-30">
-								{Intl.DateTimeFormat("en-US").format(new Date(date))}
-							</p>
+							)}
+							<span>{authorName}</span>
 						</div>
+					)}
 
-						{tags && (
-							<div className="gap-2 flex flex-wrap">
-								{tags.map((tag) => (
-									<span
-										key={tag}
-										className="font-semibold text-xs tracking-wider text-primary uppercase"
-									>
-										#{tag}
-									</span>
-								))}
-							</div>
-						)}
-					</div>
+					<span>{Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(new Date(date))}</span>
+
+					{tags && (
+						<div className="gap-2 flex flex-wrap">
+							{tags.map((tag) => (
+								<PostTagLink key={tag} tag={tag} />
+							))}
+						</div>
+					)}
 				</div>
 			</div>
 
 			{image && (
-				<div className="mt-6 aspect-video p-4 lg:p-6 relative overflow-hidden rounded-4xl bg-primary/10">
-					<img
-						src={image.startsWith("http") ? image : new URL(image, getBaseUrl()).toString()}
-						alt={title}
-						width={1200}
-						height={630}
-						className="size-full rounded-xl object-cover object-center"
-					/>
+				<div className="mt-10 max-w-3xl aspect-video relative overflow-hidden rounded-xl border border-border/60">
+					<img src={image} alt={title} className="size-full object-cover object-center" />
 				</div>
 			)}
 

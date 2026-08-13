@@ -1,62 +1,48 @@
+import { useTranslations } from "@i18n/intl";
 import { setLocaleCookie } from "@i18n/lib/update-locale";
 import { useLocalePathname, useLocaleRouter } from "@i18n/routing";
 import type { Locale } from "@repo/i18n";
 import { config as i18nConfig } from "@repo/i18n";
 import { getCurrentLocale } from "@repo/i18n/runtime";
-import { Button } from "@repo/ui/components/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuRadioGroup,
-	DropdownMenuRadioItem,
-	DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { LanguagesIcon } from "lucide-react";
-import { useState } from "react";
+import { LocaleSwitch as LocaleSwitchControl } from "@repo/ui";
 import { useIsClient } from "usehooks-ts";
 
+function isLocale(value: string): value is Locale {
+	return Object.hasOwn(i18nConfig.locales, value);
+}
+
+const locales = Object.entries(i18nConfig.locales).map(([value, localeConfig]) => ({
+	value,
+	label: localeConfig.label,
+}));
+
 export function LocaleSwitch() {
+	const t = useTranslations();
 	const localeRouter = useLocaleRouter();
 	const localePathname = useLocalePathname();
 	const currentLocale = getCurrentLocale();
-	const [value, setValue] = useState<string>(currentLocale);
 	const isClient = useIsClient();
 
-	if (!isClient || Object.keys(i18nConfig.locales).length <= 1) {
+	if (!isClient) {
 		return null;
 	}
 
 	return (
-		<DropdownMenu modal={false}>
-			<DropdownMenuTrigger
-				render={
-					<Button variant="ghost" size="icon" aria-label="Language">
-						<LanguagesIcon className="size-4" />
-					</Button>
+		<LocaleSwitchControl
+			locales={locales}
+			value={currentLocale}
+			label={t("common.aria.language")}
+			onValueChange={(nextLocale) => {
+				if (!isLocale(nextLocale)) {
+					return;
 				}
-			/>
 
-			<DropdownMenuContent>
-				<DropdownMenuRadioGroup
-					value={value}
-					onValueChange={(next) => {
-						setValue(next);
-						setLocaleCookie(next as Locale);
-						const search = typeof window !== "undefined" ? window.location.search : "";
-						localeRouter.replace(`${localePathname}${search}`, {
-							locale: next,
-						});
-					}}
-				>
-					{Object.entries(i18nConfig.locales).map(([locale, { label }]) => {
-						return (
-							<DropdownMenuRadioItem key={locale} value={locale}>
-								{label}
-							</DropdownMenuRadioItem>
-						);
-					})}
-				</DropdownMenuRadioGroup>
-			</DropdownMenuContent>
-		</DropdownMenu>
+				setLocaleCookie(nextLocale);
+				const search = typeof window !== "undefined" ? window.location.search : "";
+				localeRouter.replace(`${localePathname}${search}`, {
+					locale: nextLocale,
+				});
+			}}
+		/>
 	);
 }

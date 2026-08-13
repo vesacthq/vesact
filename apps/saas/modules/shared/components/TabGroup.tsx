@@ -26,7 +26,7 @@ export function TabGroup({
 					key={item.href}
 					to={item.href}
 					className={`-mb-0.5 px-6 py-3 block border-b-2 ${
-						item === activeItem ? "font-bold border-primary" : "border-transparent"
+						item === activeItem ? "font-bold border-touch text-touch" : "border-transparent"
 					}`}
 				>
 					{item.label}

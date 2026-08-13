@@ -5,7 +5,7 @@
 	"tsx": true,
 	"tailwind": {
 		"css": "../../tooling/tailwind/theme.css",
-		"baseColor": "slate",
+		"baseColor": "olive",
 		"cssVariables": true,
 		"prefix": ""
 	},

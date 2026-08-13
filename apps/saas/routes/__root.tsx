@@ -60,7 +60,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 			},
 			{
 				rel: "stylesheet",
-				href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..700;1,300..700&display=swap",
+				href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
 			},
 		],
 	}),
@@ -79,7 +79,7 @@ function RootLayout() {
 			<head>
 				<HeadContent />
 			</head>
-			<body className={cn("min-h-screen bg-background text-foreground antialiased")}>
+			<body className={cn("font-sans min-h-screen bg-background text-foreground antialiased")}>
 				<NuqsAdapter>
 					<ThemeProvider defaultTheme={config.defaultTheme}>
 						<ApiClientProvider>
@@ -118,7 +118,7 @@ function RootError({ error }: { error: Error }) {
 				</Button>
 				<Link
 					to="/"
-					className="h-9 px-4 font-medium text-sm flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-[var(--button-hover-primary)]"
+					className="h-9 px-4 font-medium text-sm flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-[color-mix(in_srgb,var(--primary)82%,var(--background))]"
 				>
 					Back to home
 				</Link>
@@ -136,7 +136,7 @@ function RootNotFound() {
 			</p>
 			<Link
 				to="/"
-				className="h-9 px-4 font-medium text-sm flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-[var(--button-hover-primary)]"
+				className="h-9 px-4 font-medium text-sm flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-[color-mix(in_srgb,var(--primary)82%,var(--background))]"
 			>
 				Back to home
 			</Link>

@@ -2,49 +2,49 @@
 	"pricing": {
 		"choosePlan": "Plan auswählen",
 		"contactSales": "Vertrieb kontaktieren",
-		"description": "Wähle das passende Paket für dich aus.",
+		"description": "Einfache Pläne, die mit deinem Team wachsen. Upgrade, wenn du bereit bist.",
 		"getStarted": "Jetzt loslegen",
 		"month": "Monat",
 		"monthly": "Monatlich",
 		"products": {
 			"basic": {
-				"description": "Perfekt für den Einstieg",
+				"description": "Für Solo-Founder, die das erste Release validieren.",
 				"features": {
-					"anotherFeature": "Ein weiteres erstaunliches Merkmal",
-					"limitedSupport": "Begrenzter Support"
+					"anotherFeature": "Kernfunktionen des Produkts",
+					"limitedSupport": "Community-Support"
 				},
 				"title": "Basic"
 			},
 			"enterprise": {
-				"description": "Maßgeschneiderter Plan für deine Anforderungen",
+				"description": "Sicherheit, Support und Konditionen für deine Organisation.",
 				"features": {
-					"enterpriseSupport": "Support für Unternehmen",
-					"unlimitedProjects": "Unbegrenzte Projekte"
+					"enterpriseSupport": "Dedizierter Support",
+					"unlimitedProjects": "Unbegrenzte Workspaces"
 				},
 				"title": "Enterprise"
 			},
 			"free": {
-				"description": "Kostenloser Start",
+				"description": "Das Produkt ohne Verpflichtung erkunden.",
 				"features": {
-					"anotherFeature": "Ein weiteres erstaunliches Merkmal",
-					"limitedSupport": "Begrenzter Support"
+					"anotherFeature": "Kernfunktionen des Produkts",
+					"limitedSupport": "Community-Support"
 				},
 				"title": "Free"
 			},
 			"lifetime": {
-				"description": "Einmal kaufen. Für immer verwenden.",
+				"description": "Einmal zahlen und Zugang behalten, während das Produkt wächst.",
 				"features": {
-					"extendSupport": "Erweiterter Support",
-					"noRecurringCosts": "Keine wiederkehrenden Kosten"
+					"extendSupport": "Priorisierter Support-Zeitraum",
+					"noRecurringCosts": "Keine wiederkehrenden Gebühren"
 				},
 				"title": "Lifetime"
 			},
 			"pro": {
-				"description": "Am besten für Teams",
+				"description": "Für Teams, die über Workspaces zusammenarbeiten.",
 				"features": {
-					"anotherFeature": "Ein weiteres erstaunliches Merkmal",
+					"anotherFeature": "Erweiterte Produktfunktionen",
 					"fiveMembers": "Bis zu 5 Mitglieder",
-					"fullSupport": "Voller Support"
+					"fullSupport": "E-Mail-Support"
 				},
 				"title": "Pro"
 			}
@@ -56,6 +56,7 @@
 		"trialPeriod": "{days} Tage kostenlose Testphase",
 		"year": "Jahr",
 		"yearly": "Jährlich",
-		"perSeat": "Sitz"
+		"perSeat": "Sitz",
+		"badge": "Preise"
 	}
 }

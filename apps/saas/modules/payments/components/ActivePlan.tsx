@@ -30,8 +30,8 @@ export function ActivePlan({ organizationId }: { organizationId?: string; seats?
 			<div className="p-4 rounded-lg border">
 				<div className="">
 					<div className="gap-2 flex items-center">
-						<BadgeCheckIcon className="size-6 text-primary" />
-						<h4 className="font-bold text-lg text-primary">
+						<BadgeCheckIcon className="size-6 text-touch" />
+						<h4 className="font-bold text-lg text-touch">
 							<span>{activePlanData.title}</span>
 						</h4>
 						{activePlan.status && <SubscriptionStatusBadge status={activePlan.status} />}
@@ -41,7 +41,7 @@ export function ActivePlan({ organizationId }: { organizationId?: string; seats?
 						<ul className="mt-2 gap-2 text-sm grid list-none">
 							{activePlanData.features.map((feature, key) => (
 								<li key={key} className="flex items-center justify-start">
-									<CheckIcon className="mr-2 size-4 text-primary" />
+									<CheckIcon className="mr-2 size-4 text-touch" />
 									<span>{feature}</span>
 								</li>
 							))}

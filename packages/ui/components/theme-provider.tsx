@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 export type Theme = "dark" | "light" | "system";
+export type ResolvedTheme = "light" | "dark";
 
 interface ThemeProviderProps {
 	children: React.ReactNode;
@@ -10,9 +11,11 @@ interface ThemeProviderProps {
 
 const ThemeProviderContext = createContext<{
 	theme: Theme;
+	resolvedTheme: ResolvedTheme;
 	setTheme: (theme: Theme) => void;
 }>({
 	theme: "system",
+	resolvedTheme: "light",
 	setTheme: () => null,
 });
 
@@ -20,19 +23,14 @@ function isTheme(value: string | null): value is Theme {
 	return value === "dark" || value === "light" || value === "system";
 }
 
-function applyThemeToDocument(theme: Theme): void {
+function resolveTheme(theme: Theme, systemTheme: ResolvedTheme): ResolvedTheme {
+	return theme === "system" ? systemTheme : theme;
+}
+
+function applyThemeToDocument(resolved: ResolvedTheme): void {
 	const root = document.documentElement;
 	root.classList.remove("light", "dark");
-
-	if (theme === "system") {
-		const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-			? "dark"
-			: "light";
-		root.classList.add(systemTheme);
-		return;
-	}
-
-	root.classList.add(theme);
+	root.classList.add(resolved);
 }
 
 export function ThemeProvider({
@@ -41,6 +39,7 @@ export function ThemeProvider({
 	storageKey = "ui-theme",
 }: ThemeProviderProps) {
 	const [theme, setThemeState] = useState<Theme>(defaultTheme);
+	const [systemTheme, setSystemTheme] = useState<ResolvedTheme>("light");
 
 	useEffect(() => {
 		try {
@@ -54,33 +53,39 @@ export function ThemeProvider({
 	}, [storageKey]);
 
 	useEffect(() => {
-		applyThemeToDocument(theme);
-
-		if (theme !== "system") {
-			return;
-		}
-
 		const media = window.matchMedia("(prefers-color-scheme: dark)");
 		const onChange = () => {
-			applyThemeToDocument("system");
+			setSystemTheme(media.matches ? "dark" : "light");
 		};
+
+		onChange();
 		media.addEventListener("change", onChange);
 		return () => media.removeEventListener("change", onChange);
-	}, [theme]);
+	}, []);
 
-	const value = {
-		theme,
-		setTheme: (next: Theme) => {
-			try {
-				if (typeof localStorage !== "undefined") {
-					localStorage.setItem(storageKey, next);
+	const resolvedTheme = resolveTheme(theme, systemTheme);
+
+	useEffect(() => {
+		applyThemeToDocument(resolvedTheme);
+	}, [resolvedTheme]);
+
+	const value = useMemo(
+		() => ({
+			theme,
+			resolvedTheme,
+			setTheme: (next: Theme) => {
+				try {
+					if (typeof localStorage !== "undefined") {
+						localStorage.setItem(storageKey, next);
+					}
+				} catch {
+					// ignore persistence failures
 				}
-			} catch {
-				// ignore persistence failures
-			}
-			setThemeState(next);
-		},
-	};
+				setThemeState(next);
+			},
+		}),
+		[theme, resolvedTheme, storageKey],
+	);
 
 	return <ThemeProviderContext.Provider value={value}>{children}</ThemeProviderContext.Provider>;
 }

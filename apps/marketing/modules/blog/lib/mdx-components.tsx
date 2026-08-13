@@ -31,32 +31,56 @@ export const mdxComponents = {
 			/>
 		) : null,
 	h1: ({ children, ...rest }) => (
-		<h1 id={slugifyHeadline(children as string)} className="mb-6 font-bold text-4xl" {...rest}>
+		<h1
+			id={slugifyHeadline(children as string)}
+			className="mb-6 font-medium text-4xl tracking-tight"
+			{...rest}
+		>
 			{children}
 		</h1>
 	),
 	h2: ({ children, ...rest }) => (
-		<h2 id={slugifyHeadline(children as string)} className="mb-4 font-bold text-2xl" {...rest}>
+		<h2
+			id={slugifyHeadline(children as string)}
+			className="mb-4 font-medium text-2xl tracking-tight"
+			{...rest}
+		>
 			{children}
 		</h2>
 	),
 	h3: ({ children, ...rest }) => (
-		<h3 id={slugifyHeadline(children as string)} className="mb-4 font-bold text-xl" {...rest}>
+		<h3
+			id={slugifyHeadline(children as string)}
+			className="mb-4 font-medium text-xl tracking-tight"
+			{...rest}
+		>
 			{children}
 		</h3>
 	),
 	h4: ({ children, ...rest }) => (
-		<h4 id={slugifyHeadline(children as string)} className="mb-4 font-bold text-lg" {...rest}>
+		<h4
+			id={slugifyHeadline(children as string)}
+			className="mb-4 font-medium text-lg tracking-tight"
+			{...rest}
+		>
 			{children}
 		</h4>
 	),
 	h5: ({ children, ...rest }) => (
-		<h5 id={slugifyHeadline(children as string)} className="mb-4 font-bold text-base" {...rest}>
+		<h5
+			id={slugifyHeadline(children as string)}
+			className="mb-4 font-medium text-base tracking-tight"
+			{...rest}
+		>
 			{children}
 		</h5>
 	),
 	h6: ({ children, ...rest }) => (
-		<h6 id={slugifyHeadline(children as string)} className="mb-4 font-bold text-sm" {...rest}>
+		<h6
+			id={slugifyHeadline(children as string)}
+			className="mb-4 font-medium text-sm tracking-tight"
+			{...rest}
+		>
 			{children}
 		</h6>
 	),

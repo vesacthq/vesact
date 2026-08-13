@@ -4,6 +4,7 @@ import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import {
 	cn,
+	ColorModeToggle,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuGroup,
@@ -17,7 +18,6 @@ import { Link } from "@tanstack/react-router";
 import { BookIcon, HomeIcon, LogOutIcon, MoreVerticalIcon, SettingsIcon } from "lucide-react";
 
 import { useIsMobile } from "../hooks/use-media-query";
-import { ColorModeToggle } from "./ColorModeToggle";
 
 export function UserMenu({ showUserName }: { showUserName?: boolean }) {
 	const t = useTranslations();
@@ -93,7 +93,14 @@ export function UserMenu({ showUserName }: { showUserName?: boolean }) {
 					onClick={(e) => e.preventDefault()}
 				>
 					<span>{t("app.userMenu.colorMode")}</span>
-					<ColorModeToggle />
+					<ColorModeToggle
+						modes={["system", "light", "dark"]}
+						labels={{
+							system: t("common.colorMode.system"),
+							light: t("common.colorMode.light"),
+							dark: t("common.colorMode.dark"),
+						}}
+					/>
 				</DropdownMenuItem>
 
 				<DropdownMenuSeparator />

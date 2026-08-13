@@ -3,9 +3,9 @@ import { Button } from "@repo/ui/components/button";
 import { formatFormRootError } from "@repo/ui/components/form-root-error";
 import { Input } from "@repo/ui/components/input";
 import { useForm, useStore } from "@tanstack/react-form";
-import { CheckCircleIcon, KeyIcon } from "lucide-react";
+import { CheckCircleIcon, MailIcon } from "lucide-react";
 import { useTranslations } from "use-intl";
-import * as z from "zod";
+import { z } from "zod";
 
 const formSchema = z.object({
 	email: z.email(),
@@ -20,30 +20,30 @@ function firstFieldError(errors: unknown[]): string | undefined {
 		return first;
 	}
 	if (first && typeof first === "object" && "message" in first) {
-		const m = (first as { message?: unknown }).message;
-		if (typeof m === "string") {
-			return m;
+		const message = (first as { message?: unknown }).message;
+		if (typeof message === "string") {
+			return message;
 		}
 	}
 	return String(first);
 }
 
 export function NewsletterSection() {
-	const t = useTranslations("newsletter");
+	const t = useTranslations();
 	const form = useForm({
 		defaultValues: { email: "" },
 		validators: {
 			onSubmit: formSchema,
 		},
-		onSubmit: async ({ formApi }) => {
+		onSubmit: async ({ formApi, value }) => {
 			try {
-				// TODO: Insert your newsletter signup logic here to integrate with
-				// your CRM or email service.
+				// TODO: Insert your newsletter signup logic here to integrate with your CRM or email service
+				void value.email;
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 			} catch {
 				formApi.setErrorMap({
 					onSubmit: {
-						form: t("hints.error.message"),
+						form: t("newsletter.hints.error.message"),
 						fields: {},
 					},
 				});
@@ -57,65 +57,66 @@ export function NewsletterSection() {
 	const rootError = formatFormRootError(formErrors);
 
 	return (
-		<section className="py-12 lg:py-16 bg-muted">
-			<div className="max-w-3xl container mx-auto">
-				<div className="mb-8 text-center">
-					<KeyIcon className="mb-3 size-10 mx-auto text-primary" />
-					<h1 className="font-medium text-lg md:text-xl lg:text-2xl xl:text-3xl leading-tighter text-foreground">
-						{t("title")}
-					</h1>
-					<p className="mt-2 text-sm sm:text-base text-foreground/60">{t("subtitle")}</p>
-				</div>
-
-				<div className="max-w-lg mx-auto flex flex-col items-center">
-					{isSubmitSuccessful ? (
-						<Alert variant="success">
-							<CheckCircleIcon />
-							<AlertTitle>{t("hints.success.title")}</AlertTitle>
-							<AlertDescription>{t("hints.success.message")}</AlertDescription>
-						</Alert>
-					) : (
-						<form
-							className="max-w-md mx-auto w-full"
-							onSubmit={(e) => {
-								e.preventDefault();
-								e.stopPropagation();
-								void form.handleSubmit();
+		<section className="py-16 lg:py-20 border-t border-border/60">
+			<div className="container">
+				{isSubmitSuccessful ? (
+					<Alert variant="success">
+						<CheckCircleIcon />
+						<AlertTitle>{t("newsletter.hints.success.title")}</AlertTitle>
+						<AlertDescription>{t("newsletter.hints.success.message")}</AlertDescription>
+					</Alert>
+				) : (
+					<form
+						onSubmit={(event) => {
+							event.preventDefault();
+							event.stopPropagation();
+							void form.handleSubmit();
+						}}
+						className="gap-6 md:grid-cols-[1fr_auto] md:items-end grid grid-cols-1"
+					>
+						<div className="max-w-md">
+							<h2 className="font-medium text-lg tracking-tight gap-2.5 flex items-center text-foreground">
+								<MailIcon className="size-5 text-touch" />
+								{t("newsletter.title")}
+							</h2>
+							<p className="mt-1.5 text-sm leading-relaxed text-foreground/50">
+								{t("newsletter.subtitle")}
+							</p>
+						</div>
+						<form.Field name="email">
+							{(field) => {
+								const fieldError = firstFieldError(field.state.meta.errors);
+								const displayError = rootError ?? fieldError;
+								return (
+									<>
+										<div className="sm:flex-row sm:items-start gap-2 flex flex-col items-stretch">
+											<Input
+												type="email"
+												required
+												placeholder={t("newsletter.email")}
+												className="md:w-64"
+												name={field.name}
+												value={field.state.value}
+												onBlur={field.handleBlur}
+												onChange={(event) => field.handleChange(event.target.value)}
+											/>
+											<Button
+												type="submit"
+												className="bg-touch text-touch-foreground hover:bg-touch/90"
+												loading={isSubmitting}
+											>
+												{t("newsletter.submit")}
+											</Button>
+										</div>
+										{displayError ? (
+											<p className="text-xs md:col-start-2 text-destructive">{displayError}</p>
+										) : null}
+									</>
+								);
 							}}
-						>
-							<form.Field name="email">
-								{(field) => {
-									const fieldError = firstFieldError(field.state.meta.errors);
-									const displayError = rootError ?? fieldError;
-									return (
-										<>
-											<div className="sm:flex-row sm:items-center gap-2 flex flex-col items-stretch justify-center">
-												<Input
-													type="email"
-													autoComplete="email"
-													required
-													placeholder={t("email")}
-													className="rounded-full"
-													name={field.name}
-													value={field.state.value}
-													onBlur={field.handleBlur}
-													onChange={(e) => field.handleChange(e.target.value)}
-												/>
-
-												<Button type="submit" variant="primary" loading={isSubmitting}>
-													{t("submit")}
-												</Button>
-											</div>
-											{displayError ? (
-												<p className="mt-1 text-xs text-destructive">{displayError}</p>
-											) : null}
-										</>
-									);
-								}}
-							</form.Field>
-						</form>
-					)}
-				</div>
+						</form.Field>
+					</form>
+				)}
 			</div>
 		</section>
 	);

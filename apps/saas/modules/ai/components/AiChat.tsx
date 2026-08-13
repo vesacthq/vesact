@@ -195,7 +195,7 @@ export function AiChat() {
 					type="submit"
 					size="icon"
 					variant="primary"
-					className="right-3 bottom-3 absolute"
+					className="right-3 bottom-3 absolute bg-touch text-touch-foreground hover:bg-touch/90"
 					disabled={!input.trim() || status === "streaming"}
 				>
 					<ArrowUpIcon className="size-4" />

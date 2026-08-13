@@ -1,3 +1,4 @@
+import { SectionEyebrow } from "@home/components/SectionHeader";
 import { cn } from "@repo/ui";
 import {
 	Accordion,
@@ -7,53 +8,42 @@ import {
 } from "@repo/ui/components/accordion";
 import { useTranslations } from "use-intl";
 
-const FAQ_ITEMS = [
-	{
-		question: "items.refundPolicy.question",
-		answer: "items.refundPolicy.answer",
-	},
-	{
-		question: "items.cancelSubscription.question",
-		answer: "items.cancelSubscription.answer",
-	},
-	{
-		question: "items.changePlan.question",
-		answer: "items.changePlan.answer",
-	},
-	{
-		question: "items.freeTrial.question",
-		answer: "items.freeTrial.answer",
-	},
-] as const;
+const FAQ_ITEM_KEYS = ["refundPolicy", "cancelSubscription", "changePlan", "freeTrial"] as const;
 
 export function FaqSection({ className }: { className?: string }) {
-	const t = useTranslations("faq");
-	const items = FAQ_ITEMS.map(({ question, answer }) => ({
-		question: t(question),
-		answer: t(answer),
+	const t = useTranslations();
+
+	const items = FAQ_ITEM_KEYS.map((key) => ({
+		question: t(`faq.items.${key}.question`),
+		answer: t(`faq.items.${key}.answer`),
 	}));
 
 	return (
-		<section className={cn("scroll-mt-20 py-12 lg:py-16", className)} id="faq">
+		<section className={cn("scroll-mt-20 py-28 lg:py-40", className)} id="faq">
 			<div className="container">
-				<div className="gap-6 md:gap-8 lg:gap-12 max-w-2xl mx-auto grid grid-cols-1">
-					<div className="text-center">
-						<h1 className="font-medium text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight text-foreground">
-							{t("title")}
-						</h1>
-						<p className="text-sm sm:text-lg mt-2 text-foreground/60">{t("description")}</p>
+				<div className="gap-14 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-24 lg:items-start grid grid-cols-1">
+					<div>
+						<SectionEyebrow>{t("faq.badge")}</SectionEyebrow>
+						<h2 className="font-medium text-3xl md:text-4xl lg:text-5xl tracking-tight leading-[1.12] text-pretty text-foreground">
+							{t("faq.title")}
+						</h2>
+						<p className="text-base lg:text-lg mt-5 leading-relaxed text-pretty text-foreground/55">
+							{t("faq.description")}
+						</p>
 					</div>
-					<Accordion className="space-y-2 w-full text-left" defaultValue={[]} multiple={false}>
-						{items.map((item, i) => (
+					<Accordion className="w-full text-left" defaultValue={[]} multiple={false}>
+						{items.map((item, index) => (
 							<AccordionItem
-								key={`faq-item-${i}`}
-								value={`item-${i}`}
-								className="px-4 lg:px-6 rounded-lg border bg-card shadow-none"
+								key={`faq-item-${index}`}
+								value={`item-${index}`}
+								className="px-0 border-b border-border/60 shadow-none"
 							>
-								<AccordionTrigger className="font-medium text-base text-left hover:no-underline">
+								<AccordionTrigger className="font-medium text-base py-6 text-left hover:no-underline">
 									{item.question}
 								</AccordionTrigger>
-								<AccordionContent className="text-foreground/60">{item.answer}</AccordionContent>
+								<AccordionContent>
+									<p className="leading-relaxed text-foreground/55">{item.answer}</p>
+								</AccordionContent>
 							</AccordionItem>
 						))}
 					</Accordion>
