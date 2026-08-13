@@ -3,6 +3,7 @@ import { getSession } from "@auth/lib/auth-server.server";
 import { getSafeRedirectPath } from "@auth/lib/redirects";
 import { config } from "@config";
 import { AuthWrapper } from "@shared/components/AuthWrapper";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 
@@ -36,7 +37,7 @@ export const Route = createFileRoute("/login/")({
 	},
 	component: LoginPage,
 	head: () => ({
-		meta: [{ title: "Login" }],
+		meta: [{ title: documentTitle("Login") }],
 	}),
 });
 

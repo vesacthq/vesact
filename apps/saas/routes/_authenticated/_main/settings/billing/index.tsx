@@ -3,6 +3,7 @@ import { ActivePlan } from "@payments/components/ActivePlan";
 import { ChangePlan } from "@payments/components/ChangePlan";
 import { config as paymentsConfig } from "@repo/payments/config";
 import { SettingsList } from "@shared/components/SettingsList";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/_main/settings/billing/")({
@@ -12,7 +13,7 @@ export const Route = createFileRoute("/_authenticated/_main/settings/billing/")(
 		}
 	},
 	component: SettingsBillingPage,
-	head: () => ({ meta: [{ title: "Settings — Billing" }] }),
+	head: () => ({ meta: [{ title: documentTitle("Settings — Billing") }] }),
 });
 
 function SettingsBillingPage() {

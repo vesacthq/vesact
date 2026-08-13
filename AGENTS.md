@@ -227,6 +227,9 @@ Canonical auth example:
 - Use `useTranslations`, `useFormatter`, and `IntlProvider` from `use-intl`.
   Follow `apps/saas/modules/i18n/provider.tsx`.
 - Locale helpers and the `locale` cookie are configured in `packages/i18n/config.ts`.
+- Document titles use `documentTitle()` from `@shared/lib/document-title`
+  (`{page} – ${config.appName}`, en dash). Call it from every SaaS route `head()`.
+  Routes without a page title (marketing homepage) keep `config.appName` alone.
 
 ## Config & environment variables
 

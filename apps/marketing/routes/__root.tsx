@@ -1,5 +1,4 @@
 import { AnalyticsScript } from "@analytics";
-import { config } from "@config";
 import { I18nProvider } from "@i18n/provider";
 import { getCurrentLocale } from "@repo/i18n/runtime";
 import { ThemeProvider } from "@repo/ui";
@@ -8,6 +7,7 @@ import { ConsentProvider } from "@shared/components/ConsentProvider";
 import { Footer } from "@shared/components/Footer";
 import { NavBar } from "@shared/components/NavBar";
 import { NotFoundPage } from "@shared/components/NotFoundPage";
+import { documentTitle } from "@shared/lib/document-title";
 import {
 	createRootRoute,
 	HeadContent,
@@ -27,7 +27,7 @@ export const Route = createRootRoute({
 				name: "viewport",
 				content: "width=device-width, initial-scale=1",
 			},
-			{ title: config.appName },
+			{ title: documentTitle() },
 		],
 		links: [
 			{

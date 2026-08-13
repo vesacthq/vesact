@@ -5,11 +5,12 @@ import { PasskeysBlock } from "@settings/components/PasskeysBlock";
 import { PasswordAccountSettings } from "@settings/components/PasswordAccountSettings";
 import { TwoFactorBlock } from "@settings/components/TwoFactorBlock";
 import { SettingsList } from "@shared/components/SettingsList";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/_main/settings/security/")({
 	component: SettingsSecurityPage,
-	head: () => ({ meta: [{ title: "Settings — Security" }] }),
+	head: () => ({ meta: [{ title: documentTitle("Settings — Security") }] }),
 });
 
 function SettingsSecurityPage() {

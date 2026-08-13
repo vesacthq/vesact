@@ -3,6 +3,7 @@ import { localeRedirect } from "@i18n/routing";
 import { getLegalPageByPath } from "@legal/lib/pages";
 import { getCurrentLocale } from "@repo/i18n/runtime";
 import { getActivePathFromUrlParam } from "@shared/lib/content";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/legal/$slug/")({
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/legal/$slug/")({
 		return { page };
 	},
 	head: ({ loaderData }) => ({
-		meta: loaderData?.page ? [{ title: loaderData.page.title }] : [],
+		meta: loaderData?.page ? [{ title: documentTitle(loaderData.page.title) }] : [],
 	}),
 });
 
