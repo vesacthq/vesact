@@ -11,7 +11,7 @@
 #### UI
 
 - **Form controls**: Inputs, selects, and textareas use `rounded-xl` so their corners sit closer to the pill buttons and other rounder surfaces.
-- **Alerts**: Feedback alerts use `rounded-xl` to match the form controls. Success, error, and warning colors sit in the same muted chromatic family as the olive touch color (warm sage, brick, and ochre) instead of cool emerald, candy red, and bright amber.
+- **Alerts**: Feedback alerts use `rounded-xl` to match the form controls. Success, error, and warning now use Tailwind `green-800`/`green-400`, `red-700`/`red-400`, and `yellow-700`/`yellow-500` instead of cool emerald, candy red, and bright amber.
 - **Logo**: The middle bar of the shared Acme mark uses the chromatic olive touch color.
 - **App icon**: Replaced the rocket `icon.png` in marketing, SaaS, and docs with the three-bar Acme mark. The middle bar uses the chromatic olive touch color.
 - **SaaS touch color**: The chromatic olive is used as a state hint in the product: active nav icons, settings/tab underlines, checked switches, unread notification badges, active/recommended plans, the chat send control, and organization logo placeholders.
