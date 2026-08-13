@@ -32,9 +32,11 @@ function LegalPage() {
 	const { title, body } = page;
 
 	return (
-		<div className="max-w-6xl py-16 container">
-			<div className="mb-12 max-w-2xl mx-auto">
-				<h1 className="font-bold text-4xl text-center">{title}</h1>
+		<div className="max-w-3xl py-20 lg:py-28 container">
+			<div className="mb-12">
+				<h1 className="font-medium text-3xl md:text-4xl lg:text-[2.875rem] tracking-tight leading-[1.12] text-pretty">
+					{title}
+				</h1>
 			</div>
 
 			<PostContent content={body} />

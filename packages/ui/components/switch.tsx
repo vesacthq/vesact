@@ -31,7 +31,7 @@ export function Switch({
 			}}
 			className={cn(
 				"h-6 w-11 p-0.5 relative inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
-				checked ? "bg-primary" : "bg-input",
+				checked ? "bg-touch" : "bg-input",
 				className,
 			)}
 			{...props}

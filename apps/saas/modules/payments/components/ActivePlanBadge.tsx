@@ -16,7 +16,7 @@ export function ActivePlanBadge({ organizationId }: { organizationId?: string })
 		return null;
 	}
 	return (
-		<Badge status="info" className="gap-1 px-1.5 text-xs flex items-center normal-case">
+		<Badge className="gap-1 px-1.5 text-xs flex items-center bg-touch/10 text-touch normal-case">
 			{activePlanData.title}
 		</Badge>
 	);

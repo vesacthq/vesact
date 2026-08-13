@@ -676,6 +676,9 @@
 			"upperAndLowercase": "Upper & lowercase",
 			"number": "Number",
 			"specialCharacter": "Special character"
+		},
+		"aria": {
+			"language": "Language"
 		}
 	}
 }

@@ -1,84 +1,75 @@
 import { config } from "@config";
+import { HeroWireframe } from "@home/components/HeroWireframe";
 import { Button } from "@repo/ui/components/button";
 import { ArrowRightIcon } from "lucide-react";
 import type { ComponentPropsWithoutRef } from "react";
 import { useTranslations } from "use-intl";
 
 export function HeroSection() {
-	const t = useTranslations("home.hero");
-	const imageAlt = t("imageAlt");
+	const t = useTranslations();
 
 	return (
-		<div className="relative max-w-full overflow-x-hidden">
-			<div className="py-8 md:py-16 relative z-20 container text-center">
-				<div className="mb-4 flex justify-center">
-					<div className="px-3 py-1 font-normal text-sm flex flex-wrap items-center justify-center rounded-full bg-muted p-px text-foreground">
-						<span className="gap-2 font-semibold flex items-center rounded-full">{t("new")}</span>
-						<span className="ml-1 font-medium block">{t("featureBadge")}</span>
-					</div>
-				</div>
+		<section className="max-w-full overflow-x-hidden">
+			<div className="pt-20 pb-10 md:pt-24 md:pb-12 lg:pt-28 lg:pb-14 container">
+				<div className="max-w-5xl">
+					<p className="mb-6 gap-2.5 font-medium text-sm tracking-wide flex flex-wrap items-center text-foreground/50">
+						<span className="px-2 py-0.5 font-semibold tracking-wide text-xs rounded-full bg-touch text-touch-foreground">
+							{t("home.hero.new")}
+						</span>
+						{t("home.hero.featureBadge")}
+					</p>
 
-				<h1 className="font-medium text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tighter max-w-4xl mx-auto text-balance text-foreground">
-					{t("title")}
-				</h1>
+					<h1 className="font-medium text-4xl sm:text-5xl lg:text-6xl xl:text-7xl tracking-tight leading-[1.05] text-pretty text-foreground">
+						{t("home.hero.title")}
+					</h1>
 
-				<p className="mt-2 text-sm sm:text-lg max-w-4xl mx-auto text-balance text-foreground/60">
-					{t("subtitle")}
-				</p>
+					<p className="mt-6 text-base sm:text-lg max-w-xl leading-relaxed text-pretty text-foreground/55">
+						{t("home.hero.subtitle")}
+					</p>
 
-				<div className="mt-4 gap-2 flex items-center justify-center">
-					<Button
-						size="lg"
-						variant="primary"
-						render={(props) => {
-							const { children: linkChildren, ...rest } = props;
-							return (
-								<a href={config.saasUrl} {...(rest as unknown as ComponentPropsWithoutRef<"a">)}>
-									{linkChildren}
-								</a>
-							);
-						}}
-					>
-						{t("getStarted")}
-						<ArrowRightIcon className="ml-2 size-4" />
-					</Button>
-					{config.docsUrl && (
+					<div className="mt-8 gap-3 flex flex-wrap items-center">
 						<Button
-							variant="ghost"
 							size="lg"
+							variant="primary"
 							render={(props) => {
 								const { children: linkChildren, ...rest } = props;
 								return (
-									<a href={config.docsUrl} {...(rest as unknown as ComponentPropsWithoutRef<"a">)}>
+									<a href={config.saasUrl} {...(rest as unknown as ComponentPropsWithoutRef<"a">)}>
 										{linkChildren}
 									</a>
 								);
 							}}
 						>
-							{t("documentation")}
+							{t("home.hero.getStarted")}
+							<ArrowRightIcon className="ml-2 size-4" />
 						</Button>
-					)}
-				</div>
-
-				<div className="mt-12 lg:mt-16 lg:flex-1 p-4 mx-auto rounded-4xl bg-muted">
-					<img
-						src="/images/hero-image.png"
-						alt={imageAlt}
-						className="block h-auto w-full rounded-xl dark:hidden"
-						width={1200}
-						height={630}
-						fetchPriority="high"
-					/>
-					<img
-						src="/images/hero-image-dark.png"
-						alt={imageAlt}
-						className="hidden h-auto w-full rounded-xl dark:block"
-						width={1200}
-						height={630}
-						fetchPriority="high"
-					/>
+						{config.docsUrl && (
+							<Button
+								variant="ghost"
+								size="lg"
+								className="text-touch hover:bg-touch/10 hover:text-touch"
+								render={(props) => {
+									const { children: linkChildren, ...rest } = props;
+									return (
+										<a
+											href={config.docsUrl}
+											{...(rest as unknown as ComponentPropsWithoutRef<"a">)}
+										>
+											{linkChildren}
+										</a>
+									);
+								}}
+							>
+								{t("home.hero.documentation")}
+							</Button>
+						)}
+					</div>
 				</div>
 			</div>
-		</div>
+
+			<div className="container">
+				<HeroWireframe />
+			</div>
+		</section>
 	);
 }

@@ -17,7 +17,7 @@ Use for browser-visible workflows across routing, forms, authentication, or API 
    - SaaS: `testDir: "./e2e"`, starts `vite dev` on `PW_PORT` or `3100`, and reuses only when `PW_REUSE_SERVER=1`.
    - Both load root `.env.local`, run Chromium, retain video on failure, trace on first retry, and use one worker plus one retry in CI.
 3. Start from a user-observable state with `page.goto()`. Prefer `getByRole`/`getByLabel`; use an existing stable test attribute only when accessibility locators cannot express the target.
-4. Assert hydration before client interaction. `apps/saas/e2e/login.spec.ts` waits for the `System mode` button before switching auth tabs.
+4. Assert hydration before client interaction. Wait for a control that is absent from SSR HTML — `apps/saas/e2e/login.spec.ts` waits for the Language button (`LocaleSwitch` returns null until `useIsClient()`). Do not treat `[data-test="color-mode-toggle"]` as hydration; that wrapper is server-rendered.
 5. Keep tests independent and provision/clean required PostgreSQL state explicitly. CI supplies `DATABASE_URL`; it does not start a database service.
 6. Treat authentication setup accurately: there is currently no auth setup fixture or saved `storageState`; the SaaS suite only tests the public login page. For authenticated tests, add a deterministic setup spec/API helper and isolated user, save storage state without secrets, and wire a Playwright setup-project dependency. Do not rely on a developer session. Marketing declares a `setup` project matching `*.setup.ts`, but currently has no setup file or Chromium dependency on it; SaaS declares no setup project.
 7. Run a focused spec headlessly:

@@ -8,6 +8,38 @@
 
 - **Document title**: Marketing and SaaS now append the product name with an en dash (`Login – supastarter for TanStack Start`). Every SaaS route sets a title so tabs never fall back to the product name alone.
 
+#### UI
+
+- **Form controls**: Inputs, selects, and textareas use `rounded-xl` so their corners sit closer to the pill buttons and other rounder surfaces.
+- **Logo**: The middle bar of the shared Acme mark uses the chromatic olive touch color.
+- **App icon**: Replaced the rocket `icon.png` in marketing, SaaS, and docs with the three-bar Acme mark. The middle bar uses the chromatic olive touch color.
+- **SaaS touch color**: The chromatic olive is used as a state hint in the product: active nav icons, settings/tab underlines, checked switches, unread notification badges, active/recommended plans, the chat send control, and organization logo placeholders.
+- **Marketing type scale**: Replaced one-off font sizes (`text-[2.5rem]`, `text-[11px]`, and similar) with the nearest Tailwind tokens so marketing type stays on the shared scale.
+- **Docs typography**: The docs app now uses the same pairing as marketing—Inter for body copy and DM Sans for headings and the wordmark.
+- **Accordion**: FAQ panels animate height with `--accordion-panel-height` and a longer ease, so open/close no longer snaps.
+- **Locale switch**: Moved the duplicated marketing/SaaS language pickers into `@repo/ui`. Apps pass locales, the current value, and a persist callback so the UI package stays free of `@repo/i18n`.
+- **Feature headlines**: Product feature spreads no longer show an icon above the top-level title; the three-up benefit grid still does.
+- **Inner pages**: Blog, changelog, and contact use the same left-aligned header as the homepage (olive eyebrow, stacked title and lede). Changelog is a dated timeline with six example releases; the journal has product-shaped sample posts.
+- **Marketing container**: The marketing `container` max-width steps down from `7xl` to `6xl` so the public pages sit a bit narrower.
+- **SaaS logo**: The authenticated app and auth screens show only the three-bar mark, without the Acme wordmark.
+- **Blog covers**: Each sample journal post now has a product-frame cover. The list shows it to the left of the title at full container width; the article page already used the same `image` field.
+- **Blog tags**: The journal list filters with `?tag=`. Tags on the list and article pages are links; the active tag (or All) clears the query.
+- **Hero grid**: Removed the faint grid overlay from the marketing hero.
+- **Trial copy**: FAQ and the billing journal post now say 7-day trials, matching `trialPeriodDays` in the payments config.
+- **Hero highlights**: Removed the Authentication / Organizations / Billing row under the homepage preview.
+- **Headline wrapping**: Left-aligned headlines and subtitles use `text-pretty` so the last line is less likely to leave a single word hanging. Centered headings still use `text-balance`.
+- **Homepage sections**: Slightly tighter vertical padding so features, testimonials, pricing, FAQ, and the CTA sit closer together.
+
+#### Marketing redesign
+
+- **Typography**: Marketing uses Inter for body copy and DM Sans for headlines (including the wordmark). `text-balance` is only on centered headlines and subtitles. The SaaS app uses Inter throughout.
+- **Color scheme**: Shared tokens sit on Tailwind’s olive scale—warm olive-50 paper, olive-tinted borders, and olive-950 actions—so the high-contrast ink look picks up a quiet color, in the same family as the Oatmeal olive theme.
+- **Marketing visual language**: Refreshed the public site toward a quieter Linear/Notion-like layout with UserJot-inspired structure—more vertical air, a left-aligned hero, stacked section titles with the lede underneath, a single bordered pricing table, and shared medium-weight page headers across blog, changelog, contact, and legal pages. A chromatic olive-green touch color is used like UserJot’s orange: a “New” pill, section labels, larger unboxed icons, checks, and secondary links.
+- **Landing sections**: Added testimonials and a closing CTA band on the marketing homepage, with richer example copy across marketing locales plus clearer shared pricing descriptions.
+- **Visual polish**: Hero uses a live dashboard wireframe (sidebar, stats, placeholder) instead of screenshots, feature placeholders are CSS product frames with dummy portraits and plan icons, testimonials include example headshots, pricing leads with the amount, and the newsletter is a compact closer instead of a second CTA.
+- **Logo**: Replaced the layered hex SVG with a stacked three-bar Acme mark (thin rounded bars forming a pyramid) and a semibold wordmark in the shared `Logo` component.
+- **Color mode toggle**: Moved the duplicated marketing/SaaS pickers into `@repo/ui`. Apps pass translated labels as props so the UI package stays free of `@repo/i18n`. The active option no longer uses a drop shadow.
+
 #### Dependencies
 
 - **Production dependencies**: Bumped `ai` to `^7.0.62`, `@ai-sdk/anthropic` to `^4.0.38`, `@ai-sdk/openai` to `^4.0.40`, `@ai-sdk/react` to `^4.0.65`, `better-auth` and `@better-auth/passkey` to `1.6.27`, `@tanstack/react-form` to `^1.33.5`, and `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1108.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.

@@ -2,49 +2,49 @@
 	"pricing": {
 		"choosePlan": "Choose plan",
 		"contactSales": "Contact sales",
-		"description": "Choose the plan that works best for you.",
+		"description": "Simple plans that scale with your team. Upgrade when you are ready.",
 		"getStarted": "Get started",
 		"month": "month",
 		"monthly": "Monthly",
 		"products": {
 			"basic": {
-				"description": "Perfect to small teams.",
+				"description": "For solo founders validating the first release.",
 				"features": {
-					"anotherFeature": "Another amazing feature",
-					"limitedSupport": "Limited support"
+					"anotherFeature": "Core product features",
+					"limitedSupport": "Community support"
 				},
 				"title": "Basic"
 			},
 			"enterprise": {
-				"description": "Custom plan tailored to your requirements",
+				"description": "Security, support, and terms tailored to your organization.",
 				"features": {
-					"enterpriseSupport": "Enterprise support",
-					"unlimitedProjects": "Unlimited projects"
+					"enterpriseSupport": "Dedicated support",
+					"unlimitedProjects": "Unlimited workspaces"
 				},
 				"title": "Enterprise"
 			},
 			"free": {
-				"description": "Start for free",
+				"description": "Explore the product with no commitment.",
 				"features": {
-					"anotherFeature": "Another amazing feature",
-					"limitedSupport": "Limited support"
+					"anotherFeature": "Core product features",
+					"limitedSupport": "Community support"
 				},
 				"title": "Free"
 			},
 			"lifetime": {
-				"description": "Buy once. Use forever.",
+				"description": "Pay once and keep access as the product grows.",
 				"features": {
-					"extendSupport": "Extended support",
-					"noRecurringCosts": "No recurring costs"
+					"extendSupport": "Priority support window",
+					"noRecurringCosts": "No recurring fees"
 				},
 				"title": "Lifetime"
 			},
 			"pro": {
-				"description": "Best for teams",
+				"description": "For teams collaborating across workspaces.",
 				"features": {
-					"anotherFeature": "Another amazing feature",
+					"anotherFeature": "Advanced product features",
 					"fiveMembers": "Up to 5 members",
-					"fullSupport": "Full support"
+					"fullSupport": "Email support"
 				},
 				"title": "Pro"
 			}
@@ -56,6 +56,7 @@
 		"trialPeriod": "{days} days free trial",
 		"year": "year",
 		"yearly": "Yearly",
-		"perSeat": "seat"
+		"perSeat": "seat",
+		"badge": "Pricing"
 	}
 }

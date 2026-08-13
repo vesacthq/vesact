@@ -2,6 +2,13 @@
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
 
+@theme inline {
+	--font-inter: "Inter";
+	--font-dm-sans: "DM Sans";
+	--font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+	--font-heading: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
 html {
 	scrollbar-gutter: stable;
 }
@@ -9,4 +16,16 @@ html {
 html > body[data-scroll-locked] {
 	margin-right: 0px !important;
 	--removed-body-scroll-bar-size: 0px !important;
+}
+
+@layer base {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	.prose :where(h1, h2, h3, h4, h5, h6) {
+		font-family: var(--font-heading);
+	}
 }

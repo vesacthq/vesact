@@ -12,6 +12,8 @@
 		"e2e": "pnpm exec playwright test --ui",
 		"e2e:ci": "pnpm exec playwright install && pnpm exec playwright test",
 		"type-check": "content-collections build && tsc --noEmit",
+		"test": "vitest run",
+		"test:watch": "vitest",
 		"lint": "oxlint",
 		"format": "oxfmt"
 	},
@@ -59,6 +61,7 @@
 		"dotenv": "catalog:",
 		"start-server-and-test": "catalog:",
 		"tailwindcss": "catalog:",
-		"typescript": "catalog:"
+		"typescript": "catalog:",
+		"vitest": "catalog:"
 	}
 }

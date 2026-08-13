@@ -1,55 +1,17 @@
 import { config } from "@config";
 import { LocaleLink, useLocalePathname } from "@i18n/routing";
-import { cn, Logo } from "@repo/ui";
+import { cn, ColorModeToggle, Logo } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@repo/ui/components/sheet";
-import { ColorModeToggle } from "@shared/components/ColorModeToggle";
 import { LocaleSwitch } from "@shared/components/LocaleSwitch";
 import { MenuIcon } from "lucide-react";
-import {
-	Suspense,
-	useCallback,
-	useEffect,
-	useRef,
-	useState,
-	type ComponentPropsWithoutRef,
-} from "react";
+import { useEffect, useState, type ComponentPropsWithoutRef } from "react";
 import { useTranslations } from "use-intl";
 
-/** Tiny trailing-edge debounce scoped to this module; avoids an extra dep. */
-function useDebouncedCallback<Args extends unknown[]>(
-	callback: (...args: Args) => void,
-	delayMs: number,
-) {
-	const callbackRef = useRef(callback);
-	callbackRef.current = callback;
-
-	const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-	useEffect(() => {
-		return () => {
-			if (timerRef.current) {
-				clearTimeout(timerRef.current);
-			}
-		};
-	}, []);
-
-	return useCallback(
-		(...args: Args) => {
-			if (timerRef.current) {
-				clearTimeout(timerRef.current);
-			}
-			timerRef.current = setTimeout(() => {
-				callbackRef.current(...args);
-			}, delayMs);
-		},
-		[delayMs],
-	);
-}
-
 export function NavBar() {
+	const t = useTranslations();
 	const localePathname = useLocalePathname();
-	const t = useTranslations("common");
+	const saasUrl = config.saasUrl;
 
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const [isTop, setIsTop] = useState(true);
@@ -58,17 +20,28 @@ export function NavBar() {
 		setMobileMenuOpen(false);
 	};
 
-	const debouncedScrollHandler = useDebouncedCallback(() => {
-		setIsTop(window.scrollY <= 10);
-	}, 150);
-
 	useEffect(() => {
-		window.addEventListener("scroll", debouncedScrollHandler);
-		debouncedScrollHandler();
-		return () => {
-			window.removeEventListener("scroll", debouncedScrollHandler);
+		let timeout: ReturnType<typeof setTimeout> | undefined;
+
+		const onScroll = () => {
+			if (timeout) {
+				clearTimeout(timeout);
+			}
+			timeout = setTimeout(() => {
+				setIsTop(window.scrollY <= 10);
+			}, 150);
 		};
-	}, [debouncedScrollHandler]);
+
+		window.addEventListener("scroll", onScroll);
+		setIsTop(window.scrollY <= 10);
+
+		return () => {
+			window.removeEventListener("scroll", onScroll);
+			if (timeout) {
+				clearTimeout(timeout);
+			}
+		};
+	}, []);
 
 	useEffect(() => {
 		handleMobileMenuClose();
@@ -79,29 +52,29 @@ export function NavBar() {
 		href: string;
 	}[] = [
 		{
-			label: t("menu.pricing"),
+			label: t("common.menu.pricing"),
 			href: "/#pricing",
 		},
 		{
-			label: t("menu.faq"),
+			label: t("common.menu.faq"),
 			href: "/#faq",
 		},
 		{
-			label: t("menu.blog"),
+			label: t("common.menu.blog"),
 			href: "/blog",
 		},
 		{
-			label: t("menu.changelog"),
+			label: t("common.menu.changelog"),
 			href: "/changelog",
 		},
 		{
-			label: t("menu.contact"),
+			label: t("common.menu.contact"),
 			href: "/contact",
 		},
 		...(config.docsUrl
 			? [
 					{
-						label: t("menu.docs"),
+						label: t("common.menu.docs"),
 						href: config.docsUrl,
 					},
 				]
@@ -112,21 +85,19 @@ export function NavBar() {
 
 	return (
 		<nav
-			className={cn("top-0 sticky z-50 w-full bg-background transition-shadow duration-200", {
-				"border-b": !isTop,
-			})}
+			className={cn(
+				"top-0 sticky z-50 w-full transition-[background-color,border-color,backdrop-filter] duration-300",
+				isTop
+					? "border-b border-transparent bg-transparent"
+					: "backdrop-blur-xl border-b border-border/60 bg-background/80",
+			)}
 			data-test="navigation"
 		>
 			<div className="container">
-				<div
-					className={cn(
-						"gap-6 flex items-center justify-stretch transition-[padding] duration-200",
-						!isTop ? "py-4" : "py-6",
-					)}
-				>
+				<div className="gap-6 h-16 md:h-[4.25rem] flex items-center justify-stretch">
 					<div className="flex flex-1 justify-start">
 						<LocaleLink href="/" className="block hover:no-underline active:no-underline">
-							<Logo />
+							<Logo className="font-heading" />
 						</LocaleLink>
 					</div>
 
@@ -136,8 +107,10 @@ export function NavBar() {
 								key={menuItem.href}
 								href={menuItem.href}
 								className={cn(
-									"px-3 py-2 font-medium text-sm block shrink-0 text-foreground/80",
-									isMenuItemActive(menuItem.href) ? "font-bold text-foreground" : "",
+									"px-3 py-2 font-medium text-sm block shrink-0 transition-colors",
+									isMenuItemActive(menuItem.href)
+										? "text-foreground"
+										: "text-foreground/55 hover:text-touch",
 								)}
 							>
 								{menuItem.label}
@@ -145,11 +118,15 @@ export function NavBar() {
 						))}
 					</div>
 
-					<div className="gap-3 flex flex-1 items-center justify-end">
-						<ColorModeToggle />
-						<Suspense>
-							<LocaleSwitch />
-						</Suspense>
+					<div className="gap-2 md:gap-3 flex flex-1 items-center justify-end">
+						<ColorModeToggle
+							labels={{
+								system: t("common.colorMode.system"),
+								light: t("common.colorMode.light"),
+								dark: t("common.colorMode.dark"),
+							}}
+						/>
+						<LocaleSwitch />
 
 						<Sheet open={mobileMenuOpen} onOpenChange={(open) => setMobileMenuOpen(open)}>
 							<SheetTrigger
@@ -157,8 +134,8 @@ export function NavBar() {
 									<Button
 										className="lg:hidden"
 										size="icon"
-										variant="secondary"
-										aria-label={t("aria.menu")}
+										variant="ghost"
+										aria-label={t("common.aria.menu")}
 									>
 										<MenuIcon className="size-4" />
 									</Button>
@@ -173,8 +150,8 @@ export function NavBar() {
 											href={menuItem.href}
 											onClick={handleMobileMenuClose}
 											className={cn(
-												"px-3 py-2 font-medium text-base block shrink-0 text-foreground/80",
-												isMenuItemActive(menuItem.href) ? "font-bold text-foreground" : "",
+												"px-3 py-2 font-medium text-base block shrink-0",
+												isMenuItemActive(menuItem.href) ? "text-foreground" : "text-foreground/60",
 											)}
 										>
 											{menuItem.label}
@@ -184,33 +161,30 @@ export function NavBar() {
 									{config.saasUrl && (
 										<a
 											href={config.saasUrl}
-											className="px-3 py-2 text-base block"
+											className="px-3 py-2 text-base block text-touch"
 											onClick={handleMobileMenuClose}
 										>
-											{t("menu.login")}
+											{t("common.menu.login")}
 										</a>
 									)}
 								</div>
 							</SheetContent>
 						</Sheet>
 
-						{config.saasUrl && (
+						{saasUrl && (
 							<Button
-								className="lg:flex hidden"
-								variant="secondary"
+								className="lg:flex hidden border-touch/30 text-touch hover:bg-touch/10 hover:text-touch"
+								variant="outline"
 								render={(props) => {
 									const { children: linkChildren, ...rest } = props;
 									return (
-										<a
-											href={config.saasUrl}
-											{...(rest as unknown as ComponentPropsWithoutRef<"a">)}
-										>
+										<a href={saasUrl} {...(rest as unknown as ComponentPropsWithoutRef<"a">)}>
 											{linkChildren}
 										</a>
 									);
 								}}
 							>
-								{t("menu.login")}
+								{t("common.menu.login")}
 							</Button>
 						)}
 					</div>

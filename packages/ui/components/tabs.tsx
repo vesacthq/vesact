@@ -18,7 +18,7 @@ const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimi
 const TabsTrigger = ({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Tab>) => (
 	<TabsPrimitive.Tab
 		className={cn(
-			"-mb-0.5 px-3 py-2 font-medium text-sm inline-flex items-center justify-center border-b-2 border-transparent whitespace-nowrap text-foreground/60 ring-offset-background transition-all hover:text-foreground/80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 aria-selected:border-primary aria-selected:text-card-foreground",
+			"-mb-0.5 px-3 py-2 font-medium text-sm inline-flex items-center justify-center border-b-2 border-transparent whitespace-nowrap text-foreground/60 ring-offset-background transition-all hover:text-foreground/80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 aria-selected:border-touch aria-selected:text-card-foreground",
 			className,
 		)}
 		{...props}

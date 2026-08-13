@@ -71,7 +71,7 @@ export function OrganzationSelect({
 	};
 
 	const triggerClassName = cn(
-		"gap-3 flex w-full items-center justify-between rounded-lg border border-border bg-card text-left transition-colors outline-none",
+		"gap-3 flex w-full items-center justify-between rounded-xl border border-border bg-card text-left transition-colors outline-none",
 		collapsed ? "p-1.5 justify-center" : "py-1.5 pr-2.5 pl-1.5",
 	);
 
@@ -95,7 +95,7 @@ export function OrganzationSelect({
 									{activeOrganization.name}
 								</span>
 								{paymentsConfig.billingAttachedTo === "organization" && orgActivePlan && (
-									<span className="text-xs font-medium leading-3 truncate text-primary">
+									<span className="text-xs font-medium leading-3 truncate text-touch">
 										{getPlanTitle(orgActivePlan.id)}
 									</span>
 								)}
@@ -111,7 +111,7 @@ export function OrganzationSelect({
 									{t("organizations.organizationSelect.personalAccount")}
 								</span>
 								{paymentsConfig.billingAttachedTo === "user" && userActivePlan && (
-									<span className="text-xs font-medium leading-3 truncate text-primary">
+									<span className="text-xs font-medium leading-3 truncate text-touch">
 										{getPlanTitle(userActivePlan.id)}
 									</span>
 								)}

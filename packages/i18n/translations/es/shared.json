@@ -2,49 +2,49 @@
 	"pricing": {
 		"choosePlan": "Elegir plan",
 		"contactSales": "Contactar ventas",
-		"description": "Elige el plan que mejor te funcione.",
+		"description": "Planes simples que crecen con tu equipo. Mejora cuando estés listo.",
 		"getStarted": "Comenzar",
 		"month": "mes",
 		"monthly": "Mensual",
 		"products": {
 			"basic": {
-				"description": "Perfecto para equipos pequeños.",
+				"description": "Para fundadores en solitario que validan el primer lanzamiento.",
 				"features": {
-					"anotherFeature": "Otra función increíble",
-					"limitedSupport": "Soporte limitado"
+					"anotherFeature": "Funciones principales del producto",
+					"limitedSupport": "Soporte de la comunidad"
 				},
 				"title": "Básico"
 			},
 			"enterprise": {
-				"description": "Plan personalizado según tus necesidades",
+				"description": "Seguridad, soporte y condiciones adaptadas a tu organización.",
 				"features": {
-					"enterpriseSupport": "Soporte empresarial",
-					"unlimitedProjects": "Proyectos ilimitados"
+					"enterpriseSupport": "Soporte dedicado",
+					"unlimitedProjects": "Workspaces ilimitados"
 				},
 				"title": "Empresa"
 			},
 			"free": {
-				"description": "Comienza gratis",
+				"description": "Explora el producto sin compromiso.",
 				"features": {
-					"anotherFeature": "Otra función increíble",
-					"limitedSupport": "Soporte limitado"
+					"anotherFeature": "Funciones principales del producto",
+					"limitedSupport": "Soporte de la comunidad"
 				},
 				"title": "Gratis"
 			},
 			"lifetime": {
-				"description": "Compra una vez. Úsalo para siempre.",
+				"description": "Paga una vez y mantén el acceso a medida que el producto crece.",
 				"features": {
-					"extendSupport": "Soporte extendido",
-					"noRecurringCosts": "Sin costos recurrentes"
+					"extendSupport": "Ventana de soporte prioritario",
+					"noRecurringCosts": "Sin cuotas recurrentes"
 				},
 				"title": "De por vida"
 			},
 			"pro": {
-				"description": "Ideal para equipos",
+				"description": "Para equipos que colaboran entre workspaces.",
 				"features": {
-					"anotherFeature": "Otra función increíble",
+					"anotherFeature": "Funciones avanzadas del producto",
 					"fiveMembers": "Hasta 5 miembros",
-					"fullSupport": "Soporte completo"
+					"fullSupport": "Soporte por correo"
 				},
 				"title": "Pro"
 			}
@@ -56,6 +56,7 @@
 		"trialPeriod": "{days} días de prueba gratis",
 		"year": "año",
 		"yearly": "Anual",
-		"perSeat": "asiento"
+		"perSeat": "asiento",
+		"badge": "Precios"
 	}
 }

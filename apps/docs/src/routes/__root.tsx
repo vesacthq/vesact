@@ -23,6 +23,10 @@ export const Route = createRootRoute({
 		links: [
 			{ rel: "icon", type: "image/png", href: "/icon.png" },
 			{ rel: "stylesheet", href: appCss },
+			{
+				rel: "stylesheet",
+				href: "https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+			},
 		],
 	}),
 	component: RootComponent,
@@ -34,7 +38,7 @@ function RootComponent() {
 			<head>
 				<HeadContent />
 			</head>
-			<body className="flex min-h-screen flex-col">
+			<body className="font-sans flex min-h-screen flex-col antialiased">
 				<RootProvider>
 					<Outlet />
 				</RootProvider>

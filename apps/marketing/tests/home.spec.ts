@@ -6,8 +6,11 @@ test.describe("home page", () => {
 
 		await expect(
 			page.getByRole("heading", {
-				name: "Your revolutionary SaaS built with Tanstack Start",
+				name: "Build your SaaS without rebuilding the foundations",
 			}),
 		).toBeVisible();
+
+		await expect(page.locator('[data-test="navigation"]')).toBeVisible();
+		await expect(page.locator('[data-test="color-mode-toggle"]')).toBeVisible();
 	});
 });

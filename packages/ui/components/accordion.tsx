@@ -27,7 +27,7 @@ const AccordionTrigger = ({
 			{...props}
 		>
 			{children}
-			<ChevronDownIcon className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+			<ChevronDownIcon className="size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]" />
 		</AccordionPrimitive.Trigger>
 	</AccordionPrimitive.Header>
 );
@@ -39,7 +39,7 @@ const AccordionContent = ({
 }: React.ComponentProps<typeof AccordionPrimitive.Panel>) => (
 	<AccordionPrimitive.Panel
 		className={cn(
-			"text-sm data-[ending-style]:animate-accordion-up data-[starting-style]:animate-accordion-down overflow-hidden",
+			"text-sm data-ending-style:h-0 data-starting-style:h-0 h-[var(--accordion-panel-height)] overflow-hidden transition-[height,opacity] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] data-ending-style:opacity-0 data-starting-style:opacity-0",
 			className,
 		)}
 		{...props}

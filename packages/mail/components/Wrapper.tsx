@@ -36,6 +36,10 @@ const mailTailwindTheme = {
 					DEFAULT: "#f5f5f4",
 					foreground: "#1c1917",
 				},
+				touch: {
+					DEFAULT: "#52721a",
+					foreground: "#f7faf0",
+				},
 				popover: {
 					DEFAULT: "#ffffff",
 					foreground: "#0c0a09",
@@ -46,10 +50,14 @@ const mailTailwindTheme = {
 				},
 			},
 			borderRadius: {
-				lg: "0.75rem",
-				md: "calc(0.75rem - 2px)",
-				sm: "calc(0.75rem - 4px)",
 				DEFAULT: "0.75rem",
+				sm: "0.45rem",
+				md: "0.6rem",
+				lg: "0.75rem",
+				xl: "1.05rem",
+				"2xl": "1.35rem",
+				"3xl": "1.65rem",
+				"4xl": "1.95rem",
 			},
 		},
 	},

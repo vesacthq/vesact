@@ -7,11 +7,17 @@ export function NotFoundPage() {
 	const t = useTranslations("notFound");
 
 	return (
-		<div className="flex h-full min-h-[calc(100vh-16rem)] flex-col items-center justify-center">
-			<h1 className="font-bold text-5xl">{t("code")}</h1>
-			<p className="mt-2 text-2xl">{t("title")}</p>
+		<div className="px-6 flex min-h-[60vh] flex-col items-center justify-center text-center">
+			<p className="font-medium text-sm tracking-wide text-foreground/45">{t("code")}</p>
+			<h1 className="mt-2 font-medium text-3xl md:text-4xl tracking-tight text-balance">
+				{t("title")}
+			</h1>
 
-			<Button className="mt-4" render={(props) => <LocaleLink href="/" {...props} />}>
+			<Button
+				className="mt-6"
+				variant="secondary"
+				render={(props) => <LocaleLink {...props} href="/" />}
+			>
 				<ArrowLeftIcon className="mr-2 size-4" /> {t("goToHomepage")}
 			</Button>
 		</div>

@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
 
 async function waitForAuthPageHydration(page: import("@playwright/test").Page) {
-	await expect(page.getByRole("button", { name: "System mode" })).toBeVisible();
+	// LocaleSwitch is client-only; the color-mode toggle wrapper is SSR'd.
+	await expect(page.getByRole("button", { name: "Language" })).toBeVisible();
 }
 
 test.describe("login page", () => {

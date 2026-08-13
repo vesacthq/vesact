@@ -95,7 +95,9 @@ export function NotificationCenter({ className }: { className?: string }) {
 					>
 						<BellIcon className="size-4 text-muted-foreground" />
 						{unreadCount > 0 ? (
-							<span className="-top-0.5 -right-0.5 h-2 min-w-2 px-0.5 absolute rounded-full bg-destructive" />
+							<span className="-right-1.5 -top-1.5 h-5 min-w-5 px-1 font-semibold absolute flex items-center justify-center rounded-full bg-touch text-[10px] leading-none text-touch-foreground">
+								{unreadCount > 99 ? "99+" : unreadCount}
+							</span>
 						) : null}
 					</Button>
 				}
@@ -183,7 +185,7 @@ function NotificationRowBody({
 			<div className="min-w-0 flex-1">
 				<div className="gap-2 flex items-start">
 					{unread ? (
-						<span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" aria-hidden />
+						<span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-touch" aria-hidden />
 					) : (
 						<span className="mt-1.5 h-1.5 w-1.5 shrink-0" aria-hidden />
 					)}
