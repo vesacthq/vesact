@@ -7,6 +7,7 @@
 #### Page titles
 
 - **Document title**: Marketing and SaaS now append the product name with an en dash (`Login – supastarter for TanStack Start`). Every SaaS route sets a title so tabs never fall back to the product name alone.
+- **Hero preview**: The dashboard mock’s drop shadow is no longer clipped at the bottom. The section no longer uses `overflow-x-hidden` around the preview, and the mock has enough bottom padding for the full blur.
 
 #### UI
 
@@ -22,7 +23,7 @@
 - **Locale switch**: Moved the duplicated marketing/SaaS language pickers into `@repo/ui`. Apps pass locales, the current value, and a persist callback so the UI package stays free of `@repo/i18n`.
 - **Feature headlines**: Product feature spreads no longer show an icon above the top-level title; the three-up benefit grid still does.
 - **Inner pages**: Blog, changelog, and contact use the same left-aligned header as the homepage (olive eyebrow, stacked title and lede). Changelog is a dated timeline with six example releases; the journal has product-shaped sample posts.
-- **Marketing container**: The marketing `container` max-width steps down from `7xl` to `6xl` so the public pages sit a bit narrower.
+- **Marketing container**: The marketing `container` max-width is `6xl`. The shared Tailwind theme no longer ships a `7xl` container, so public pages stay on the narrower width instead of inheriting the SaaS layout.
 - **SaaS logo**: The authenticated app and auth screens show only the three-bar mark, without the Acme wordmark.
 - **Blog covers**: Each sample journal post now has a product-frame cover. The list shows it to the left of the title at full container width; the article page already used the same `image` field.
 - **Blog tags**: The journal list filters with `?tag=`. Tags on the list and article pages are links; the active tag (or All) clears the query.
