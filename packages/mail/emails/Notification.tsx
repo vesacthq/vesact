@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Text } from "react-email";
+import { Heading, Link, Text } from "react-email";
 
 import PrimaryButton from "../components/PrimaryButton";
 import Wrapper from "../components/Wrapper";
@@ -21,7 +21,7 @@ export function Notification({
 
 	return (
 		<Wrapper>
-			<Text className="font-semibold text-lg">{title}</Text>
+			<Heading className="mt-0 text-xl font-semibold">{title}</Heading>
 			{message ? <Text>{message}</Text> : null}
 			{link ? (
 				<>
