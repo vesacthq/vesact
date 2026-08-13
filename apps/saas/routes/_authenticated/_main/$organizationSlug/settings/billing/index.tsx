@@ -5,6 +5,7 @@ import { ChangePlan } from "@payments/components/ChangePlan";
 import { config as authConfig } from "@repo/auth/config";
 import { config as paymentsConfig } from "@repo/payments/config";
 import { SettingsList } from "@shared/components/SettingsList";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/_main/$organizationSlug/settings/billing/")({
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/_authenticated/_main/$organizationSlug/se
 		}
 	},
 	component: OrgSettingsBillingPage,
-	head: () => ({ meta: [{ title: "Organization — Billing" }] }),
+	head: () => ({ meta: [{ title: documentTitle("Organization — Billing") }] }),
 });
 
 function OrgSettingsBillingPage() {

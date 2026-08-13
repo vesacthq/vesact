@@ -3,6 +3,7 @@ import { OrganizationStart } from "@organizations/components/OrganizationStart";
 import { useActiveOrganizationQuery } from "@organizations/lib/api";
 import { config as authConfig } from "@repo/auth/config";
 import { PageHeader } from "@shared/components/PageHeader";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useMemo } from "react";
 
@@ -13,7 +14,7 @@ export const Route = createFileRoute("/_authenticated/_main/$organizationSlug/")
 		}
 	},
 	component: OrganizationHomePage,
-	head: () => ({ meta: [{ title: "Organization" }] }),
+	head: () => ({ meta: [{ title: documentTitle("Organization") }] }),
 });
 
 function OrganizationHomePage() {

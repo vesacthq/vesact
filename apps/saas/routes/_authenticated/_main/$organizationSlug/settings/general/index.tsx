@@ -5,6 +5,7 @@ import { OrganizationLogoForm } from "@organizations/components/OrganizationLogo
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { config as authConfig } from "@repo/auth/config";
 import { SettingsList } from "@shared/components/SettingsList";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/_main/$organizationSlug/settings/general/")({
@@ -14,7 +15,7 @@ export const Route = createFileRoute("/_authenticated/_main/$organizationSlug/se
 		}
 	},
 	component: OrgSettingsGeneralPage,
-	head: () => ({ meta: [{ title: "Organization — General" }] }),
+	head: () => ({ meta: [{ title: documentTitle("Organization — General") }] }),
 });
 
 function OrgSettingsGeneralPage() {

@@ -5,6 +5,7 @@ import { filterPostsByTag, getTagFromSearchParam, getUniquePostTags } from "@blo
 import { SectionHeader } from "@home/components/SectionHeader";
 import { createTranslatorForLocale } from "@repo/i18n";
 import { getCurrentLocale } from "@repo/i18n/runtime";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute } from "@tanstack/react-router";
 import { useTranslations } from "use-intl";
 
@@ -23,7 +24,7 @@ export const Route = createFileRoute("/blog/")({
 	head: () => {
 		const t = createTranslatorForLocale(getCurrentLocale(), "marketing");
 		return {
-			meta: [{ title: t("blog.title") }],
+			meta: [{ title: documentTitle(t("blog.title")) }],
 		};
 	},
 });

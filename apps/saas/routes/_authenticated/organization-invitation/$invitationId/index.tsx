@@ -1,6 +1,7 @@
 import { OrganizationInvitationModal } from "@organizations/components/OrganizationInvitationModal";
 import { getInvitationById } from "@repo/database";
 import { Card, CardContent } from "@repo/ui";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 
@@ -26,7 +27,7 @@ export const Route = createFileRoute("/_authenticated/organization-invitation/$i
 		return loadPendingInvitationForInvitationRouteFn({ data: params.invitationId });
 	},
 	component: OrganizationInvitationPage,
-	head: () => ({ meta: [{ title: "Organization invitation" }] }),
+	head: () => ({ meta: [{ title: documentTitle("Organization invitation") }] }),
 });
 
 function OrganizationInvitationPage() {

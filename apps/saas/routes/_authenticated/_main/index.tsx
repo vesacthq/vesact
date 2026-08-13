@@ -4,6 +4,7 @@ import { OrganizationsGrid } from "@organizations/components/OrganizationsGrid";
 import { config as authConfig } from "@repo/auth/config";
 import { Card } from "@repo/ui";
 import { PageHeader } from "@shared/components/PageHeader";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 
@@ -48,6 +49,7 @@ export const Route = createFileRoute("/_authenticated/_main/")({
 		return { session };
 	},
 	component: DashboardHome,
+	head: () => ({ meta: [{ title: documentTitle("Start") }] }),
 });
 
 function DashboardHome() {

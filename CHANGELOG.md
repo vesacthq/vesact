@@ -4,6 +4,10 @@
 
 ### Changed
 
+#### Page titles
+
+- **Document title**: Marketing and SaaS now append the product name with an en dash (`Login – supastarter for TanStack Start`). Every SaaS route sets a title so tabs never fall back to the product name alone.
+
 #### UI
 
 - **Form controls**: Inputs, selects, and textareas use `rounded-xl` so their corners sit closer to the pill buttons and other rounder surfaces.
