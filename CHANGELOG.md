@@ -24,6 +24,7 @@
 - **Trial copy**: FAQ and the billing journal post now say 7-day trials, matching `trialPeriodDays` in the payments config.
 - **Hero highlights**: Removed the Authentication / Organizations / Billing row under the homepage preview.
 - **Headline wrapping**: Left-aligned headlines and subtitles use `text-pretty` so the last line is less likely to leave a single word hanging. Centered headings still use `text-balance`.
+- **Homepage sections**: Slightly tighter vertical padding so features, testimonials, pricing, FAQ, and the CTA sit closer together.
 
 #### Marketing redesign
 

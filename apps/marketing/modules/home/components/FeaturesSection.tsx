@@ -82,7 +82,7 @@ export function FeaturesSection() {
 	];
 
 	return (
-		<section id="features" className="scroll-my-20 py-28 lg:py-40">
+		<section id="features" className="scroll-my-20 py-24 lg:py-32">
 			<div className="container">
 				<SectionHeader
 					eyebrow={t("home.features.badge")}

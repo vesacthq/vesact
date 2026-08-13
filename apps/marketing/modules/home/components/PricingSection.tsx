@@ -73,7 +73,7 @@ export function PricingSection() {
 	);
 
 	return (
-		<section id="pricing" className="scroll-mt-16 py-28 lg:py-40 border-y border-border/60">
+		<section id="pricing" className="scroll-mt-16 py-24 lg:py-32 border-y border-border/60">
 			<div className="container">
 				<SectionHeader
 					eyebrow={t("pricing.badge")}

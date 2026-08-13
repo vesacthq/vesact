@@ -10,7 +10,7 @@ export function HeroSection() {
 
 	return (
 		<section className="max-w-full overflow-x-hidden">
-			<div className="pt-20 pb-12 md:pt-24 md:pb-14 lg:pt-28 lg:pb-16 container">
+			<div className="pt-20 pb-10 md:pt-24 md:pb-12 lg:pt-28 lg:pb-14 container">
 				<div className="max-w-5xl">
 					<p className="mb-6 gap-2.5 font-medium text-sm tracking-wide flex flex-wrap items-center text-foreground/50">
 						<span className="px-2 py-0.5 font-semibold tracking-wide text-xs rounded-full bg-touch text-touch-foreground">

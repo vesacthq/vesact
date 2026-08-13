@@ -19,7 +19,7 @@ export function FaqSection({ className }: { className?: string }) {
 	}));
 
 	return (
-		<section className={cn("scroll-mt-20 py-28 lg:py-40", className)} id="faq">
+		<section className={cn("scroll-mt-20 py-24 lg:py-32", className)} id="faq">
 			<div className="container">
 				<div className="gap-14 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-24 lg:items-start grid grid-cols-1">
 					<div>

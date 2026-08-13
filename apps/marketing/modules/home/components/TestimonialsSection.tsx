@@ -8,7 +8,7 @@ export function TestimonialsSection() {
 	const t = useTranslations();
 
 	return (
-		<section id="testimonials" className="scroll-mt-20 py-28 lg:py-40 border-t border-border/60">
+		<section id="testimonials" className="scroll-mt-20 py-24 lg:py-32 border-t border-border/60">
 			<div className="container">
 				<SectionHeader
 					eyebrow={t("home.testimonials.badge")}

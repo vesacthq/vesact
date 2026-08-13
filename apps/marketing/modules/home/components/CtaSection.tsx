@@ -15,7 +15,7 @@ export function CtaSection() {
 	);
 
 	return (
-		<section id="cta" className="scroll-mt-20 py-32 lg:py-44 border-t border-border/60">
+		<section id="cta" className="scroll-mt-20 py-24 lg:py-36 border-t border-border/60">
 			<div className="container">
 				<SectionHeader
 					align="center"
