@@ -2,6 +2,7 @@ import { AiChat } from "@ai/components/AiChat";
 import { config } from "@config";
 import { useTranslations } from "@i18n/intl";
 import { PageHeader } from "@shared/components/PageHeader";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/_main/chatbot/")({
@@ -11,7 +12,7 @@ export const Route = createFileRoute("/_authenticated/_main/chatbot/")({
 		}
 	},
 	component: ChatbotPage,
-	head: () => ({ meta: [{ title: "AI Chat" }] }),
+	head: () => ({ meta: [{ title: documentTitle("AI Chat") }] }),
 });
 
 function ChatbotPage() {

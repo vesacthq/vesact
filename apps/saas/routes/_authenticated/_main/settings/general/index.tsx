@@ -5,11 +5,12 @@ import { DeleteAccountForm } from "@settings/components/DeleteAccountForm";
 import { UserAvatarForm } from "@settings/components/UserAvatarForm";
 import { UserLanguageForm } from "@settings/components/UserLanguageForm";
 import { SettingsList } from "@shared/components/SettingsList";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/_main/settings/general/")({
 	component: SettingsGeneralPage,
-	head: () => ({ meta: [{ title: "Settings — General" }] }),
+	head: () => ({ meta: [{ title: documentTitle("Settings — General") }] }),
 });
 
 function SettingsGeneralPage() {

@@ -1,4 +1,5 @@
 import { CheckoutReturnContent } from "@payments/components/CheckoutReturnContent";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
@@ -9,7 +10,7 @@ const checkoutReturnSearch = z.object({
 export const Route = createFileRoute("/_authenticated/checkout-return/")({
 	validateSearch: (search) => checkoutReturnSearch.parse(search),
 	component: CheckoutReturnPage,
-	head: () => ({ meta: [{ title: "Checkout" }] }),
+	head: () => ({ meta: [{ title: documentTitle("Checkout") }] }),
 });
 
 function CheckoutReturnPage() {

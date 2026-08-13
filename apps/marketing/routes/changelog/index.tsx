@@ -1,9 +1,18 @@
 import { ChangelogSection } from "@changelog/components/ChangelogSection";
+import { createTranslatorForLocale } from "@repo/i18n";
+import { getCurrentLocale } from "@repo/i18n/runtime";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute } from "@tanstack/react-router";
 import { useTranslations } from "use-intl";
 
 export const Route = createFileRoute("/changelog/")({
 	component: ChangelogPage,
+	head: () => {
+		const t = createTranslatorForLocale(getCurrentLocale(), "marketing");
+		return {
+			meta: [{ title: documentTitle(t("changelog.title")) }],
+		};
+	},
 });
 
 function ChangelogPage() {

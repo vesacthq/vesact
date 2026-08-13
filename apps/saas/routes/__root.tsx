@@ -9,6 +9,7 @@ import { ClientProviders } from "@shared/components/ClientProviders";
 import { ConsentBanner } from "@shared/components/ConsentBanner";
 import { ConsentProvider } from "@shared/components/ConsentProvider";
 import { PermixProvider } from "@shared/components/PermixProvider";
+import { documentTitle } from "@shared/lib/document-title";
 import { getPermixState } from "@shared/lib/get-permix-state";
 import {
 	createRootRouteWithContext,
@@ -46,7 +47,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 				name: "robots",
 				content: "noindex, nofollow",
 			},
-			{ title: config.appName },
+			{ title: documentTitle() },
 		],
 		links: [
 			{

@@ -1,10 +1,11 @@
 import { PricingTable } from "@payments/components/PricingTable";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/choose-plan/")({
 	component: ChoosePlanPage,
 	head: () => ({
-		meta: [{ title: "Choose plan" }],
+		meta: [{ title: documentTitle("Choose plan") }],
 	}),
 });
 

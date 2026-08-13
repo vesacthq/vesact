@@ -5,6 +5,7 @@ import { deLocalizeHref } from "@repo/i18n/routing";
 import { getCurrentLocale } from "@repo/i18n/runtime";
 import { getBaseUrl } from "@shared/lib/base-url";
 import { getActivePathFromUrlParam } from "@shared/lib/content";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute } from "@tanstack/react-router";
 import { useTranslations } from "use-intl";
 
@@ -23,7 +24,7 @@ export const Route = createFileRoute("/blog/$/")({
 	head: ({ loaderData }) => ({
 		meta: loaderData?.post
 			? [
-					{ title: loaderData.post.title },
+					{ title: documentTitle(loaderData.post.title) },
 					{ name: "description", content: loaderData.post.excerpt ?? "" },
 				]
 			: [],

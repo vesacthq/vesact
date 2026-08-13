@@ -3,6 +3,7 @@ import { InviteMemberForm } from "@organizations/components/InviteMemberForm";
 import { OrganizationMembersBlock } from "@organizations/components/OrganizationMembersBlock";
 import { useActiveOrganizationQuery } from "@organizations/lib/api";
 import { config as authConfig } from "@repo/auth/config";
+import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/_main/$organizationSlug/settings/members/")({
@@ -12,7 +13,7 @@ export const Route = createFileRoute("/_authenticated/_main/$organizationSlug/se
 		}
 	},
 	component: OrgSettingsMembersPage,
-	head: () => ({ meta: [{ title: "Organization — Members" }] }),
+	head: () => ({ meta: [{ title: documentTitle("Organization — Members") }] }),
 });
 
 function OrgSettingsMembersPage() {
