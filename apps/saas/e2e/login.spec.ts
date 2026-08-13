@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 async function waitForAuthPageHydration(page: import("@playwright/test").Page) {
-	await expect(page.getByRole("button", { name: "System mode" })).toBeVisible();
+	await expect(page.locator('[data-test="color-mode-toggle"]')).toBeVisible();
 }
 
 test.describe("login page", () => {
