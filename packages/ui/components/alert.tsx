@@ -5,7 +5,7 @@ import * as React from "react";
 import { cn } from "../lib";
 
 const alertVariants = cva(
-	"relative w-full rounded-lg border p-4 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:top-4 [&>svg]:left-4 [&>svg]:size-4 [&>svg]:text-foreground [&>svg~*]:pl-6",
+	"relative w-full rounded-xl border p-4 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:top-4 [&>svg]:left-4 [&>svg]:size-4 [&>svg]:text-foreground [&>svg~*]:pl-6",
 	{
 		variants: {
 			variant: {
@@ -13,6 +13,7 @@ const alertVariants = cva(
 				primary: "border-primary/20 bg-primary/10 text-primary [&>svg]:text-primary",
 				error: "border-destructive/20 bg-destructive/10 text-destructive [&>svg]:text-destructive",
 				success: "border-success/20 bg-success/10 text-success [&>svg]:text-success",
+				warning: "border-warning/20 bg-warning/10 text-warning [&>svg]:text-warning",
 			},
 		},
 		defaultVariants: {
