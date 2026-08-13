@@ -10,6 +10,7 @@
 
 #### UI
 
+- **Mail templates**: The shared mail wrapper is a bit wider (640px) with more padding and 16px body copy, so transactional emails are less cramped. The primary button matches that scale.
 - **Form controls**: Inputs, selects, and textareas use `rounded-xl` so their corners sit closer to the pill buttons and other rounder surfaces.
 - **Logo**: The middle bar of the shared Acme mark uses the chromatic olive touch color.
 - **App icon**: Replaced the rocket `icon.png` in marketing, SaaS, and docs with the three-bar Acme mark. The middle bar uses the chromatic olive touch color.

@@ -10,7 +10,7 @@ export default function PrimaryButton({
 	return (
 		<Button
 			href={href}
-			className="px-4 py-2 text-sm rounded-full bg-primary text-primary-foreground"
+			className="px-5 py-2.5 text-base rounded-full bg-primary text-primary-foreground"
 		>
 			{children}
 		</Button>

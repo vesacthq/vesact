@@ -69,10 +69,21 @@ export default function Wrapper({ children }: PropsWithChildren) {
 			<Html lang="en">
 				<Head>
 					<Font fontFamily="Inter" fallbackFontFamily="Arial" fontWeight={400} fontStyle="normal" />
+					<style>
+						{`
+							p {
+								font-size: 16px !important;
+								line-height: 26px !important;
+							}
+						`}
+					</style>
 				</Head>
-				<Section className="p-4 bg-background">
-					<Container className="p-6 rounded-lg bg-card text-card-foreground">
-						<Logo />
+				<Section className="px-4 py-8 bg-background">
+					<Container
+						className="p-8 rounded-lg bg-card text-card-foreground"
+						style={{ maxWidth: "640px" }}
+					>
+						<Logo className="mb-6" />
 						{children}
 					</Container>
 				</Section>
