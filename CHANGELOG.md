@@ -12,6 +12,7 @@
 
 - **Mail templates**: The shared mail wrapper is a bit wider (640px) with more padding and 16px body copy, so transactional emails are less cramped. The primary button matches that scale.
 - **Form controls**: Inputs, selects, and textareas use `rounded-xl` so their corners sit closer to the pill buttons and other rounder surfaces.
+- **Alerts**: Feedback alerts use `rounded-xl` to match the form controls. Success, error, and warning now use Tailwind `green-800`/`green-400`, `red-700`/`red-400`, and `yellow-700`/`yellow-500` instead of cool emerald, candy red, and bright amber.
 - **Logo**: The middle bar of the shared Acme mark uses the chromatic olive touch color.
 - **App icon**: Replaced the rocket `icon.png` in marketing, SaaS, and docs with the three-bar Acme mark. The middle bar uses the chromatic olive touch color.
 - **SaaS touch color**: The chromatic olive is used as a state hint in the product: active nav icons, settings/tab underlines, checked switches, unread notification badges, active/recommended plans, the chat send control, and organization logo placeholders.
