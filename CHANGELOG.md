@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-14
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.64`, `@ai-sdk/openai` to `^4.0.41`, `@ai-sdk/react` to `^4.0.67`, `@tanstack/react-router` to `^1.170.27`, `@tanstack/react-start` to `^1.168.44`, and `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1109.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-08-13
 
 ### Changed
