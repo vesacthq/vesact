@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-15
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.65`, `@ai-sdk/react` to `^4.0.68`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1110.0`, `better-auth` and `@better-auth/passkey` to `1.6.28`, `@scalar/hono-api-reference` to `^0.11.14`, `fumadocs-core` and `fumadocs-ui` to `16.14.4`, `hono` to `^4.13.2`, `dodopayments` to `^2.46.0`, and `resend` to `^6.20.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-08-14
 
 ### Changed
