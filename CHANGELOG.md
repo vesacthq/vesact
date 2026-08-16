@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-16
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.66`, `@ai-sdk/anthropic` to `^4.0.39`, `@ai-sdk/openai` to `^4.0.42`, `@ai-sdk/react` to `^4.0.69`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1111.0`, `better-auth` and `@better-auth/passkey` to `1.6.29`, `@tanstack/react-router` to `^1.170.29`, and `@tanstack/react-start` to `^1.168.46`. **Development dependencies**: Bumped `turbo` to `^2.10.10`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-08-15
 
 ### Changed
