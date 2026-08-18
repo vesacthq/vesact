@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-18
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `es-toolkit` to `^1.51.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-08-16
 
 ### Changed
