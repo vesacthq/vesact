@@ -4,6 +4,10 @@
 
 ### Changed
 
+#### UI
+
+- **Toasts now use Base UI**: `packages/ui/components/toast.tsx` is rebuilt on `@base-ui/react/toast` (following the shadcn Base UI toast) and `sonner` was removed from the workspace. The `toastSuccess`, `toastError`, `toastInfo`, `toastWarning`, `toastLoading`, `toastPromise` and `dismiss` helpers were removed; use the exported `toast` manager directly (`toast.add({ title, description, type: "success" })`, `toast.close(id)`, `toast.promise(promise, { loading: { title }, success: { title }, error: { title } })`). `Toaster` still accepts `position` and takes a translated `closeLabel` for the dismiss button (`common.aria.closeToast`), and the toast primitives (`Toast`, `ToastContent`, `ToastTitle`, `ToastDescription`, `ToastAction`, `ToastClose`, `ToastViewport`, ...) are exported for custom toasts. Run `pnpm install` after pulling.
+
 #### Dependencies
 
 - **Production dependencies**: Bumped `es-toolkit` to `^1.51.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.

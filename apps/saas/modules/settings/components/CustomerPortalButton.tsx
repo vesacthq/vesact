@@ -1,6 +1,6 @@
 import { useTranslations } from "@i18n/intl";
 import { Button } from "@repo/ui/components/button";
-import { toastError } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation } from "@tanstack/react-query";
 import { CreditCardIcon } from "lucide-react";
@@ -20,7 +20,10 @@ export function CustomerPortalButton({ purchaseId }: { purchaseId: string }) {
 
 			window.location.href = customerPortalLink;
 		} catch {
-			toastError(t("settings.billing.createCustomerPortal.notifications.error.title"));
+			toast.add({
+				title: t("settings.billing.createCustomerPortal.notifications.error.title"),
+				type: "error",
+			});
 		}
 	};
 

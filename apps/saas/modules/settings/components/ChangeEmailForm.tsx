@@ -3,7 +3,7 @@ import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
-import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { useForm, useStore } from "@tanstack/react-form";
 import { z } from "zod";
@@ -27,12 +27,15 @@ export function ChangeEmailForm() {
 			const { error } = await authClient.changeEmail({ newEmail: email });
 
 			if (error) {
-				toastError(t("settings.account.changeEmail.notifications.error"));
+				toast.add({ title: t("settings.account.changeEmail.notifications.error"), type: "error" });
 				return;
 			}
 
 			await reloadSession();
-			toastSuccess(t("settings.account.changeEmail.notifications.success"));
+			toast.add({
+				title: t("settings.account.changeEmail.notifications.success"),
+				type: "success",
+			});
 		},
 	});
 

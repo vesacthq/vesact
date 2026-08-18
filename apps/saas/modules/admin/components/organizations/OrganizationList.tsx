@@ -15,7 +15,7 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Table, TableBody, TableCell, TableRow } from "@repo/ui/components/table";
-import { toastPromise } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { Pagination } from "@shared/components/Pagination";
 import { orpc } from "@shared/lib/orpc-query-utils";
@@ -81,31 +81,32 @@ export function OrganizationList() {
 	}, [debouncedSearchTerm, setCurrentPage]);
 
 	const deleteOrganization = async (id: string) => {
-		toastPromise(
-			async () => {
-				const { error } = await authClient.organization.delete({
-					organizationId: id,
-				});
+		const removeOrganization = async () => {
+			const { error } = await authClient.organization.delete({
+				organizationId: id,
+			});
 
-				if (error) {
-					throw error;
-				}
+			if (error) {
+				throw error;
+			}
 
-				await Promise.all([
-					queryClient.invalidateQueries({
-						queryKey: orpc.admin.organizations.list.key(),
-					}),
-					queryClient.invalidateQueries({
-						queryKey: organizationListQueryKey,
-					}),
-				]);
-			},
-			{
-				loading: t("admin.organizations.deleteOrganization.deleting"),
-				success: t("admin.organizations.deleteOrganization.deleted"),
-				error: t("admin.organizations.deleteOrganization.notDeleted"),
-			},
-		);
+			await Promise.all([
+				queryClient.invalidateQueries({
+					queryKey: orpc.admin.organizations.list.key(),
+				}),
+				queryClient.invalidateQueries({
+					queryKey: organizationListQueryKey,
+				}),
+			]);
+		};
+
+		await toast
+			.promise(removeOrganization(), {
+				loading: { title: t("admin.organizations.deleteOrganization.deleting") },
+				success: { title: t("admin.organizations.deleteOrganization.deleted") },
+				error: { title: t("admin.organizations.deleteOrganization.notDeleted") },
+			})
+			.catch(() => undefined);
 	};
 
 	const columns: ColumnDef<

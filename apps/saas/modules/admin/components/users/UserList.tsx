@@ -14,7 +14,7 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Input } from "@repo/ui/components/input";
 import { Table, TableBody, TableCell, TableRow } from "@repo/ui/components/table";
-import { dismiss, toastLoading, toastPromise } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import {
 	Tooltip,
 	TooltipContent,
@@ -144,64 +144,64 @@ export function UserList() {
 	}, [debouncedSearchTerm]); // oxlint-disable-line eslint-plugin-react-hooks/exhaustive-deps
 
 	const impersonateUser = async (userId: string, { name }: { name: string }) => {
-		const toastId = toastLoading(
-			t("admin.users.impersonation.impersonating", {
+		const toastId = toast.add({
+			title: t("admin.users.impersonation.impersonating", {
 				name,
 			}),
-		);
+			type: "loading",
+			timeout: 0,
+		});
 
 		await authClient.admin.impersonateUser({
 			userId,
 		});
 		await refetch();
-		dismiss(toastId);
+		toast.close(toastId);
 		window.location.href = new URL("/", window.location.origin).toString();
 	};
 
 	const deleteUser = async (id: string) => {
-		toastPromise(
-			async () => {
-				const { error } = await authClient.admin.removeUser({
-					userId: id,
-				});
+		const removeUser = async () => {
+			const { error } = await authClient.admin.removeUser({
+				userId: id,
+			});
 
-				if (error) {
-					throw error;
-				}
+			if (error) {
+				throw error;
+			}
 
-				await queryClient.invalidateQueries({
-					queryKey: orpc.admin.users.list.key(),
-				});
-			},
-			{
-				loading: t("admin.users.deleteUser.deleting"),
-				success: () => {
-					return t("admin.users.deleteUser.deleted");
-				},
-				error: t("admin.users.deleteUser.notDeleted"),
-			},
-		);
+			await queryClient.invalidateQueries({
+				queryKey: orpc.admin.users.list.key(),
+			});
+		};
+
+		await toast
+			.promise(removeUser(), {
+				loading: { title: t("admin.users.deleteUser.deleting") },
+				success: { title: t("admin.users.deleteUser.deleted") },
+				error: { title: t("admin.users.deleteUser.notDeleted") },
+			})
+			.catch(() => undefined);
 	};
 
 	const resendVerificationMail = async (email: string) => {
-		toastPromise(
-			async () => {
-				const { error } = await authClient.sendVerificationEmail({
-					email,
-				});
+		const sendVerificationEmail = async () => {
+			const { error } = await authClient.sendVerificationEmail({
+				email,
+			});
 
-				if (error) {
-					throw error;
-				}
-			},
-			{
-				loading: t("admin.users.resendVerificationMail.submitting"),
-				success: () => {
-					return t("admin.users.resendVerificationMail.success");
-				},
-				error: t("admin.users.resendVerificationMail.error"),
-			},
-		);
+			if (error) {
+				throw error;
+			}
+		};
+
+		await toast
+			.promise(sendVerificationEmail(), {
+				loading: { title: t("admin.users.resendVerificationMail.submitting") },
+				success: { title: t("admin.users.resendVerificationMail.success") },
+				error: { title: t("admin.users.resendVerificationMail.error") },
+			})
+			.catch(() => undefined);
 	};
 
 	const assignAdminRole = async (id: string) => {
@@ -226,27 +226,28 @@ export function UserList() {
 		});
 	};
 
-	const unbanUser = (userId: string) => {
-		toastPromise(
-			async () => {
-				const { error } = await authClient.admin.unbanUser({
-					userId,
-				});
+	const unbanUser = async (userId: string) => {
+		const unban = async () => {
+			const { error } = await authClient.admin.unbanUser({
+				userId,
+			});
 
-				if (error) {
-					throw error;
-				}
+			if (error) {
+				throw error;
+			}
 
-				await queryClient.invalidateQueries({
-					queryKey: orpc.admin.users.list.key(),
-				});
-			},
-			{
-				loading: t("admin.users.ban.notifications.unbanning"),
-				success: t("admin.users.ban.notifications.unbanSuccess"),
-				error: t("admin.users.ban.notifications.unbanError"),
-			},
-		);
+			await queryClient.invalidateQueries({
+				queryKey: orpc.admin.users.list.key(),
+			});
+		};
+
+		await toast
+			.promise(unban(), {
+				loading: { title: t("admin.users.ban.notifications.unbanning") },
+				success: { title: t("admin.users.ban.notifications.unbanSuccess") },
+				error: { title: t("admin.users.ban.notifications.unbanError") },
+			})
+			.catch(() => undefined);
 	};
 
 	const columns: ColumnDef<typeof manualPaginationTableFeatures, AdminUser>[] = useMemo(

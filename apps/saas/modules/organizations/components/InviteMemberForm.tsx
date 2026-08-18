@@ -5,7 +5,7 @@ import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { useForm, useStore } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
@@ -49,9 +49,15 @@ export function InviteMemberForm({ organizationId }: { organizationId: string })
 					queryKey: fullOrganizationQueryKey(organizationId),
 				});
 
-				toastSuccess(t("organizations.settings.members.inviteMember.notifications.success.title"));
+				toast.add({
+					title: t("organizations.settings.members.inviteMember.notifications.success.title"),
+					type: "success",
+				});
 			} catch {
-				toastError(t("organizations.settings.members.inviteMember.notifications.error.title"));
+				toast.add({
+					title: t("organizations.settings.members.inviteMember.notifications.error.title"),
+					type: "error",
+				});
 			}
 		},
 	});

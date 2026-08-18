@@ -80,7 +80,6 @@ catalog:
   recharts: ^3.10.1
   sharp: ^0.35.3
   slugify: ^1.6.9
-  sonner: ^2.0.8
   start-server-and-test: ^3.0.12
   streamdown: ^2.5.0
   tailwind-merge: ^3.6.0

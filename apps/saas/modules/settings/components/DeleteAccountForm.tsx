@@ -2,7 +2,7 @@ import { useSession } from "@auth/hooks/use-session";
 import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
-import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { useMutation } from "@tanstack/react-query";
@@ -22,10 +22,13 @@ export function DeleteAccountForm() {
 		},
 		onSuccess: async () => {
 			await reloadSession();
-			toastSuccess(t("settings.account.deleteAccount.notifications.success"));
+			toast.add({
+				title: t("settings.account.deleteAccount.notifications.success"),
+				type: "success",
+			});
 		},
 		onError: () => {
-			toastError(t("settings.account.deleteAccount.notifications.error"));
+			toast.add({ title: t("settings.account.deleteAccount.notifications.error"), type: "error" });
 		},
 	});
 

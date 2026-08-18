@@ -672,6 +672,7 @@
 			"specialCharacter": "Carácter especial"
 		},
 		"aria": {
+			"closeToast": "Cerrar notificación",
 			"language": "Idioma"
 		}
 	}

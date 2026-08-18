@@ -3,7 +3,7 @@ import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
-import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { useForm, useStore } from "@tanstack/react-form";
 import { z } from "zod";
@@ -27,12 +27,12 @@ export function ChangeNameForm() {
 			const { error } = await authClient.updateUser({ name });
 
 			if (error) {
-				toastError(t("settings.account.changeName.notifications.error"));
+				toast.add({ title: t("settings.account.changeName.notifications.error"), type: "error" });
 				return;
 			}
 
 			await reloadSession();
-			toastSuccess(t("settings.account.changeName.notifications.success"));
+			toast.add({ title: t("settings.account.changeName.notifications.success"), type: "success" });
 
 			// Reset the baseline so `isDirty` flips back to false until the next edit.
 			formApi.reset({ name });

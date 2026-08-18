@@ -5,7 +5,7 @@ import { useOrganizationListQuery } from "@organizations/lib/api";
 import { authClient } from "@repo/auth/client";
 import { checkPermission } from "@repo/permissions";
 import { Button } from "@repo/ui/components/button";
-import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { useRouter } from "@tanstack/react-router";
@@ -43,11 +43,17 @@ export function DeleteOrganizationForm() {
 				});
 
 				if (error) {
-					toastError(t("organizations.settings.notifications.organizationNotDeleted"));
+					toast.add({
+						title: t("organizations.settings.notifications.organizationNotDeleted"),
+						type: "error",
+					});
 					return;
 				}
 
-				toastSuccess(t("organizations.settings.notifications.organizationDeleted"));
+				toast.add({
+					title: t("organizations.settings.notifications.organizationDeleted"),
+					type: "success",
+				});
 				await setActiveOrganization(null);
 				await reloadOrganizations();
 				void router.navigate({ to: "/", replace: true });

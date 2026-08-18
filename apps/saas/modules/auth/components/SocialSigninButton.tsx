@@ -2,7 +2,7 @@ import { config } from "@config";
 import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
-import { toastError } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { parseAsString, useQueryState } from "nuqs";
 
 import { oAuthProviders } from "../constants/oauth-providers";
@@ -30,7 +30,7 @@ export function SocialSigninButton({
 		});
 
 		if (error) {
-			toastError(t("auth.login.hints.socialSigninFailed"));
+			toast.add({ title: t("auth.login.hints.socialSigninFailed"), type: "error" });
 		}
 	};
 

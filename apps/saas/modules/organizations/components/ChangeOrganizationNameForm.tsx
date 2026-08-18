@@ -4,7 +4,7 @@ import { organizationListQueryKey } from "@organizations/lib/api";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
-import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { useForm, useStore } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
@@ -47,11 +47,17 @@ export function ChangeOrganizationNameForm() {
 				await refetchActiveOrganization();
 				void router.invalidate();
 
-				toastSuccess(t("organizations.settings.changeName.notifications.success"));
+				toast.add({
+					title: t("organizations.settings.changeName.notifications.success"),
+					type: "success",
+				});
 
 				formApi.reset({ name });
 			} catch {
-				toastError(t("organizations.settings.changeName.notifications.error"));
+				toast.add({
+					title: t("organizations.settings.changeName.notifications.error"),
+					type: "error",
+				});
 			}
 		},
 	});

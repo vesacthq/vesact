@@ -5,7 +5,7 @@ import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { toastSuccess } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ComputerIcon, XIcon } from "lucide-react";
@@ -35,9 +35,12 @@ export function ActiveSessionsBlock() {
 			},
 			{
 				onSuccess: async () => {
-					toastSuccess(
-						t("settings.account.security.activeSessions.notifications.revokeSession.success"),
-					);
+					toast.add({
+						title: t(
+							"settings.account.security.activeSessions.notifications.revokeSession.success",
+						),
+						type: "success",
+					});
 
 					if (currentSession?.token === token) {
 						await queryClient.refetchQueries({

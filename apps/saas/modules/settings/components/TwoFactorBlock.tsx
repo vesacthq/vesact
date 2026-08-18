@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@repo/ui/compo
 import { FormItem } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
-import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { PasswordInput } from "@shared/components/PasswordInput";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { useMutation } from "@tanstack/react-query";
@@ -68,7 +68,10 @@ export function TwoFactorBlock() {
 		},
 
 		onError: () => {
-			toastError(t("settings.account.security.twoFactor.notifications.enable.error.title"));
+			toast.add({
+				title: t("settings.account.security.twoFactor.notifications.enable.error.title"),
+				type: "error",
+			});
 		},
 	});
 
@@ -87,11 +90,17 @@ export function TwoFactorBlock() {
 
 			setDialogOpen(false);
 
-			toastSuccess(t("settings.account.security.twoFactor.notifications.disable.success.title"));
+			toast.add({
+				title: t("settings.account.security.twoFactor.notifications.disable.success.title"),
+				type: "success",
+			});
 		},
 
 		onError: () => {
-			toastError(t("settings.account.security.twoFactor.notifications.enable.error.title"));
+			toast.add({
+				title: t("settings.account.security.twoFactor.notifications.enable.error.title"),
+				type: "error",
+			});
 		},
 	});
 
@@ -106,7 +115,10 @@ export function TwoFactorBlock() {
 				throw error;
 			}
 
-			toastSuccess(t("settings.account.security.twoFactor.notifications.verify.success.title"));
+			toast.add({
+				title: t("settings.account.security.twoFactor.notifications.verify.success.title"),
+				type: "success",
+			});
 
 			await reloadSession();
 			setDialogOpen(false);

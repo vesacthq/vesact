@@ -2,7 +2,7 @@ import { useSession } from "@auth/hooks/use-session";
 import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
-import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { useState } from "react";
 
@@ -25,10 +25,16 @@ export function SetPasswordForm() {
 			},
 			{
 				onSuccess: () => {
-					toastSuccess(t("settings.account.security.setPassword.notifications.success"));
+					toast.add({
+						title: t("settings.account.security.setPassword.notifications.success"),
+						type: "success",
+					});
 				},
 				onError: () => {
-					toastError(t("settings.account.security.setPassword.notifications.error"));
+					toast.add({
+						title: t("settings.account.security.setPassword.notifications.error"),
+						type: "error",
+					});
 				},
 				onResponse: () => {
 					setSubmitting(false);
