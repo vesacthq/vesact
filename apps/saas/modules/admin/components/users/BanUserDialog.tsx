@@ -19,7 +19,7 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
-import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
@@ -113,10 +113,13 @@ export function BanUserDialog({ open, onOpenChange, user }: BanUserDialogProps) 
 					queryKey: orpc.admin.users.list.key(),
 				});
 
-				toastSuccess(translations("admin.users.ban.notifications.banSuccess"));
+				toast.add({
+					title: translations("admin.users.ban.notifications.banSuccess"),
+					type: "success",
+				});
 				onOpenChange(false);
 			} catch {
-				toastError(translations("admin.users.ban.notifications.banError"));
+				toast.add({ title: translations("admin.users.ban.notifications.banError"), type: "error" });
 			} finally {
 				setIsSubmitting(false);
 			}

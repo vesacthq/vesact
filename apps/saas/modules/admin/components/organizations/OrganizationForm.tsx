@@ -20,7 +20,7 @@ import {
 	FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
@@ -73,7 +73,7 @@ export function OrganizationForm({ organizationId }: { organizationId: string })
 					}),
 				]);
 
-				toastSuccess(t("admin.organizations.form.notifications.success"));
+				toast.add({ title: t("admin.organizations.form.notifications.success"), type: "success" });
 
 				if (!organization) {
 					void router.navigate({
@@ -82,7 +82,7 @@ export function OrganizationForm({ organizationId }: { organizationId: string })
 					});
 				}
 			} catch {
-				toastError(t("admin.organizations.form.notifications.error"));
+				toast.add({ title: t("admin.organizations.form.notifications.error"), type: "error" });
 			}
 		},
 	});

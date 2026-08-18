@@ -11,7 +11,7 @@ import {
 	FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { toastError } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { useForm, useStore } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
@@ -51,7 +51,7 @@ export function CreateOrganizationForm({ defaultName }: { defaultName?: string }
 
 				void router.navigate({ to: `/${newOrganization.slug}`, replace: true });
 			} catch {
-				toastError(t("organizations.createForm.notifications.error"));
+				toast.add({ title: t("organizations.createForm.notifications.error"), type: "error" });
 			}
 		},
 	});

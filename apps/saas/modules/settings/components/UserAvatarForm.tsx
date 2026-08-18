@@ -1,7 +1,7 @@
 import { useSession } from "@auth/hooks/use-session";
 import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
-import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { useMutation } from "@tanstack/react-query";
 
@@ -22,10 +22,10 @@ export function UserAvatarForm() {
 		},
 		onSuccess: async () => {
 			await reloadSession();
-			toastSuccess(t("settings.account.avatar.notifications.success"));
+			toast.add({ title: t("settings.account.avatar.notifications.success"), type: "success" });
 		},
 		onError: () => {
-			toastError(t("settings.account.avatar.notifications.error"));
+			toast.add({ title: t("settings.account.avatar.notifications.error"), type: "error" });
 		},
 	});
 
@@ -36,10 +36,10 @@ export function UserAvatarForm() {
 		>
 			<UserAvatarUpload
 				onSuccess={() => {
-					toastSuccess(t("settings.account.avatar.notifications.success"));
+					toast.add({ title: t("settings.account.avatar.notifications.success"), type: "success" });
 				}}
 				onError={() => {
-					toastError(t("settings.account.avatar.notifications.error"));
+					toast.add({ title: t("settings.account.avatar.notifications.error"), type: "error" });
 				}}
 				onDelete={() => deleteAvatarMutation.mutate()}
 				isDeleting={deleteAvatarMutation.isPending}

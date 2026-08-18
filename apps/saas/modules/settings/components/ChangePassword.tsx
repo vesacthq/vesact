@@ -9,7 +9,7 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@repo/ui/components/form";
-import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { passwordSchema } from "@repo/utils";
 import { PasswordInput } from "@shared/components/PasswordInput";
 import { SettingsItem } from "@shared/components/SettingsItem";
@@ -43,7 +43,10 @@ export function ChangePasswordForm() {
 			});
 
 			if (error) {
-				toastError(t("settings.account.security.changePassword.notifications.error"));
+				toast.add({
+					title: t("settings.account.security.changePassword.notifications.error"),
+					type: "error",
+				});
 				return;
 			}
 
@@ -51,7 +54,10 @@ export function ChangePasswordForm() {
 				queryKey: ["active-sessions"],
 			});
 
-			toastSuccess(t("settings.account.security.changePassword.notifications.success"));
+			toast.add({
+				title: t("settings.account.security.changePassword.notifications.success"),
+				type: "success",
+			});
 			formApi.reset({ currentPassword: "", newPassword: "" });
 			void router.invalidate();
 		},

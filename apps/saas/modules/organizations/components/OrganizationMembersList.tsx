@@ -17,7 +17,7 @@ import {
 	DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Table, TableBody, TableCell, TableRow } from "@repo/ui/components/table";
-import { toastPromise } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { UserAvatar } from "@shared/components/UserAvatar";
 import { clientDataTableFeatures } from "@shared/lib/table-features";
 import { useQueryClient } from "@tanstack/react-query";
@@ -47,55 +47,69 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 	);
 
 	const updateMemberRole = async (memberId: string, role: OrganizationMemberRole) => {
-		toastPromise(
-			async () => {
-				await authClient.organization.updateMemberRole({
-					memberId,
-					role,
-					organizationId,
-				});
-			},
-			{
-				loading: t(
-					"organizations.settings.members.notifications.updateMembership.loading.description",
-				),
-				success: () => {
-					void queryClient.invalidateQueries({
-						queryKey: fullOrganizationQueryKey(organizationId),
-					});
+		const updateRole = async () => {
+			await authClient.organization.updateMemberRole({
+				memberId,
+				role,
+				organizationId,
+			});
 
-					return t(
-						"organizations.settings.members.notifications.updateMembership.success.description",
-					);
+			await queryClient.invalidateQueries({
+				queryKey: fullOrganizationQueryKey(organizationId),
+			});
+		};
+
+		await toast
+			.promise(updateRole(), {
+				loading: {
+					title: t(
+						"organizations.settings.members.notifications.updateMembership.loading.description",
+					),
 				},
-				error: t("organizations.settings.members.notifications.updateMembership.error.description"),
-			},
-		);
+				success: {
+					title: t(
+						"organizations.settings.members.notifications.updateMembership.success.description",
+					),
+				},
+				error: {
+					title: t(
+						"organizations.settings.members.notifications.updateMembership.error.description",
+					),
+				},
+			})
+			.catch(() => undefined);
 	};
 
 	const removeMember = async (memberId: string) => {
-		toastPromise(
-			async () => {
-				await authClient.organization.removeMember({
-					memberIdOrEmail: memberId,
-					organizationId,
-				});
+		const remove = async () => {
+			await authClient.organization.removeMember({
+				memberIdOrEmail: memberId,
+				organizationId,
+			});
 
-				await Promise.all([
-					queryClient.invalidateQueries({
-						queryKey: fullOrganizationQueryKey(organizationId),
-					}),
-					queryClient.invalidateQueries({
-						queryKey: organizationListQueryKey,
-					}),
-				]);
-			},
-			{
-				loading: t("organizations.settings.members.notifications.removeMember.loading.description"),
-				success: t("organizations.settings.members.notifications.removeMember.success.description"),
-				error: t("organizations.settings.members.notifications.removeMember.error.description"),
-			},
-		);
+			await Promise.all([
+				queryClient.invalidateQueries({
+					queryKey: fullOrganizationQueryKey(organizationId),
+				}),
+				queryClient.invalidateQueries({
+					queryKey: organizationListQueryKey,
+				}),
+			]);
+		};
+
+		await toast
+			.promise(remove(), {
+				loading: {
+					title: t("organizations.settings.members.notifications.removeMember.loading.description"),
+				},
+				success: {
+					title: t("organizations.settings.members.notifications.removeMember.success.description"),
+				},
+				error: {
+					title: t("organizations.settings.members.notifications.removeMember.error.description"),
+				},
+			})
+			.catch(() => undefined);
 	};
 
 	const columns: ColumnDef<

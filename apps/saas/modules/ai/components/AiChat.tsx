@@ -3,7 +3,7 @@ import { eventIteratorToStream } from "@orpc/client";
 import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import { Textarea } from "@repo/ui/components/textarea";
-import { toastError } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { orpcClient } from "@shared/lib/orpc-client";
 import {
 	ArrowUpIcon,
@@ -80,7 +80,7 @@ export function AiChat() {
 				text,
 			});
 		} catch {
-			toastError("Failed to send message");
+			toast.add({ title: "Failed to send message", type: "error" });
 			setInput(text);
 		}
 	};
@@ -110,7 +110,7 @@ export function AiChat() {
 													text: suggestion.prompt,
 												});
 											} catch {
-												toastError("Failed to send message");
+												toast.add({ title: "Failed to send message", type: "error" });
 											}
 										}}
 										disabled={status === "streaming"}

@@ -13,7 +13,7 @@ import {
 	DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Table, TableBody, TableCell, TableRow } from "@repo/ui/components/table";
-import { toastPromise } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { clientDataTableFeatures } from "@shared/lib/table-features";
 import { useQueryClient } from "@tanstack/react-query";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -46,32 +46,40 @@ export function OrganizationInvitationsList({ organizationId }: { organizationId
 		[organization?.invitations],
 	);
 
-	const revokeInvitation = (invitationId: string) => {
-		toastPromise(
-			async () => {
-				const { error } = await authClient.organization.cancelInvitation({
-					invitationId,
-				});
+	const revokeInvitation = async (invitationId: string) => {
+		const cancelInvitation = async () => {
+			const { error } = await authClient.organization.cancelInvitation({
+				invitationId,
+			});
 
-				if (error) {
-					throw error;
-				}
-			},
-			{
-				loading: t(
-					"organizations.settings.members.notifications.revokeInvitation.loading.description",
-				),
-				success: () => {
-					void queryClient.invalidateQueries({
-						queryKey: fullOrganizationQueryKey(organizationId),
-					});
-					return t(
-						"organizations.settings.members.notifications.revokeInvitation.success.description",
-					);
+			if (error) {
+				throw error;
+			}
+
+			await queryClient.invalidateQueries({
+				queryKey: fullOrganizationQueryKey(organizationId),
+			});
+		};
+
+		await toast
+			.promise(cancelInvitation(), {
+				loading: {
+					title: t(
+						"organizations.settings.members.notifications.revokeInvitation.loading.description",
+					),
 				},
-				error: t("organizations.settings.members.notifications.revokeInvitation.error.description"),
-			},
-		);
+				success: {
+					title: t(
+						"organizations.settings.members.notifications.revokeInvitation.success.description",
+					),
+				},
+				error: {
+					title: t(
+						"organizations.settings.members.notifications.revokeInvitation.error.description",
+					),
+				},
+			})
+			.catch(() => undefined);
 	};
 
 	const columns: ColumnDef<

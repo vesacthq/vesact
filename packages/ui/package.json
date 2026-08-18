@@ -15,7 +15,6 @@
 		"input-otp": "catalog:",
 		"lucide-react": "catalog:",
 		"recharts": "catalog:",
-		"sonner": "catalog:",
 		"tailwind-merge": "catalog:"
 	},
 	"devDependencies": {

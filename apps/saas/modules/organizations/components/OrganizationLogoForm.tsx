@@ -4,7 +4,7 @@ import { organizationListQueryKey } from "@organizations/lib/api";
 import { authClient } from "@repo/auth/client";
 import { Spinner } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
-import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { toast } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -77,7 +77,10 @@ export function OrganizationLogoForm() {
 				throw error;
 			}
 
-			toastSuccess(t("organizations.settings.logo.notifications.success"));
+			toast.add({
+				title: t("organizations.settings.logo.notifications.success"),
+				type: "success",
+			});
 
 			await refetchActiveOrganization();
 
@@ -85,7 +88,10 @@ export function OrganizationLogoForm() {
 				queryKey: organizationListQueryKey,
 			});
 		} catch {
-			toastError(t("organizations.settings.logo.notifications.error"));
+			toast.add({
+				title: t("organizations.settings.logo.notifications.error"),
+				type: "error",
+			});
 		} finally {
 			setIsSaving(false);
 		}
@@ -109,7 +115,10 @@ export function OrganizationLogoForm() {
 				throw error;
 			}
 
-			toastSuccess(t("organizations.settings.logo.notifications.success"));
+			toast.add({
+				title: t("organizations.settings.logo.notifications.success"),
+				type: "success",
+			});
 
 			await refetchActiveOrganization();
 
@@ -117,7 +126,10 @@ export function OrganizationLogoForm() {
 				queryKey: organizationListQueryKey,
 			});
 		} catch {
-			toastError(t("organizations.settings.logo.notifications.error"));
+			toast.add({
+				title: t("organizations.settings.logo.notifications.error"),
+				type: "error",
+			});
 		} finally {
 			setIsSaving(false);
 		}
