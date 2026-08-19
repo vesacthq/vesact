@@ -63,6 +63,10 @@ export function TwoFactorBlock() {
 				throw error;
 			}
 
+			if (!data || data.method !== "totp") {
+				throw new Error("Expected TOTP enrollment response");
+			}
+
 			setTotpURI(data.totpURI);
 			setDialogView("totp-url");
 		},

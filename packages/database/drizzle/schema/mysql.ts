@@ -58,26 +58,31 @@ export const session = mysqlTable(
 	(table) => [uniqueIndex("session_token_idx").on(table.token)],
 );
 
-export const account = mysqlTable("account", {
-	id: varchar("id", { length: 255 })
-		.$defaultFn(() => cuid())
-		.primaryKey(),
-	accountId: text("accountId").notNull(),
-	providerId: text("providerId").notNull(),
-	userId: text("userId")
-		.notNull()
-		.references(() => user.id, { onDelete: "cascade" }),
-	accessToken: text("accessToken"),
-	refreshToken: text("refreshToken"),
-	idToken: text("idToken"),
-	expiresAt: timestamp("expiresAt"),
-	password: text("password"),
-	accessTokenExpiresAt: timestamp("accessTokenExpiresAt"),
-	refreshTokenExpiresAt: timestamp("refreshTokenExpiresAt"),
-	scope: text("scope"),
-	createdAt: timestamp("createdAt").notNull(),
-	updatedAt: timestamp("updatedAt").notNull(),
-});
+export const account = mysqlTable(
+	"account",
+	{
+		id: varchar("id", { length: 255 })
+			.$defaultFn(() => cuid())
+			.primaryKey(),
+		accountId: text("accountId").notNull(),
+		providerId: text("providerId").notNull(),
+		userId: text("userId")
+			.notNull()
+			.references(() => user.id, { onDelete: "cascade" }),
+		accessToken: text("accessToken"),
+		refreshToken: text("refreshToken"),
+		idToken: text("idToken"),
+		expiresAt: timestamp("expiresAt"),
+		password: text("password"),
+		accessTokenExpiresAt: timestamp("accessTokenExpiresAt"),
+		refreshTokenExpiresAt: timestamp("refreshTokenExpiresAt"),
+		scope: text("scope"),
+		createdAt: timestamp("createdAt").notNull(),
+		updatedAt: timestamp("updatedAt").notNull(),
+		issuer: text("issuer").notNull(),
+	},
+	(table) => [uniqueIndex("account_issuer_accountId_uidx").on(table.issuer, table.accountId)],
+);
 
 export const verification = mysqlTable("verification", {
 	id: varchar("id", { length: 255 })

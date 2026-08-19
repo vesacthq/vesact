@@ -10,10 +10,10 @@ catalog:
   "@ai-sdk/anthropic": ^4.0.39
   "@ai-sdk/openai": ^4.0.42
   "@ai-sdk/react": ^4.0.69
-  "@aws-sdk/client-s3": 3.1111.0
-  "@aws-sdk/s3-request-presigner": 3.1111.0
+  "@aws-sdk/client-s3": 3.1112.0
+  "@aws-sdk/s3-request-presigner": 3.1112.0
   "@base-ui/react": ^1.7.0
-  "@better-auth/passkey": 1.6.29
+  "@better-auth/passkey": 1.7.0
   "@bprogress/react": 1.2.7
   "@mdx-js/mdx": ^3.1.1
   "@orpc/client": 1.15.0
@@ -43,7 +43,7 @@ catalog:
   "@vitest/coverage-v8": ^4.1.10
   ai: ^7.0.66
   autoprefixer: 10.5.4
-  better-auth: 1.6.29
+  better-auth: 1.7.0
   boring-avatars: ^2.0.4
   class-variance-authority: ^0.7.1
   clsx: ^2.1.1
@@ -65,8 +65,8 @@ catalog:
   nanoid: ^6.0.1
   nodemailer: ^9.0.5
   nprogress: ^0.2.0
-  nuqs: ^2.9.5
-  openai: ^7.4.0
+  nuqs: ^2.9.6
+  openai: ^7.5.0
   oxfmt: 0.63.0
   oxlint: 1.78.0
   permix: ^4.1.2
@@ -87,7 +87,7 @@ catalog:
   tsx: ^4.23.12
   typescript: 7.0.2
   ufo: ^1.6.4
-  use-intl: ^4.13.6
+  use-intl: ^4.13.7
   usehooks-ts: ^3.1.1
   uuid: ^14.0.1
   vite: ^8.2.1
