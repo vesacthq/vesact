@@ -1,7 +1,6 @@
 import { eq, ilike, or, sql } from "drizzle-orm";
 import type { z } from "zod";
 
-import { getAccountIssuer } from "../../lib/account-issuer";
 import { db } from "../client";
 import { account, user } from "../schema/postgres";
 import type { UserUpdateSchema } from "../zod";
@@ -100,7 +99,6 @@ export async function createUserAccount({
 			userId,
 			accountId,
 			providerId,
-			issuer: getAccountIssuer(providerId),
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			password: hashedPassword,

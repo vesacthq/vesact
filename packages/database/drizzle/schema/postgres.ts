@@ -86,12 +86,8 @@ export const account = pgTable(
 		updatedAt: timestamp("updatedAt")
 			.$onUpdate(() => /* @__PURE__ */ new Date())
 			.notNull(),
-		issuer: text("issuer").notNull(),
 	},
-	(table) => [
-		index("account_userId_idx").on(table.userId),
-		uniqueIndex("account_issuer_accountId_uidx").on(table.issuer, table.accountId),
-	],
+	(table) => [index("account_userId_idx").on(table.userId)],
 );
 
 export const verification = pgTable(

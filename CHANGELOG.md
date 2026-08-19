@@ -6,7 +6,7 @@
 
 #### Dependencies
 
-- **Production dependencies**: Bumped `better-auth` and `@better-auth/passkey` to `1.7.0` (adds required `issuer` on `account` rows and a compound unique index — backfill existing accounts per the [Better Auth 1.7 upgrade guide](https://better-auth.com/docs/guides/1-7-upgrade-guide) before deploying), `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1112.0`, `nuqs` to `^2.9.6`, `openai` to `^7.5.0`, `use-intl` to `^4.13.7`, and `dodopayments` to `^2.47.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+- **Production dependencies**: Bumped `better-auth` and `@better-auth/passkey` to `1.7.0`. Better Auth 1.7 includes breaking schema changes — follow the [Better Auth 1.7 upgrade guide](https://better-auth.com/docs/guides/1-7-upgrade-guide) to update your database. Also bumped `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1112.0`, `nuqs` to `^2.9.6`, `openai` to `^7.5.0`, `use-intl` to `^4.13.7`, and `dodopayments` to `^2.47.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
 
 ## 2026-08-18
 
