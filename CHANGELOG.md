@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-21
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@ai-sdk/anthropic` to `^4.0.40`, `@ai-sdk/openai` to `^4.0.44`, `@ai-sdk/react` to `^4.0.73`, `ai` to `^7.0.70`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1114.0`, `@tanstack/react-router` to `^1.170.31`, `@tanstack/react-start` to `^1.168.48`, `@vitejs/plugin-react` to `^6.1.0`, `lucide-react` to `^1.33.0`, and `fumadocs-mdx` to `15.3.0`. Refreshed the lockfile for previously cataloged bumps including `better-auth` and `@better-auth/passkey` `1.7.1`, `fumadocs-core`/`fumadocs-ui` `16.14.5`, `hono` `^4.13.3`, `input-otp` `^1.5.0`, `nuqs` `^2.9.6`, `openai` `^7.5.0`, `use-intl` `^4.13.7`, `dodopayments` `^2.47.0`, and `uuid` `^14.0.2`. Added the initial Drizzle migration under `packages/database/drizzle/migrations/`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-08-20
 
 ### Changed
