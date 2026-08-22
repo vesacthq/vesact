@@ -8,10 +8,10 @@ minimumReleaseAge: 1440
 
 catalog:
   "@ai-sdk/anthropic": ^4.0.40
-  "@ai-sdk/openai": ^4.0.44
-  "@ai-sdk/react": ^4.0.73
-  "@aws-sdk/client-s3": 3.1114.0
-  "@aws-sdk/s3-request-presigner": 3.1114.0
+  "@ai-sdk/openai": ^4.0.45
+  "@ai-sdk/react": ^4.0.76
+  "@aws-sdk/client-s3": 3.1115.0
+  "@aws-sdk/s3-request-presigner": 3.1115.0
   "@base-ui/react": ^1.7.0
   "@better-auth/passkey": 1.7.1
   "@bprogress/react": 1.2.7
@@ -23,7 +23,7 @@ catalog:
   "@orpc/tanstack-query": 1.15.0
   "@orpc/zod": 1.15.0
   "@playwright/test": ^1.62.1
-  "@scalar/hono-api-reference": ^0.11.14
+  "@scalar/hono-api-reference": ^0.11.16
   "@shikijs/rehype": ^4.4.3
   "@sindresorhus/slugify": ^3.0.0
   "@tailwindcss/vite": ^4.3.3
@@ -41,7 +41,7 @@ catalog:
   "@types/react-dom": 19.2.4
   "@vitejs/plugin-react": ^6.1.0
   "@vitest/coverage-v8": ^4.1.11
-  ai: ^7.0.70
+  ai: ^7.0.73
   autoprefixer: 10.5.4
   better-auth: 1.7.1
   boring-avatars: ^2.0.4
@@ -65,7 +65,7 @@ catalog:
   nanoid: ^6.0.1
   nodemailer: ^9.0.5
   nprogress: ^0.2.0
-  nuqs: ^2.9.6
+  nuqs: ^2.10.0
   openai: ^7.5.0
   oxfmt: 0.64.0
   oxlint: 1.79.0
@@ -75,7 +75,7 @@ catalog:
   prettier: 3.9.4
   react: 19.2.8
   react-dom: 19.2.8
-  react-dropzone: ^20.1.0
+  react-dropzone: ^20.1.1
   react-qr-code: ^2.2.0
   recharts: ^3.10.1
   sharp: ^0.35.3
@@ -90,7 +90,7 @@ catalog:
   use-intl: ^4.13.7
   usehooks-ts: ^3.1.1
   uuid: ^14.0.2
-  vite: ^8.2.1
+  vite: ^8.2.2
   vitest: ^4.1.11
   zod: ^4.4.3
 
