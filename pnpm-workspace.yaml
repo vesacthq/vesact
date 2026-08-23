@@ -9,9 +9,9 @@ minimumReleaseAge: 1440
 catalog:
   "@ai-sdk/anthropic": ^4.0.40
   "@ai-sdk/openai": ^4.0.45
-  "@ai-sdk/react": ^4.0.76
-  "@aws-sdk/client-s3": 3.1115.0
-  "@aws-sdk/s3-request-presigner": 3.1115.0
+  "@ai-sdk/react": ^4.0.79
+  "@aws-sdk/client-s3": 3.1116.0
+  "@aws-sdk/s3-request-presigner": 3.1116.0
   "@base-ui/react": ^1.7.0
   "@better-auth/passkey": 1.7.1
   "@bprogress/react": 1.2.7
@@ -41,7 +41,7 @@ catalog:
   "@types/react-dom": 19.2.4
   "@vitejs/plugin-react": ^6.1.0
   "@vitest/coverage-v8": ^4.1.11
-  ai: ^7.0.73
+  ai: ^7.0.76
   autoprefixer: 10.5.4
   better-auth: 1.7.1
   boring-avatars: ^2.0.4

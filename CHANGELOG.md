@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-23
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.76`, `@ai-sdk/react` to `^4.0.79`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1116.0`, `fumadocs-core` and `fumadocs-ui` to `16.15.0`, `fumadocs-mdx` to `15.3.1`, and `resend` to `^6.22.0`. Refreshed the lockfile for previously cataloged bumps including `better-auth` and `@better-auth/passkey` `1.7.1`, `@tanstack/react-router` `^1.170.31`, `@tanstack/react-start` `^1.168.48`, `@vitejs/plugin-react` `^6.1.0`, `fumadocs-core`/`fumadocs-ui`/`fumadocs-mdx` `16.14.5`/`15.3.0`, `hono` `^4.13.3`, `input-otp` `^1.5.0`, `lucide-react` `^1.33.0`, `nuqs` `^2.10.0`, `openai` `^7.5.0`, `use-intl` `^4.13.7`, `dodopayments` `^2.47.0`, `react-dropzone` `^20.1.1`, and `uuid` `^14.0.2`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-08-22
 
 ### Changed
