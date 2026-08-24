@@ -21,7 +21,7 @@ export function LastUsedBadge({
 	return (
 		<span
 			className={cn(
-				"px-1.5 py-0.5 font-medium rounded-md bg-primary/10 text-[10px] leading-none text-primary",
+				"px-1.5 py-0.5 font-medium rounded-md bg-touch text-[10px] leading-none text-touch-foreground",
 				placement === "corner"
 					? "top-0 right-3 pointer-events-none absolute -translate-y-1/2"
 					: "ml-1.5",
