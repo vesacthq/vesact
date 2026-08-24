@@ -22,9 +22,7 @@ export function LastUsedBadge({
 		<span
 			className={cn(
 				"px-1.5 py-0.5 font-medium rounded-md bg-touch text-[10px] leading-none text-touch-foreground",
-				placement === "corner"
-					? "top-0 right-3 pointer-events-none absolute -translate-y-1/2"
-					: "ml-1.5",
+				placement === "corner" ? "-top-2 right-3 pointer-events-none absolute" : "ml-1.5",
 			)}
 		>
 			{t("auth.login.lastUsed")}
