@@ -7,9 +7,9 @@ packages:
 minimumReleaseAge: 1440
 
 catalog:
-  "@ai-sdk/anthropic": ^4.0.40
-  "@ai-sdk/openai": ^4.0.45
-  "@ai-sdk/react": ^4.0.79
+  "@ai-sdk/anthropic": ^4.0.41
+  "@ai-sdk/openai": ^4.0.46
+  "@ai-sdk/react": ^4.0.80
   "@aws-sdk/client-s3": 3.1116.0
   "@aws-sdk/s3-request-presigner": 3.1116.0
   "@base-ui/react": ^1.7.0
@@ -28,9 +28,9 @@ catalog:
   "@sindresorhus/slugify": ^3.0.0
   "@tailwindcss/vite": ^4.3.3
   "@tanstack/react-form": ^1.33.5
-  "@tanstack/react-query": ^5.101.4
-  "@tanstack/react-router": ^1.170.31
-  "@tanstack/react-start": ^1.168.48
+  "@tanstack/react-query": ^5.102.0
+  "@tanstack/react-router": ^1.170.32
+  "@tanstack/react-start": ^1.168.49
   "@tanstack/react-table": ^9.1.2
   "@types/js-cookie": ^3.0.6
   "@types/mdx": ^2.0.14
@@ -41,7 +41,7 @@ catalog:
   "@types/react-dom": 19.2.4
   "@vitejs/plugin-react": ^6.1.0
   "@vitest/coverage-v8": ^4.1.11
-  ai: ^7.0.76
+  ai: ^7.0.77
   autoprefixer: 10.5.4
   better-auth: 1.7.1
   boring-avatars: ^2.0.4

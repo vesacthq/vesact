@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-24
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.77`, `@ai-sdk/anthropic` to `^4.0.41`, `@ai-sdk/openai` to `^4.0.46`, `@ai-sdk/react` to `^4.0.80`, `@tanstack/react-query` to `^5.102.0`, `@tanstack/react-router` to `^1.170.32`, and `@tanstack/react-start` to `^1.168.49`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-08-23
 
 ### Changed
