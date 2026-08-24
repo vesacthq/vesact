@@ -285,12 +285,12 @@ export function LoginForm() {
 								{authConfig.enablePasskeys && (
 									<Button
 										variant="secondary"
-										className="sm:col-span-2 w-full"
+										className="sm:col-span-2 relative w-full overflow-visible"
 										onClick={() => signInWithPasskey()}
 									>
 										<KeyIcon className="mr-1.5 size-4 text-primary" />
 										{t("auth.login.loginWithPasskey")}
-										<LastUsedBadge method={lastUsedLoginMethodIds.passkey} />
+										<LastUsedBadge method={lastUsedLoginMethodIds.passkey} placement="corner" />
 									</Button>
 								)}
 							</div>

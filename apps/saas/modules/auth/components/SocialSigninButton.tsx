@@ -1,6 +1,7 @@
 import { config } from "@config";
 import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
+import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import { toast } from "@repo/ui/components/toast";
 import { parseAsString, useQueryState } from "nuqs";
@@ -36,14 +37,19 @@ export function SocialSigninButton({
 	};
 
 	return (
-		<Button onClick={() => onSignin()} variant="secondary" type="button" className={className}>
+		<Button
+			onClick={() => onSignin()}
+			variant="secondary"
+			type="button"
+			className={cn("relative overflow-visible", className)}
+		>
 			{providerData.icon && (
 				<i className="mr-2 text-primary">
 					<providerData.icon className="size-4" />
 				</i>
 			)}
 			{providerData.name}
-			<LastUsedBadge method={provider} />
+			<LastUsedBadge method={provider} placement="corner" />
 		</Button>
 	);
 }
