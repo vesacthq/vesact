@@ -6,6 +6,7 @@ import { toast } from "@repo/ui/components/toast";
 import { parseAsString, useQueryState } from "nuqs";
 
 import { oAuthProviders } from "../constants/oauth-providers";
+import { LastUsedBadge } from "./LastUsedBadge";
 
 export function SocialSigninButton({
 	provider,
@@ -42,6 +43,7 @@ export function SocialSigninButton({
 				</i>
 			)}
 			{providerData.name}
+			<LastUsedBadge method={provider} />
 		</Button>
 	);
 }

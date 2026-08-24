@@ -1,6 +1,9 @@
 import { useTranslations } from "@i18n/intl";
 import { cn } from "@repo/ui";
 
+import { lastUsedLoginMethodIds } from "../lib/last-used-login-method";
+import { LastUsedBadge } from "./LastUsedBadge";
+
 export function LoginModeSwitch({
 	activeMode,
 	onChange,
@@ -33,6 +36,7 @@ export function LoginModeSwitch({
 				)}
 			>
 				{t("auth.login.modes.password")}
+				<LastUsedBadge method={lastUsedLoginMethodIds.password} />
 			</button>
 			<button
 				type="button"
@@ -47,6 +51,7 @@ export function LoginModeSwitch({
 				)}
 			>
 				{t("auth.login.modes.magicLink")}
+				<LastUsedBadge method={lastUsedLoginMethodIds.magicLink} />
 			</button>
 		</div>
 	);
