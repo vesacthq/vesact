@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-25
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `cropperjs` to `2.2.0`, `@tanstack/react-query` to `^5.102.2`, `fumadocs-core` and `fumadocs-ui` to `16.15.1`, and refreshed the lockfile for previously cataloged bumps including `ai` `^7.0.77`, `@ai-sdk/*` `^4.0.x`, `better-auth` and `@better-auth/passkey` `1.7.1`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` `3.1116.0`, `@tanstack/react-router` `^1.170.32`, `@tanstack/react-start` `^1.168.49`, `@vitejs/plugin-react` `^6.1.0`, `hono` `^4.13.3`, `input-otp` `^1.5.0`, `lucide-react` `^1.33.0`, `nuqs` `^2.10.0`, `openai` `^7.5.0`, `react-dropzone` `^20.1.1`, `dodopayments` `^2.47.0`, `resend` `^6.22.0`, `use-intl` `^4.13.7`, `uuid` `^14.0.2`, and `vite` `^8.2.2`. **Development dependencies**: Bumped `@types/react-dom` to `19.2.5`, `vitest` and `@vitest/coverage-v8` to `^4.1.11`, `oxlint` to `1.79.0`, `oxfmt` to `0.64.0`, and `turbo` to `^2.10.11`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-08-24
 
 ### Changed
