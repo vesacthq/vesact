@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-26
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.79`, `@ai-sdk/anthropic` to `^4.0.42`, `@ai-sdk/openai` to `^4.0.47`, `@ai-sdk/react` to `^4.0.82`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1117.0`, `@tanstack/react-query` to `^5.102.3`, `hono` to `^4.13.4`, `lucide-react` to `^1.34.0`, `streamdown` to `^2.6.0`, `dodopayments` to `^2.48.0`, and `resend` to `^6.22.1`. **Development dependencies**: Bumped `@types/node` to `26.3.0`, `oxlint` to `1.80.0`, and `oxfmt` to `0.65.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-08-25
 
 ### Changed
