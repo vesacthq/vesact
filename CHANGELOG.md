@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-27
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1118.0`, `@tanstack/react-query` to `^5.102.4`, `hono` to `^4.13.5`, `nuqs` to `^2.10.1`, and `react-email` and `@react-email/ui` to `^6.9.3`. **Development dependencies**: Bumped `turbo` to `^2.10.12`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-08-26
 
 ### Changed
