@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-28
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.83`, `@ai-sdk/anthropic` to `^4.0.44`, `@ai-sdk/openai` to `^4.0.50`, `@ai-sdk/react` to `^4.0.86`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1119.0`, `better-auth` and `@better-auth/passkey` to `1.7.2`, `@tanstack/react-query` to `^5.102.6`, `@tanstack/react-table` to `^9.2.3`, `fumadocs-core` and `fumadocs-ui` to `16.15.2`, `openai` to `^7.7.0`, `resend` to `^6.24.0`, and `sharp` to `^0.35.4`. **Development dependencies**: Bumped `@types/node` to `26.4.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-08-27
 
 ### Changed
