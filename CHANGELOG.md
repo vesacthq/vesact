@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-29
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1120.0`, `@tanstack/react-query` to `^5.102.8`, `@vitejs/plugin-react` to `^6.1.1`, `fumadocs-core` and `fumadocs-ui` to `16.15.4`, `fumadocs-mdx` to `15.4.0`, `nodemailer` to `^9.0.6`, `openai` to `^7.8.0`, `stripe` to `^22.6.0`, and `use-intl` to `^4.14.0`. Skipped `prisma` `8.x` pre-releases. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-08-28
 
 ### Changed

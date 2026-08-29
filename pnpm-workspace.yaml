@@ -10,8 +10,8 @@ catalog:
   "@ai-sdk/anthropic": ^4.0.44
   "@ai-sdk/openai": ^4.0.50
   "@ai-sdk/react": ^4.0.86
-  "@aws-sdk/client-s3": 3.1119.0
-  "@aws-sdk/s3-request-presigner": 3.1119.0
+  "@aws-sdk/client-s3": 3.1120.0
+  "@aws-sdk/s3-request-presigner": 3.1120.0
   "@base-ui/react": ^1.7.0
   "@better-auth/passkey": 1.7.2
   "@bprogress/react": 1.2.7
@@ -28,7 +28,7 @@ catalog:
   "@sindresorhus/slugify": ^3.0.0
   "@tailwindcss/vite": ^4.3.3
   "@tanstack/react-form": ^1.33.5
-  "@tanstack/react-query": ^5.102.6
+  "@tanstack/react-query": ^5.102.8
   "@tanstack/react-router": ^1.170.32
   "@tanstack/react-start": ^1.168.49
   "@tanstack/react-table": ^9.2.3
@@ -39,7 +39,7 @@ catalog:
   "@types/nprogress": ^0.2.3
   "@types/react": 19.2.18
   "@types/react-dom": 19.2.5
-  "@vitejs/plugin-react": ^6.1.0
+  "@vitejs/plugin-react": ^6.1.1
   "@vitest/coverage-v8": ^4.1.11
   ai: ^7.0.83
   autoprefixer: 10.5.4
@@ -63,10 +63,10 @@ catalog:
   mdx: ^0.3.1
   mdx-bundler: ^10.1.1
   nanoid: ^6.0.1
-  nodemailer: ^9.0.5
+  nodemailer: ^9.0.6
   nprogress: ^0.2.0
   nuqs: ^2.10.1
-  openai: ^7.7.0
+  openai: ^7.8.0
   oxfmt: 0.65.0
   oxlint: 1.80.0
   permix: ^4.1.2
@@ -87,7 +87,7 @@ catalog:
   tsx: ^4.23.12
   typescript: 7.0.2
   ufo: ^1.6.4
-  use-intl: ^4.13.7
+  use-intl: ^4.14.0
   usehooks-ts: ^3.1.1
   uuid: ^14.0.2
   vite: ^8.2.2
