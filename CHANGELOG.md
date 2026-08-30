@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-30
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@ai-sdk/anthropic` to `^4.0.45`, `@ai-sdk/openai` to `^4.0.51`, `@ai-sdk/react` to `^4.0.87`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1121.0`, `@scalar/hono-api-reference` to `^0.12.0`, `@tanstack/react-table` to `^9.2.4`, `ai` to `^7.0.84`, `es-toolkit` to `^1.52.0`, `lucide-react` to `^1.35.0`, `resend` to `^6.25.0`, `use-intl` to `^4.14.1`, and `zod` to `^4.5.2`. **Development dependencies**: Refreshed the lockfile for previously cataloged bumps including `turbo` `^2.10.12`, `oxlint` `1.80.0`, `oxfmt` `0.65.0`, and `@types/node` `26.4.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-08-29
 
 ### Changed
