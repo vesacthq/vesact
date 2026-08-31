@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-31
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `lucide-react` to `^1.37.0` and `zod` to `^4.5.4`. **Development dependencies**: Bumped `tsx` to `^4.23.13`. Refreshed the lockfile for previously cataloged bumps including `better-auth` and `@better-auth/passkey` `1.7.2`, `@scalar/hono-api-reference` `^0.12.0`, `@tanstack/react-router` `^1.170.32`, `@tanstack/react-start` `^1.168.49`, `@tanstack/react-table` `^9.2.4`, `turbo` `^2.10.12`, `oxlint` `1.80.0`, and `oxfmt` `0.65.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-08-30
 
 ### Changed
