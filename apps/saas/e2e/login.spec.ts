@@ -64,4 +64,25 @@ test.describe("login page", () => {
 		await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
 		await expect(passwordInput).toBeVisible();
 	});
+
+	test("should show a last used badge on the matching authentication method", async ({
+		page,
+		context,
+		baseURL,
+	}) => {
+		await context.addCookies([
+			{
+				name: "better-auth.last_used_login_method",
+				value: "github",
+				url: baseURL ?? "http://localhost:3100",
+			},
+		]);
+
+		await page.goto("/login");
+		await waitForAuthPageHydration(page);
+
+		await expect(page.getByRole("button", { name: /github/i })).toContainText("Last used");
+		await expect(page.getByRole("button", { name: /google/i })).not.toContainText("Last used");
+		await expect(page.getByRole("tab", { name: "Password" })).not.toContainText("Last used");
+	});
 });

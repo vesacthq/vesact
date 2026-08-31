@@ -16,7 +16,14 @@ import { getBaseUrl, getTrustedOrigins } from "@repo/utils";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError, createAuthMiddleware } from "better-auth/api";
-import { admin, magicLink, openAPI, organization, twoFactor } from "better-auth/plugins";
+import {
+	admin,
+	lastLoginMethod,
+	magicLink,
+	openAPI,
+	organization,
+	twoFactor,
+} from "better-auth/plugins";
 import { parseCookie as parseCookies } from "cookie";
 
 import { config } from "./config";
@@ -290,6 +297,7 @@ export const auth = betterAuth({
 		openAPI(),
 		invitationOnlyPlugin(),
 		twoFactor(),
+		lastLoginMethod(),
 	],
 	onAPIError: {
 		onError(error, ctx) {

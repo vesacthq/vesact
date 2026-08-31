@@ -198,6 +198,7 @@
 					"title": "Link sent"
 				}
 			},
+			"lastUsed": "Last used",
 			"loginWithPasskey": "Login with passkey",
 			"modes": {
 				"magicLink": "Magic link",

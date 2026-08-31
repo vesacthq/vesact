@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-24
+
+### Added
+
+#### Authentication
+
+- **Last used login method**: The login page shows a small "Last used" badge on the authentication method you signed in with last (password, magic link, passkey, or a social provider), using Better Auth's `lastLoginMethod` plugin. Social and passkey buttons show the badge on the top-right corner; password and magic-link tabs keep it inline next to the label.
+
 ## 2026-08-18
 
 ### Changed
