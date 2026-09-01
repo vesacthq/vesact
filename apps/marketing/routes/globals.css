@@ -2,6 +2,8 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@repo/tailwind-config/theme.css";
+@import "@fontsource/noto-serif-sc/chinese-simplified-500.css";
+@import "@fontsource/noto-serif-sc/chinese-simplified-700.css";
 
 @plugin "../node_modules/@tailwindcss/typography/src/index.js";
 
@@ -23,11 +25,23 @@
 @theme inline {
 	--font-noto-sans: "Noto Sans";
 	--font-roboto-slab: "Roboto Slab";
-	--font-sans: var(--font-noto-sans), ui-sans-serif, system-ui, sans-serif;
-	--font-heading: var(--font-roboto-slab), ui-serif, serif;
+	--font-sans:
+		var(--font-noto-sans), ui-sans-serif, system-ui, "PingFang SC", "Hiragino Sans GB",
+		"Microsoft YaHei", sans-serif;
+	--font-heading: var(--font-roboto-slab), "Noto Serif SC", ui-serif, serif;
 }
 
 @layer base {
+	:root {
+		--leading-hero: 1.05;
+		--leading-display: 1.12;
+	}
+
+	:root:lang(zh) {
+		--leading-hero: 1.2;
+		--leading-display: 1.25;
+	}
+
 	/* Base UI: helps portaled overlays (dialogs, popovers) cover the visual viewport on newer Safari. */
 	body {
 		position: relative;

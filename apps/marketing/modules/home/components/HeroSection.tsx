@@ -19,7 +19,7 @@ export function HeroSection() {
 						{t("home.hero.featureBadge")}
 					</p>
 
-					<h1 className="font-medium text-4xl sm:text-5xl lg:text-6xl xl:text-7xl tracking-tight leading-[1.05] text-pretty text-foreground">
+					<h1 className="font-medium text-4xl sm:text-5xl lg:text-6xl xl:text-7xl tracking-tight leading-(--leading-hero) text-balance text-foreground">
 						{t("home.hero.title")}
 					</h1>
 

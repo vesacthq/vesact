@@ -24,7 +24,7 @@ export function FaqSection({ className }: { className?: string }) {
 				<div className="gap-14 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-24 lg:items-start grid grid-cols-1">
 					<div>
 						<SectionEyebrow>{t("faq.badge")}</SectionEyebrow>
-						<h2 className="font-medium text-3xl md:text-4xl lg:text-5xl tracking-tight leading-[1.12] text-pretty text-foreground">
+						<h2 className="font-medium text-3xl md:text-4xl lg:text-5xl tracking-tight leading-(--leading-display) text-pretty text-foreground">
 							{t("faq.title")}
 						</h2>
 						<p className="text-base lg:text-lg mt-5 leading-relaxed text-pretty text-foreground/55">

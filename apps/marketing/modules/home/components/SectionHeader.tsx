@@ -52,7 +52,7 @@ export function SectionHeader({
 			{eyebrow ? <SectionEyebrow align={align}>{eyebrow}</SectionEyebrow> : null}
 			<TitleTag
 				className={cn(
-					"font-medium text-3xl md:text-4xl lg:text-5xl tracking-tight leading-[1.12] text-foreground",
+					"font-medium text-3xl md:text-4xl lg:text-5xl tracking-tight leading-(--leading-display) text-foreground",
 					align === "center" ? "text-balance" : "text-pretty",
 				)}
 			>

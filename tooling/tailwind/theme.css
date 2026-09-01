@@ -91,6 +91,17 @@
 		--focus: var(--color-blue-500);
 		--focus-foreground: var(--color-blue-600);
 	}
+
+	:root:lang(zh) {
+		--tracking-tight: 0em;
+		--tracking-wide: 0.08em;
+		--text-3xl: 2rem;
+		--text-4xl: 2.5rem;
+		--text-5xl: 3.3rem;
+		--text-6xl: 4.125rem;
+		--text-7xl: 5rem;
+		--leading-relaxed: 1.8;
+	}
 }
 
 @theme inline {

@@ -54,7 +54,7 @@ function BlogPostPage() {
 			</div>
 
 			<div className="max-w-2xl">
-				<h1 className="font-medium text-3xl md:text-4xl lg:text-[2.875rem] tracking-tight leading-[1.12] text-pretty text-foreground">
+				<h1 className="font-medium text-3xl md:text-4xl lg:text-[2.875rem] tracking-tight leading-(--leading-display) text-pretty text-foreground">
 					{title}
 				</h1>
 

@@ -34,7 +34,7 @@ function LegalPage() {
 	return (
 		<div className="max-w-3xl py-20 lg:py-28 container">
 			<div className="mb-12">
-				<h1 className="font-medium text-3xl md:text-4xl lg:text-[2.875rem] tracking-tight leading-[1.12] text-pretty">
+				<h1 className="font-medium text-3xl md:text-4xl lg:text-[2.875rem] tracking-tight leading-(--leading-display) text-pretty">
 					{title}
 				</h1>
 			</div>
