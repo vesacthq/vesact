@@ -87,7 +87,7 @@ export function UserMenu({ showUserName }: { showUserName?: boolean }) {
 
 				<DropdownMenuSeparator />
 
-				{/* Color mode selection: a control row, not a selectable menu item */}
+				{/* Color mode selection */}
 				<div className="gap-4 px-3 py-2 text-sm flex items-center justify-between">
 					<span>{t("app.userMenu.colorMode")}</span>
 					<ColorModeToggle

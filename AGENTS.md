@@ -8,7 +8,7 @@ Explicit user instructions win; if a documented command fails, report it rather 
 
 - TanStack Start, TanStack Router, React, TypeScript, Vite, and Node.js 22+
 - pnpm workspaces, Turborepo, Nitro, oRPC, Hono, and Better Auth
-- Drizzle ORM, Tailwind CSS, Shadcn-style components, and Base UI
+- Drizzle ORM, Tailwind CSS, shadcn/ui (base-nova registry), and Base UI
 - TanStack Form, TanStack Query, Zod 4, use-intl, Vitest, Playwright, Oxlint, and Oxfmt
 
 ## Setup & verification
