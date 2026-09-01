@@ -20,9 +20,9 @@ export function TestimonialsSection() {
 					{TESTIMONIAL_KEYS.map((itemKey) => (
 						<figure key={itemKey} className="gap-8 flex flex-col justify-between">
 							<blockquote className="text-base leading-relaxed text-foreground/70">
-								<span className="text-touch">“</span>
+								<span className="text-primary">“</span>
 								{t(`home.testimonials.items.${itemKey}.quote`)}
-								<span className="text-touch">”</span>
+								<span className="text-primary">”</span>
 							</blockquote>
 							<figcaption className="gap-3 flex items-center">
 								<img

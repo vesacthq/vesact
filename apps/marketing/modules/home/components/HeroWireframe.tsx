@@ -175,10 +175,10 @@ function NavigationItem({
 		<div
 			className={cn(
 				"gap-2 px-2 py-1.5 text-xs flex items-center rounded-md",
-				active ? "font-medium bg-touch/10 text-foreground" : "text-foreground/50",
+				active ? "font-medium bg-primary/10 text-foreground" : "text-foreground/50",
 			)}
 		>
-			<Icon className={cn("size-3.5 shrink-0", active && "text-touch")} />
+			<Icon className={cn("size-3.5 shrink-0", active && "text-primary")} />
 			<span className="truncate">{label}</span>
 		</div>
 	);

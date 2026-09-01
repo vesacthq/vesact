@@ -27,7 +27,7 @@ function PreviewRow({
 }) {
 	return (
 		<div
-			className={cn("gap-3 px-3 py-2.5 flex items-center rounded-lg", emphasized && "bg-touch/6")}
+			className={cn("gap-3 px-3 py-2.5 flex items-center rounded-lg", emphasized && "bg-primary/6")}
 		>
 			<img src={portrait} alt="" className="size-7 shrink-0 rounded-full object-cover" />
 			<div className="min-w-0 flex-1">
@@ -72,9 +72,9 @@ function BillingPreview() {
 				</div>
 				<div className="h-2 w-10 rounded-full bg-foreground/15" />
 			</div>
-			<div className="gap-3 px-3 py-3 flex items-center justify-between rounded-lg bg-touch/6 ring-1 ring-touch/15">
+			<div className="gap-3 px-3 py-3 flex items-center justify-between rounded-lg bg-primary/6 ring-1 ring-primary/15">
 				<div className="gap-3 flex items-center">
-					<span className="size-7 inline-flex items-center justify-center rounded-md border border-touch/20 bg-touch/8 text-touch">
+					<span className="size-7 inline-flex items-center justify-center rounded-md border border-primary/20 bg-primary/8 text-primary">
 						<CreditCardIcon className="size-3.5" />
 					</span>
 					<div>

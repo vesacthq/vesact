@@ -136,7 +136,7 @@ export function PricingTable({
 						<div
 							key={planId}
 							className={cn("p-6 rounded-3xl border bg-card", {
-								"border-touch bg-touch/6": recommended,
+								"border-primary bg-primary/6": recommended,
 							})}
 							data-test="price-table-plan"
 						>
@@ -144,7 +144,7 @@ export function PricingTable({
 								<div>
 									{recommended && (
 										<div className="-mt-9 flex justify-center">
-											<div className="mb-2 h-6 gap-1.5 px-2 py-1 font-semibold text-xs flex w-auto items-center rounded-full bg-touch text-touch-foreground">
+											<div className="mb-2 h-6 gap-1.5 px-2 py-1 font-semibold text-xs flex w-auto items-center rounded-full bg-primary text-primary-foreground">
 												<StarIcon className="size-3" />
 												{t("pricing.recommended")}
 											</div>
@@ -152,7 +152,7 @@ export function PricingTable({
 									)}
 									<h3
 										className={cn("my-0 font-semibold text-2xl", {
-											"font-bold text-touch": recommended,
+											"font-bold text-primary": recommended,
 										})}
 									>
 										{title}
@@ -165,7 +165,7 @@ export function PricingTable({
 										<ul className="mt-4 gap-2 text-sm grid list-none">
 											{features.map((feature, key) => (
 												<li key={key} className="flex items-center justify-start">
-													<CheckIcon className="mr-2 size-4 text-touch" />
+													<CheckIcon className="mr-2 size-4 text-primary" />
 													<span>{feature}</span>
 												</li>
 											))}
@@ -173,7 +173,7 @@ export function PricingTable({
 									)}
 
 									{price && "trialPeriodDays" in price && price.trialPeriodDays && (
-										<div className="mt-4 font-medium text-sm flex items-center justify-start text-touch opacity-80">
+										<div className="mt-4 font-medium text-sm flex items-center justify-start text-primary opacity-80">
 											<BadgePercentIcon className="mr-2 size-4" />
 											{t("pricing.trialPeriod", {
 												days: price.trialPeriodDays,

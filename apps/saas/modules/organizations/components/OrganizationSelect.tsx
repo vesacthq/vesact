@@ -95,7 +95,7 @@ export function OrganzationSelect({
 									{activeOrganization.name}
 								</span>
 								{paymentsConfig.billingAttachedTo === "organization" && orgActivePlan && (
-									<span className="text-xs font-medium leading-3 truncate text-touch">
+									<span className="text-xs font-medium leading-3 truncate text-primary">
 										{getPlanTitle(orgActivePlan.id)}
 									</span>
 								)}
@@ -111,7 +111,7 @@ export function OrganzationSelect({
 									{t("organizations.organizationSelect.personalAccount")}
 								</span>
 								{paymentsConfig.billingAttachedTo === "user" && userActivePlan && (
-									<span className="text-xs font-medium leading-3 truncate text-touch">
+									<span className="text-xs font-medium leading-3 truncate text-primary">
 										{getPlanTitle(userActivePlan.id)}
 									</span>
 								)}
@@ -229,14 +229,14 @@ export function OrganzationSelect({
 				<DropdownMenuGroup>
 					<DropdownMenuItem
 						nativeButton={false}
-						className="text-sm cursor-pointer text-touch"
+						className="text-sm cursor-pointer text-primary"
 						render={(props) => (
 							<Link
 								{...props}
 								to="/new-organization"
 								className={cn(props.className, "flex items-center")}
 							>
-								<PlusIcon className="size-6 p-1 rounded-md bg-touch/20" />
+								<PlusIcon className="size-6 p-1 rounded-md bg-primary/20" />
 								{t("organizations.organizationSelect.createNewOrganization")}
 							</Link>
 						)}

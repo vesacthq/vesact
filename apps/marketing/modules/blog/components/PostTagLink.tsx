@@ -11,7 +11,7 @@ export function PostTagLink({ tag, activeTag }: { tag: string; activeTag?: strin
 			aria-current={active ? "page" : undefined}
 			className={cn(
 				"font-medium text-xs tracking-wide transition-colors",
-				active ? "text-foreground" : "text-touch hover:text-foreground",
+				active ? "text-foreground" : "text-primary hover:text-foreground",
 			)}
 		>
 			{tag}

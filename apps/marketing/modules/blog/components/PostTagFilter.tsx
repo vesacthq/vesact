@@ -32,7 +32,7 @@ export function PostTagFilter({
 				data-test="blog-tag-all"
 				className={cn(
 					"font-medium text-xs tracking-wide transition-colors",
-					showingAll ? "text-foreground" : "text-touch hover:text-foreground",
+					showingAll ? "text-foreground" : "text-primary hover:text-foreground",
 				)}
 			>
 				{allLabel}

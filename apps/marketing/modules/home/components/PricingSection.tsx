@@ -121,7 +121,7 @@ export function PricingSection() {
 									key={plan.id}
 									className={cn(
 										"p-8 lg:p-10 relative flex h-full flex-col bg-background",
-										plan.recommended && "bg-touch/6",
+										plan.recommended && "bg-primary/6",
 									)}
 									data-test="price-table-plan"
 								>
@@ -129,7 +129,7 @@ export function PricingSection() {
 										<div className="gap-2 flex items-baseline justify-between">
 											<h3 className="my-0 font-medium text-lg tracking-tight">{plan.title}</h3>
 											{plan.recommended && (
-												<p className="font-medium tracking-wide text-xs text-touch">
+												<p className="font-medium tracking-wide text-xs text-primary">
 													{t("pricing.recommended")}
 												</p>
 											)}
@@ -183,7 +183,7 @@ export function PricingSection() {
 											<ul className="mb-8 gap-3 text-sm grid list-none">
 												{plan.features.map((feature) => (
 													<li key={feature} className="flex items-start justify-start">
-														<CheckIcon className="mt-0.5 mr-2 size-3.5 shrink-0 text-touch" />
+														<CheckIcon className="mt-0.5 mr-2 size-3.5 shrink-0 text-primary" />
 														<span className="text-foreground/70">{feature}</span>
 													</li>
 												))}
@@ -192,7 +192,7 @@ export function PricingSection() {
 
 										{trialPeriodDays !== undefined && trialPeriodDays > 0 && (
 											<div className="mb-4 font-medium text-sm flex items-center justify-start text-foreground/55">
-												<BadgePercentIcon className="mr-2 size-4 text-touch" />
+												<BadgePercentIcon className="mr-2 size-4 text-primary" />
 												{t("pricing.trialPeriod", {
 													days: trialPeriodDays,
 												})}

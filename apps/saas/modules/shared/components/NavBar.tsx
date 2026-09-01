@@ -86,7 +86,7 @@ function NavMenuList({
 					const parentClasses = cn(
 						"gap-3 px-3 py-2 text-sm flex w-full items-center rounded-lg whitespace-nowrap transition-colors",
 						{
-							"font-semibold bg-touch/10": menuItem.isActive,
+							"font-semibold bg-primary/10": menuItem.isActive,
 							"hover:bg-muted": !menuItem.isActive,
 							"md:justify-center md:px-2": isCollapsedEffective,
 						},
@@ -96,7 +96,7 @@ function NavMenuList({
 						<menuItem.icon
 							className={cn(
 								"size-5 shrink-0",
-								menuItem.isActive ? "text-touch" : "text-muted-foreground opacity-60",
+								menuItem.isActive ? "text-primary" : "text-muted-foreground opacity-60",
 							)}
 						/>
 					);

@@ -15,5 +15,5 @@ export function ActivePlanBadge({ organizationId }: { organizationId?: string })
 	if (!activePlanData) {
 		return null;
 	}
-	return <Badge className="px-1.5 bg-touch/10 text-touch">{activePlanData.title}</Badge>;
+	return <Badge className="px-1.5 bg-primary/10 text-primary">{activePlanData.title}</Badge>;
 }

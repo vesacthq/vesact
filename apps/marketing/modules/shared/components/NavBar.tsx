@@ -110,7 +110,7 @@ export function NavBar() {
 									"px-3 py-2 font-medium text-sm block shrink-0 transition-colors",
 									isMenuItemActive(menuItem.href)
 										? "text-foreground"
-										: "text-foreground/55 hover:text-touch",
+										: "text-foreground/55 hover:text-primary",
 								)}
 							>
 								{menuItem.label}
@@ -161,7 +161,7 @@ export function NavBar() {
 									{config.saasUrl && (
 										<a
 											href={config.saasUrl}
-											className="px-3 py-2 text-base block text-touch"
+											className="px-3 py-2 text-base block text-primary"
 											onClick={handleMobileMenuClose}
 										>
 											{t("common.menu.login")}
@@ -173,7 +173,7 @@ export function NavBar() {
 
 						{saasUrl && (
 							<Button
-								className="lg:flex hidden border-touch/30 text-touch hover:bg-touch/10 hover:text-touch"
+								className="lg:flex hidden border-primary/30 text-primary hover:bg-primary/10 hover:text-primary"
 								variant="outline"
 								render={(props) => {
 									const { children: linkChildren, ...rest } = props;

@@ -122,7 +122,7 @@ export function FeaturesSection() {
 									<div className="mt-12 gap-x-10 gap-y-10 sm:grid-cols-3 lg:mt-16 grid">
 										{filteredHighlights.map((highlight) => (
 											<div key={highlight.title} className="flex flex-col items-start">
-												<highlight.icon className="mb-4 size-6 text-touch" />
+												<highlight.icon className="mb-4 size-6 text-primary" />
 												<strong className="font-medium text-sm block">{highlight.title}</strong>
 												<p className="mt-2 text-sm leading-relaxed text-foreground/50">
 													{highlight.description}

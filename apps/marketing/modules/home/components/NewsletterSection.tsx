@@ -76,7 +76,7 @@ export function NewsletterSection() {
 					>
 						<div className="max-w-md">
 							<h2 className="font-medium text-lg tracking-tight gap-2.5 flex items-center text-foreground">
-								<MailIcon className="size-5 text-touch" />
+								<MailIcon className="size-5 text-primary" />
 								{t("newsletter.title")}
 							</h2>
 							<p className="mt-1.5 text-sm leading-relaxed text-foreground/50">
@@ -102,7 +102,7 @@ export function NewsletterSection() {
 											/>
 											<Button
 												type="submit"
-												className="bg-touch text-touch-foreground hover:bg-touch/90"
+												className="bg-primary text-primary-foreground hover:bg-primary/90"
 												loading={isSubmitting}
 											>
 												{t("newsletter.submit")}

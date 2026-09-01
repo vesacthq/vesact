@@ -47,7 +47,7 @@ function BlogPostPage() {
 			<div className="mb-10">
 				<LocaleLink
 					href="/blog"
-					className="text-sm text-foreground/50 transition-colors hover:text-touch"
+					className="text-sm text-foreground/50 transition-colors hover:text-primary"
 				>
 					&larr; {t("back")}
 				</LocaleLink>

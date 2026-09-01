@@ -36,7 +36,7 @@ export function PostListItem({ post, activeTag }: { post: Post; activeTag?: stri
 
 				<LocaleLink
 					href={`/blog/${path}`}
-					className="font-medium text-xl md:text-2xl tracking-tight text-pretty text-foreground transition-colors hover:text-touch"
+					className="font-medium text-xl md:text-2xl tracking-tight text-pretty text-foreground transition-colors hover:text-primary"
 				>
 					{title}
 				</LocaleLink>

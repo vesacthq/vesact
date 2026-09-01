@@ -12,8 +12,8 @@ export function Logo({ withLabel = true, className }: { className?: string; with
 					width="16"
 					height="4.5"
 					rx="2.25"
-					fill="var(--touch)"
-					className="fill-touch"
+					fill="var(--primary)"
+					className="fill-primary"
 				/>
 				<rect x="4.5" y="22.25" width="23" height="4.5" rx="2.25" fill="currentColor" />
 			</svg>

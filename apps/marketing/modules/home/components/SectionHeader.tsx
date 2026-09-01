@@ -13,12 +13,12 @@ export function SectionEyebrow({
 	return (
 		<p
 			className={cn(
-				"mb-4 gap-2 font-medium text-sm tracking-wide flex items-center text-touch",
+				"mb-4 gap-2 font-medium text-sm tracking-wide flex items-center text-primary",
 				align === "center" && "justify-center",
 				className,
 			)}
 		>
-			<span className="size-1.5 rounded-full bg-touch" aria-hidden />
+			<span className="size-1.5 rounded-full bg-primary" aria-hidden />
 			{children}
 		</p>
 	);

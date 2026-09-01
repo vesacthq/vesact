@@ -46,7 +46,7 @@ export function CtaSection() {
 					<Button
 						size="lg"
 						variant="ghost"
-						className="text-touch hover:bg-touch/10 hover:text-touch"
+						className="text-primary hover:bg-primary/10 hover:text-primary"
 						render={(props) => <LocaleLink {...props} href="/contact" />}
 					>
 						{t("home.cta.secondary")}
