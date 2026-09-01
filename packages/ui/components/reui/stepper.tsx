@@ -15,7 +15,7 @@ import {
 	useState,
 } from "react";
 
-import { cn } from "@/lib/index";
+import { cn } from "../../lib";
 
 // Types
 type StepperOrientation = "horizontal" | "vertical";

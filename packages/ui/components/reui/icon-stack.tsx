@@ -1,4 +1,4 @@
-import { cn } from "@/lib/index";
+import { cn } from "../../lib";
 
 type IconStackProps = React.ComponentProps<"div">;
 

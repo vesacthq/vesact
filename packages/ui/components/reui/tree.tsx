@@ -6,7 +6,7 @@ import type { ItemInstance } from "@headless-tree/core";
 import { MinusIcon, PlusIcon, ChevronDownIcon } from "lucide-react";
 import { createContext, useContext } from "react";
 
-import { cn } from "@/lib/index";
+import { cn } from "../../lib";
 
 type ToggleIconType = "chevron" | "plus-minus";
 
