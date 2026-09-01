@@ -42,10 +42,7 @@ export function ChangelogSection() {
 
 	return (
 		<section id="changelog">
-			<Timeline
-				defaultValue={CHANGELOG_ENTRY_KEYS.length}
-				className="w-full md:ps-40"
-			>
+			<Timeline defaultValue={CHANGELOG_ENTRY_KEYS.length} className="md:ps-40 w-full">
 				{CHANGELOG_ENTRY_KEYS.map((entryKey, entryIndex) => {
 					const version = t(`entries.${entryKey}.version`);
 					const isLatest = entryIndex === 0;
@@ -54,12 +51,11 @@ export function ChangelogSection() {
 						<TimelineItem key={entryKey} step={entryIndex + 1}>
 							<TimelineHeader>
 								<TimelineDate className="md:-left-48 md:absolute md:top-1 md:mb-0 md:w-36">
-									{formatter.dateTime(
-										new Date(`${t(`entries.${entryKey}.date`)}T12:00:00`),
-										{ dateStyle: "medium" },
-									)}
+									{formatter.dateTime(new Date(`${t(`entries.${entryKey}.date`)}T12:00:00`), {
+										dateStyle: "medium",
+									})}
 								</TimelineDate>
-								<TimelineTitle className="flex flex-wrap items-center gap-2 text-lg">
+								<TimelineTitle className="gap-2 text-lg flex flex-wrap items-center">
 									{t(`entries.${entryKey}.title`)}
 									{version ? (
 										<Badge size="xs" variant="outline">
@@ -72,21 +68,14 @@ export function ChangelogSection() {
 							<TimelineIndicator />
 							<TimelineSeparator />
 							<TimelineContent>
-								<p className="leading-relaxed text-pretty">
-									{t(`entries.${entryKey}.summary`)}
-								</p>
-								<ul className="mt-4 flex flex-col gap-3">
+								<p className="leading-relaxed text-pretty">{t(`entries.${entryKey}.summary`)}</p>
+								<ul className="mt-4 gap-3 flex flex-col">
 									{CHANGE_ITEM_KEYS.map((changeKey) => {
-										const kindValue = t(
-											`entries.${entryKey}.changes.${changeKey}.kind`,
-										);
+										const kindValue = t(`entries.${entryKey}.changes.${changeKey}.kind`);
 										const kind = isChangeKind(kindValue) ? kindValue : "improved";
 
 										return (
-											<li
-												key={`${entryKey}-${changeKey}`}
-												className="flex items-start gap-2.5"
-											>
+											<li key={`${entryKey}-${changeKey}`} className="gap-2.5 flex items-start">
 												<Badge size="xs" variant={CHANGE_KIND_VARIANTS[kind]}>
 													{t(`kinds.${kind}`)}
 												</Badge>

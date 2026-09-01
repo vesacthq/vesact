@@ -1,16 +1,7 @@
 import { Button } from "@repo/ui/components/button";
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from "@repo/ui/components/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Input } from "@repo/ui/components/input";
-import {
-	Alert,
-	AlertDescription,
-	AlertTitle,
-} from "@repo/ui/components/reui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/reui/alert";
 import { Badge } from "@repo/ui/components/reui/badge";
 import {
 	Frame,
@@ -98,13 +89,7 @@ const badgeOutlineVariants = [
 
 const badgeSizes = ["xs", "sm", "default", "lg", "xl"] as const;
 
-const iconTileVariants = [
-	"outline",
-	"elevated",
-	"soft",
-	"solid",
-	"frame",
-] as const;
+const iconTileVariants = ["outline", "elevated", "soft", "solid", "frame"] as const;
 
 const stepperSteps = [1, 2, 3, 4];
 
@@ -114,12 +99,11 @@ function ReuiDemoPage() {
 
 	return (
 		<div className="py-12 md:py-16">
-			<div className="container space-y-6">
+			<div className="space-y-6 container">
 				<div>
 					<h1 className="font-bold text-3xl">ReUI 组件演示</h1>
-					<p className="text-muted-foreground mt-1">
-						ReUI（base-nova）组件在本项目主题下的渲染效果，与现有 @repo/ui
-						组件对照。
+					<p className="mt-1 text-muted-foreground">
+						ReUI（base-nova）组件在本项目主题下的渲染效果，与现有 @repo/ui 组件对照。
 					</p>
 				</div>
 
@@ -128,28 +112,28 @@ function ReuiDemoPage() {
 						<CardTitle>Badge</CardTitle>
 					</CardHeader>
 					<CardContent className="space-y-4">
-						<div className="flex flex-wrap items-center gap-2">
+						<div className="gap-2 flex flex-wrap items-center">
 							{badgeSolidVariants.map((variant) => (
 								<Badge key={variant} variant={variant}>
 									{variant}
 								</Badge>
 							))}
 						</div>
-						<div className="flex flex-wrap items-center gap-2">
+						<div className="gap-2 flex flex-wrap items-center">
 							{badgeLightVariants.map((variant) => (
 								<Badge key={variant} variant={variant}>
 									{variant}
 								</Badge>
 							))}
 						</div>
-						<div className="flex flex-wrap items-center gap-2">
+						<div className="gap-2 flex flex-wrap items-center">
 							{badgeOutlineVariants.map((variant) => (
 								<Badge key={variant} variant={variant}>
 									{variant}
 								</Badge>
 							))}
 						</div>
-						<div className="flex flex-wrap items-center gap-2">
+						<div className="gap-2 flex flex-wrap items-center">
 							{badgeSizes.map((size) => (
 								<Badge key={size} size={size}>
 									{size}
@@ -197,13 +181,13 @@ function ReuiDemoPage() {
 					</CardContent>
 				</Card>
 
-				<div className="grid gap-6 lg:grid-cols-2">
+				<div className="gap-6 lg:grid-cols-2 grid">
 					<Card>
 						<CardHeader>
 							<CardTitle>Stepper</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<Stepper defaultValue={2} className="w-full space-y-8">
+							<Stepper defaultValue={2} className="space-y-8 w-full">
 								<StepperNav>
 									{stepperSteps.map((step) => (
 										<StepperItem key={step} step={step}>
@@ -244,7 +228,7 @@ function ReuiDemoPage() {
 					</Card>
 				</div>
 
-				<div className="grid gap-6 lg:grid-cols-2">
+				<div className="gap-6 lg:grid-cols-2 grid">
 					<Card>
 						<CardHeader>
 							<CardTitle>Timeline</CardTitle>
@@ -258,9 +242,7 @@ function ReuiDemoPage() {
 									</TimelineHeader>
 									<TimelineIndicator />
 									<TimelineSeparator />
-									<TimelineContent>
-										完成仓库初始化与基础架构搭建。
-									</TimelineContent>
+									<TimelineContent>完成仓库初始化与基础架构搭建。</TimelineContent>
 								</TimelineItem>
 								<TimelineItem step={2}>
 									<TimelineHeader>
@@ -269,9 +251,7 @@ function ReuiDemoPage() {
 									</TimelineHeader>
 									<TimelineIndicator />
 									<TimelineSeparator />
-									<TimelineContent>
-										面向早期用户开放测试并收集反馈。
-									</TimelineContent>
+									<TimelineContent>面向早期用户开放测试并收集反馈。</TimelineContent>
 								</TimelineItem>
 								<TimelineItem step={3}>
 									<TimelineHeader>
@@ -297,13 +277,13 @@ function ReuiDemoPage() {
 									<FrameDescription>Frame 默认样式</FrameDescription>
 								</FrameHeader>
 								<FramePanel>
-									<p className="text-muted-foreground text-sm">面板内容区域</p>
+									<p className="text-sm text-muted-foreground">面板内容区域</p>
 								</FramePanel>
 								<FrameFooter>
-									<p className="text-muted-foreground text-sm">页脚说明</p>
+									<p className="text-sm text-muted-foreground">页脚说明</p>
 								</FrameFooter>
 							</Frame>
-							<div className="flex flex-wrap items-center gap-3">
+							<div className="gap-3 flex flex-wrap items-center">
 								{iconTileVariants.map((variant) => (
 									<IconTile key={variant} variant={variant}>
 										<SettingsIcon />
@@ -322,7 +302,7 @@ function ReuiDemoPage() {
 						<CardTitle>现有 @repo/ui 组件对照</CardTitle>
 					</CardHeader>
 					<CardContent className="space-y-4">
-						<div className="flex flex-wrap items-center gap-2">
+						<div className="gap-2 flex flex-wrap items-center">
 							<Button variant="primary">primary</Button>
 							<Button variant="secondary">secondary</Button>
 							<Button variant="outline">outline</Button>
@@ -330,7 +310,7 @@ function ReuiDemoPage() {
 							<Button variant="destructive">destructive</Button>
 							<Button variant="link">link</Button>
 						</div>
-						<div className="flex flex-wrap items-center gap-4">
+						<div className="gap-4 flex flex-wrap items-center">
 							<Input placeholder="现有 Input 组件" className="max-w-60" />
 							<Switch checked={switchOn} onCheckedChange={setSwitchOn} />
 							<Rating rating={4} size="sm" />
