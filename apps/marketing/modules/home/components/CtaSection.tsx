@@ -29,7 +29,8 @@ export function CtaSection() {
 					{signupUrl && (
 						<Button
 							size="lg"
-							variant="primary"
+							variant="default"
+							nativeButton={false}
 							render={(props) => {
 								const { children: linkChildren, ...rest } = props;
 								return (
@@ -47,6 +48,7 @@ export function CtaSection() {
 						size="lg"
 						variant="ghost"
 						className="text-primary hover:bg-primary/10 hover:text-primary"
+						nativeButton={false}
 						render={(props) => <LocaleLink {...props} href="/contact" />}
 					>
 						{t("home.cta.secondary")}

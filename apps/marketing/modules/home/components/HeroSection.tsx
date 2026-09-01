@@ -30,7 +30,8 @@ export function HeroSection() {
 					<div className="mt-8 gap-3 flex flex-wrap items-center">
 						<Button
 							size="lg"
-							variant="primary"
+							variant="default"
+							nativeButton={false}
 							render={(props) => {
 								const { children: linkChildren, ...rest } = props;
 								return (
@@ -48,6 +49,7 @@ export function HeroSection() {
 								variant="ghost"
 								size="lg"
 								className="text-primary hover:bg-primary/10 hover:text-primary"
+								nativeButton={false}
 								render={(props) => {
 									const { children: linkChildren, ...rest } = props;
 									return (

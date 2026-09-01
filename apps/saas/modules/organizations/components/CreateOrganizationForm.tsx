@@ -11,6 +11,7 @@ import {
 	FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { Spinner } from "@repo/ui/components/spinner";
 import { toast } from "@repo/ui/components/toast";
 import { useForm, useStore } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
@@ -88,7 +89,8 @@ export function CreateOrganizationForm({ defaultName }: { defaultName?: string }
 						)}
 					</FormField>
 
-					<Button className="mt-6 w-full" type="submit" variant="primary" loading={isSubmitting}>
+					<Button className="mt-6 w-full" type="submit" variant="default" disabled={isSubmitting}>
+						{isSubmitting && <Spinner data-icon="inline-start" />}
 						{t("organizations.createForm.submit")}
 					</Button>
 				</form>

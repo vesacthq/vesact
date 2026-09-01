@@ -194,7 +194,7 @@ export function AiChat() {
 				<Button
 					type="submit"
 					size="icon"
-					variant="primary"
+					variant="default"
 					className="right-3 bottom-3 absolute bg-primary text-primary-foreground hover:bg-primary/90"
 					disabled={!input.trim() || status === "streaming"}
 				>

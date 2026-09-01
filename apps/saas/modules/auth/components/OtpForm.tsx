@@ -19,6 +19,7 @@ import {
 	InputOTPSeparator,
 	InputOTPSlot,
 } from "@repo/ui/components/input-otp";
+import { Spinner } from "@repo/ui/components/spinner";
 import { useForm, useStore } from "@tanstack/react-form";
 import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { AlertTriangleIcon, ArrowLeftIcon } from "lucide-react";
@@ -135,7 +136,8 @@ export function OtpForm() {
 						)}
 					</FormField>
 
-					<Button type="submit" loading={isSubmitting}>
+					<Button variant="secondary" type="submit" disabled={isSubmitting}>
+						{isSubmitting && <Spinner data-icon="inline-start" />}
 						{t("auth.verify.submit")}
 					</Button>
 				</form>

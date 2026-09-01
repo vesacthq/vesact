@@ -38,8 +38,8 @@ export function SocialSigninButton({
 
 	return (
 		<Button
-			onClick={() => onSignin()}
 			variant="secondary"
+			onClick={() => onSignin()}
 			type="button"
 			className={cn("relative overflow-visible", className)}
 		>

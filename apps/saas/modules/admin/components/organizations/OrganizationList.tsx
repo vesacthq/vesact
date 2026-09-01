@@ -209,6 +209,8 @@ export function OrganizationList() {
 				<h2 className="font-semibold text-2xl">{t("admin.organizations.title")}</h2>
 
 				<Button
+					variant="secondary"
+					nativeButton={false}
 					render={(props) => {
 						const { ref, ...rest } = props;
 						return (

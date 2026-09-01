@@ -12,6 +12,7 @@ import {
 	FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { Spinner } from "@repo/ui/components/spinner";
 import { useForm, useStore } from "@tanstack/react-form";
 import { Link } from "@tanstack/react-router";
 import { AlertTriangleIcon, ArrowLeftIcon, MailboxIcon } from "lucide-react";
@@ -129,7 +130,8 @@ export function ForgotPasswordForm() {
 							)}
 						</FormField>
 
-						<Button type="submit" variant="primary" loading={isSubmitting}>
+						<Button type="submit" variant="default" disabled={isSubmitting}>
+							{isSubmitting && <Spinner data-icon="inline-start" />}
 							{t("auth.forgotPassword.submit")}
 						</Button>
 					</form>

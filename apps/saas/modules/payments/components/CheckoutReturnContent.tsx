@@ -63,7 +63,7 @@ export function CheckoutReturnContent({ organizationId }: { organizationId?: str
 						{t("retry")}
 					</Button>
 					<Button
-						variant="primary"
+						variant="default"
 						onClick={() => void router.navigate({ to: "/choose-plan", replace: true })}
 					>
 						{t("choosePlan")}

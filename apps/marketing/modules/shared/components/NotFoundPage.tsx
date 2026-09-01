@@ -16,6 +16,7 @@ export function NotFoundPage() {
 			<Button
 				className="mt-6"
 				variant="secondary"
+				nativeButton={false}
 				render={(props) => <LocaleLink {...props} href="/" />}
 			>
 				<ArrowLeftIcon className="mr-2 size-4" /> {t("goToHomepage")}

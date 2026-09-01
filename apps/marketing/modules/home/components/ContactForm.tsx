@@ -10,6 +10,7 @@ import {
 } from "@repo/ui/components/form";
 import { formatFormRootError } from "@repo/ui/components/form-root-error";
 import { Input } from "@repo/ui/components/input";
+import { Spinner } from "@repo/ui/components/spinner";
 import { Textarea } from "@repo/ui/components/textarea";
 import { useForm, useStore } from "@tanstack/react-form";
 import { MailCheckIcon, MailIcon } from "lucide-react";
@@ -132,7 +133,8 @@ export function ContactForm() {
 							)}
 						</FormField>
 
-						<Button type="submit" className="w-full" variant="primary" loading={isSubmitting}>
+						<Button type="submit" className="w-full" variant="default" disabled={isSubmitting}>
+							{isSubmitting && <Spinner data-icon="inline-start" />}
 							{t("submit")}
 						</Button>
 					</form>

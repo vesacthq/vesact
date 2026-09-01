@@ -18,6 +18,7 @@ import {
 	FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { Spinner } from "@repo/ui/components/spinner";
 import { Textarea } from "@repo/ui/components/textarea";
 import { toast } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
@@ -193,7 +194,8 @@ export function BanUserDialog({ open, onOpenChange, user }: BanUserDialogProps) 
 							<Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
 								{translations("common.confirmation.cancel")}
 							</Button>
-							<Button type="submit" variant="primary" loading={isSubmitting}>
+							<Button type="submit" variant="default" disabled={isSubmitting}>
+								{isSubmitting && <Spinner data-icon="inline-start" />}
 								{isSubmitting
 									? translations("admin.users.ban.actions.banning")
 									: translations("admin.users.ban.actions.confirmBan")}

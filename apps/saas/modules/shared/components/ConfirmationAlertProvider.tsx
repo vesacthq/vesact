@@ -52,7 +52,7 @@ export function ConfirmationAlertProvider({ children }: PropsWithChildren) {
 							{confirmOptions?.cancelLabel ?? t("common.confirmation.cancel")}
 						</AlertDialogCancel>
 						<Button
-							variant={confirmOptions?.destructive ? "destructive" : "primary"}
+							variant={confirmOptions?.destructive ? "destructive" : "default"}
 							onClick={async () => {
 								await confirmOptions?.onConfirm();
 								setConfirmOptions(null);

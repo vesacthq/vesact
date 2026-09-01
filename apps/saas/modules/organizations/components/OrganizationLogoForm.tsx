@@ -163,14 +163,13 @@ export function OrganizationLogoForm() {
 						size="icon"
 						className="bottom-0 right-0 size-7 shadow-sm absolute z-10"
 						aria-label={t("organizations.settings.logo.delete")}
-						loading={isSaving}
 						disabled={isSaving}
 						onClick={(event) => {
 							event.stopPropagation();
 							void deleteLogo();
 						}}
 					>
-						<TrashIcon className="size-3.5" />
+						{isSaving ? <Spinner className="size-3.5" /> : <TrashIcon className="size-3.5" />}
 					</Button>
 				)}
 			</div>

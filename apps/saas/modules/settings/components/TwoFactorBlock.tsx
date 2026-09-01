@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@repo/ui/compo
 import { FormItem } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
+import { Spinner } from "@repo/ui/components/spinner";
 import { toast } from "@repo/ui/components/toast";
 import { PasswordInput } from "@shared/components/PasswordInput";
 import { SettingsItem } from "@shared/components/SettingsItem";
@@ -201,8 +202,10 @@ export function TwoFactorBlock() {
 									type="submit"
 									variant="secondary"
 									className="w-full"
-									loading={enableTwoFactorMutation.isPending || disableTwoFactorMutation.isPending}
+									disabled={enableTwoFactorMutation.isPending || disableTwoFactorMutation.isPending}
 								>
+									{enableTwoFactorMutation.isPending ||
+										(disableTwoFactorMutation.isPending && <Spinner data-icon="inline-start" />)}
 									{t("common.actions.continue")}
 									<ArrowRightIcon className="ml-1.5 size-4" />
 								</Button>
@@ -238,8 +241,9 @@ export function TwoFactorBlock() {
 									type="submit"
 									variant="secondary"
 									className="w-full"
-									loading={verifyTwoFactorMutation.isPending}
+									disabled={verifyTwoFactorMutation.isPending}
 								>
+									{verifyTwoFactorMutation.isPending && <Spinner data-icon="inline-start" />}
 									<CheckIcon className="mr-1.5 size-4" />
 									{t("common.actions.verify")}
 								</Button>

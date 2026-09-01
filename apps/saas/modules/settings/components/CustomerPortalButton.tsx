@@ -1,5 +1,6 @@
 import { useTranslations } from "@i18n/intl";
 import { Button } from "@repo/ui/components/button";
+import { Spinner } from "@repo/ui/components/spinner";
 import { toast } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation } from "@tanstack/react-query";
@@ -32,9 +33,13 @@ export function CustomerPortalButton({ purchaseId }: { purchaseId: string }) {
 			variant="secondary"
 			size="sm"
 			onClick={() => createCustomerPortal()}
-			loading={createCustomerPortalMutation.isPending}
+			disabled={createCustomerPortalMutation.isPending}
 		>
-			<CreditCardIcon className="mr-2 size-4" />
+			{createCustomerPortalMutation.isPending ? (
+				<Spinner data-icon="inline-start" />
+			) : (
+				<CreditCardIcon data-icon="inline-start" />
+			)}
 			{t("settings.billing.createCustomerPortal.label")}
 		</Button>
 	);

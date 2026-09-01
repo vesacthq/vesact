@@ -110,14 +110,13 @@ export function UserAvatarUpload({
 						size="icon"
 						className="bottom-0 right-0 size-7 shadow-sm absolute z-10"
 						aria-label={deleteLabel}
-						loading={isDeleting}
 						disabled={isDeleting || uploading}
 						onClick={(event) => {
 							event.stopPropagation();
 							onDelete();
 						}}
 					>
-						<TrashIcon className="size-3.5" />
+						{isDeleting ? <Spinner className="size-3.5" /> : <TrashIcon className="size-3.5" />}
 					</Button>
 				)}
 			</div>

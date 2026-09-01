@@ -20,6 +20,7 @@ import {
 	FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { Spinner } from "@repo/ui/components/spinner";
 import { toast } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useForm } from "@tanstack/react-form";
@@ -127,7 +128,8 @@ export function OrganizationForm({ organizationId }: { organizationId: string })
 							</FormField>
 
 							<div className="flex justify-end">
-								<Button type="submit" loading={isSaving}>
+								<Button variant="secondary" type="submit" disabled={isSaving}>
+									{isSaving && <Spinner data-icon="inline-start" />}
 									{t("admin.organizations.form.save")}
 								</Button>
 							</div>

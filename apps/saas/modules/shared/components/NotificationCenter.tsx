@@ -6,6 +6,7 @@ import {
 	DropdownMenuContent,
 	DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import { Spinner } from "@repo/ui/components/spinner";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
@@ -119,9 +120,10 @@ export function NotificationCenter({ className }: { className?: string }) {
 							variant="ghost"
 							size="sm"
 							className="h-8 text-xs shrink-0"
-							loading={markAllRead.isPending}
+							disabled={markAllRead.isPending}
 							onClick={() => void markAllRead.mutateAsync(undefined)}
 						>
+							{markAllRead.isPending && <Spinner data-icon="inline-start" />}
 							{t("markAllAsRead")}
 						</Button>
 					) : null}

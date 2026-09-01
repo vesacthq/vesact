@@ -4,6 +4,7 @@ import { organizationListQueryKey } from "@organizations/lib/api";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
+import { Spinner } from "@repo/ui/components/spinner";
 import { toast } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { useForm, useStore } from "@tanstack/react-form";
@@ -86,7 +87,8 @@ export function ChangeOrganizationNameForm() {
 				</form.Field>
 
 				<div className="mt-4 flex justify-end">
-					<Button type="submit" disabled={!canSubmit} loading={isSubmitting}>
+					<Button variant="secondary" type="submit" disabled={!canSubmit || isSubmitting}>
+						{isSubmitting && <Spinner data-icon="inline-start" />}
 						{t("settings.save")}
 					</Button>
 				</div>

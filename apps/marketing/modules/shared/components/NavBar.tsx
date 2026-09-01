@@ -175,6 +175,7 @@ export function NavBar() {
 							<Button
 								className="lg:flex hidden border-primary/30 text-primary hover:bg-primary/10 hover:text-primary"
 								variant="outline"
+								nativeButton={false}
 								render={(props) => {
 									const { children: linkChildren, ...rest } = props;
 									return (

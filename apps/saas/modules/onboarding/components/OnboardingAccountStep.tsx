@@ -4,6 +4,7 @@ import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { Spinner } from "@repo/ui/components/spinner";
 import { UserAvatarUpload } from "@settings/components/UserAvatarUpload";
 import { useForm, useStore } from "@tanstack/react-form";
 import { ArrowRightIcon } from "lucide-react";
@@ -83,7 +84,8 @@ export function OnboardingAccountStep({ onCompleted }: { onCompleted: () => void
 						/>
 					</div>
 
-					<Button type="submit" loading={isSubmitting}>
+					<Button variant="secondary" type="submit" disabled={isSubmitting}>
+						{isSubmitting && <Spinner data-icon="inline-start" />}
 						{t("onboarding.continue")}
 						<ArrowRightIcon className="ml-2 size-4" />
 					</Button>

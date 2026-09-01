@@ -5,6 +5,7 @@ import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { Spinner } from "@repo/ui/components/spinner";
 import { toast } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { useForm, useStore } from "@tanstack/react-form";
@@ -116,7 +117,8 @@ export function InviteMemberForm({ organizationId }: { organizationId: string })
 					</div>
 
 					<div className="mt-4 flex justify-end">
-						<Button type="submit" loading={isSubmitting}>
+						<Button variant="secondary" type="submit" disabled={isSubmitting}>
+							{isSubmitting && <Spinner data-icon="inline-start" />}
 							{t("organizations.settings.members.inviteMember.submit")}
 						</Button>
 					</div>

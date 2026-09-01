@@ -3,6 +3,7 @@ import { OrganizationLogo } from "@organizations/components/OrganizationLogo";
 import { organizationListQueryKey } from "@organizations/lib/api";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
+import { Spinner } from "@repo/ui/components/spinner";
 import { toast } from "@repo/ui/components/toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
@@ -82,19 +83,25 @@ export function OrganizationInvitationModal({
 					variant="secondary"
 					onClick={() => onSelectAnswer(false)}
 					disabled={!!submitting}
-					loading={submitting === "reject"}
 				>
-					<XIcon className="mr-1.5 size-4" />
+					{submitting === "reject" ? (
+						<Spinner data-icon="inline-start" />
+					) : (
+						<XIcon data-icon="inline-start" />
+					)}
 					{t("organizations.invitationModal.decline")}
 				</Button>
 				<Button
 					className="flex-1"
-					variant="primary"
+					variant="default"
 					onClick={() => onSelectAnswer(true)}
 					disabled={!!submitting}
-					loading={submitting === "accept"}
 				>
-					<CheckIcon className="mr-1.5 size-4" />
+					{submitting === "accept" ? (
+						<Spinner data-icon="inline-start" />
+					) : (
+						<CheckIcon data-icon="inline-start" />
+					)}
 					{t("organizations.invitationModal.accept")}
 				</Button>
 			</div>

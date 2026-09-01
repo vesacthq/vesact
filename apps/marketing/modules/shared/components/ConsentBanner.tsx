@@ -30,7 +30,7 @@ export function ConsentBanner() {
 						<Button variant="secondary" className="flex-1" onClick={() => declineCookies()}>
 							Decline
 						</Button>
-						<Button variant="primary" className="flex-1" onClick={() => allowCookies()}>
+						<Button variant="default" className="flex-1" onClick={() => allowCookies()}>
 							Allow
 						</Button>
 					</div>

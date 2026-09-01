@@ -10,6 +10,7 @@ import { Button } from "@repo/ui/components/button";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@repo/ui/components/form";
 import { formatFormRootError } from "@repo/ui/components/form-root-error";
 import { Input } from "@repo/ui/components/input";
+import { Spinner } from "@repo/ui/components/spinner";
 import { useForm, useStore } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useRouter, useSearch } from "@tanstack/react-router";
@@ -248,7 +249,8 @@ export function LoginForm() {
 								</FormField>
 							)}
 
-							<Button className="w-full" type="submit" variant="primary" loading={isSubmitting}>
+							<Button className="w-full" type="submit" variant="default" disabled={isSubmitting}>
+								{isSubmitting && <Spinner data-icon="inline-start" />}
 								{signinMode === "magic-link"
 									? t("auth.login.sendMagicLink")
 									: t("auth.login.submit")}

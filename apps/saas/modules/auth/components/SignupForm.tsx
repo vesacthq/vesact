@@ -17,6 +17,7 @@ import {
 } from "@repo/ui/components/form";
 import { formatFormRootError } from "@repo/ui/components/form-root-error";
 import { Input } from "@repo/ui/components/input";
+import { Spinner } from "@repo/ui/components/spinner";
 import { passwordSchema } from "@repo/utils";
 import { PasswordInput } from "@shared/components/PasswordInput";
 import { useForm, useStore } from "@tanstack/react-form";
@@ -210,7 +211,8 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 								</FormField>
 							)}
 
-							<Button type="submit" variant="primary" loading={isSubmitting}>
+							<Button type="submit" variant="default" disabled={isSubmitting}>
+								{isSubmitting && <Spinner data-icon="inline-start" />}
 								{t("auth.signup.submit")}
 							</Button>
 						</form>

@@ -303,7 +303,7 @@ function ReuiDemoPage() {
 					</CardHeader>
 					<CardContent className="space-y-4">
 						<div className="gap-2 flex flex-wrap items-center">
-							<Button variant="primary">primary</Button>
+							<Button variant="default">primary</Button>
 							<Button variant="secondary">secondary</Button>
 							<Button variant="outline">outline</Button>
 							<Button variant="ghost">ghost</Button>

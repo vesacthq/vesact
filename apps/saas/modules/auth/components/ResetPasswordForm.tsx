@@ -14,6 +14,7 @@ import {
 	FormMessage,
 } from "@repo/ui/components/form";
 import { formatFormRootError } from "@repo/ui/components/form-root-error";
+import { Spinner } from "@repo/ui/components/spinner";
 import { passwordSchema } from "@repo/utils";
 import { PasswordInput } from "@shared/components/PasswordInput";
 import { useForm, useStore } from "@tanstack/react-form";
@@ -124,7 +125,8 @@ export function ResetPasswordForm() {
 							)}
 						</FormField>
 
-						<Button type="submit" loading={isSubmitting}>
+						<Button variant="secondary" type="submit" disabled={isSubmitting}>
+							{isSubmitting && <Spinner data-icon="inline-start" />}
 							{t("auth.resetPassword.submit")}
 						</Button>
 					</form>

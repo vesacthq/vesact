@@ -246,6 +246,7 @@ export function CropImageDialog({
 				</div>
 				<DialogFooter>
 					<Button
+						variant="secondary"
 						onClick={async () => {
 							onCrop(await getCroppedImage());
 							onOpenChange(false);

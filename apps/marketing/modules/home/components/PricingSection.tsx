@@ -202,7 +202,8 @@ export function PricingSection() {
 										{plan.to.startsWith("/") ? (
 											<Button
 												className="w-full"
-												variant={plan.recommended ? "primary" : "outline"}
+												variant={plan.recommended ? "default" : "outline"}
+												nativeButton={false}
 												render={(props) => <LocaleLink {...props} href={plan.to} />}
 											>
 												{plan.cta}
@@ -211,7 +212,8 @@ export function PricingSection() {
 										) : (
 											<Button
 												className="w-full"
-												variant={plan.recommended ? "primary" : "outline"}
+												variant={plan.recommended ? "default" : "outline"}
+												nativeButton={false}
 												render={(props) => {
 													const { children: linkChildren, ...rest } = props;
 													return (

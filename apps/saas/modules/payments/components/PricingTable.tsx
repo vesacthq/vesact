@@ -6,6 +6,7 @@ import { config as paymentsConfig } from "@repo/payments/config";
 import type { PaidPlan } from "@repo/payments/types";
 import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
+import { Spinner } from "@repo/ui/components/spinner";
 import { Tabs, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 import { useLocaleCurrency } from "@shared/hooks/locale-currency";
 import { orpc } from "@shared/lib/orpc-query-utils";
@@ -215,7 +216,7 @@ export function PricingTable({
 
 									<Button
 										className="mt-4 w-full"
-										variant={recommended ? "primary" : "secondary"}
+										variant={recommended ? "default" : "secondary"}
 										onClick={() =>
 											onSelectPlan(
 												planId as PlanId,
@@ -227,8 +228,9 @@ export function PricingTable({
 													: undefined,
 											)
 										}
-										loading={loading === planId}
+										disabled={loading === planId}
 									>
+										{loading === planId && <Spinner data-icon="inline-start" />}
 										{userId || organizationId ? t("pricing.choosePlan") : t("pricing.getStarted")}
 										<ArrowRightIcon className="ml-2 size-4" />
 									</Button>

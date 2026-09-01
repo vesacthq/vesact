@@ -2,6 +2,7 @@ import { useSession } from "@auth/hooks/use-session";
 import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
+import { Spinner } from "@repo/ui/components/spinner";
 import { toast } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { useState } from "react";
@@ -48,7 +49,8 @@ export function SetPasswordForm() {
 			title={t("settings.account.security.setPassword.title")}
 			description={t("settings.account.security.setPassword.description")}
 		>
-			<Button type="submit" loading={submitting} onClick={onSubmit}>
+			<Button variant="secondary" type="submit" onClick={onSubmit} disabled={submitting}>
+				{submitting && <Spinner data-icon="inline-start" />}
 				{t("settings.account.security.setPassword.submit")}
 			</Button>
 		</SettingsItem>

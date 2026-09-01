@@ -9,6 +9,7 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@repo/ui/components/form";
+import { Spinner } from "@repo/ui/components/spinner";
 import { toast } from "@repo/ui/components/toast";
 import { passwordSchema } from "@repo/utils";
 import { PasswordInput } from "@shared/components/PasswordInput";
@@ -116,7 +117,8 @@ export function ChangePasswordForm() {
 						</FormField>
 
 						<div className="flex justify-end">
-							<Button type="submit" loading={isSubmitting} disabled={!canSubmit}>
+							<Button variant="secondary" type="submit" disabled={!canSubmit || isSubmitting}>
+								{isSubmitting && <Spinner data-icon="inline-start" />}
 								{t("settings.save")}
 							</Button>
 						</div>

@@ -2,6 +2,7 @@ import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
 import { Button } from "@repo/ui/components/button";
 import { formatFormRootError } from "@repo/ui/components/form-root-error";
 import { Input } from "@repo/ui/components/input";
+import { Spinner } from "@repo/ui/components/spinner";
 import { useForm, useStore } from "@tanstack/react-form";
 import { CheckCircleIcon, MailIcon } from "lucide-react";
 import { useTranslations } from "use-intl";
@@ -100,11 +101,8 @@ export function NewsletterSection() {
 												onBlur={field.handleBlur}
 												onChange={(event) => field.handleChange(event.target.value)}
 											/>
-											<Button
-												type="submit"
-												className="bg-primary text-primary-foreground hover:bg-primary/90"
-												loading={isSubmitting}
-											>
+											<Button type="submit" variant="default" disabled={isSubmitting}>
+												{isSubmitting && <Spinner data-icon="inline-start" />}
 												{t("newsletter.submit")}
 											</Button>
 										</div>
