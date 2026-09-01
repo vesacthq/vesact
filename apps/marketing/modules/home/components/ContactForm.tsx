@@ -120,7 +120,7 @@ export function ContactForm() {
 									<FormLabel>{t("message")}</FormLabel>
 									<FormControl>
 										<Textarea
-											rows={6}
+											className="min-h-36"
 											name={field.name}
 											value={field.state.value}
 											onBlur={field.handleBlur}
