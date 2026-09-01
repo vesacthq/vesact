@@ -92,7 +92,7 @@ export function HeroWireframe() {
 	const t = useTranslations("home.hero");
 
 	return (
-		<figure className="shadow-olive-950/30 dark:shadow-black/70 m-0 overflow-hidden rounded-2xl border border-border/70 bg-card shadow-[0_24px_80px_-32px]">
+		<figure className="shadow-zinc-950/30 dark:shadow-black/70 m-0 overflow-hidden rounded-2xl border border-border/70 bg-card shadow-[0_24px_80px_-32px]">
 			<figcaption className="sr-only">{t("imageAlt")}</figcaption>
 			<div aria-hidden className="pointer-events-none select-none">
 				<BrowserChrome />

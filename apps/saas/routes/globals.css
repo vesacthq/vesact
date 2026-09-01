@@ -8,8 +8,8 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-	--font-inter: "Inter";
-	--font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+	--font-noto-sans: "Noto Sans";
+	--font-sans: var(--font-noto-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 @utility container {

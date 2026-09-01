@@ -1,4 +1,14 @@
-import { cn } from "@repo/ui";
+import { Badge } from "@repo/ui/components/reui/badge";
+import {
+	Timeline,
+	TimelineContent,
+	TimelineDate,
+	TimelineHeader,
+	TimelineIndicator,
+	TimelineItem,
+	TimelineSeparator,
+	TimelineTitle,
+} from "@repo/ui/components/reui/timeline";
 import { useFormatter, useTranslations } from "use-intl";
 
 const CHANGELOG_ENTRY_KEYS = [
@@ -16,6 +26,12 @@ const CHANGE_KINDS = ["added", "improved", "fixed"] as const;
 
 type ChangeKind = (typeof CHANGE_KINDS)[number];
 
+const CHANGE_KIND_VARIANTS = {
+	added: "success",
+	improved: "info",
+	fixed: "warning",
+} as const satisfies Record<ChangeKind, string>;
+
 function isChangeKind(value: string): value is ChangeKind {
 	return CHANGE_KINDS.some((kind) => kind === value);
 }
@@ -26,75 +42,66 @@ export function ChangelogSection() {
 
 	return (
 		<section id="changelog">
-			<div className="flex w-full flex-col">
+			<Timeline
+				defaultValue={CHANGELOG_ENTRY_KEYS.length}
+				className="w-full md:ps-40"
+			>
 				{CHANGELOG_ENTRY_KEYS.map((entryKey, entryIndex) => {
 					const version = t(`entries.${entryKey}.version`);
 					const isLatest = entryIndex === 0;
 
 					return (
-						<article
-							key={entryKey}
-							className="gap-8 md:grid-cols-[11rem_minmax(0,1fr)] pb-16 last:pb-0 relative grid grid-cols-1"
-						>
-							<div className="md:pt-1.5">
-								<p className="font-medium text-sm whitespace-nowrap text-foreground/45">
-									{formatter.dateTime(new Date(`${t(`entries.${entryKey}.date`)}T12:00:00`), {
-										dateStyle: "medium",
-									})}
-								</p>
-								{version ? (
-									<p className="mt-1 font-medium text-xs tracking-wide text-touch">{version}</p>
-								) : null}
-							</div>
-
-							<div className="md:border-l md:pl-10 md:border-border/60 relative">
-								<span
-									className="size-1.5 top-2.5 md:block absolute -left-[3px] hidden rounded-[1.5px] bg-touch"
-									aria-hidden
-								/>
-
-								<div>
-									{isLatest ? (
-										<span className="px-2 py-0.5 font-semibold tracking-wide text-xs rounded-full bg-touch text-touch-foreground">
-											{t("latest")}
-										</span>
+						<TimelineItem key={entryKey} step={entryIndex + 1}>
+							<TimelineHeader>
+								<TimelineDate className="md:-left-48 md:absolute md:top-1 md:mb-0 md:w-36">
+									{formatter.dateTime(
+										new Date(`${t(`entries.${entryKey}.date`)}T12:00:00`),
+										{ dateStyle: "medium" },
+									)}
+								</TimelineDate>
+								<TimelineTitle className="flex flex-wrap items-center gap-2 text-lg">
+									{t(`entries.${entryKey}.title`)}
+									{version ? (
+										<Badge size="xs" variant="outline">
+											{version}
+										</Badge>
 									) : null}
-									<h2
-										className={cn(
-											"font-medium text-2xl lg:text-[1.75rem] tracking-tight text-pretty text-foreground",
-											isLatest && "mt-3",
-										)}
-									>
-										{t(`entries.${entryKey}.title`)}
-									</h2>
-								</div>
-
-								<p className="mt-4 text-base leading-relaxed text-pretty text-foreground/70">
+									{isLatest ? <Badge size="xs">{t("latest")}</Badge> : null}
+								</TimelineTitle>
+							</TimelineHeader>
+							<TimelineIndicator />
+							<TimelineSeparator />
+							<TimelineContent>
+								<p className="leading-relaxed text-pretty">
 									{t(`entries.${entryKey}.summary`)}
 								</p>
-
-								<ul className="mt-6 space-y-4">
+								<ul className="mt-4 flex flex-col gap-3">
 									{CHANGE_ITEM_KEYS.map((changeKey) => {
-										const kindValue = t(`entries.${entryKey}.changes.${changeKey}.kind`);
+										const kindValue = t(
+											`entries.${entryKey}.changes.${changeKey}.kind`,
+										);
 										const kind = isChangeKind(kindValue) ? kindValue : "improved";
 
 										return (
-											<li key={`${entryKey}-${changeKey}`}>
-												<p className="font-medium text-xs tracking-wide text-touch">
+											<li
+												key={`${entryKey}-${changeKey}`}
+												className="flex items-start gap-2.5"
+											>
+												<Badge size="xs" variant={CHANGE_KIND_VARIANTS[kind]}>
 													{t(`kinds.${kind}`)}
-												</p>
-												<p className="mt-1 text-sm leading-relaxed text-foreground/60">
+												</Badge>
+												<span className="text-sm leading-relaxed">
 													{t(`entries.${entryKey}.changes.${changeKey}.text`)}
-												</p>
+												</span>
 											</li>
 										);
 									})}
 								</ul>
-							</div>
-						</article>
+							</TimelineContent>
+						</TimelineItem>
 					);
 				})}
-			</div>
+			</Timeline>
 		</section>
 	);
 }

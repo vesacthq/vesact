@@ -5,7 +5,7 @@
 	"tsx": true,
 	"tailwind": {
 		"css": "../../tooling/tailwind/theme.css",
-		"baseColor": "olive",
+		"baseColor": "zinc",
 		"cssVariables": true,
 		"prefix": ""
 	},
@@ -13,5 +13,8 @@
 		"components": "@/components",
 		"utils": "@/lib",
 		"lib": "@/lib"
+	},
+	"registries": {
+		"@reui": "https://reui.io/r/base-nova/{name}.json"
 	}
 }

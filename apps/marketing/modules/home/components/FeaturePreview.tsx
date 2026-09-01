@@ -4,7 +4,7 @@ import { CreditCardIcon, ReceiptIcon, WalletIcon } from "lucide-react";
 
 export function FeaturePreview({ variant }: { variant: "teams" | "billing" }) {
 	return (
-		<div className="shadow-olive-950/25 dark:shadow-black/65 w-full overflow-hidden rounded-2xl border border-border/70 bg-card shadow-[0_16px_48px_-28px]">
+		<div className="shadow-zinc-950/25 dark:shadow-black/65 w-full overflow-hidden rounded-2xl border border-border/70 bg-card shadow-[0_16px_48px_-28px]">
 			<div className="gap-1.5 px-3 py-2.5 flex items-center border-b border-border/60">
 				<span className="size-2 rounded-full bg-foreground/15" />
 				<span className="size-2 rounded-full bg-foreground/10" />
