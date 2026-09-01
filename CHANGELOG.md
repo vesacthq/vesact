@@ -9,6 +9,12 @@
 - **Simplified Chinese locale**: `zh` is available in `packages/i18n` with full `marketing`, `shared`, and `mail` translations; `saas` strings fall back to English until translated. Locale routing, the language switcher, and `Intl` date/currency formatting pick it up automatically from `config.locales`.
 - **Chinese typography**: `:root:lang(zh)` token overrides in `tooling/tailwind/theme.css` (zeroed tight tracking, wider label tracking, ~10% larger display sizes, looser relaxed leading) and in the marketing app (display line heights). Marketing headings render CJK in self-hosted Noto Serif SC (`@fontsource/noto-serif-sc`, loaded on demand via `unicode-range`, so non-CJK pages download nothing), the sans stack lists CJK system fallbacks explicitly, and the hero headline wraps with `text-balance`. Run `pnpm install` after pulling.
 
+### Fixed
+
+#### Mail
+
+- **Booting without a mail API key**: the mail provider no longer instantiates Resend at import time. When `RESEND_API_KEY` is unset, development logs emails to the console (so verification links stay reachable) and production throws a clear error at send time.
+
 ### Changed
 
 #### UI
