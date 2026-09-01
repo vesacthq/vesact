@@ -1,6 +1,5 @@
 import { SessionProvider } from "@auth/components/SessionProvider";
 import { config } from "@config";
-import { useTranslations } from "@i18n/intl";
 import { I18nProvider } from "@i18n/provider";
 import { getCurrentLocale } from "@repo/i18n/runtime";
 import type { PermissionsDefinition } from "@repo/permissions";
@@ -92,7 +91,7 @@ function RootLayout() {
 											<ConsentProvider>
 												<Outlet />
 												<ConsentBanner />
-												<AppToaster />
+												<Toaster />
 											</ConsentProvider>
 										</I18nProvider>
 									</ClientProviders>
@@ -105,12 +104,6 @@ function RootLayout() {
 			</body>
 		</html>
 	);
-}
-
-function AppToaster() {
-	const t = useTranslations();
-
-	return <Toaster position="top-right" closeLabel={t("common.aria.closeToast")} />;
 }
 
 function RootError({ error }: { error: Error }) {
