@@ -159,19 +159,19 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 										{row.original.userId !== user?.id && (
 											<DropdownMenuItem
 												disabled={!canManageOrganization}
-												className="text-destructive"
+												variant="destructive"
 												onClick={async () => removeMember(row.original.id)}
 											>
-												<TrashIcon className="mr-2 size-4" />
+												<TrashIcon className="size-4" />
 												{t("organizations.settings.members.removeMember")}
 											</DropdownMenuItem>
 										)}
 										{row.original.userId === user?.id && (
 											<DropdownMenuItem
-												className="text-destructive"
+												variant="destructive"
 												onClick={async () => removeMember(row.original.id)}
 											>
-												<LogOutIcon className="mr-2 size-4" />
+												<LogOutIcon className="size-4" />
 												{t("organizations.settings.members.leaveOrganization")}
 											</DropdownMenuItem>
 										)}

@@ -87,11 +87,8 @@ export function UserMenu({ showUserName }: { showUserName?: boolean }) {
 
 				<DropdownMenuSeparator />
 
-				{/* Color mode selection */}
-				<DropdownMenuItem
-					className="gap-4 flex items-center justify-between hover:bg-transparent focus:bg-transparent"
-					onClick={(e) => e.preventDefault()}
-				>
+				{/* Color mode selection: a control row, not a selectable menu item */}
+				<div className="gap-4 px-3 py-2 text-sm flex items-center justify-between">
 					<span>{t("app.userMenu.colorMode")}</span>
 					<ColorModeToggle
 						modes={["system", "light", "dark"]}
@@ -101,7 +98,7 @@ export function UserMenu({ showUserName }: { showUserName?: boolean }) {
 							dark: t("common.colorMode.dark"),
 						}}
 					/>
-				</DropdownMenuItem>
+				</div>
 
 				<DropdownMenuSeparator />
 
@@ -113,7 +110,7 @@ export function UserMenu({ showUserName }: { showUserName?: boolean }) {
 							to="/settings/general"
 							className={cn(props.className, "flex cursor-default items-center")}
 						>
-							<SettingsIcon className="mr-2 size-4" />
+							<SettingsIcon className="size-4" />
 							{t("app.userMenu.accountSettings")}
 						</Link>
 					)}
@@ -128,7 +125,7 @@ export function UserMenu({ showUserName }: { showUserName?: boolean }) {
 								href={config.docsUrl}
 								className={cn(props.className, "flex cursor-default items-center")}
 							>
-								<BookIcon className="mr-2 size-4" />
+								<BookIcon className="size-4" />
 								{t("app.userMenu.documentation")}
 							</a>
 						)}
@@ -144,7 +141,7 @@ export function UserMenu({ showUserName }: { showUserName?: boolean }) {
 								href={config.marketingUrl}
 								className={cn(props.className, "flex cursor-default items-center")}
 							>
-								<HomeIcon className="mr-2 size-4" />
+								<HomeIcon className="size-4" />
 								{t("app.userMenu.home")}
 							</a>
 						)}
@@ -152,7 +149,7 @@ export function UserMenu({ showUserName }: { showUserName?: boolean }) {
 				)}
 
 				<DropdownMenuItem onClick={onLogout}>
-					<LogOutIcon className="mr-2 size-4" />
+					<LogOutIcon className="size-4" />
 					{t("app.userMenu.logout")}
 				</DropdownMenuItem>
 			</DropdownMenuContent>

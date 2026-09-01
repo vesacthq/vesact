@@ -181,10 +181,8 @@ export function OrganizationList() {
 											})
 										}
 									>
-										<span className="flex items-center text-destructive hover:text-destructive">
-											<TrashIcon className="mr-2 size-4" />
-											{t("admin.organizations.delete")}
-										</span>
+										<TrashIcon className="size-4" />
+										{t("admin.organizations.delete")}
 									</DropdownMenuItem>
 								</DropdownMenuContent>
 							</DropdownMenu>

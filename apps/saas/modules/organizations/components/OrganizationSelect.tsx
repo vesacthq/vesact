@@ -229,14 +229,14 @@ export function OrganzationSelect({
 				<DropdownMenuGroup>
 					<DropdownMenuItem
 						nativeButton={false}
-						className="text-sm cursor-pointer text-primary!"
+						className="text-sm cursor-pointer text-touch"
 						render={(props) => (
 							<Link
 								{...props}
 								to="/new-organization"
 								className={cn(props.className, "flex items-center")}
 							>
-								<PlusIcon className="mr-2 size-6 p-1 rounded-md bg-primary/20" />
+								<PlusIcon className="size-6 p-1 rounded-md bg-touch/20" />
 								{t("organizations.organizationSelect.createNewOrganization")}
 							</Link>
 						)}

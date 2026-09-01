@@ -296,26 +296,26 @@ export function UserList() {
 											})
 										}
 									>
-										<SquareUserRoundIcon className="mr-2 size-4" />
+										<SquareUserRoundIcon className="size-4" />
 										{t("admin.users.impersonate")}
 									</DropdownMenuItem>
 
 									{!row.original.emailVerified && (
 										<DropdownMenuItem onClick={() => resendVerificationMail(row.original.email)}>
-											<Repeat1Icon className="mr-2 size-4" />
+											<Repeat1Icon className="size-4" />
 											{t("admin.users.resendVerificationMail.title")}
 										</DropdownMenuItem>
 									)}
 
 									{isUserActivelyBanned(row.original, banStatusTime) ? (
 										<DropdownMenuItem onClick={() => unbanUser(row.original.id)}>
-											<ShieldCheckIcon className="mr-2 size-4" />
+											<ShieldCheckIcon className="size-4" />
 											{t("admin.users.ban.actions.unban")}
 										</DropdownMenuItem>
 									) : (
 										currentUser?.id !== row.original.id && (
 											<DropdownMenuItem onClick={() => setUserToBan(row.original)}>
-												<BanIcon className="mr-2 size-4" />
+												<BanIcon className="size-4" />
 												{t("admin.users.ban.actions.ban")}
 											</DropdownMenuItem>
 										)
@@ -323,12 +323,12 @@ export function UserList() {
 
 									{row.original.role !== "admin" ? (
 										<DropdownMenuItem onClick={() => assignAdminRole(row.original.id)}>
-											<ShieldCheckIcon className="mr-2 size-4" />
+											<ShieldCheckIcon className="size-4" />
 											{t("admin.users.assignAdminRole")}
 										</DropdownMenuItem>
 									) : (
 										<DropdownMenuItem onClick={() => removeAdminRole(row.original.id)}>
-											<ShieldXIcon className="mr-2 size-4" />
+											<ShieldXIcon className="size-4" />
 											{t("admin.users.removeAdminRole")}
 										</DropdownMenuItem>
 									)}
@@ -344,10 +344,8 @@ export function UserList() {
 											})
 										}
 									>
-										<span className="flex items-center text-destructive hover:text-destructive">
-											<TrashIcon className="mr-2 size-4" />
-											{t("admin.users.delete")}
-										</span>
+										<TrashIcon className="size-4" />
+										{t("admin.users.delete")}
 									</DropdownMenuItem>
 								</DropdownMenuContent>
 							</DropdownMenu>
