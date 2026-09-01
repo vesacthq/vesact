@@ -147,7 +147,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 							}}
 						>
 							{rootMessage && (
-								<Alert variant="error">
+								<Alert variant="destructive">
 									<AlertTriangleIcon />
 									<AlertDescription>{rootMessage}</AlertDescription>
 								</Alert>

@@ -72,7 +72,7 @@ export function ContactForm() {
 						}}
 					>
 						{rootMessage ? (
-							<Alert variant="error">
+							<Alert variant="destructive">
 								<MailIcon />
 								<AlertTitle>{rootMessage}</AlertTitle>
 							</Alert>

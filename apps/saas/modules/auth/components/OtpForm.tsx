@@ -94,7 +94,7 @@ export function OtpForm() {
 					}}
 				>
 					{rootMessage && (
-						<Alert variant="error">
+						<Alert variant="destructive">
 							<AlertTriangleIcon />
 							<AlertTitle>{rootMessage}</AlertTitle>
 						</Alert>
