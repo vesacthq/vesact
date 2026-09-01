@@ -1,6 +1,6 @@
-import ameliaOrtiz from "../../../public/images/testimonials/amelia-ortiz.webp";
-import jonasWeber from "../../../public/images/testimonials/jonas-weber.webp";
-import mayaChen from "../../../public/images/testimonials/maya-chen.webp";
+const mayaChen = "/images/testimonials/maya-chen.webp";
+const jonasWeber = "/images/testimonials/jonas-weber.webp";
+const ameliaOrtiz = "/images/testimonials/amelia-ortiz.webp";
 
 export const dummyPortraits = {
 	item1: mayaChen,
