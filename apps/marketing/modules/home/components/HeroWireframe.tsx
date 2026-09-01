@@ -220,7 +220,7 @@ function MainPreview() {
 				))}
 			</div>
 
-			<Card className="mt-4 rounded-xl">
+			<Card className="mt-4 py-0 rounded-xl">
 				<div className="h-36 sm:h-44 lg:h-52 text-sm flex items-center justify-center text-foreground/45">
 					{t("placeholder")}
 				</div>
@@ -270,7 +270,7 @@ function MetricCard({
 	const { linePath, areaPath } = buildSparklinePaths(values);
 
 	return (
-		<Card className="rounded-xl">
+		<Card className="py-0 gap-0 rounded-xl">
 			<CardHeader className="p-3.5 pb-2">
 				<CardTitle className="font-medium text-xs text-foreground/50">{title}</CardTitle>
 			</CardHeader>

@@ -50,8 +50,8 @@ export function StatsTile({
 	}, [trend, format]);
 
 	return (
-		<Card>
-			<CardHeader className="pb-2">
+		<Card className="gap-2">
+			<CardHeader>
 				<CardTitle>{title}</CardTitle>
 			</CardHeader>
 			<CardContent>

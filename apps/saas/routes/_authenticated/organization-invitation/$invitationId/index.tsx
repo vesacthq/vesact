@@ -36,7 +36,7 @@ function OrganizationInvitationPage() {
 	return (
 		<div className="max-w-md p-6 mx-auto">
 			<Card>
-				<CardContent className="p-6">
+				<CardContent>
 					<OrganizationInvitationModal
 						invitationId={data.invitationId}
 						organizationName={data.organizationName}

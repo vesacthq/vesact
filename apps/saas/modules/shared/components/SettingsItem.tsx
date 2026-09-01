@@ -20,17 +20,15 @@ export function SettingsItem({
 }>) {
 	return (
 		<Card className="@2xl:grid @2xl:grid-cols-[min(100%/3,360px)_auto] @2xl:gap-8 @container">
-			<CardHeader className="@2xl:pb-6">
-				<CardTitle className={cn("font-medium text-base", danger && "text-destructive")}>
-					{title}
-				</CardTitle>
+			<CardHeader>
+				<CardTitle className={cn(danger && "text-destructive")}>{title}</CardTitle>
 				{description && (
 					<CardDescription className="leading-snug text-foreground/60">
 						{description}
 					</CardDescription>
 				)}
 			</CardHeader>
-			<CardContent className="@2xl:pt-6">{children}</CardContent>
+			<CardContent>{children}</CardContent>
 		</Card>
 	);
 }
