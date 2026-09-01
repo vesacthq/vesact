@@ -59,8 +59,10 @@
 		"@types/react-dom": "catalog:",
 		"autoprefixer": "catalog:",
 		"dotenv": "catalog:",
+		"shadcn": "catalog:",
 		"start-server-and-test": "catalog:",
 		"tailwindcss": "catalog:",
+		"tw-animate-css": "catalog:",
 		"typescript": "catalog:",
 		"vitest": "catalog:"
 	}
