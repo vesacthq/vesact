@@ -38,8 +38,8 @@ Common mistakes:
 
 ```tsx
 <EventCalendar defaultEvents={events} defaultView="month" className="h-[560px]">
-  <EventCalendarNav />
-  <EventCalendarContent />
+	<EventCalendarNav />
+	<EventCalendarContent />
 </EventCalendar>
 ```
 
@@ -52,8 +52,8 @@ Common mistakes:
 
 ```tsx
 <Gantt defaultEvents={bars} resources={tasks} defaultScale="month" className="h-[480px]">
-  <GanttNav />
-  <GanttView />
+	<GanttNav />
+	<GanttView />
 </Gantt>
 ```
 
@@ -66,21 +66,25 @@ Common mistakes:
 
 ```tsx
 <Kanban value={cols} onValueChange={setCols} getItemValue={(i) => i.id}>
-  <KanbanBoard>
-    {Object.entries(cols).map(([id, items]) => (
-      <KanbanColumn key={id} value={id}>
-        <KanbanColumnHandle><h3>{id}</h3></KanbanColumnHandle>
-        <KanbanColumnContent value={id}>
-          {items.map((i) => (
-            <KanbanItem key={i.id} value={i.id}>
-              <KanbanItemHandle>{i.title}</KanbanItemHandle>
-            </KanbanItem>
-          ))}
-        </KanbanColumnContent>
-      </KanbanColumn>
-    ))}
-  </KanbanBoard>
-  <KanbanOverlay><div className="bg-muted size-full rounded-md" /></KanbanOverlay>
+	<KanbanBoard>
+		{Object.entries(cols).map(([id, items]) => (
+			<KanbanColumn key={id} value={id}>
+				<KanbanColumnHandle>
+					<h3>{id}</h3>
+				</KanbanColumnHandle>
+				<KanbanColumnContent value={id}>
+					{items.map((i) => (
+						<KanbanItem key={i.id} value={i.id}>
+							<KanbanItemHandle>{i.title}</KanbanItemHandle>
+						</KanbanItem>
+					))}
+				</KanbanColumnContent>
+			</KanbanColumn>
+		))}
+	</KanbanBoard>
+	<KanbanOverlay>
+		<div className="bg-muted size-full rounded-md" />
+	</KanbanOverlay>
 </Kanban>
 ```
 
@@ -93,12 +97,14 @@ Common mistakes:
 
 ```tsx
 <Sortable value={items} onValueChange={setItems} getItemValue={(i) => i.id}>
-  {items.map((i) => (
-    <SortableItem key={i.id} value={i.id}>
-      <SortableItemHandle><GripVertical /></SortableItemHandle>
-      {i.label}
-    </SortableItem>
-  ))}
+	{items.map((i) => (
+		<SortableItem key={i.id} value={i.id}>
+			<SortableItemHandle>
+				<GripVertical />
+			</SortableItemHandle>
+			{i.label}
+		</SortableItem>
+	))}
 </Sortable>
 ```
 
@@ -138,22 +144,22 @@ const [query, setQuery] = useState<FilterQuery>(() => createFilterQuery())
 
 ```tsx
 <Cascader items={items} value={value} onValueChange={setValue}>
-  <CascaderTrigger render={<Button variant="outline" />}>
-    <CascaderValue placeholder="Select an attribute" />
-  </CascaderTrigger>
-  <CascaderContent className="w-80">
-    <CascaderPanel>
-      <CascaderNav>
-        <CascaderBreadcrumb />
-        <CascaderInput />
-      </CascaderNav>
-      <CascaderEmpty />
-      <CascaderList maxHeight={288}>
-        <CascaderItems />
-      </CascaderList>
-      <CascaderStatus />
-    </CascaderPanel>
-  </CascaderContent>
+	<CascaderTrigger render={<Button variant="outline" />}>
+		<CascaderValue placeholder="Select an attribute" />
+	</CascaderTrigger>
+	<CascaderContent className="w-80">
+		<CascaderPanel>
+			<CascaderNav>
+				<CascaderBreadcrumb />
+				<CascaderInput />
+			</CascaderNav>
+			<CascaderEmpty />
+			<CascaderList maxHeight={288}>
+				<CascaderItems />
+			</CascaderList>
+			<CascaderStatus />
+		</CascaderPanel>
+	</CascaderContent>
 </Cascader>
 ```
 
@@ -181,11 +187,11 @@ const [value, setValue] = useState<DateSelectorValue | undefined>()
 
 ```tsx
 <Tree tree={tree}>
-  {tree.getItems().map((item) => (
-    <TreeItem key={item.getId()} item={item}>
-      <TreeItemLabel />
-    </TreeItem>
-  ))}
+	{tree.getItems().map((item) => (
+		<TreeItem key={item.getId()} item={item}>
+			<TreeItemLabel />
+		</TreeItem>
+	))}
 </Tree>
 ```
 
@@ -198,19 +204,23 @@ const [value, setValue] = useState<DateSelectorValue | undefined>()
 
 ```tsx
 <Stepper defaultValue={1}>
-  <StepperNav>
-    <StepperItem step={1}>
-      <StepperTrigger><StepperIndicator>1</StepperIndicator></StepperTrigger>
-      <StepperSeparator />
-    </StepperItem>
-    <StepperItem step={2}>
-      <StepperTrigger><StepperIndicator>2</StepperIndicator></StepperTrigger>
-    </StepperItem>
-  </StepperNav>
-  <StepperPanel>
-    <StepperContent value={1}>Step 1 content</StepperContent>
-    <StepperContent value={2}>Step 2 content</StepperContent>
-  </StepperPanel>
+	<StepperNav>
+		<StepperItem step={1}>
+			<StepperTrigger>
+				<StepperIndicator>1</StepperIndicator>
+			</StepperTrigger>
+			<StepperSeparator />
+		</StepperItem>
+		<StepperItem step={2}>
+			<StepperTrigger>
+				<StepperIndicator>2</StepperIndicator>
+			</StepperTrigger>
+		</StepperItem>
+	</StepperNav>
+	<StepperPanel>
+		<StepperContent value={1}>Step 1 content</StepperContent>
+		<StepperContent value={2}>Step 2 content</StepperContent>
+	</StepperPanel>
 </Stepper>
 ```
 
@@ -223,15 +233,15 @@ const [value, setValue] = useState<DateSelectorValue | undefined>()
 
 ```tsx
 <Timeline>
-  <TimelineItem step={1}>
-    <TimelineHeader>
-      <TimelineDate>March 2024</TimelineDate>
-      <TimelineTitle>Project initialized</TimelineTitle>
-    </TimelineHeader>
-    <TimelineIndicator />
-    <TimelineSeparator />
-    <TimelineContent>Repo and architecture set up.</TimelineContent>
-  </TimelineItem>
+	<TimelineItem step={1}>
+		<TimelineHeader>
+			<TimelineDate>March 2024</TimelineDate>
+			<TimelineTitle>Project initialized</TimelineTitle>
+		</TimelineHeader>
+		<TimelineIndicator />
+		<TimelineSeparator />
+		<TimelineContent>Repo and architecture set up.</TimelineContent>
+	</TimelineItem>
 </Timeline>
 ```
 
@@ -244,15 +254,17 @@ const [value, setValue] = useState<DateSelectorValue | undefined>()
 
 ```tsx
 <Autocomplete items={items}>
-  <AutocompleteInput placeholder="Search..." />
-  <AutocompleteContent>
-    <AutocompleteEmpty>No results found.</AutocompleteEmpty>
-    <AutocompleteList>
-      {(item) => (
-        <AutocompleteItem key={item.value} value={item}>{item.label}</AutocompleteItem>
-      )}
-    </AutocompleteList>
-  </AutocompleteContent>
+	<AutocompleteInput placeholder="Search..." />
+	<AutocompleteContent>
+		<AutocompleteEmpty>No results found.</AutocompleteEmpty>
+		<AutocompleteList>
+			{(item) => (
+				<AutocompleteItem key={item.value} value={item}>
+					{item.label}
+				</AutocompleteItem>
+			)}
+		</AutocompleteList>
+	</AutocompleteContent>
 </Autocomplete>
 ```
 
@@ -264,7 +276,12 @@ const [value, setValue] = useState<DateSelectorValue | undefined>()
 **Shape:**
 
 ```tsx
-<PhoneInput placeholder="Enter phone number" defaultCountry="US" value={value} onChange={setValue} />
+<PhoneInput
+	placeholder="Enter phone number"
+	defaultCountry="US"
+	value={value}
+	onChange={setValue}
+/>
 ```
 
 **Gotcha:** `value`/`onChange` use an E.164 string (e.g. `"+14155551234"`), not a display-formatted string; `onChange` can fire `undefined`. `defaultCountry` is a 2-letter ISO code. Wraps `react-phone-number-input`.
@@ -276,12 +293,12 @@ const [value, setValue] = useState<DateSelectorValue | undefined>()
 
 ```tsx
 <NumberField defaultValue={0}>
-  <NumberFieldScrubArea label="Quantity" />
-  <NumberFieldGroup>
-    <NumberFieldDecrement />
-    <NumberFieldInput />
-    <NumberFieldIncrement />
-  </NumberFieldGroup>
+	<NumberFieldScrubArea label="Quantity" />
+	<NumberFieldGroup>
+		<NumberFieldDecrement />
+		<NumberFieldInput />
+		<NumberFieldIncrement />
+	</NumberFieldGroup>
 </NumberField>
 ```
 
@@ -323,14 +340,14 @@ const [value, setValue] = useState<DateSelectorValue | undefined>()
 
 ```tsx
 <Frame>
-  <FramePanel>
-    <FrameHeader>
-      <FrameTitle>Title</FrameTitle>
-      <FrameDescription>Description</FrameDescription>
-    </FrameHeader>
-    <div className="p-5">Content</div>
-    <FrameFooter>Footer</FrameFooter>
-  </FramePanel>
+	<FramePanel>
+		<FrameHeader>
+			<FrameTitle>Title</FrameTitle>
+			<FrameDescription>Description</FrameDescription>
+		</FrameHeader>
+		<div className="p-5">Content</div>
+		<FrameFooter>Footer</FrameFooter>
+	</FramePanel>
 </Frame>
 ```
 
@@ -343,7 +360,7 @@ const [value, setValue] = useState<DateSelectorValue | undefined>()
 
 ```tsx
 <IconStack aria-hidden="true">
-  <InboxIcon className="size-4" />
+	<InboxIcon className="size-4" />
 </IconStack>
 ```
 
@@ -356,7 +373,7 @@ const [value, setValue] = useState<DateSelectorValue | undefined>()
 
 ```tsx
 <IconTile variant="elevated" size="lg">
-  <PackageIcon />
+	<PackageIcon />
 </IconTile>
 ```
 
@@ -369,10 +386,12 @@ const [value, setValue] = useState<DateSelectorValue | undefined>()
 
 ```tsx
 <Alert variant="success">
-  <ShieldCheckIcon />
-  <AlertTitle>Security update</AlertTitle>
-  <AlertDescription>Enable two-factor authentication.</AlertDescription>
-  <AlertAction><Button size="xs">Update</Button></AlertAction>
+	<ShieldCheckIcon />
+	<AlertTitle>Security update</AlertTitle>
+	<AlertDescription>Enable two-factor authentication.</AlertDescription>
+	<AlertAction>
+		<Button size="xs">Update</Button>
+	</AlertAction>
 </Alert>
 ```
 

@@ -20,12 +20,12 @@ REUI_LICENSE_KEY=your-license-key
 
 ```json
 {
-  "registries": {
-    "@reui": {
-      "url": "https://proxy.collectui.pro/api/r/reui/{style}/{name}.json",
-      "headers": { "Authorization": "Bearer ${REUI_LICENSE_KEY}" }
-    }
-  }
+	"registries": {
+		"@reui": {
+			"url": "https://proxy.collectui.pro/api/r/reui/{style}/{name}.json",
+			"headers": { "Authorization": "Bearer ${REUI_LICENSE_KEY}" }
+		}
+	}
 }
 ```
 
