@@ -18,6 +18,10 @@ export const config = {
 			label: "Français",
 			currency: "USD",
 		},
+		zh: {
+			label: "简体中文",
+			currency: "USD",
+		},
 	},
 	defaultLocale: "en",
 	defaultCurrency: "USD",

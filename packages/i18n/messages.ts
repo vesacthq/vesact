@@ -20,6 +20,10 @@ import frMail from "./translations/fr/mail.json";
 import frMarketing from "./translations/fr/marketing.json";
 import frSaas from "./translations/fr/saas.json";
 import frShared from "./translations/fr/shared.json";
+import zhMail from "./translations/zh/mail.json";
+import zhMarketing from "./translations/zh/marketing.json";
+import zhSaas from "./translations/zh/saas.json";
+import zhShared from "./translations/zh/shared.json";
 
 type Messages = Record<string, unknown>;
 
@@ -47,6 +51,12 @@ const scopedMessages = {
 		marketing: frMarketing,
 		saas: frSaas,
 		shared: frShared,
+	},
+	zh: {
+		mail: zhMail,
+		marketing: zhMarketing,
+		saas: zhSaas,
+		shared: zhShared,
 	},
 } as const satisfies Record<Locale, Record<TranslationScope | "shared", Messages>>;
 

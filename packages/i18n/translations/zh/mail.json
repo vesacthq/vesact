@@ -1,0 +1,32 @@
+{
+	"common": {
+		"openLinkInBrowser": "如果想在非默认浏览器中打开链接，请复制并粘贴此链接：",
+		"useLink": "或使用以下链接："
+	},
+	"emailVerification": {
+		"body": "你好，\n请点击下方链接验证这个新的邮箱地址。",
+		"confirmEmail": "验证邮箱",
+		"subject": "验证你的邮箱"
+	},
+	"forgotPassword": {
+		"body": "你好，\n你请求了密码重置。\n\n点击下方按钮重置密码。",
+		"resetPassword": "重置密码",
+		"subject": "重置你的密码"
+	},
+	"magicLink": {
+		"body": "你好，\n你在 supastarter 请求了登录邮件。\n\n点击下方链接登录。",
+		"login": "登录",
+		"subject": "登录 supastarter"
+	},
+	"notification": {
+		"openInApp": "在应用中打开此通知：",
+		"subject": "新通知",
+		"view": "查看"
+	},
+	"organizationInvitation": {
+		"body": "你受邀加入组织 {organizationName}。点击下方按钮，或将链接复制到浏览器中打开，即可接受邀请并加入该组织。",
+		"headline": "加入组织 {organizationName}",
+		"join": "加入组织",
+		"subject": "你收到了一份组织邀请"
+	}
+}

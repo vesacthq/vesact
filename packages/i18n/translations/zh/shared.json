@@ -1,0 +1,62 @@
+{
+	"pricing": {
+		"choosePlan": "选择套餐",
+		"contactSales": "联系销售",
+		"description": "简单清晰、随团队一起成长的套餐，什么时候准备好了，什么时候再升级。",
+		"getStarted": "开始使用",
+		"month": "月",
+		"monthly": "月付",
+		"products": {
+			"basic": {
+				"description": "适合验证首个版本的独立创始人。",
+				"features": {
+					"anotherFeature": "核心产品功能",
+					"limitedSupport": "社区支持"
+				},
+				"title": "基础版"
+			},
+			"enterprise": {
+				"description": "为你的组织量身定制的安全、支持与条款。",
+				"features": {
+					"enterpriseSupport": "专属支持",
+					"unlimitedProjects": "不限工作区数量"
+				},
+				"title": "企业版"
+			},
+			"free": {
+				"description": "无需任何承诺，先体验产品。",
+				"features": {
+					"anotherFeature": "核心产品功能",
+					"limitedSupport": "社区支持"
+				},
+				"title": "免费版"
+			},
+			"lifetime": {
+				"description": "一次付费，随产品成长持续享有。",
+				"features": {
+					"extendSupport": "优先支持期",
+					"noRecurringCosts": "无重复扣费"
+				},
+				"title": "终身版"
+			},
+			"pro": {
+				"description": "适合跨工作区协作的团队。",
+				"features": {
+					"anotherFeature": "进阶产品功能",
+					"fiveMembers": "最多 5 名成员",
+					"fullSupport": "邮件支持"
+				},
+				"title": "专业版"
+			}
+		},
+		"purchase": "购买",
+		"recommended": "推荐",
+		"subscribe": "订阅",
+		"title": "定价",
+		"trialPeriod": "{days} 天免费试用",
+		"year": "年",
+		"yearly": "年付",
+		"perSeat": "席位",
+		"badge": "定价"
+	}
+}

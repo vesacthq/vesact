@@ -1,0 +1,331 @@
+{
+	"blog": {
+		"badge": "手记",
+		"description": "关于工作区、计费，以及团队加入之后才会浮现的那些细节，我们是这样思考的。",
+		"title": "来自产品的手记",
+		"back": "返回手记",
+		"allTags": "全部",
+		"filterLabel": "按标签筛选",
+		"emptyFilter": "该标签下暂无文章。"
+	},
+	"changelog": {
+		"badge": "更新",
+		"description": "新角色、更快的切换，以及这一季上线的计费细节。",
+		"title": "看看最近上了什么",
+		"latest": "最新",
+		"kinds": {
+			"added": "新增",
+			"improved": "改进",
+			"fixed": "修复"
+		},
+		"entries": {
+			"clientPortals": {
+				"date": "2026-08-06",
+				"version": "v1.4",
+				"title": "给每位客户一个家",
+				"summary": "客户可以进入自己的工作区，查看进行中的工作并留言——不用再借同事的账号登录。",
+				"changes": {
+					"item1": {
+						"kind": "added",
+						"text": "新增仅查看角色的访客访问，客户无需完整席位即可了解进展。"
+					},
+					"item2": {
+						"kind": "added",
+						"text": "起始页新增面向客户的概览，聚焦本周最重要的工作。"
+					},
+					"item3": {
+						"kind": "improved",
+						"text": "切换组织时保留浏览位置，客户列表再长也不迷路。"
+					}
+				}
+			},
+			"planClarity": {
+				"date": "2026-07-22",
+				"version": "v1.3",
+				"title": "一次就能讲清楚的套餐",
+				"summary": "结账和价格表现在先说金额、再讲细节——销售电话上没人需要现场解读表格。",
+				"changes": {
+					"item1": {
+						"kind": "improved",
+						"text": "价格表先展示价格，再列出随附的功能。"
+					},
+					"item2": {
+						"kind": "added",
+						"text": "年付套餐在结账时就展示节省金额，而不是等账单寄到之后。"
+					},
+					"item3": {
+						"kind": "fixed",
+						"text": "订阅状态在结账后可能短暂滞后，现在会立即更新。"
+					}
+				}
+			},
+			"quietWeek": {
+				"date": "2026-07-08",
+				"version": "",
+				"title": "安静打磨的一周",
+				"summary": "没有大功能——只是把空状态、邮件和邀请的边边角角打磨到位，让产品更完整。",
+				"changes": {
+					"item1": {
+						"kind": "improved",
+						"text": "成员和邀请的空状态页面现在会给出下一步建议，而不是干瞪着你。"
+					},
+					"item2": {
+						"kind": "fixed",
+						"text": "受邀人已有账号时邀请链接会失败，现在会直接进入正确的工作区。"
+					},
+					"item3": {
+						"kind": "improved",
+						"text": "计费邮件会注明所属的工作区，多客户收件箱也能一眼分清。"
+					}
+				}
+			},
+			"workspaceSwitching": {
+				"date": "2026-06-30",
+				"version": "v1.2",
+				"title": "切换工作区，无需等待",
+				"summary": "在客户之间移动应该像切换文件夹，而不是重新加载应用。这个版本就是为了那一下点击。",
+				"changes": {
+					"item1": {
+						"kind": "improved",
+						"text": "即使有几十个成员身份，组织切换依然干脆利落。"
+					},
+					"item2": {
+						"kind": "added",
+						"text": "我们会记住你上次打开的工作区，并直接带你回去。"
+					},
+					"item3": {
+						"kind": "fixed",
+						"text": "重命名后组织切换器可能显示旧名称，现在会跟随工作区更新。"
+					}
+				}
+			},
+			"invites": {
+				"date": "2026-05-14",
+				"version": "v1.1",
+				"title": "像握手一样的邀请",
+				"summary": "别人从 Acme 收到的第一封邮件，应该写清工作区、邀请人，以及下一步该做什么。",
+				"changes": {
+					"item1": {
+						"kind": "added",
+						"text": "邀请邮件包含工作区名称和邀请人。"
+					},
+					"item2": {
+						"kind": "improved",
+						"text": "首次进入产品时会引导创建第一个组织，而不是把你丢在空荡荡的起始页。"
+					},
+					"item3": {
+						"kind": "fixed",
+						"text": "过期的邀请现在会明确说明，而不是一个笼统的错误。"
+					}
+				}
+			},
+			"launch": {
+				"date": "2026-04-02",
+				"version": "v1.0",
+				"title": "Acme，从第一次登录开始",
+				"summary": "首个公开版本：组织、角色和计费合而为一——团队可以邀请成员、为工作收费，不用绕路。",
+				"changes": {
+					"item1": {
+						"kind": "added",
+						"text": "组织、角色和计费从第一天起就在一起。"
+					},
+					"item2": {
+						"kind": "added",
+						"text": "每个工作区都有一个起始页，团队知道从哪里开始。"
+					},
+					"item3": {
+						"kind": "added",
+						"text": "在客户门户中自助更换套餐。"
+					}
+				}
+			}
+		}
+	},
+	"contact": {
+		"badge": "联系",
+		"description": "关于套餐、上手引导，或想为团队开一个工作区——我们通常在一个工作日内回复。",
+		"form": {
+			"email": "邮箱",
+			"message": "留言",
+			"name": "姓名",
+			"notifications": {
+				"error": "消息发送失败，请稍后重试。",
+				"success": "已发送，我们会尽快回复你。"
+			},
+			"submit": "发送消息"
+		},
+		"title": "告诉我们你的需求"
+	},
+	"documentation": {
+		"title": "文档"
+	},
+	"faq": {
+		"badge": "答疑",
+		"description": "这些是团队决定上手之前最常问的问题，我们把回答写得尽量直截了当。",
+		"title": "常见问题",
+		"items": {
+			"refundPolicy": {
+				"question": "退款政策是什么？",
+				"answer": "如果产品不合适，30 天内申请即可全额退款。"
+			},
+			"cancelSubscription": {
+				"question": "如何取消订阅？",
+				"answer": "在账户设置中打开「计费」即可随时取消，权益保留至当前周期结束。"
+			},
+			"changePlan": {
+				"question": "可以更换套餐吗？",
+				"answer": "可以。随时在「计费」中升级或降级，除非另有说明，变更在下一张账单生效。"
+			},
+			"freeTrial": {
+				"question": "有免费试用吗？",
+				"answer": "有。付费套餐包含 7 天试用，你可以和团队完整体验产品。"
+			}
+		}
+	},
+	"home": {
+		"hero": {
+			"new": "新",
+			"featureBadge": "多租户认证、计费与组织——开箱即用",
+			"title": "构建你的 SaaS，不再重造地基",
+			"subtitle": "一套面向生产环境的 TanStack Start 套件，认证、组织、计费和上线所需的 UI 模式都已内置——把时间留给真正的产品。",
+			"getStarted": "开始构建",
+			"documentation": "阅读文档",
+			"imageAlt": "产品仪表盘预览",
+			"preview": {
+				"organization": "Acme",
+				"start": "起始页",
+				"chatbot": "AI 聊天助手",
+				"organizationSettings": "组织设置",
+				"accountSettings": "账户设置",
+				"welcome": "欢迎来到这个组织的起始页！",
+				"newClients": "新客户",
+				"revenue": "营收",
+				"churn": "流失率",
+				"placeholder": "在这里放置你的内容…",
+				"userName": "Maya Chen",
+				"userEmail": "maya@acme.com"
+			}
+		},
+		"features": {
+			"badge": "产品",
+			"title": "从注册到规模化之间的一切",
+			"description": "注册、邀请、权限、计费，这些 SaaS 里最难啃的部分都有了有主见的默认方案——你的团队只需专注于客户真正愿意付费的产品。",
+			"feature1": {
+				"title": "团队与组织",
+				"subtitle": "邀请成员、管理角色，让每个工作区从第一天起彼此隔离。",
+				"description": "多租户结构开箱即用：创建组织、邀请团队、切换上下文，无需自行搭脚手架。",
+				"benefit1": {
+					"title": "按角色授权",
+					"description": "所有者、管理员和成员各有清晰的默认权限。"
+				},
+				"benefit2": {
+					"title": "真正可用的邀请",
+					"description": "邮件邀请和加入流程按真实上手场景打通，不是演示品。"
+				},
+				"benefit3": {
+					"title": "活跃工作区上下文",
+					"description": "用户在组织之间切换，不会丢失在产品中的位置。"
+				}
+			},
+			"feature2": {
+				"title": "不碍事的计费",
+				"subtitle": "订阅、试用与客户门户，配上一份干净的套餐目录。",
+				"description": "套餐只需配置一次，结账和计费门户接管其余环节，你继续专心发布产品功能。",
+				"benefit1": {
+					"title": "灵活的套餐目录",
+					"description": "月付、年付和一次性买断，清晰映射你的定价模型。"
+				},
+				"benefit2": {
+					"title": "无需定制代码的试用",
+					"description": "给团队足够时间评估，再做承诺。"
+				},
+				"benefit3": {
+					"title": "自助升级",
+					"description": "客户在门户中自行管理支付方式和套餐变更。"
+				}
+			}
+		},
+		"testimonials": {
+			"badge": "客户",
+			"title": "交付真实产品的团队都在用",
+			"description": "这里是示例引语，等你的产品上线，把它们换成真实客户的声音。",
+			"items": {
+				"item1": {
+					"quote": "我们用一个真正可扩展的地基，替掉了数月的认证和计费开发。第一批付费客户几周内就上线了，而不是几个季度。",
+					"name": "Maya Chen",
+					"role": "Northline 创始人"
+				},
+				"item2": {
+					"quote": "组织模型和我们的销售方式天然吻合。邀请、角色、工作区切换直接能用——时间都花在了产品上。",
+					"name": "Jonas Weber",
+					"role": "Latticeworks CTO"
+				},
+				"item3": {
+					"quote": "默认干净、结构清晰，定制时没有任何东西跟你较劲。就像一支资深团队给你留好了起点。",
+					"name": "Amelia Ortiz",
+					"role": "Harbor Studio 产品负责人"
+				}
+			}
+		},
+		"cta": {
+			"badge": "开始使用",
+			"title": "准备好发布下一个版本了吗？",
+			"description": "从一套完整的 SaaS 地基出发：认证、组织、计费和 UI 都已就位，接下来只需要把它变成你自己的产品。",
+			"primary": "创建账号",
+			"secondary": "联系我们"
+		}
+	},
+	"newsletter": {
+		"email": "邮箱",
+		"hints": {
+			"error": {
+				"message": "订阅失败，请稍后再试。"
+			},
+			"success": {
+				"message": "你已在列表中，我们只会偶尔分享产品动态。",
+				"title": "已订阅"
+			}
+		},
+		"submit": "订阅",
+		"subtitle": "产品笔记与发布动态——没有噪音。",
+		"title": "保持联系"
+	},
+	"notFound": {
+		"code": "404",
+		"title": "页面不存在",
+		"goToDashboard": "前往仪表盘",
+		"goToHomepage": "返回首页"
+	},
+	"common": {
+		"footer": {
+			"blog": "博客",
+			"features": "功能",
+			"pricing": "定价",
+			"privacyPolicy": "隐私政策",
+			"termsAndConditions": "服务条款",
+			"builtWith": "基于 supastarter 构建"
+		},
+		"menu": {
+			"blog": "博客",
+			"changelog": "更新日志",
+			"contact": "联系",
+			"dashboard": "仪表盘",
+			"docs": "文档",
+			"faq": "常见问题",
+			"login": "登录",
+			"pricing": "定价"
+		},
+		"aria": {
+			"menu": "菜单",
+			"language": "语言"
+		},
+		"tableOfContents": {
+			"title": "本页目录"
+		},
+		"colorMode": {
+			"system": "跟随系统",
+			"light": "浅色",
+			"dark": "深色"
+		}
+	}
+}
