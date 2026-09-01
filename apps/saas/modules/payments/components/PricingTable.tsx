@@ -94,7 +94,7 @@ export function PricingTable({
 						onValueChange={(value) => setInterval(value as typeof interval)}
 						data-test="price-table-interval-tabs"
 					>
-						<TabsList>
+						<TabsList variant="line">
 							<TabsTrigger value="month">{t("pricing.monthly")}</TabsTrigger>
 							<TabsTrigger value="year">{t("pricing.yearly")}</TabsTrigger>
 						</TabsList>

@@ -89,7 +89,7 @@ export function PricingSection() {
 								onValueChange={(value) => setBillingInterval(value as "month" | "year")}
 								data-test="price-table-interval-tabs"
 							>
-								<TabsList>
+								<TabsList variant="line">
 									<TabsTrigger value="month">{t("pricing.monthly")}</TabsTrigger>
 									<TabsTrigger value="year">{t("pricing.yearly")}</TabsTrigger>
 								</TabsList>
