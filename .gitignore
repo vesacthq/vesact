@@ -50,3 +50,4 @@ dist/
 # other
 .react-email/
 .content-collections/
+.tanstack/
