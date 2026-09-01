@@ -61,7 +61,7 @@ export function OnboardingForm() {
 
 			{steps.length > 1 && (
 				<div className="mb-6 gap-3 flex items-center">
-					<Progress value={(onboardingStep / steps.length) * 100} className="h-2" />
+					<Progress value={(onboardingStep / steps.length) * 100} className="w-full" />
 					<span className="text-xs shrink-0 text-foreground/60">
 						{t("onboarding.step", {
 							step: onboardingStep,
