@@ -16,7 +16,7 @@ Explicit user instructions win; if a documented command fails, report it rather 
 ### Environment
 
 Copy `.env.local.example` to `.env.local`. For local boot, set `DATABASE_URL` to
-`postgresql://postgres:postgres@localhost:5432/flint`, set `BETTER_AUTH_SECRET`,
+`postgresql://postgres:postgres@localhost:5433/flint`, set `BETTER_AUTH_SECRET`,
 and keep the local `VITE_*` URLs from the example. OAuth, mail, payments, storage,
 and AI variables are only needed when using those integrations.
 

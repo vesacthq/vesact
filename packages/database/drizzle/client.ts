@@ -6,7 +6,7 @@ import * as schema from "./schema/postgres";
 // https://orm.drizzle.team/docs/get-started-postgresql
 
 const databaseUrl =
-	process.env.DATABASE_URL ?? "postgresql://postgres:postgres@localhost:5432/flint";
+	process.env.DATABASE_URL ?? "postgresql://postgres:postgres@localhost:5433/flint";
 
 export const db = drizzle(databaseUrl, {
 	schema,
