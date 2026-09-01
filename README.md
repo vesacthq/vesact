@@ -1,8 +1,3 @@
-# supastarter for Tanstack Start
+# flint
 
-supastarter is the ultimate starter kit for production-ready, scalable SaaS applications.
-
-## Helpful links
-
-- [📘 Documentation](https://supastarter.dev/docs/tanstack-start)
-- [🚀 Demo](https://tanstack-start-demo.supastarter.dev)
+Based on [supastarter for TanStack Start](https://supastarter.dev/docs/tanstack-start).
