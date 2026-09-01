@@ -75,7 +75,7 @@ function UserBanStatus({ user, currentTime }: { user: AdminUser; currentTime: nu
 		<TooltipProvider delay={0}>
 			<Tooltip>
 				<TooltipTrigger>
-					<Badge status="error">{translations("admin.users.ban.status.banned")}</Badge>
+					<Badge variant="destructive">{translations("admin.users.ban.status.banned")}</Badge>
 				</TooltipTrigger>
 				<TooltipContent>
 					<div className="space-y-1">

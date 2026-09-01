@@ -277,9 +277,7 @@ function MetricCard({
 			<CardContent className="p-3.5 pt-0">
 				<div className="flex items-center justify-between">
 					<strong className="font-semibold text-lg tracking-tight text-foreground">{value}</strong>
-					<Badge status={trendPositive ? "success" : "error"} className="px-2 py-0.5 normal-case">
-						{trend}
-					</Badge>
+					<Badge variant={trendPositive ? "success" : "destructive"}>{trend}</Badge>
 				</div>
 				<svg
 					viewBox={`0 0 ${SPARKLINE_WIDTH} ${SPARKLINE_HEIGHT}`}

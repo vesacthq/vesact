@@ -1,6 +1,6 @@
 import { useTranslations } from "@i18n/intl";
-import type { BadgeProps } from "@repo/ui/components/badge";
-import { Badge } from "@repo/ui/components/badge";
+import { Badge, type badgeVariants } from "@repo/ui/components/badge";
+import type { VariantProps } from "class-variance-authority";
 
 export function SubscriptionStatusBadge({ status }: { status: string; className?: string }) {
 	const t = useTranslations();
@@ -16,16 +16,16 @@ export function SubscriptionStatusBadge({ status }: { status: string; className?
 		unpaid: t("settings.billing.activePlan.status.unpaid"),
 	};
 
-	const badgeColors: Record<string, BadgeProps["status"]> = {
+	const badgeColors: Record<string, VariantProps<typeof badgeVariants>["variant"]> = {
 		active: "success",
-		canceled: "error",
-		expired: "error",
+		canceled: "destructive",
+		expired: "destructive",
 		incomplete: "warning",
 		past_due: "warning",
 		paused: "warning",
 		trialing: "info",
-		unpaid: "error",
+		unpaid: "destructive",
 	};
 
-	return <Badge status={badgeColors[status]}>{badgeLabels[status]}</Badge>;
+	return <Badge variant={badgeColors[status]}>{badgeLabels[status]}</Badge>;
 }

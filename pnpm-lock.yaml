@@ -614,6 +614,9 @@ importers:
       boring-avatars:
         specifier: 'catalog:'
         version: 2.0.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      class-variance-authority:
+        specifier: 'catalog:'
+        version: 0.7.1
       cropperjs:
         specifier: 'catalog:'
         version: 2.1.1

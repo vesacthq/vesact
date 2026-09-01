@@ -60,7 +60,7 @@ export function StatsTile({
 						{formattedValue}
 						{context && <small>{context}</small>}
 					</strong>
-					{trend && <Badge status={trend > 0 ? "success" : "error"}>{formattedTrend}</Badge>}
+					{trend && <Badge variant={trend > 0 ? "success" : "destructive"}>{formattedTrend}</Badge>}
 				</div>
 				{children ? <div className="mt-4 w-full">{children}</div> : null}
 			</CardContent>
