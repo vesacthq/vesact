@@ -12,7 +12,7 @@ interface StatsTileChartProps {
 	dataKey: string;
 	chartConfig: ChartConfig;
 	gradientId: string;
-	tooltipFormatter: (value: number | string) => React.ReactNode;
+	tooltipFormatter: React.ComponentProps<typeof ChartTooltipContent>["formatter"];
 	className?: string;
 }
 
