@@ -9,6 +9,22 @@ description: "Use when adding a reusable Shadcn-style React component or Base UI
 
 Use for reusable, app-agnostic primitives in `packages/ui`. Do not move feature components, data fetching, routing, or translations into the UI package.
 
+## Registry installs (shadcn / @reui)
+
+Prefer installing from a registry over hand-writing when an official or ReUI item exists.
+
+1. Run from `packages/ui`: `pnpm dlx shadcn@latest add <name>` (or `@reui/<name>`; the `@reui` registry and its auth are configured in `components.json`). Never pass `--overwrite` by default; when the CLI prompts about an existing file, answer no and resolve deliberately (`yes n | pnpm dlx shadcn@latest add ... --yes` for non-interactive runs).
+2. Audit CLI side effects with `git status` and `git diff` before anything else. Known offenders, all to roll back unless intended:
+   - `tooling/tailwind/theme.css`: the CLI rewrites theme tokens to upstream defaults.
+   - `packages/ui/package.json`: the CLI pins versions that should stay `catalog:` and adds dependencies the code may not need after adaptation.
+   - Existing components overwritten as dependencies of the installed item.
+3. Post-process every installed file:
+   - Rewrite `@/` alias imports to relative paths (`@/lib/index` → `../lib`); app tsconfigs compile `packages/ui` sources directly and do not resolve the `@/*` alias.
+   - Remove `"use client"` directives.
+   - Replace Next.js-isms with repo equivalents: `next-themes` → `components/theme-provider.tsx` (`useTheme`), `next/link` and `next/navigation` → TanStack Router.
+4. Map variants faithfully: when the official item has a variant matching the previous look (for example `TabsList variant="line"`), use it instead of accepting the default.
+5. Continue with the verification steps below.
+
 ## Procedure
 
 1. Search `packages/ui/components/` for an existing primitive or composition before creating one.
@@ -28,7 +44,7 @@ Use for reusable, app-agnostic primitives in `packages/ui`. Do not move feature 
    ```
    Also run affected app E2E for interactive/user-visible changes.
 
-Canonical references: `packages/ui/components/button.tsx` implements variants, loading, ref forwarding, and `render`; `packages/ui/components/dialog.tsx` wraps Base UI primitives.
+Canonical references: `packages/ui/components/button.tsx` implements variants and `render` composition (loading states compose `Spinner` with `disabled` at call sites); `packages/ui/components/dialog.tsx` wraps Base UI primitives.
 
 ## Done
 
@@ -39,6 +55,6 @@ Canonical references: `packages/ui/components/button.tsx` implements variants, l
 
 - Adding `"use client"`; TanStack Start does not use the RSC boundary.
 - Copying Radix `asChild` examples instead of the `render` composition API.
-- Trusting `packages/ui/components.json`'s `rsc: true`; it is Shadcn metadata, not this app's runtime model.
+- Leaving `@/` alias imports or `"use client"` in installed registry files; both break app type-checks or are dead weight in TanStack Start.
 - Embedding feature translations, router links, or API calls in a shared primitive.
 - Assuming Turbo runs UI unit tests when `packages/ui/package.json` defines no test task.
