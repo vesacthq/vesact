@@ -20,14 +20,6 @@
 	}
 }
 
-@utility no-scrollbar {
-	&::-webkit-scrollbar {
-		display: none;
-	}
-	-ms-overflow-style: none;
-	scrollbar-width: none;
-}
-
 @theme inline {
 	--font-noto-sans: "Noto Sans";
 	--font-roboto-slab: "Roboto Slab";

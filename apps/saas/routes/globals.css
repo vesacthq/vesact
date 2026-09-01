@@ -20,14 +20,6 @@
 	max-width: var(--container-7xl);
 }
 
-@utility no-scrollbar {
-	&::-webkit-scrollbar {
-		display: none;
-	}
-	-ms-overflow-style: none;
-	scrollbar-width: none;
-}
-
 @layer base {
 	*,
 	::after,
