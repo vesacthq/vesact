@@ -87,7 +87,7 @@ function NavMenuList({
 						"gap-3 px-3 py-2 text-sm flex w-full items-center rounded-lg whitespace-nowrap transition-colors",
 						{
 							"font-semibold bg-touch/10": menuItem.isActive,
-							"hover:bg-accent/50": !menuItem.isActive,
+							"hover:bg-muted": !menuItem.isActive,
 							"md:justify-center md:px-2": isCollapsedEffective,
 						},
 					);
@@ -222,7 +222,7 @@ function NavMenuList({
 															to={subItem.href}
 															onClick={onLinkClick}
 															className={cn(
-																"py-1.5 pl-2 pr-3 text-sm flex w-full items-center rounded-md text-muted-foreground transition-colors hover:bg-accent/50",
+																"py-1.5 pl-2 pr-3 text-sm flex w-full items-center rounded-md text-muted-foreground transition-colors hover:bg-muted",
 																subActive && "font-semibold text-foreground",
 															)}
 															preload="intent"

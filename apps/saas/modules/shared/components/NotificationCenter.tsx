@@ -146,8 +146,8 @@ export function NotificationCenter({ className }: { className?: string }) {
 											type="button"
 											className={cn(
 												"px-3 py-2 text-sm w-full rounded-md text-left transition-colors",
-												"hover:bg-accent",
-												isUnread && "bg-accent/40",
+												"hover:bg-muted",
+												isUnread && "bg-muted/40",
 											)}
 											onClick={() => void onItemActivate(n)}
 										>
