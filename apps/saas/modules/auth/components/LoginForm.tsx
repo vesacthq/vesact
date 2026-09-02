@@ -26,7 +26,9 @@ import { withQuery } from "ufo";
 import { z } from "zod";
 
 import { type OAuthProvider, oAuthProviders } from "../constants/oauth-providers";
+import { lastUsedLoginMethodIds } from "../lib/last-used-login-method";
 import { getSafeRedirectPath } from "../lib/redirects";
+import { LastUsedBadge } from "./LastUsedBadge";
 import { LoginModeSwitch } from "./LoginModeSwitch";
 import { SocialSigninButton } from "./SocialSigninButton";
 
@@ -250,6 +252,15 @@ export function LoginForm() {
 								{signinMode === "magic-link"
 									? t("auth.login.sendMagicLink")
 									: t("auth.login.submit")}
+								{!(authConfig.enableMagicLink && authConfig.enablePasswordLogin) && (
+									<LastUsedBadge
+										method={
+											signinMode === "magic-link"
+												? lastUsedLoginMethodIds.magicLink
+												: lastUsedLoginMethodIds.password
+										}
+									/>
+								)}
 							</Button>
 						</form>
 					</Form>
@@ -274,11 +285,12 @@ export function LoginForm() {
 								{authConfig.enablePasskeys && (
 									<Button
 										variant="secondary"
-										className="sm:col-span-2 w-full"
+										className="sm:col-span-2 relative w-full overflow-visible"
 										onClick={() => signInWithPasskey()}
 									>
 										<KeyIcon className="mr-1.5 size-4 text-primary" />
 										{t("auth.login.loginWithPasskey")}
+										<LastUsedBadge method={lastUsedLoginMethodIds.passkey} placement="corner" />
 									</Button>
 								)}
 							</div>
