@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ReuiDemoRouteImport } from './routes/reui-demo'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as ChangelogIndexRouteImport } from './routes/changelog/index'
@@ -21,11 +20,6 @@ import { Route as LegalSlugIndexRouteImport } from './routes/legal/$slug/index'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReuiDemoRoute = ReuiDemoRouteImport.update({
-  id: '/reui-demo',
-  path: '/reui-demo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -61,7 +55,6 @@ const LegalSlugIndexRoute = LegalSlugIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/reui-demo': typeof ReuiDemoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/': typeof BlogIndexRoute
   '/changelog/': typeof ChangelogIndexRoute
@@ -71,7 +64,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/reui-demo': typeof ReuiDemoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog': typeof BlogIndexRoute
   '/changelog': typeof ChangelogIndexRoute
@@ -82,7 +74,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/reui-demo': typeof ReuiDemoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/': typeof BlogIndexRoute
   '/changelog/': typeof ChangelogIndexRoute
@@ -94,7 +85,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/reui-demo'
     | '/sitemap.xml'
     | '/blog/'
     | '/changelog/'
@@ -104,7 +94,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/reui-demo'
     | '/sitemap.xml'
     | '/blog'
     | '/changelog'
@@ -114,7 +103,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/reui-demo'
     | '/sitemap.xml'
     | '/blog/'
     | '/changelog/'
@@ -125,7 +113,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ReuiDemoRoute: typeof ReuiDemoRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   BlogIndexRoute: typeof BlogIndexRoute
   ChangelogIndexRoute: typeof ChangelogIndexRoute
@@ -141,13 +128,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reui-demo': {
-      id: '/reui-demo'
-      path: '/reui-demo'
-      fullPath: '/reui-demo'
-      preLoaderRoute: typeof ReuiDemoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -197,7 +177,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ReuiDemoRoute: ReuiDemoRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   BlogIndexRoute: BlogIndexRoute,
   ChangelogIndexRoute: ChangelogIndexRoute,
