@@ -48,20 +48,25 @@ const enforceMainAppGuardsForRouteFn = createServerFn({ method: "GET", strict: f
 				throw redirect({ href: "/choose-plan" });
 			}
 		}
+
+		const cookie = getRequestHeaders().get("cookie") ?? "";
+		return !/(?:^|;\s*)sidebar_state=false(?:;|$)/.test(cookie);
 	},
 );
 
 export const Route = createFileRoute("/_authenticated/_main")({
 	loader: async () => {
-		await enforceMainAppGuardsForRouteFn();
-		return {};
+		const sidebarDefaultOpen = await enforceMainAppGuardsForRouteFn();
+		return { sidebarDefaultOpen };
 	},
 	component: MainLayout,
 });
 
 function MainLayout() {
+	const { sidebarDefaultOpen } = Route.useLoaderData();
+
 	return (
-		<AppWrapper>
+		<AppWrapper defaultSidebarOpen={sidebarDefaultOpen}>
 			<Outlet />
 		</AppWrapper>
 	);
