@@ -346,7 +346,7 @@ function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
 			data-slot="sidebar-content"
 			data-sidebar="content"
 			className={cn(
-				"no-scrollbar min-h-0 gap-0 flex flex-1 flex-col overflow-auto group-data-[collapsible=icon]:overflow-hidden",
+				"no-scrollbar min-h-0 gap-2 flex flex-1 flex-col overflow-auto group-data-[collapsible=icon]:overflow-hidden",
 				className,
 			)}
 			{...props}
@@ -429,7 +429,7 @@ function SidebarMenu({ className, ...props }: React.ComponentProps<"ul">) {
 		<ul
 			data-slot="sidebar-menu"
 			data-sidebar="menu"
-			className={cn("min-w-0 gap-0 flex w-full flex-col", className)}
+			className={cn("min-w-0 gap-1 flex w-full flex-col", className)}
 			{...props}
 		/>
 	);

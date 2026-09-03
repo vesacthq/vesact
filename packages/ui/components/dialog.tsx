@@ -48,7 +48,7 @@ function DialogContent({
 			<DialogPrimitive.Popup
 				data-slot="dialog-content"
 				className={cn(
-					"gap-4 p-4 text-sm sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-popover text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none",
+					"gap-6 p-6 text-sm sm:max-w-md data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-popover text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none",
 					className,
 				)}
 				{...props}
@@ -57,7 +57,7 @@ function DialogContent({
 				{showCloseButton && (
 					<DialogPrimitive.Close
 						data-slot="dialog-close"
-						render={<Button variant="ghost" className="top-2 right-2 absolute" size="icon-sm" />}
+						render={<Button variant="ghost" className="top-4 right-4 absolute" size="icon-sm" />}
 					>
 						<RiCloseLine />
 						<span className="sr-only">Close</span>
@@ -85,10 +85,7 @@ function DialogFooter({
 	return (
 		<div
 			data-slot="dialog-footer"
-			className={cn(
-				"-mx-4 -mb-4 gap-2 p-4 sm:flex-row sm:justify-end flex flex-col-reverse rounded-b-xl border-t bg-muted/50",
-				className,
-			)}
+			className={cn("gap-2 sm:flex-row sm:justify-end flex flex-col-reverse", className)}
 			{...props}
 		>
 			{children}
@@ -103,7 +100,7 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
 	return (
 		<DialogPrimitive.Title
 			data-slot="dialog-title"
-			className={cn("text-base font-medium leading-none", className)}
+			className={cn("font-medium leading-none", className)}
 			{...props}
 		/>
 	);

@@ -1,7 +1,5 @@
-"use client";
-
+import { RiStarLine } from "@remixicon/react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { StarIcon } from "lucide-react";
 import { useState } from "react";
 
 import { cn } from "../../lib";
@@ -120,7 +118,7 @@ function Rating({
 					onMouseLeave={handleStarMouseLeave}
 				>
 					{/* Background star (empty) */}
-					<StarIcon
+					<RiStarLine
 						data-slot="rating-star-empty"
 						className={cn(starVariants({ size }), "text-muted-foreground/30")}
 					/>
@@ -132,7 +130,7 @@ function Rating({
 							width: filled ? "100%" : `${fillPercentage}%`,
 						}}
 					>
-						<StarIcon
+						<RiStarLine
 							data-slot="rating-star-filled"
 							className={cn(starVariants({ size }), "fill-yellow-400 text-yellow-400")}
 						/>

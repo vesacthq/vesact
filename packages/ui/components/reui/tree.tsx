@@ -1,9 +1,7 @@
-"use client";
-
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import type { ItemInstance } from "@headless-tree/core";
-import { MinusIcon, PlusIcon, ChevronDownIcon } from "lucide-react";
+import { RiSubtractLine, RiAddLine, RiArrowDownSLine } from "@remixicon/react";
 import { createContext, useContext } from "react";
 
 import { cn } from "../../lib";
@@ -143,20 +141,20 @@ function TreeItemLabel<T = any>({
 			{item.isFolder() &&
 				(toggleIconType === "plus-minus" ? (
 					item.isExpanded() ? (
-						<MinusIcon
+						<RiSubtractLine
 							className="size-3.5 text-muted-foreground"
 							stroke="currentColor"
 							strokeWidth="1"
 						/>
 					) : (
-						<PlusIcon
+						<RiAddLine
 							className="size-3.5 text-muted-foreground"
 							stroke="currentColor"
 							strokeWidth="1"
 						/>
 					)
 				) : (
-					<ChevronDownIcon className="size-4 text-muted-foreground in-aria-[expanded=false]:-rotate-90" />
+					<RiArrowDownSLine className="size-4 text-muted-foreground in-aria-[expanded=false]:-rotate-90" />
 				))}
 			{children || (typeof item.getItemName === "function" ? item.getItemName() : null)}
 		</span>

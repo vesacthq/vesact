@@ -60,7 +60,7 @@ function SheetContent({
 				{showCloseButton && (
 					<SheetPrimitive.Close
 						data-slot="sheet-close"
-						render={<Button variant="ghost" className="top-3 right-3 absolute" size="icon-sm" />}
+						render={<Button variant="ghost" className="top-4 right-4 absolute" size="icon-sm" />}
 					>
 						<RiCloseLine />
 						<span className="sr-only">Close</span>
@@ -75,7 +75,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
 	return (
 		<div
 			data-slot="sheet-header"
-			className={cn("gap-0.5 p-4 flex flex-col", className)}
+			className={cn("gap-1.5 p-4 flex flex-col", className)}
 			{...props}
 		/>
 	);
@@ -95,7 +95,7 @@ function SheetTitle({ className, ...props }: SheetPrimitive.Title.Props) {
 	return (
 		<SheetPrimitive.Title
 			data-slot="sheet-title"
-			className={cn("text-base font-medium text-foreground", className)}
+			className={cn("font-medium text-foreground", className)}
 			{...props}
 		/>
 	);

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-03
+
+### Changed
+
+#### UI
+
+- **Preset `b1Z5bbljM`**: `packages/ui/components.json` switches to the `base-vega` style with the `neutral` base color, and `tooling/tailwind/theme.css` carries the preset's neutral/blue tokens (`--primary`, sidebar primary, and chart colors on the blue scale, `--radius: 0.45rem`). The Chinese typography tokens and the tuned status tokens (`success`, `warning`, `info`, `invert`, `focus`) are unchanged. All 28 shared components were reinstalled from the official registry with shadcn CLI 4.20.1, and the nine ReUI components under `packages/ui/components/reui` were reinstalled from the `@reui` registry so their icons resolve to `@remixicon/react`. The local extras stay: `Badge` `info`/`success`/`warning` and `Alert` `primary`/`success`. The preset's Inter font is not applied; both apps keep their own `--font-sans` (Noto Sans with CJK fallbacks). The workspace `shadcn` dependency stays at 4.19.1 because its `tailwind.css` is identical to 4.20.1.
+
 ## 2026-09-02
 
 ### Added
