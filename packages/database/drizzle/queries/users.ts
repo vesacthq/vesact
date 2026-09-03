@@ -86,11 +86,13 @@ export async function createUserAccount({
 	userId,
 	providerId,
 	accountId,
+	issuer,
 	hashedPassword,
 }: {
 	userId: string;
 	providerId: string;
 	accountId: string;
+	issuer: string;
 	hashedPassword?: string;
 }) {
 	const [{ id }] = await db
@@ -99,6 +101,7 @@ export async function createUserAccount({
 			userId,
 			accountId,
 			providerId,
+			issuer,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			password: hashedPassword,

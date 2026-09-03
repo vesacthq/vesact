@@ -4,6 +4,21 @@
 
 ### Changed
 
+#### Authentication
+
+- **Better Auth 1.7 account identity**: Added the required `account.issuer` column and unique `(issuer, accountId)` index (`account_issuer_accountId_uidx`) to the PostgreSQL, MySQL, and SQLite Drizzle schemas. Set `account.identityStrategy` to `"provider-id"` so existing email/password, Google, and GitHub accounts keep their 1.6 provider-scoped identity (`local:credential`, `local:oauth:google`, `local:oauth:github`). Two-factor `verified` now defaults to `true` to match Better Auth 1.7. Existing databases need an issuer backfill before applying the unique index. Follow the official [Better Auth 1.7 migration guide](https://better-auth.com/docs/guides/1-7-upgrade-guide). For a typical email/password + Google + GitHub setup:
+
+```sql
+ALTER TABLE account ADD COLUMN issuer TEXT;
+UPDATE account SET issuer = 'local:credential' WHERE providerId = 'credential' AND issuer IS NULL;
+UPDATE account SET issuer = 'local:oauth:google' WHERE providerId = 'google' AND issuer IS NULL;
+UPDATE account SET issuer = 'local:oauth:github' WHERE providerId = 'github' AND issuer IS NULL;
+ALTER TABLE account ALTER COLUMN issuer SET NOT NULL;
+CREATE UNIQUE INDEX account_issuer_accountId_uidx ON account (issuer, "accountId");
+```
+
+Then apply the rest of the schema with `pnpm --filter @repo/database push`.
+
 #### UI
 
 - **Preset `b1Z5bbljM`**: `packages/ui/components.json` switches to the `base-vega` style with the `neutral` base color, and `tooling/tailwind/theme.css` carries the preset's neutral/blue tokens (`--primary`, sidebar primary, and chart colors on the blue scale, `--radius: 0.45rem`). The Chinese typography tokens and the tuned status tokens (`success`, `warning`, `info`, `invert`, `focus`) are unchanged. All 28 shared components were reinstalled from the official registry with shadcn CLI 4.20.1, and the nine ReUI components under `packages/ui/components/reui` were reinstalled from the `@reui` registry so their icons resolve to `@remixicon/react`. The local extras stay: `Badge` `info`/`success`/`warning` and `Alert` `primary`/`success`. The preset's Inter font is not applied; both apps keep their own `--font-sans` (Noto Sans with CJK fallbacks). The workspace `shadcn` dependency stays at 4.19.1 because its `tailwind.css` is identical to 4.20.1.
@@ -12,6 +27,10 @@
 #### Marketing
 
 - **ReUI demo route removed**: `/reui-demo` is gone; the changelog timeline keeps using `reui/timeline` and `reui/badge`.
+
+#### Dependencies
+
+- **Production dependencies**: Refreshed the lockfile for catalog bumps including `better-auth` and `@better-auth/passkey` `1.7.2`, `@scalar/hono-api-reference` `^0.12.0`, `ai` `^7.0.85`, `@ai-sdk/anthropic` `^4.0.46`, `@ai-sdk/openai` `^4.0.52`, `@ai-sdk/react` `^4.0.88`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` `3.1121.0`, `@tanstack/react-query` `^5.102.8`, `@tanstack/react-router` `^1.170.32`, `@tanstack/react-start` `^1.168.49`, `@tanstack/react-table` `^9.2.4`, `cropperjs` `2.2.0`, `es-toolkit` `^1.52.0`, `hono` `^4.13.5`, `input-otp` `^1.5.0`, `lucide-react` `^1.37.0`, `nuqs` `^2.10.1`, `openai` `^7.8.0`, `react-dropzone` `^20.1.1`, `resend` `^6.25.0`, `sharp` `^0.35.4`, `streamdown` `^2.6.0`, `stripe` `^22.6.0`, `uuid` `^14.0.2`, and `zod` `^4.5.4`. Bumped `@sindresorhus/slugify` to `^3.0.1`. **Development dependencies**: Bumped `turbo` to `^2.10.12`, `oxlint` to `1.80.0`, `oxfmt` to `0.65.0`, `@types/node` to `26.4.0`, `@vitejs/plugin-react` to `^6.1.1`, and `vite` to `^8.2.2`. Skipped `ai` `7.0.90`, `@ai-sdk/openai` `4.0.56`, `@ai-sdk/react` `4.0.93`, `lucide-react` `1.39.0`, `nodemailer` `9.1.1`, and `@aws-sdk/*` `3.1124.0` (published less than 24 hours ago). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
 
 ## 2026-09-02
 
@@ -34,6 +53,74 @@
 
 - **Official shadcn/ui components**: All 24 shared UI components in `packages/ui/components` are now installed from the official shadcn registry (`base-nova` style, preset `b5aYs0a9Lc`: olive base and theme, remixicon icons), replacing the hand-written Shadcn-style implementations. Both apps import `shadcn/tailwind.css` and `tw-animate-css` in `globals.css`, and the shared theme in `tooling/tailwind/theme.css` uses `@theme inline` with the nova olive/emerald tokens. API changes at call sites: `Button` no longer has `loading` (compose `Spinner` with `disabled`), its default variant is `default` (the old implicit `secondary` is now explicit), and `variant="primary"` is `variant="default"`; `Badge` uses `variant` instead of `status` (`error` maps to `destructive`, soft `info`/`success`/`warning` variants added); `Alert` maps `error` to `destructive` (with added `primary`/`success` variants); `Progress` composes `ProgressTrack`/`ProgressIndicator`; `Toaster` drops `position`/`closeLabel` (both built in); `TabsList` uses the official `line` variant where the underline style is kept. The custom `touch` color token was removed in favor of `primary`. New workspace dependencies: `shadcn`, `tw-animate-css`, `@remixicon/react`. Run `pnpm install` after pulling.
 
+#### Dependencies
+
+- No new dependency bumps today. Skipped `ai` `7.0.87`, `@ai-sdk/openai` `4.0.53`, `@ai-sdk/react` `4.0.90`, `lucide-react` `1.38.0`, `nodemailer` `9.1.0`, and `@aws-sdk/*` `3.1123.0` (published less than 24 hours ago). Merged `main` to include the last-used login method feature. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-09-01
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.85`, `@ai-sdk/anthropic` to `^4.0.46`, `@ai-sdk/openai` to `^4.0.52`, and `@ai-sdk/react` to `^4.0.88`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-08-31
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `lucide-react` to `^1.37.0` and `zod` to `^4.5.4`. **Development dependencies**: Bumped `tsx` to `^4.23.13`. Refreshed the lockfile for previously cataloged bumps including `better-auth` and `@better-auth/passkey` `1.7.2`, `@scalar/hono-api-reference` `^0.12.0`, `@tanstack/react-router` `^1.170.32`, `@tanstack/react-start` `^1.168.49`, `@tanstack/react-table` `^9.2.4`, `turbo` `^2.10.12`, `oxlint` `1.80.0`, and `oxfmt` `0.65.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-08-30
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@ai-sdk/anthropic` to `^4.0.45`, `@ai-sdk/openai` to `^4.0.51`, `@ai-sdk/react` to `^4.0.87`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1121.0`, `@scalar/hono-api-reference` to `^0.12.0`, `@tanstack/react-table` to `^9.2.4`, `ai` to `^7.0.84`, `es-toolkit` to `^1.52.0`, `lucide-react` to `^1.35.0`, `resend` to `^6.25.0`, `use-intl` to `^4.14.1`, and `zod` to `^4.5.2`. **Development dependencies**: Refreshed the lockfile for previously cataloged bumps including `turbo` `^2.10.12`, `oxlint` `1.80.0`, `oxfmt` `0.65.0`, and `@types/node` `26.4.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-08-29
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1120.0`, `@tanstack/react-query` to `^5.102.8`, `@vitejs/plugin-react` to `^6.1.1`, `fumadocs-core` and `fumadocs-ui` to `16.15.4`, `fumadocs-mdx` to `15.4.0`, `nodemailer` to `^9.0.6`, `openai` to `^7.8.0`, `stripe` to `^22.6.0`, and `use-intl` to `^4.14.0`. Skipped `prisma` `8.x` pre-releases. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-08-28
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.83`, `@ai-sdk/anthropic` to `^4.0.44`, `@ai-sdk/openai` to `^4.0.50`, `@ai-sdk/react` to `^4.0.86`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1119.0`, `better-auth` and `@better-auth/passkey` to `1.7.2`, `@tanstack/react-query` to `^5.102.6`, `@tanstack/react-table` to `^9.2.3`, `fumadocs-core` and `fumadocs-ui` to `16.15.2`, `openai` to `^7.7.0`, `resend` to `^6.24.0`, and `sharp` to `^0.35.4`. **Development dependencies**: Bumped `@types/node` to `26.4.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-08-27
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1118.0`, `@tanstack/react-query` to `^5.102.4`, `hono` to `^4.13.5`, `nuqs` to `^2.10.1`, and `react-email` and `@react-email/ui` to `^6.9.3`. **Development dependencies**: Bumped `turbo` to `^2.10.12`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-08-26
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.79`, `@ai-sdk/anthropic` to `^4.0.42`, `@ai-sdk/openai` to `^4.0.47`, `@ai-sdk/react` to `^4.0.82`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1117.0`, `@tanstack/react-query` to `^5.102.3`, `hono` to `^4.13.4`, `lucide-react` to `^1.34.0`, `streamdown` to `^2.6.0`, `dodopayments` to `^2.48.0`, and `resend` to `^6.22.1`. **Development dependencies**: Bumped `@types/node` to `26.3.0`, `oxlint` to `1.80.0`, and `oxfmt` to `0.65.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-08-25
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `cropperjs` to `2.2.0`, `@tanstack/react-query` to `^5.102.2`, `fumadocs-core` and `fumadocs-ui` to `16.15.1`, and refreshed the lockfile for previously cataloged bumps including `ai` `^7.0.77`, `@ai-sdk/*` `^4.0.x`, `better-auth` and `@better-auth/passkey` `1.7.1`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` `3.1116.0`, `@tanstack/react-router` `^1.170.32`, `@tanstack/react-start` `^1.168.49`, `@vitejs/plugin-react` `^6.1.0`, `hono` `^4.13.3`, `input-otp` `^1.5.0`, `lucide-react` `^1.33.0`, `nuqs` `^2.10.0`, `openai` `^7.5.0`, `react-dropzone` `^20.1.1`, `dodopayments` `^2.47.0`, `resend` `^6.22.0`, `use-intl` `^4.13.7`, `uuid` `^14.0.2`, and `vite` `^8.2.2`. **Development dependencies**: Bumped `@types/react-dom` to `19.2.5`, `vitest` and `@vitest/coverage-v8` to `^4.1.11`, `oxlint` to `1.79.0`, `oxfmt` to `0.64.0`, and `turbo` to `^2.10.11`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-08-24
 
 ### Added
@@ -41,6 +128,52 @@
 #### Authentication
 
 - **Last used login method**: The login page shows a small "Last used" badge on the authentication method you signed in with last (password, magic link, passkey, or a social provider), using Better Auth's `lastLoginMethod` plugin. Social and passkey buttons show the badge on the top-right corner; password and magic-link tabs keep it inline next to the label.
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.77`, `@ai-sdk/anthropic` to `^4.0.41`, `@ai-sdk/openai` to `^4.0.46`, `@ai-sdk/react` to `^4.0.80`, `@tanstack/react-query` to `^5.102.0`, `@tanstack/react-router` to `^1.170.32`, and `@tanstack/react-start` to `^1.168.49`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-08-23
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.76`, `@ai-sdk/react` to `^4.0.79`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1116.0`, `fumadocs-core` and `fumadocs-ui` to `16.15.0`, `fumadocs-mdx` to `15.3.1`, and `resend` to `^6.22.0`. Refreshed the lockfile for previously cataloged bumps including `better-auth` and `@better-auth/passkey` `1.7.1`, `@tanstack/react-router` `^1.170.31`, `@tanstack/react-start` `^1.168.48`, `@vitejs/plugin-react` `^6.1.0`, `fumadocs-core`/`fumadocs-ui`/`fumadocs-mdx` `16.14.5`/`15.3.0`, `hono` `^4.13.3`, `input-otp` `^1.5.0`, `lucide-react` `^1.33.0`, `nuqs` `^2.10.0`, `openai` `^7.5.0`, `use-intl` `^4.13.7`, `dodopayments` `^2.47.0`, `react-dropzone` `^20.1.1`, and `uuid` `^14.0.2`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-08-22
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `ai` to `^7.0.73`, `@ai-sdk/openai` to `^4.0.45`, `@ai-sdk/react` to `^4.0.76`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1115.0`, `nuqs` to `^2.10.0`, `react-dropzone` to `^20.1.1`, `@scalar/hono-api-reference` to `^0.11.16`, and `resend` to `^6.21.0`. **Development dependencies**: Bumped `vite` to `^8.2.2`. Refreshed the lockfile for previously cataloged bumps including `better-auth` and `@better-auth/passkey` `1.7.1`, `@tanstack/react-router` `^1.170.31`, `@tanstack/react-start` `^1.168.48`, `@vitejs/plugin-react` `^6.1.0`, `fumadocs-core`/`fumadocs-ui`/`fumadocs-mdx` `16.14.5`/`15.3.0`, `hono` `^4.13.3`, `input-otp` `^1.5.0`, `lucide-react` `^1.33.0`, `openai` `^7.5.0`, `use-intl` `^4.13.7`, `dodopayments` `^2.47.0`, and `uuid` `^14.0.2`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-08-21
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@ai-sdk/anthropic` to `^4.0.40`, `@ai-sdk/openai` to `^4.0.44`, `@ai-sdk/react` to `^4.0.73`, `ai` to `^7.0.70`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1114.0`, `@tanstack/react-router` to `^1.170.31`, `@tanstack/react-start` to `^1.168.48`, `@vitejs/plugin-react` to `^6.1.0`, `lucide-react` to `^1.33.0`, and `fumadocs-mdx` to `15.3.0`. Refreshed the lockfile for previously cataloged bumps including `better-auth` and `@better-auth/passkey` `1.7.1`, `fumadocs-core`/`fumadocs-ui` `16.14.5`, `hono` `^4.13.3`, `input-otp` `^1.5.0`, `nuqs` `^2.9.6`, `openai` `^7.5.0`, `use-intl` `^4.13.7`, `dodopayments` `^2.47.0`, and `uuid` `^14.0.2`. Added the initial Drizzle migration under `packages/database/drizzle/migrations/`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-08-20
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `better-auth` and `@better-auth/passkey` to `1.7.1`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1113.0`, `ai` to `^7.0.68`, `@ai-sdk/openai` to `^4.0.43`, `@ai-sdk/react` to `^4.0.71`, `@tanstack/react-router` to `^1.170.30`, `@tanstack/react-start` to `^1.168.47`, `fumadocs-core` and `fumadocs-ui` to `16.14.5`, `hono` to `^4.13.3`, `input-otp` to `^1.5.0`, `lucide-react` to `^1.32.0`, `openai` to `^7.5.0`, `use-intl` to `^4.13.7`, `dodopayments` to `^2.47.0`, and `uuid` to `^14.0.2`. **Development dependencies**: Bumped `turbo` to `^2.10.11`, `vitest` and `@vitest/coverage-v8` to `^4.1.11`, `oxlint` to `1.79.0`, and `oxfmt` to `0.64.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-08-19
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `better-auth` and `@better-auth/passkey` to `1.7.0`. Better Auth 1.7 includes breaking schema changes — follow the [Better Auth 1.7 upgrade guide](https://better-auth.com/docs/guides/1-7-upgrade-guide) to update your database. Also bumped `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1112.0`, `nuqs` to `^2.9.6`, `openai` to `^7.5.0`, `use-intl` to `^4.13.7`, and `dodopayments` to `^2.47.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
 
 ## 2026-08-18
 
