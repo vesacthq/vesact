@@ -91,6 +91,7 @@ export const auth = betterAuth({
 		},
 	},
 	account: {
+		identityStrategy: "provider-id",
 		accountLinking: {
 			enabled: true,
 			trustedProviders: ["google", "github"],
