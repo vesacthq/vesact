@@ -8,6 +8,13 @@
 			"when": 1787285195544,
 			"tag": "0000_yellow_sumo",
 			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "7",
+			"when": 1788423178893,
+			"tag": "0001_furry_hobgoblin",
+			"breakpoints": true
 		}
 	]
 }
