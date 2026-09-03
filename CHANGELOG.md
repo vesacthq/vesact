@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-03
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Refreshed the lockfile for catalog bumps including `better-auth` and `@better-auth/passkey` `1.7.2`, `@scalar/hono-api-reference` `^0.12.0`, `ai` `^7.0.85`, `@ai-sdk/anthropic` `^4.0.46`, `@ai-sdk/openai` `^4.0.52`, `@ai-sdk/react` `^4.0.88`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` `3.1121.0`, `@tanstack/react-query` `^5.102.8`, `@tanstack/react-router` `^1.170.32`, `@tanstack/react-start` `^1.168.49`, `@tanstack/react-table` `^9.2.4`, `cropperjs` `2.2.0`, `es-toolkit` `^1.52.0`, `hono` `^4.13.5`, `input-otp` `^1.5.0`, `lucide-react` `^1.37.0`, `nuqs` `^2.10.1`, `openai` `^7.8.0`, `react-dropzone` `^20.1.1`, `resend` `^6.25.0`, `sharp` `^0.35.4`, `streamdown` `^2.6.0`, `stripe` `^22.6.0`, `uuid` `^14.0.2`, and `zod` `^4.5.4`. Bumped `@sindresorhus/slugify` to `^3.0.1`. **Development dependencies**: Bumped `turbo` to `^2.10.12`, `oxlint` to `1.80.0`, `oxfmt` to `0.65.0`, `@types/node` to `26.4.0`, `@vitejs/plugin-react` to `^6.1.1`, and `vite` to `^8.2.2`. Skipped `ai` `7.0.90`, `@ai-sdk/openai` `4.0.56`, `@ai-sdk/react` `4.0.93`, `lucide-react` `1.39.0`, `nodemailer` `9.1.1`, and `@aws-sdk/*` `3.1124.0` (published less than 24 hours ago). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-09-02
 
 ### Changed
