@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-04
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@ai-sdk/anthropic` to `^4.0.49`, `ai` to `^7.0.91`, `dodopayments` to `^2.49.0`, `fumadocs-core` and `fumadocs-ui` to `16.15.5`, `lucide-react` to `^1.39.0`, `nodemailer` to `^9.1.1`, `openai` to `^7.9.0`, `stripe` to `^22.6.1`, and `use-intl` to `^4.14.2`. **Development dependencies**: Bumped `oxlint` to `1.81.0`, `oxfmt` to `0.66.0`, and `@types/node` to `26.4.1`. Skipped `@ai-sdk/openai` `4.0.57`, `@ai-sdk/react` `4.0.94`, and `@aws-sdk/*` `3.1125.0` (published less than 24 hours ago). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-09-03
 
 ### Changed
