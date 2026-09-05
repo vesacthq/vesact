@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-05
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Refreshed the lockfile for catalog bumps including `@ai-sdk/anthropic` `^4.0.49`, `ai` `^7.0.91`, `dodopayments` `^2.49.0`, `fumadocs-core` and `fumadocs-ui` `16.15.5`, `lucide-react` `^1.39.0`, `nodemailer` `^9.1.1`, `openai` `^7.10.0`, `resend` `^6.26.0`, `stripe` `^22.6.1`, and `use-intl` `^4.14.2`. Bumped `@types/react-dom` to `19.2.7` and `postcss` to `8.5.28`. Bumped `nitro` to `3.0.260903-beta`. **Development dependencies**: Bumped `vitest` and `@vitest/coverage-v8` to `^5.0.0` (set `clearMocks: false` in Vitest configs to preserve mock call history across tests), `oxlint` to `1.81.0`, `oxfmt` to `0.66.0`, and `@types/node` to `26.4.1`. Skipped `@ai-sdk/openai` `4.0.58`, `@ai-sdk/react` `4.0.95`, `@aws-sdk/*` `3.1126.0`, `ai` `7.0.92`, and `lucide-react` `1.40.0` (published less than 24 hours ago). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-09-04
 
 ### Changed

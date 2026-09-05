@@ -10,6 +10,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
 	plugins: [react()],
 	test: {
+		clearMocks: false,
 		exclude: ["**/node_modules/**", "**/.output/**", "**/dist/**", "e2e/**"],
 	},
 });
