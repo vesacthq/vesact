@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-06
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@ai-sdk/openai` to `^4.0.59`, `@ai-sdk/react` to `^4.0.96`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1127.0`, `@base-ui/react` to `^1.8.0`, `ai` to `^7.0.93`, `autoprefixer` to `10.5.5`, `fumadocs-core` and `fumadocs-ui` to `16.15.7`, `hono` to `^4.13.7`, `lucide-react` to `^1.41.0`, and `nodemailer` to `^10.0.0`. **Development dependencies**: Bumped `@playwright/test` to `^1.63.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-09-05
 
 ### Changed
