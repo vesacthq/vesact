@@ -10,6 +10,10 @@
 
 ## 2026-09-05
 
+### Fixed
+
+- **Consola prompts**: `@repo/logs` imports `createConsola` from `consola` instead of `consola/core`. The core build does not implement `prompt`, which broke interactive scripts such as `create-user`.
+
 ### Changed
 
 #### Dependencies
