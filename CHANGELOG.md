@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-07
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@ai-sdk/openai` to `^4.0.60`, `better-auth` and `@better-auth/passkey` to `1.7.3`. Refreshed the lockfile for catalog bumps from the previous run including `@ai-sdk/anthropic` `^4.0.49`, `@ai-sdk/react` `^4.0.96`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` `3.1127.0`, `@base-ui/react` `^1.8.0`, `ai` `^7.0.93`, `autoprefixer` `10.5.5`, `dodopayments` `^2.49.0`, `fumadocs-core` and `fumadocs-ui` `16.15.7`, `hono` `^4.13.7`, `lucide-react` `^1.41.0`, `nodemailer` `^10.0.0`, `openai` `^7.10.0`, `resend` `^6.26.0`, `stripe` `^22.6.1`, and `use-intl` `^4.14.2`. Bumped `nitro` to `3.0.260903-beta`. **Development dependencies**: Bumped `@playwright/test` to `^1.63.0`, `@types/node` to `26.4.1`, `@types/react-dom` to `19.2.7`, `postcss` to `8.5.28`, `vitest` and `@vitest/coverage-v8` to `^5.0.0`, `oxlint` to `1.81.0`, and `oxfmt` to `0.66.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-09-06
 
 ### Changed
