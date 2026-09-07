@@ -7,13 +7,13 @@ packages:
 minimumReleaseAge: 1440
 
 catalog:
-  "@ai-sdk/anthropic": ^4.0.46
-  "@ai-sdk/openai": ^4.0.52
-  "@ai-sdk/react": ^4.0.88
-  "@aws-sdk/client-s3": 3.1121.0
-  "@aws-sdk/s3-request-presigner": 3.1121.0
-  "@base-ui/react": ^1.7.0
-  "@better-auth/passkey": 1.7.2
+  "@ai-sdk/anthropic": ^4.0.49
+  "@ai-sdk/openai": ^4.0.60
+  "@ai-sdk/react": ^4.0.96
+  "@aws-sdk/client-s3": 3.1127.0
+  "@aws-sdk/s3-request-presigner": 3.1127.0
+  "@base-ui/react": ^1.8.0
+  "@better-auth/passkey": 1.7.3
   "@bprogress/react": 1.2.7
   "@mdx-js/mdx": ^3.1.1
   "@orpc/client": 1.15.0
@@ -22,7 +22,7 @@ catalog:
   "@orpc/server": 1.15.0
   "@orpc/tanstack-query": 1.15.0
   "@orpc/zod": 1.15.0
-  "@playwright/test": ^1.62.1
+  "@playwright/test": ^1.63.0
   "@scalar/hono-api-reference": ^0.12.0
   "@shikijs/rehype": ^4.4.3
   "@sindresorhus/slugify": ^3.0.1
@@ -34,16 +34,16 @@ catalog:
   "@tanstack/react-table": ^9.2.4
   "@types/js-cookie": ^3.0.6
   "@types/mdx": ^2.0.14
-  "@types/node": 26.4.0
+  "@types/node": 26.4.1
   "@types/nodemailer": ^8.0.1
   "@types/nprogress": ^0.2.3
   "@types/react": 19.2.18
-  "@types/react-dom": 19.2.5
+  "@types/react-dom": 19.2.7
   "@vitejs/plugin-react": ^6.1.1
-  "@vitest/coverage-v8": ^4.1.11
-  ai: ^7.0.85
-  autoprefixer: 10.5.4
-  better-auth: 1.7.2
+  "@vitest/coverage-v8": ^5.0.0
+  ai: ^7.0.93
+  autoprefixer: 10.5.5
+  better-auth: 1.7.3
   boring-avatars: ^2.0.4
   class-variance-authority: ^0.7.1
   clsx: ^2.1.1
@@ -56,22 +56,22 @@ catalog:
   drizzle-orm: ^0.45.2
   drizzle-zod: 0.8.3
   es-toolkit: ^1.52.0
-  hono: ^4.13.5
+  hono: ^4.13.7
   input-otp: ^1.5.0
   js-cookie: ^3.0.8
-  lucide-react: ^1.37.0
+  lucide-react: ^1.41.0
   mdx: ^0.3.1
   mdx-bundler: ^10.1.1
   nanoid: ^6.0.1
-  nodemailer: ^9.0.6
+  nodemailer: ^10.0.0
   nprogress: ^0.2.0
   nuqs: ^2.10.1
-  openai: ^7.8.0
-  oxfmt: 0.65.0
-  oxlint: 1.80.0
+  openai: ^7.10.0
+  oxfmt: 0.66.0
+  oxlint: 1.81.0
   permix: ^4.1.2
   pg: ^8.23.0
-  postcss: 8.5.26
+  postcss: 8.5.28
   prettier: 3.9.4
   react: 19.2.8
   react-dom: 19.2.8
@@ -87,11 +87,11 @@ catalog:
   tsx: ^4.23.13
   typescript: 7.0.2
   ufo: ^1.6.4
-  use-intl: ^4.14.1
+  use-intl: ^4.14.2
   usehooks-ts: ^3.1.1
   uuid: ^14.0.2
   vite: ^8.2.2
-  vitest: ^4.1.11
+  vitest: ^5.0.0
   zod: ^4.5.4
 
 allowBuilds:
