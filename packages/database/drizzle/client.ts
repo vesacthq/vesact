@@ -8,6 +8,10 @@ import * as schema from "./schema/postgres";
 const databaseUrl =
 	process.env.DATABASE_URL ?? "postgresql://postgres:postgres@localhost:5433/vesact";
 
-export const db = drizzle(databaseUrl, {
+// Workers bind a socket to the request that opened it, so a pooled connection
+// cannot survive into the next request. Retiring a client after one checkout
+// keeps every socket inside one request; Hyperdrive does the real pooling.
+export const db = drizzle({
+	connection: { connectionString: databaseUrl, maxUses: 1 },
 	schema,
 });
