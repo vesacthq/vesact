@@ -51,3 +51,4 @@ dist/
 .react-email/
 .content-collections/
 .tanstack/
+.playwright-mcp/
