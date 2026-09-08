@@ -70,7 +70,6 @@ export const account = pgTable(
 		id: text("id")
 			.$defaultFn(() => cuid())
 			.primaryKey(),
-		issuer: text("issuer").notNull(),
 		accountId: text("accountId").notNull(),
 		providerId: text("providerId").notNull(),
 		userId: text("userId")
@@ -88,10 +87,7 @@ export const account = pgTable(
 			.$onUpdate(() => /* @__PURE__ */ new Date())
 			.notNull(),
 	},
-	(table) => [
-		uniqueIndex("account_issuer_accountId_uidx").on(table.issuer, table.accountId),
-		index("account_userId_idx").on(table.userId),
-	],
+	(table) => [index("account_userId_idx").on(table.userId)],
 );
 
 export const verification = pgTable(
