@@ -1,5 +1,54 @@
 # Changelog
 
+## 2026-09-08
+
+### Fixed
+
+- **Better Auth 1.7.3 account schema**: Better Auth 1.7.3 no longer writes `account.issuer`. The required column and unique `(issuer, accountId)` index added for 1.7.2 now fail the Drizzle adapter schema check on every auth request (`Required columns Better Auth never writes: account.issuer`), which blocks initial setup. Removed `issuer` from the PostgreSQL, MySQL, and SQLite Drizzle schemas, and stopped writing it from `createUserAccount`. Keep `account.identityStrategy: "provider-id"`. Existing databases that already applied the 1.7.2 column should drop it:
+
+```sql
+DROP INDEX IF EXISTS "account_issuer_accountId_uidx";
+ALTER TABLE account DROP COLUMN issuer;
+```
+
+Then apply the rest of the schema with `pnpm --filter @repo/database push`.
+
+## 2026-09-07
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@ai-sdk/openai` to `^4.0.60`, `better-auth` and `@better-auth/passkey` to `1.7.3`. Refreshed the lockfile for catalog bumps from the previous run including `@ai-sdk/anthropic` `^4.0.49`, `@ai-sdk/react` `^4.0.96`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` `3.1127.0`, `@base-ui/react` `^1.8.0`, `ai` `^7.0.93`, `autoprefixer` `10.5.5`, `dodopayments` `^2.49.0`, `fumadocs-core` and `fumadocs-ui` `16.15.7`, `hono` `^4.13.7`, `lucide-react` `^1.41.0`, `nodemailer` `^10.0.0`, `openai` `^7.10.0`, `resend` `^6.26.0`, `stripe` `^22.6.1`, and `use-intl` `^4.14.2`. Bumped `nitro` to `3.0.260903-beta`. **Development dependencies**: Bumped `@playwright/test` to `^1.63.0`, `@types/node` to `26.4.1`, `@types/react-dom` to `19.2.7`, `postcss` to `8.5.28`, `vitest` and `@vitest/coverage-v8` to `^5.0.0`, `oxlint` to `1.81.0`, and `oxfmt` to `0.66.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-09-06
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@ai-sdk/openai` to `^4.0.59`, `@ai-sdk/react` to `^4.0.96`, `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` to `3.1127.0`, `@base-ui/react` to `^1.8.0`, `ai` to `^7.0.93`, `autoprefixer` to `10.5.5`, `fumadocs-core` and `fumadocs-ui` to `16.15.7`, `hono` to `^4.13.7`, `lucide-react` to `^1.41.0`, and `nodemailer` to `^10.0.0`. **Development dependencies**: Bumped `@playwright/test` to `^1.63.0`. Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-09-05
+
+### Fixed
+
+- **Consola prompts**: `@repo/logs` imports `createConsola` from `consola` instead of `consola/core`. The core build does not implement `prompt`, which broke interactive scripts such as `create-user`.
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Refreshed the lockfile for catalog bumps including `@ai-sdk/anthropic` `^4.0.49`, `ai` `^7.0.91`, `dodopayments` `^2.49.0`, `fumadocs-core` and `fumadocs-ui` `16.15.5`, `lucide-react` `^1.39.0`, `nodemailer` `^9.1.1`, `openai` `^7.10.0`, `resend` `^6.26.0`, `stripe` `^22.6.1`, and `use-intl` `^4.14.2`. Bumped `@types/react-dom` to `19.2.7` and `postcss` to `8.5.28`. Bumped `nitro` to `3.0.260903-beta`. **Development dependencies**: Bumped `vitest` and `@vitest/coverage-v8` to `^5.0.0` (set `clearMocks: false` in Vitest configs to preserve mock call history across tests), `oxlint` to `1.81.0`, `oxfmt` to `0.66.0`, and `@types/node` to `26.4.1`. Skipped `@ai-sdk/openai` `4.0.58`, `@ai-sdk/react` `4.0.95`, `@aws-sdk/*` `3.1126.0`, `ai` `7.0.92`, and `lucide-react` `1.40.0` (published less than 24 hours ago). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
+## 2026-09-04
+
+### Changed
+
+#### Dependencies
+
+- **Production dependencies**: Bumped `@ai-sdk/anthropic` to `^4.0.49`, `ai` to `^7.0.91`, `dodopayments` to `^2.49.0`, `fumadocs-core` and `fumadocs-ui` to `16.15.5`, `lucide-react` to `^1.39.0`, `nodemailer` to `^9.1.1`, `openai` to `^7.9.0`, `stripe` to `^22.6.1`, and `use-intl` to `^4.14.2`. **Development dependencies**: Bumped `oxlint` to `1.81.0`, `oxfmt` to `0.66.0`, and `@types/node` to `26.4.1`. Skipped `@ai-sdk/openai` `4.0.57`, `@ai-sdk/react` `4.0.94`, and `@aws-sdk/*` `3.1125.0` (published less than 24 hours ago). Refresh the lockfile with `pnpm install` after pulling. `pnpm-workspace.yaml` enforces `minimumReleaseAge: 1440` (one day) at install time.
+
 ## 2026-09-03
 
 ### Changed
