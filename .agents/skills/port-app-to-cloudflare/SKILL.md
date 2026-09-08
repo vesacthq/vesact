@@ -91,8 +91,16 @@ implementation.
 7. Deploy from the app directory:
 
    ```bash
+   pnpm --filter <app> build
+   cd apps/<app>
    CLOUDFLARE_ACCOUNT_ID=6a8e5373d12070c930f09f1a82541a0b pnpm exec wrangler deploy
    ```
+
+   Server-side configuration goes in the app's own `wrangler.jsonc`: public URLs
+   as `vars`, everything else through `wrangler secret put`. `@repo/utils`
+   builds better-auth's `trustedOrigins` and the API CORS allow-list from
+   `process.env.VITE_SAAS_URL` at runtime, so a var is enough — without it every
+   auth request answers `403 INVALID_ORIGIN`.
 
 ## Pitfalls
 
@@ -122,6 +130,11 @@ below the release date of the pinned wrangler.
 
 **`minimumReleaseAge: 1440` blocks fresh releases.** `pnpm install` fails on any
 version published within 24 hours. Pick the newest release older than that.
+
+**Rebuild after editing `wrangler.jsonc`.** The build copies the config into
+`.output/server/wrangler.json`, and `.wrangler/deploy/config.json` points
+wrangler at that copy. Deploying without rebuilding ships the previous config
+and drops the change with no warning.
 
 **Do not delete `.wrangler/`.** The plugin writes `.wrangler/deploy/config.json`
 at build time, redirecting wrangler to the generated config under the output

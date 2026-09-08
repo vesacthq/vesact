@@ -5,6 +5,10 @@
 	"compatibility_date": "2026-09-03",
 	"compatibility_flags": ["nodejs_compat"],
 	"main": "./server.ts",
+	"vars": {
+		"VITE_SAAS_URL": "https://vesact-saas.vesact.workers.dev",
+		"VITE_MARKETING_URL": "https://vesact-marketing.vesact.workers.dev",
+	},
 	"hyperdrive": [
 		{
 			"binding": "HYPERDRIVE",
