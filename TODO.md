@@ -1,19 +1,8 @@
 # TODO
 
-## 按顺序
+具体待办在 [Issues](https://github.com/vesacthq/vesact/issues)。
 
-1. **CF 部署 `apps/marketing`** — 用 wrangler 手动跑通，验证 TanStack Start + Nitro 的 cloudflare preset。没有数据库依赖，适合先验证链路。
-2. **Neon + Hyperdrive** — 用 Hyperdrive 保持 `pg` driver，不改 `packages/database/drizzle/client.ts`。区域选 `ap-southeast-1` 或 `ap-northeast-1`。
-3. **CF 部署 `apps/saas`** — 依赖上面两步。环境变量三处各配各的：本地 `.env.local`、GitHub Actions secrets、`wrangler secret`。
-4. **写 deploy workflow** — 手动跑通之后再自动化。
-
-## 独立
-
-- **Turbo Remote Cache** — 只影响 CI 速度，和部署无关，随时可做。需要 Vercel 账号。
-
-## 触发式
-
-到条件了再做，提前做是浪费。
+这里只记触发式的事——它们没有开始时间，条件到了才做。做成 issue 会一直挂在列表里，反而看不见真正要做的东西。
 
 | 事项 | 触发点 |
 | --- | --- |
