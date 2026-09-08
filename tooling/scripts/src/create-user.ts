@@ -53,7 +53,6 @@ async function main() {
 		userId: adminUser.id,
 		providerId: "credential",
 		accountId: adminUser.id,
-		issuer: "local:credential",
 		hashedPassword,
 	});
 

@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-09-08
+
+### Fixed
+
+- **Better Auth 1.7.3 account schema**: Better Auth 1.7.3 no longer writes `account.issuer`. The required column and unique `(issuer, accountId)` index added for 1.7.2 now fail the Drizzle adapter schema check on every auth request (`Required columns Better Auth never writes: account.issuer`), which blocks initial setup. Removed `issuer` from the PostgreSQL, MySQL, and SQLite Drizzle schemas, and stopped writing it from `createUserAccount`. Keep `account.identityStrategy: "provider-id"`. Existing databases that already applied the 1.7.2 column should drop it:
+
+```sql
+DROP INDEX IF EXISTS "account_issuer_accountId_uidx";
+ALTER TABLE account DROP COLUMN issuer;
+```
+
+Then apply the rest of the schema with `pnpm --filter @repo/database push`.
+
 ## 2026-09-07
 
 ### Changed
