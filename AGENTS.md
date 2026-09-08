@@ -1,6 +1,6 @@
 # [AGENTS.md](http://AGENTS.md)
 
-This file applies to the whole `flint` repository.
+This file applies to the whole `vesact` repository.
 Mirror existing conventions and prefer nearby canonical implementations.
 Explicit user instructions win; if a documented command fails, report it rather than inventing a workaround.
 
@@ -16,7 +16,7 @@ Explicit user instructions win; if a documented command fails, report it rather 
 ### Environment
 
 Copy `.env.local.example` to `.env.local`. For local boot, set `DATABASE_URL` to
-`postgresql://postgres:postgres@localhost:5433/flint`, set `BETTER_AUTH_SECRET`,
+`postgresql://postgres:postgres@localhost:5433/vesact`, set `BETTER_AUTH_SECRET`,
 and keep the local `VITE_*` URLs from the example. OAuth, mail, payments, storage,
 and AI variables are only needed when using those integrations.
 

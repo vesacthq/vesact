@@ -34,7 +34,7 @@ export const openApiHandler = new OpenAPIHandler(router, {
 				return {
 					...(authSchema as Record<string, unknown>),
 					info: {
-						title: "flint API",
+						title: "vesact API",
 						version: "1.0.0",
 					},
 					servers: [

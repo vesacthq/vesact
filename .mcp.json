@@ -4,7 +4,7 @@
 			"type": "http",
 			"url": "https://proxy.collectui.pro/api/reui-mcp",
 			"headers": {
-				"Authorization": "Bearer reui_EdJDfhNdB2TcCF41",
+				"Authorization": "Bearer ${REUI_TOKEN}",
 				"X-Reui-Style": "base-vega"
 			}
 		}

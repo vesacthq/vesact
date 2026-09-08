@@ -1,7 +1,8 @@
 {
 	"$schema": "https://v2-9-15.turborepo.dev/schema.json",
 	"globalDependencies": ["**/.env.*local", ".env"],
-	"globalEnv": ["*"],
+	"globalEnv": ["NODE_ENV", "VITE_*"],
+	"globalPassThroughEnv": ["*"],
 	"tasks": {
 		"build": {
 			"dependsOn": ["^generate", "^build"],

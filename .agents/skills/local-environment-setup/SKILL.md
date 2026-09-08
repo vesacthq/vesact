@@ -17,7 +17,7 @@ Use for a fresh clone or broken local prerequisites. Do not provision cloud reso
    cp .env.local.example .env.local
    openssl rand -hex 32
    ```
-   Set `DATABASE_URL=postgresql://postgres:postgres@localhost:5433/flint`, paste the generated value into `BETTER_AUTH_SECRET`, and keep `VITE_SAAS_URL`, `VITE_MARKETING_URL`, and `VITE_DOCS_URL` at `3000`, `3001`, and `3002`. Leave provider values blank unless exercising that integration.
+   Set `DATABASE_URL=postgresql://postgres:postgres@localhost:5433/vesact`, paste the generated value into `BETTER_AUTH_SECRET`, and keep `VITE_SAAS_URL`, `VITE_MARKETING_URL`, and `VITE_DOCS_URL` at `3000`, `3001`, and `3002`. Leave provider values blank unless exercising that integration.
 3. Start PostgreSQL and wait for its health check:
    ```bash
    docker compose up -d postgres

@@ -4,12 +4,12 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: flint-postgres
+    container_name: vesact-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: flint
+      POSTGRES_DB: vesact
     ports:
       - "5433:5432"
     volumes:
@@ -22,7 +22,7 @@ services:
 
   minio:
     image: minio/minio:latest
-    container_name: flint-minio
+    container_name: vesact-minio
     restart: unless-stopped
     command: server /data --console-address ":9001"
     environment:
@@ -42,7 +42,7 @@ services:
   # Creates the default bucket on startup
   minio-setup:
     image: minio/mc:latest
-    container_name: flint-minio-setup
+    container_name: vesact-minio-setup
     depends_on:
       minio:
         condition: service_healthy
