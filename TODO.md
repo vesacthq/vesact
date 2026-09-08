@@ -12,14 +12,14 @@
 
 到条件了再做，提前做是浪费。
 
-| 事项 | 触发点 |
-| --- | --- |
-| secrets 管理工具（Infisical / 1Password） | 第二个人加入 |
-| 拆 `packages/` 边界、独立产品的 api 包 | 第二个产品 |
-| TanStack DB 替换收件箱的数据层 | 开写收件箱 |
-| 断开模板上游 | 为保持可 merge 而不敢重构模板代码时 |
-| `.claude/` hooks | 出现具体的重复痛点 |
-| CI 换 affected filter（`--filter=...[origin/main]`） | app 数量明显变多 |
+| 事项                                                 | 触发点                              |
+| ---------------------------------------------------- | ----------------------------------- |
+| secrets 管理工具（Infisical / 1Password）            | 第二个人加入                        |
+| 拆 `packages/` 边界、独立产品的 api 包               | 第二个产品                          |
+| TanStack DB 替换收件箱的数据层                       | 开写收件箱                          |
+| 断开模板上游                                         | 为保持可 merge 而不敢重构模板代码时 |
+| `.claude/` hooks                                     | 出现具体的重复痛点                  |
+| CI 换 affected filter（`--filter=...[origin/main]`） | app 数量明显变多                    |
 
 ## 约定
 
