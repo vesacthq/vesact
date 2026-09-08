@@ -264,3 +264,24 @@ dependencies to the workspace package that imports them.
 - [ ] Relevant docs and `CHANGELOG.md` are updated
 
 More documentation: [https://supastarter.dev/docs/tanstack-start](https://supastarter.dev/docs/tanstack-start)
+
+## Template sync
+
+This repository tracks the upstream supastarter template through the `template`
+remote. Keeping that channel open constrains how product code is added.
+
+- Add files and directories; do not edit template files. Product modules use
+  names the template will never create, such as `inbox`, `contacts`, and
+  `publishing`.
+- Four seams are unavoidable and conflict on any merge that touches them:
+  `packages/api/orpc/router.ts`, `packages/database/drizzle/schema/index.ts`,
+  `apps/saas/modules/shared/components/AppSidebar.tsx`, and
+  `packages/permissions/definition.ts`.
+- Register product routers as one sub-router so `router.ts` carries a single
+  added line rather than one per module.
+- Product tables belong in their own schema file, re-exported from
+  `packages/database/drizzle/schema/index.ts`. Never add them to `postgres.ts`.
+- Merge the template with a real merge commit. Squashing destroys the merge base,
+  and every later sync then replays commits that were already applied.
+- Repository-specific skills live in `.agents/skills/` under names the template
+  will not use.
