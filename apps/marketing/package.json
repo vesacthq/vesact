@@ -7,7 +7,7 @@
 		"dev": "vite dev",
 		"generate": "content-collections build",
 		"build": "pnpm generate && vite build",
-		"start": "PORT=3001 node .output/server/index.mjs",
+		"start": "wrangler dev --port 3001",
 		"clean": "git clean -xdf .cache .turbo dist node_modules .content-collections",
 		"e2e": "pnpm exec playwright test --ui",
 		"e2e:ci": "pnpm exec playwright install && pnpm exec playwright test",
@@ -33,7 +33,6 @@
 		"date-fns": "catalog:",
 		"js-cookie": "catalog:",
 		"lucide-react": "catalog:",
-		"nitro": "3.0.260903-beta",
 		"react": "catalog:",
 		"react-dom": "catalog:",
 		"slugify": "catalog:",
@@ -42,6 +41,7 @@
 		"zod": "catalog:"
 	},
 	"devDependencies": {
+		"@cloudflare/vite-plugin": "catalog:",
 		"@content-collections/cli": "^0.1.9",
 		"@content-collections/core": "^0.15.2",
 		"@content-collections/mdx": "^0.2.2",
