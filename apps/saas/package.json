@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
-		"start": "node .output/server/index.mjs",
+		"start": "wrangler dev",
 		"clean": "git clean -xdf .cache .turbo dist node_modules .output",
 		"e2e": "pnpm exec playwright test --ui",
 		"e2e:ci": "pnpm exec playwright install && pnpm exec playwright test",
@@ -53,7 +53,6 @@
 		"input-otp": "catalog:",
 		"js-cookie": "catalog:",
 		"lucide-react": "catalog:",
-		"nitro": "3.0.260903-beta",
 		"nprogress": "catalog:",
 		"nuqs": "catalog:",
 		"permix": "catalog:",
@@ -74,6 +73,7 @@
 		"zod": "catalog:"
 	},
 	"devDependencies": {
+		"@cloudflare/vite-plugin": "catalog:",
 		"@mdx-js/mdx": "catalog:",
 		"@playwright/test": "catalog:",
 		"@repo/auth": "workspace:*",
@@ -97,6 +97,7 @@
 		"tailwindcss": "catalog:",
 		"tw-animate-css": "catalog:",
 		"typescript": "catalog:",
-		"vitest": "catalog:"
+		"vitest": "catalog:",
+		"wrangler": "catalog:"
 	}
 }

@@ -273,10 +273,12 @@ remote. Keeping that channel open constrains how product code is added.
 - Add files and directories; do not edit template files. Product modules use
   names the template will never create, such as `inbox`, `contacts`, and
   `publishing`.
-- Four seams are unavoidable and conflict on any merge that touches them:
+- Six seams are unavoidable and conflict on any merge that touches them:
   `packages/api/orpc/router.ts`, `packages/database/drizzle/schema/index.ts`,
-  `apps/saas/modules/shared/components/AppSidebar.tsx`, and
-  `packages/permissions/definition.ts`.
+  `apps/saas/modules/shared/components/AppSidebar.tsx`,
+  `packages/permissions/definition.ts`, `packages/database/drizzle/client.ts`,
+  and `apps/saas/server.ts`. The last two carry the Cloudflare Workers
+  connection lifecycle; `.agents/skills/port-app-to-cloudflare` explains why.
 - Register product routers as one sub-router so `router.ts` carries a single
   added line rather than one per module.
 - Product tables belong in their own schema file, re-exported from

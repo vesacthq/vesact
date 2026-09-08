@@ -4,5 +4,5 @@
 	"account_id": "6a8e5373d12070c930f09f1a82541a0b",
 	"compatibility_date": "2026-09-03",
 	"compatibility_flags": ["nodejs_compat"],
-	"main": "@tanstack/react-start/server-entry",
+	"main": "./server.ts",
 }

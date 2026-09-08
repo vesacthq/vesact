@@ -1,0 +1,19 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "vesact-saas",
+	"account_id": "6a8e5373d12070c930f09f1a82541a0b",
+	"compatibility_date": "2026-09-03",
+	"compatibility_flags": ["nodejs_compat"],
+	"main": "./server.ts",
+	"vars": {
+		"VITE_SAAS_URL": "https://vesact-saas.vesact.workers.dev",
+		"VITE_MARKETING_URL": "https://vesact-marketing.vesact.workers.dev",
+	},
+	"hyperdrive": [
+		{
+			"binding": "HYPERDRIVE",
+			"id": "44e2ab6c84854ade9fe521c963bb55f9",
+			"localConnectionString": "postgresql://postgres:postgres@localhost:5433/vesact",
+		},
+	],
+}
