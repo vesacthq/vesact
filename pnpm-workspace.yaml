@@ -95,6 +95,7 @@ catalog:
   uuid: ^14.0.2
   vite: ^8.2.2
   vitest: ^5.0.0
+  wrangler: ^4.129.0
   zod: ^4.5.4
 
 allowBuilds:
@@ -103,3 +104,4 @@ allowBuilds:
   sharp: true
   "@prisma/engines": false
   prisma: false
+  workerd: true
