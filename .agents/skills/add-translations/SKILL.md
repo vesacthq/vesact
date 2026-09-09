@@ -1,6 +1,6 @@
 ---
 name: add-translations
-description: "Use when adding or changing use-intl message keys across SaaS, marketing, mail, shared scopes, locales, and locale-aware routing."
+description: "Use when adding or changing use-intl message keys across Studio, marketing, mail, shared scopes, locales, and locale-aware routing."
 ---
 
 # Add translations
@@ -11,9 +11,9 @@ Use for user-visible strings or locale behavior. Do not translate logs, stable A
 
 ## Procedure
 
-1. Choose the owning scope: `saas.json`, `marketing.json`, `mail.json`, or cross-surface `shared.json` under `packages/i18n/translations/<locale>/`.
+1. Choose the owning scope: `studio.json`, `marketing.json`, `mail.json`, or cross-surface `shared.json` under `packages/i18n/translations/<locale>/`.
 2. Add the same nested key and compatible placeholders to `en`, `de`, `es`, and `fr`. English is the fallback, not permission to omit other locales.
-3. In SaaS, import `useTranslations`/`useFormatter` through `@i18n/intl` (`apps/saas/modules/i18n/intl.tsx`). Marketing components currently import from `use-intl`.
+3. In Studio, import `useTranslations`/`useFormatter` through `@i18n/intl` (`apps/studio/modules/i18n/intl.tsx`). Marketing components currently import from `use-intl`.
 4. For route metadata or non-React code, use `createTranslatorForLocale(locale, scope)` from `@repo/i18n`, as in `apps/marketing/routes/contact/index.tsx`.
 5. Keep locale registration, currency, default locale, and cookie name in `packages/i18n/config.ts`. Adding a locale also requires all four JSON files and imports/entries in `packages/i18n/messages.ts`.
 6. Preserve localized navigation through each app's `modules/i18n/routing.tsx` (`LocaleLink`, `useLocaleRouter`, `localeRedirect`); do not concatenate prefixes by hand.
@@ -24,7 +24,7 @@ Use for user-visible strings or locale behavior. Do not translate logs, stable A
    import { readFile } from "node:fs/promises";
 
    const locales = ["en", "de", "es", "fr"];
-   const scopes = ["shared", "saas", "marketing", "mail"];
+   const scopes = ["shared", "studio", "marketing", "mail"];
    const flattenKeys = (value, prefix = "") =>
      Object.entries(value).flatMap(([key, child]) => {
        const path = prefix ? `${prefix}.${key}` : key;
@@ -62,7 +62,7 @@ Use for user-visible strings or locale behavior. Do not translate logs, stable A
    pnpm build
    ```
 
-Canonical references: `packages/i18n/config.ts`, `packages/i18n/messages.ts`, `apps/marketing/routes/contact/index.tsx`, `apps/saas/modules/i18n/intl.tsx`, and `packages/mail/emails/EmailVerification.tsx`.
+Canonical references: `packages/i18n/config.ts`, `packages/i18n/messages.ts`, `apps/marketing/routes/contact/index.tsx`, `apps/studio/modules/i18n/intl.tsx`, and `packages/mail/emails/EmailVerification.tsx`.
 
 ## Done
 
@@ -72,7 +72,7 @@ Canonical references: `packages/i18n/config.ts`, `packages/i18n/messages.ts`, `a
 ## Common mistakes
 
 - Adding a key to `en` only because fallback hides omissions.
-- Importing a SaaS message into the marketing or mail scope.
+- Importing a Studio message into the marketing or mail scope.
 - Hardcoding locale prefixes or formatting currency/date manually when formatter helpers exist.
 - Translating stable plan IDs, notification enum values, or auth error codes.
 - Adding a locale to config without all scope imports in `messages.ts`.

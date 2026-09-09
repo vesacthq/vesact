@@ -1,7 +1,7 @@
 import { getBaseUrl } from "@repo/utils";
 import { z } from "zod";
 
-const allowedRedirectOrigin = new URL(getBaseUrl(process.env.VITE_SAAS_URL, 3000)).origin;
+const allowedRedirectOrigin = new URL(getBaseUrl(process.env.VITE_STUDIO_URL, 3000)).origin;
 
 function isAllowedRedirectUrl(redirectUrl: string) {
 	try {

@@ -1,7 +1,7 @@
 import type mailMessages from "./translations/en/mail.json";
 import type marketingMessages from "./translations/en/marketing.json";
-import type saasMessages from "./translations/en/saas.json";
 import type sharedMessages from "./translations/en/shared.json";
+import type studioMessages from "./translations/en/studio.json";
 
 export interface LocaleDefinition {
 	/**
@@ -37,5 +37,5 @@ export interface I18nConfig {
 
 export type SharedMessages = typeof sharedMessages;
 export type MarketingMessages = typeof marketingMessages & SharedMessages;
-export type SaasMessages = typeof saasMessages & SharedMessages;
+export type StudioMessages = typeof studioMessages & SharedMessages;
 export type MailMessages = typeof mailMessages;

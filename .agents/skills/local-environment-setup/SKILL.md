@@ -17,7 +17,7 @@ Use for a fresh clone or broken local prerequisites. Do not provision cloud reso
    cp .env.local.example .env.local
    openssl rand -hex 32
    ```
-   Set `DATABASE_URL=postgresql://postgres:postgres@localhost:5433/vesact`, paste the generated value into `BETTER_AUTH_SECRET`, and keep `VITE_SAAS_URL`, `VITE_MARKETING_URL`, and `VITE_DOCS_URL` at `3000`, `3001`, and `3002`. Leave provider values blank unless exercising that integration.
+   Set `DATABASE_URL=postgresql://postgres:postgres@localhost:5433/vesact`, paste the generated value into `BETTER_AUTH_SECRET`, and keep `VITE_STUDIO_URL`, `VITE_MARKETING_URL`, and `VITE_DOCS_URL` at `3000`, `3001`, and `3002`. Leave provider values blank unless exercising that integration.
 3. Start PostgreSQL and wait for its health check:
    ```bash
    docker compose up -d postgres
@@ -36,21 +36,21 @@ Use for a fresh clone or broken local prerequisites. Do not provision cloud reso
    ```bash
    pnpm --filter @repo/database push
    ```
-7. Start all workspace development tasks with `pnpm dev`. The SaaS and marketing Vite configs load env from the monorepo root and use `PORT` overrides; docs is fixed to `3002`.
-8. Check SaaS at `http://localhost:3000`, marketing at `http://localhost:3001`, and docs at `http://localhost:3002`; the optional mail preview is `http://localhost:3003`.
+7. Start all workspace development tasks with `pnpm dev`. The Studio and marketing Vite configs load env from the monorepo root and use `PORT` overrides; docs is fixed to `3002`.
+8. Check Studio at `http://localhost:3000`, marketing at `http://localhost:3001`, and docs at `http://localhost:3002`; the optional mail preview is `http://localhost:3003`.
 9. Smoke-check the live API with `curl -sf http://localhost:3000/api/health`; it must return `OK`.
 
-Canonical references: `.env.local.example`, `docker-compose.yml`, `apps/saas/vite.config.ts`, `apps/marketing/vite.config.ts`, and `packages/database/drizzle/client.ts`.
+Canonical references: `.env.local.example`, `docker-compose.yml`, `apps/studio/vite.config.ts`, `apps/marketing/vite.config.ts`, and `packages/database/drizzle/client.ts`.
 
 ## Done
 
-- PostgreSQL is healthy, dependencies match the lockfile, required app URLs load, and SaaS `/api/health` returns `OK`.
+- PostgreSQL is healthy, dependencies match the lockfile, required app URLs load, and Studio `/api/health` returns `OK`.
 - `.env.local` remains untracked and contains no placeholder auth/database values.
 
 ## Common mistakes
 
-- Putting `.env.local` under an app; the SaaS and marketing Vite configs use the monorepo root as `envDir`.
+- Putting `.env.local` under an app; the Studio and marketing Vite configs use the monorepo root as `envDir`.
 - Exposing a secret with a `VITE_` prefix.
 - Starting MinIO without `minio-setup` and then debugging a missing bucket.
 - Running migration generation merely to initialize a disposable local database.
-- Assuming the Playwright SaaS port `3100` is the normal development port; `pnpm dev` uses `3000`.
+- Assuming the Playwright Studio port `3100` is the normal development port; `pnpm dev` uses `3000`.

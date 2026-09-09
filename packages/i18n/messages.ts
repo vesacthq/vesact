@@ -6,24 +6,24 @@ import type { TranslationScope } from "./lib/get-messages";
 import { normalizeLocale } from "./shared";
 import deMail from "./translations/de/mail.json";
 import deMarketing from "./translations/de/marketing.json";
-import deSaas from "./translations/de/saas.json";
 import deShared from "./translations/de/shared.json";
+import deStudio from "./translations/de/studio.json";
 import enMail from "./translations/en/mail.json";
 import enMarketing from "./translations/en/marketing.json";
-import enSaas from "./translations/en/saas.json";
 import enShared from "./translations/en/shared.json";
+import enStudio from "./translations/en/studio.json";
 import esMail from "./translations/es/mail.json";
 import esMarketing from "./translations/es/marketing.json";
-import esSaas from "./translations/es/saas.json";
 import esShared from "./translations/es/shared.json";
+import esStudio from "./translations/es/studio.json";
 import frMail from "./translations/fr/mail.json";
 import frMarketing from "./translations/fr/marketing.json";
-import frSaas from "./translations/fr/saas.json";
 import frShared from "./translations/fr/shared.json";
+import frStudio from "./translations/fr/studio.json";
 import zhMail from "./translations/zh/mail.json";
 import zhMarketing from "./translations/zh/marketing.json";
-import zhSaas from "./translations/zh/saas.json";
 import zhShared from "./translations/zh/shared.json";
+import zhStudio from "./translations/zh/studio.json";
 
 type Messages = Record<string, unknown>;
 
@@ -31,31 +31,31 @@ const scopedMessages = {
 	en: {
 		mail: enMail,
 		marketing: enMarketing,
-		saas: enSaas,
+		studio: enStudio,
 		shared: enShared,
 	},
 	de: {
 		mail: deMail,
 		marketing: deMarketing,
-		saas: deSaas,
+		studio: deStudio,
 		shared: deShared,
 	},
 	es: {
 		mail: esMail,
 		marketing: esMarketing,
-		saas: esSaas,
+		studio: esStudio,
 		shared: esShared,
 	},
 	fr: {
 		mail: frMail,
 		marketing: frMarketing,
-		saas: frSaas,
+		studio: frStudio,
 		shared: frShared,
 	},
 	zh: {
 		mail: zhMail,
 		marketing: zhMarketing,
-		saas: zhSaas,
+		studio: zhStudio,
 		shared: zhShared,
 	},
 } as const satisfies Record<Locale, Record<TranslationScope | "shared", Messages>>;

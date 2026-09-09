@@ -6,5 +6,12 @@
 	"compatibility_flags": ["nodejs_compat"],
 	"main": "./server.ts",
 	"observability": { "enabled": true },
+	"workers_dev": false,
 	"routes": [{ "pattern": "www.vesact.com", "custom_domain": true }],
+	"env": {
+		"preview": {
+			"workers_dev": true,
+			"observability": { "enabled": true },
+		},
+	},
 }

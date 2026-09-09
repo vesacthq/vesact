@@ -15,13 +15,13 @@ Use for authentication, account, session, and Better Auth plugin behavior. Do no
 2. Add server configuration/plugin to `packages/auth/auth.ts`. Put a custom plugin under `packages/auth/plugins/<plugin>/index.ts` and type it with `BetterAuthPlugin`.
 3. Register the corresponding client plugin in `packages/auth/client.ts` when the feature has browser APIs. Extend exported error codes/types instead of casting across the UI.
 4. Apply required fields/tables to active PostgreSQL `packages/database/drizzle/schema/postgres.ts`, update Zod/queries if consumed, and generate a migration. `packages/auth/auth.ts` currently uses `drizzleAdapter(db, { provider: "pg" })`.
-5. Add/update file routes under `apps/saas/routes/` with `createFileRoute`. Wrap server session/loading work in `createServerFn`; `getSession()` in `apps/saas/modules/auth/lib/auth-server.server.ts` reads TanStack Start request headers.
+5. Add/update file routes under `apps/studio/routes/` with `createFileRoute`. Wrap server session/loading work in `createServerFn`; `getSession()` in `apps/studio/modules/auth/lib/auth-server.server.ts` reads TanStack Start request headers.
 6. Build forms with `@tanstack/react-form`, call `authClient`, and refresh session state through `sessionQueryKey` invalidation or `reloadSession()` from `useSession()` after mutations.
 7. Update localized strings and React Email templates/hooks when verification, reset, magic-link, or invitation behavior changes.
 8. Preserve audit/payment hooks in `packages/auth/auth.ts`, trusted-origin validation, locale extraction, and safe redirect handling.
-9. Add unit coverage for callbacks/errors/safe redirects and Playwright coverage for changed UI. Run focused tests, `pnpm --filter saas e2e:ci`, lint, type-check, and build.
+9. Add unit coverage for callbacks/errors/safe redirects and Playwright coverage for changed UI. Run focused tests, `pnpm --filter studio e2e:ci`, lint, type-check, and build.
 
-Canonical references: `packages/auth/auth.ts`, `packages/auth/client.ts`, `packages/auth/plugins/invitation-only/index.ts`, `apps/saas/modules/auth/components/LoginForm.tsx`, `apps/saas/modules/auth/lib/auth-server.server.ts`, and `apps/saas/routes/login/index.tsx`.
+Canonical references: `packages/auth/auth.ts`, `packages/auth/client.ts`, `packages/auth/plugins/invitation-only/index.ts`, `apps/studio/modules/auth/components/LoginForm.tsx`, `apps/studio/modules/auth/lib/auth-server.server.ts`, and `apps/studio/routes/login/index.tsx`.
 
 ## Done
 

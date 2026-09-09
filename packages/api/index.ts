@@ -32,7 +32,7 @@ export const app = new Hono()
 	)
 	// Request logger
 	.use(honoLogger((message, ...rest) => logger.log(message, ...rest)))
-	// CORS: allow the SaaS app and (optionally) the marketing site.
+	// CORS: allow the Studio app and (optionally) the marketing site.
 	.use(
 		cors({
 			origin: allowedOrigins,

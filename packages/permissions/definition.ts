@@ -1,7 +1,7 @@
 import type { ValidateDefinition } from "permix";
 
 /**
- * Central permission schema for the SaaS app and oRPC API.
+ * Central permission schema for the Studio app and oRPC API.
  *
  * Semantics preserve the pre-Permix role checks:
  * - `admin.access` — global platform admin (`user.role === "admin"`)

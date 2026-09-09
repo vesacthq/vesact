@@ -11,11 +11,11 @@ Use only when existing platform, workspace, or standard-library code cannot sati
 
 ## Procedure
 
-1. Identify the importing workspace from its `package.json`, for example `apps/saas/package.json` (`saas`) or `packages/api/package.json` (`@repo/api`).
+1. Identify the importing workspace from its `package.json`, for example `apps/studio/package.json` (`studio`) or `packages/api/package.json` (`@repo/api`).
 2. Search `pnpm-workspace.yaml` and all workspace manifests for an existing catalog entry or dependency before installing.
 3. Add the latest eligible package version to the importing workspace. `minimumReleaseAge: 1440` excludes releases newer than 24 hours:
    ```bash
-   pnpm --filter saas add <package>
+   pnpm --filter studio add <package>
    pnpm --filter @repo/api add -D <package>
    ```
 4. If several workspaces intentionally share the version, add the version under `catalog` in `pnpm-workspace.yaml`, then use `"catalog:"` in each consumer. Keep internal packages on `"workspace:*"`. A manifest cannot use `catalog:` before that key exists.
@@ -30,7 +30,7 @@ Use only when existing platform, workspace, or standard-library code cannot sati
    ```
    Run affected tests/build as required by the imported surface.
 
-Canonical reference: `pnpm-workspace.yaml` centralizes React, TanStack, oRPC, Vitest, and other shared versions; `apps/saas/package.json` consumes them with `catalog:`.
+Canonical reference: `pnpm-workspace.yaml` centralizes React, TanStack, oRPC, Vitest, and other shared versions; `apps/studio/package.json` consumes them with `catalog:`.
 
 ## Done
 

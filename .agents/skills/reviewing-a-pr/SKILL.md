@@ -33,7 +33,7 @@ Use to identify correctness, security, regression, and test gaps. Do not impleme
 7. If structural changes alter paths, scripts, commands, exports, architecture, env variables, ports, or canonical examples, require updates to `AGENTS.md` and every affected `.agents/skills/*/SKILL.md`. Skills are operational documentation and stale references are a review defect.
 8. Write findings by severity with a concrete failure scenario, affected path/symbol, and minimal correction. Separate blocking defects from optional suggestions.
 
-Canonical references: `apps/saas/routes/_authenticated/route.tsx` for auth routing, `packages/api/modules/payments/procedures/create-checkout-link.ts` for authorization, and `.github/workflows/validate-prs.yml` for gates.
+Canonical references: `apps/studio/routes/_authenticated/route.tsx` for auth routing, `packages/api/modules/payments/procedures/create-checkout-link.ts` for authorization, and `.github/workflows/validate-prs.yml` for gates.
 
 ## Done
 

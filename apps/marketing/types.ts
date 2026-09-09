@@ -12,10 +12,10 @@ export interface MarketingConfig {
 	 */
 	docsUrl?: string;
 	/**
-	 * Absolute URL for the SaaS application that marketing pages use for sign-in,
+	 * Absolute URL for the Studio application that marketing pages use for sign-in,
 	 * dashboard, and conversion links.
 	 */
-	saasUrl?: string;
+	studioUrl?: string;
 	/**
 	 * Theme options available on the marketing site.
 	 */
