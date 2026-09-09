@@ -14,6 +14,8 @@ export type AnalyticsOptions = {
 };
 
 let started = false;
+let identified = false;
+let registeredProduct: string | undefined;
 
 function servedFromAppUrl(appUrl: string) {
 	try {
@@ -29,6 +31,7 @@ export function startAnalytics({ product, key, host, appUrl, enabled }: Analytic
 	}
 
 	started = true;
+	registeredProduct = product;
 	posthog.init(key, {
 		api_host: host,
 		ui_host: "https://us.posthog.com",
@@ -48,10 +51,21 @@ export function identifyUser(userId: string | null) {
 	if (!started) {
 		return;
 	}
+
 	if (userId) {
 		posthog.identify(userId);
-	} else {
+		identified = true;
+		return;
+	}
+
+	// Only a real sign-out, not the render before the session resolves. `reset()`
+	// drops the super properties with the identity, so they go back on after.
+	if (identified) {
 		posthog.reset();
+		identified = false;
+		if (registeredProduct) {
+			posthog.register({ product: registeredProduct });
+		}
 	}
 }
 
