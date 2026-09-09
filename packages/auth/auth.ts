@@ -35,10 +35,13 @@ const getLocaleFromRequest = (request?: Request) => {
 	return normalizeLocale(cookies[i18nConfig.localeCookieName]);
 };
 
-const appUrl = getBaseUrl(process.env.VITE_SAAS_URL, 3000);
+// Auth lives on its own hostname so every product shares one login and one set
+// of OAuth callbacks.
+const authUrl = getBaseUrl(process.env.VITE_AUTH_URL, 3000);
+const cookieDomain = process.env.AUTH_COOKIE_DOMAIN;
 
 export const auth = betterAuth({
-	baseURL: appUrl,
+	baseURL: authUrl,
 	// Explicit allow-list of origins better-auth accepts for origin/CSRF and
 	// callback/redirect URL validation. A wildcard ("*") here disables that
 	// protection — e.g. it lets an attacker-controlled `callbackURL` drive an
@@ -52,6 +55,9 @@ export const auth = betterAuth({
 		database: {
 			generateId: false,
 		},
+		// Set to the parent domain in deployed environments so the session is
+		// readable from every product subdomain.
+		crossSubDomainCookies: cookieDomain ? { enabled: true, domain: cookieDomain } : undefined,
 	},
 	session: {
 		expiresIn: config.sessionCookieMaxAge,

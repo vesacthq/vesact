@@ -946,6 +946,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 26.4.1
+      vite:
+        specifier: 'catalog:'
+        version: 8.2.2(@types/node@26.4.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0)
 
   packages/database:
     dependencies:

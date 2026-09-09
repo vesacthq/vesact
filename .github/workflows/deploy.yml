@@ -15,6 +15,7 @@ env:
   TURBO_TEAM: jinl0ngs-projects
   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
   VITE_SAAS_URL: "https://studio.vesact.com"
+  VITE_AUTH_URL: "https://auth.vesact.com"
   VITE_MARKETING_URL: "https://www.vesact.com"
   VITE_POSTHOG_HOST: "https://e.vesact.com"
   # Public project key: it is compiled into the client bundle by design.
@@ -67,4 +68,4 @@ jobs:
         run: pnpm exec wrangler deploy
         working-directory: apps/saas
       - name: Smoke check
-        run: .github/scripts/smoke-check.sh https://studio.vesact.com/login https://studio.vesact.com/api/health
+        run: .github/scripts/smoke-check.sh https://studio.vesact.com/login https://studio.vesact.com/api/health https://auth.vesact.com/api/auth/get-session

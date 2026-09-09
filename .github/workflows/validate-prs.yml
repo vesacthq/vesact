@@ -11,6 +11,7 @@ env:
   BETTER_AUTH_SECRET: "better-auth-e2e-secret-1234567890"
   RESEND_API_KEY: "resend-api-key-1234567890"
   VITE_SAAS_URL: "http://localhost:3000"
+  VITE_AUTH_URL: "http://localhost:3000"
   VITE_MARKETING_URL: "http://localhost:3001"
   VITE_DOCS_URL: "http://localhost:3002"
 
