@@ -15,7 +15,9 @@ env:
   TURBO_TEAM: jinl0ngs-projects
   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
   VITE_SAAS_URL: "https://vesact-saas.vesact.workers.dev"
-  VITE_MARKETING_URL: "https://vesact-marketing.vesact.workers.dev"
+  VITE_MARKETING_URL: "https://www.vesact.com"
+  VITE_POSTHOG_HOST: "https://e.vesact.com"
+  VITE_POSTHOG_KEY: "phc_uLUk93bEHjHERp7hMxbDRiRPG4PefxhnzTkSGWYscgjR"
 
 jobs:
   marketing:
