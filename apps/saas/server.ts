@@ -5,11 +5,27 @@ import { env } from "cloudflare:workers";
 let server: (typeof import("./src/server"))["default"] | undefined;
 
 const base = import.meta.env.BASE_URL;
+const mounted = base !== "/";
+
+// The app is mounted under `base`, but route guards redirect with raw hrefs
+// (`redirect({ href: "/login" })`), which are relative to the origin rather than
+// to the app. Without this they would leave the app entirely.
+function withBase(response: Response) {
+	const location = response.headers.get("location");
+
+	if (!location?.startsWith("/") || location.startsWith("//") || location.startsWith(base)) {
+		return response;
+	}
+
+	const rebased = new Response(response.body, response);
+	rebased.headers.set("location", `${base}${location.slice(1)}`);
+	return rebased;
+}
 
 export default {
 	async fetch(request: Request, options?: RequestOptions<Register>) {
 		const url = new URL(request.url);
-		if (base !== "/" && url.pathname === base.slice(0, -1)) {
+		if (mounted && url.pathname === base.slice(0, -1)) {
 			url.pathname = base;
 			return Response.redirect(url.toString(), 308);
 		}
@@ -25,6 +41,8 @@ export default {
 			server = (await import("./src/server")).default;
 		}
 
-		return server.fetch(request, options);
+		const response = await server.fetch(request, options);
+
+		return mounted ? withBase(response) : response;
 	},
 };

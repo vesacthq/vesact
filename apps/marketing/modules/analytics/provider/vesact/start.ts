@@ -17,8 +17,8 @@ export function posthog() {
 	return (window as unknown as { posthog?: PostHog }).posthog;
 }
 
-function servedFromAppUrl() {
-	if (!appUrl) {
+function shouldReport() {
+	if (!appUrl || !import.meta.env.PROD) {
 		return false;
 	}
 	try {
@@ -29,7 +29,7 @@ function servedFromAppUrl() {
 }
 
 export function startAnalytics() {
-	if (!posthogKey || !posthogHost || !servedFromAppUrl()) {
+	if (!posthogKey || !posthogHost || !shouldReport()) {
 		return Promise.resolve();
 	}
 
