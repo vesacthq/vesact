@@ -7,8 +7,6 @@ import { Button, cn, ThemeProvider, Toaster } from "@repo/ui";
 import { Analytics } from "@shared/components/Analytics";
 import { ApiClientProvider } from "@shared/components/ApiClientProvider";
 import { ClientProviders } from "@shared/components/ClientProviders";
-import { ConsentBanner } from "@shared/components/ConsentBanner";
-import { ConsentProvider } from "@shared/components/ConsentProvider";
 import { PermixProvider } from "@shared/components/PermixProvider";
 import { documentTitle } from "@shared/lib/document-title";
 import { getPermixState } from "@shared/lib/get-permix-state";
@@ -89,12 +87,9 @@ function RootLayout() {
 								<PermixProvider permix={permix} state={permixState}>
 									<ClientProviders>
 										<I18nProvider>
-											<ConsentProvider>
-												<Analytics />
-												<Outlet />
-												<ConsentBanner />
-												<Toaster />
-											</ConsentProvider>
+											<Analytics />
+											<Outlet />
+											<Toaster />
 										</I18nProvider>
 									</ClientProviders>
 								</PermixProvider>

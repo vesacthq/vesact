@@ -1,16 +1,11 @@
-import { useCookieConsent } from "@shared/hooks/cookie-consent";
 import { useEffect } from "react";
 
 import { posthog, startAnalytics } from "./start";
 
 export function AnalyticsScript() {
-	const { userHasConsented } = useCookieConsent();
-
 	useEffect(() => {
-		if (userHasConsented) {
-			void startAnalytics();
-		}
-	}, [userHasConsented]);
+		void startAnalytics();
+	}, []);
 
 	return null;
 }

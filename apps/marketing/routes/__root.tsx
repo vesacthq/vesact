@@ -2,8 +2,6 @@ import { AnalyticsScript } from "@analytics";
 import { I18nProvider } from "@i18n/provider";
 import { getCurrentLocale } from "@repo/i18n/runtime";
 import { ThemeProvider } from "@repo/ui";
-import { ConsentBanner } from "@shared/components/ConsentBanner";
-import { ConsentProvider } from "@shared/components/ConsentProvider";
 import { Footer } from "@shared/components/Footer";
 import { NavBar } from "@shared/components/NavBar";
 import { NotFoundPage } from "@shared/components/NotFoundPage";
@@ -60,16 +58,13 @@ function RootLayout() {
 			<body className="font-sans min-h-screen bg-background text-foreground antialiased">
 				<ThemeProvider>
 					<I18nProvider>
-						<ConsentProvider>
-							<AnalyticsScript />
-							{/* Isolate stacking so portaled Base UI popups (menu, select, tooltip) paint above sticky chrome (e.g. z-50 nav). */}
-							<div className="isolate min-h-screen">
-								<NavBar />
-								<Outlet />
-								<Footer />
-							</div>
-							<ConsentBanner />
-						</ConsentProvider>
+						<AnalyticsScript />
+						{/* Isolate stacking so portaled Base UI popups (menu, select, tooltip) paint above sticky chrome (e.g. z-50 nav). */}
+						<div className="isolate min-h-screen">
+							<NavBar />
+							<Outlet />
+							<Footer />
+						</div>
 					</I18nProvider>
 					<Scripts />
 				</ThemeProvider>

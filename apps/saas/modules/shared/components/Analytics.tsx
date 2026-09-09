@@ -1,19 +1,14 @@
 import { useSession } from "@auth/hooks/use-session";
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
-import { useCookieConsent } from "@shared/hooks/cookie-consent";
 import { posthog, startAnalytics } from "@shared/lib/analytics";
 import { useEffect, useState } from "react";
 
 export function Analytics() {
-	const { userHasConsented } = useCookieConsent();
 	const { user } = useSession();
 	const { activeOrganization } = useActiveOrganization();
 	const [ready, setReady] = useState(false);
 
 	useEffect(() => {
-		if (!userHasConsented) {
-			return;
-		}
 		let active = true;
 		void startAnalytics().then(() => {
 			if (active) {
@@ -23,7 +18,7 @@ export function Analytics() {
 		return () => {
 			active = false;
 		};
-	}, [userHasConsented]);
+	}, []);
 
 	useEffect(() => {
 		if (!ready) {
