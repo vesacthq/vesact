@@ -56,12 +56,12 @@ function RootLayout() {
 		<html lang={lang} suppressHydrationWarning>
 			<head>
 				<HeadContent />
-				<AnalyticsScript />
 			</head>
 			<body className="font-sans min-h-screen bg-background text-foreground antialiased">
 				<ThemeProvider>
 					<I18nProvider>
 						<ConsentProvider>
+							<AnalyticsScript />
 							{/* Isolate stacking so portaled Base UI popups (menu, select, tooltip) paint above sticky chrome (e.g. z-50 nav). */}
 							<div className="isolate min-h-screen">
 								<NavBar />

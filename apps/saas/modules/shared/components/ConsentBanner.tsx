@@ -24,7 +24,7 @@ export function ConsentBanner() {
 				<CookieIcon className="size-6 text-5xl mt-1 block shrink-0 text-primary/60" />
 				<div>
 					<p className="text-sm leading-normal">
-						This site doesn't use cookies yet, but we added this banner to demo it to you.
+						We use cookies to analyze usage and improve the product.
 					</p>
 					<div className="mt-4 gap-2 flex">
 						<Button variant="secondary" className="flex-1" onClick={() => declineCookies()}>

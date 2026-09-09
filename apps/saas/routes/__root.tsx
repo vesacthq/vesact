@@ -4,6 +4,7 @@ import { I18nProvider } from "@i18n/provider";
 import { getCurrentLocale } from "@repo/i18n/runtime";
 import type { PermissionsDefinition } from "@repo/permissions";
 import { Button, cn, ThemeProvider, Toaster } from "@repo/ui";
+import { Analytics } from "@shared/components/Analytics";
 import { ApiClientProvider } from "@shared/components/ApiClientProvider";
 import { ClientProviders } from "@shared/components/ClientProviders";
 import { ConsentBanner } from "@shared/components/ConsentBanner";
@@ -89,6 +90,7 @@ function RootLayout() {
 									<ClientProviders>
 										<I18nProvider>
 											<ConsentProvider>
+												<Analytics />
 												<Outlet />
 												<ConsentBanner />
 												<Toaster />
