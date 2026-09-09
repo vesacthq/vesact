@@ -13,7 +13,7 @@ export function AuthWrapper({
 
 	return (
 		<div className="py-6 flex min-h-screen w-full">
-			<div className="gap-8 flex w-full flex-col items-center justify-between">
+			<div className="gap-8 flex w-full flex-col items-center">
 				<div className="container">
 					<div className="flex items-center justify-between">
 						<a href={config.marketingUrl ?? "/"} className="block">
@@ -34,7 +34,7 @@ export function AuthWrapper({
 					</div>
 				</div>
 
-				<div className="container flex justify-center">
+				<div className="container flex flex-1 items-center justify-center">
 					<main className={cn("max-w-md w-full", contentClass)}>{children}</main>
 				</div>
 			</div>
