@@ -42,7 +42,10 @@ function objectUrl(bucketName: string, path: string, expiresIn: number) {
 		throw new Error("Missing env variable S3_ENDPOINT");
 	}
 
-	const url = new URL(`${endpoint.replace(/\/+$/, "")}/${bucketName}/${encodeURIComponent(path)}`);
+	// Each segment is escaped on its own: `encodeURIComponent` over the whole
+	// path would turn a prefixed key into one flat, differently named object.
+	const key = path.split("/").map(encodeURIComponent).join("/");
+	const url = new URL(`${endpoint.replace(/\/+$/, "")}/${bucketName}/${key}`);
 	url.searchParams.set("X-Amz-Expires", String(expiresIn));
 
 	return url;
