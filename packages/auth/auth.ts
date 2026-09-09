@@ -100,7 +100,7 @@ export const auth = betterAuth({
 		identityStrategy: "provider-id",
 		accountLinking: {
 			enabled: true,
-			trustedProviders: ["google", "github"],
+			trustedProviders: ["google"],
 		},
 	},
 	hooks: {
@@ -252,11 +252,6 @@ export const auth = betterAuth({
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
 			scope: ["email", "profile"],
 		},
-		github: {
-			clientId: process.env.GITHUB_CLIENT_ID as string,
-			clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-			scope: ["user:email"],
-		},
 	},
 	plugins: [
 		admin(),
@@ -284,7 +279,7 @@ export const auth = betterAuth({
 
 				const url = new URL(
 					existingUser ? "/login" : "/signup",
-					getBaseUrl(process.env.VITE_SAAS_URL, 3000),
+					getBaseUrl(process.env.VITE_STUDIO_URL, 3000),
 				);
 
 				url.searchParams.set("invitationId", id);

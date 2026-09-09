@@ -99,7 +99,7 @@ implementation.
    Server-side configuration goes in the app's own `wrangler.jsonc`: public URLs
    as `vars`, everything else through `wrangler secret put`. `@repo/utils`
    builds better-auth's `trustedOrigins` and the API CORS allow-list from
-   `process.env.VITE_SAAS_URL` at runtime, so a var is enough — without it every
+   `process.env.VITE_STUDIO_URL` at runtime, so a var is enough — without it every
    auth request answers `403 INVALID_ORIGIN`.
 
 ## Pitfalls

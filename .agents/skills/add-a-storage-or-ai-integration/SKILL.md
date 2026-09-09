@@ -22,7 +22,7 @@ Use for provider/model/bucket integration behind `@repo/storage` or `@repo/ai`. 
 7. Add tests that mock provider calls and cover malformed input, auth, MIME/path restrictions, and provider failures without real credentials.
 8. Translate new UI/errors, then run affected package/API tests, `pnpm type-check`, and `pnpm build`. Exercise MinIO/provider or AI streaming end to end when the required local service/credentials are available; otherwise document the skipped external check.
 
-Canonical references: `packages/storage/provider/s3/index.ts`, `packages/api/modules/organizations/procedures/create-logo-upload-url.ts`, `apps/saas/modules/settings/components/UserAvatarUpload.tsx`, `packages/ai/index.ts`, `packages/api/modules/ai/procedures/stream-message.ts`, and `apps/saas/modules/ai/components/AiChat.tsx`.
+Canonical references: `packages/storage/provider/s3/index.ts`, `packages/api/modules/organizations/procedures/create-logo-upload-url.ts`, `apps/studio/modules/settings/components/UserAvatarUpload.tsx`, `packages/ai/index.ts`, `packages/api/modules/ai/procedures/stream-message.ts`, and `apps/studio/modules/ai/components/AiChat.tsx`.
 
 ## Done
 

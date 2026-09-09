@@ -7,10 +7,9 @@ on:
 env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: jinl0ngs-projects
-  DATABASE_URL: ${{ secrets.DATABASE_URL }}
   BETTER_AUTH_SECRET: "better-auth-e2e-secret-1234567890"
   RESEND_API_KEY: "resend-api-key-1234567890"
-  VITE_SAAS_URL: "http://localhost:3000"
+  VITE_STUDIO_URL: "http://localhost:3000"
   VITE_AUTH_URL: "http://localhost:3000"
   VITE_MARKETING_URL: "http://localhost:3001"
   VITE_DOCS_URL: "http://localhost:3002"
@@ -95,8 +94,8 @@ jobs:
         run: docker compose up -d minio minio-setup
       - name: Write the local Worker vars
         run: |
-          cat > apps/saas/.dev.vars <<'VARS'
-          VITE_SAAS_URL="http://localhost:3100"
+          cat > apps/studio/.dev.vars <<'VARS'
+          VITE_STUDIO_URL="http://localhost:3100"
           VITE_AUTH_URL="http://localhost:3100"
           VITE_MARKETING_URL="http://localhost:3001"
           BETTER_AUTH_SECRET="better-auth-e2e-secret-1234567890"
@@ -109,11 +108,11 @@ jobs:
           VARS
       - name: Run Playwright tests for the marketing app
         run: pnpm --filter marketing e2e:ci
-      - name: Run Playwright tests for the SaaS app
-        run: pnpm --filter saas e2e:ci
+      - name: Run Playwright tests for the Studio app
+        run: pnpm --filter studio e2e:ci
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
-          path: apps/saas/playwright-report/
+          path: apps/studio/playwright-report/
           retention-days: 30

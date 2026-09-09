@@ -35,7 +35,10 @@ export function HeroSection() {
 							render={(props) => {
 								const { children: linkChildren, ...rest } = props;
 								return (
-									<a href={config.saasUrl} {...(rest as unknown as ComponentPropsWithoutRef<"a">)}>
+									<a
+										href={config.studioUrl}
+										{...(rest as unknown as ComponentPropsWithoutRef<"a">)}
+									>
 										{linkChildren}
 									</a>
 								);

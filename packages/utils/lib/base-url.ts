@@ -1,8 +1,8 @@
 /**
  * Returns the base URL for the current app. Pass the env value directly so the
- * bundler can replace it at build time (e.g. import.meta.env.VITE_SAAS_URL).
+ * bundler can replace it at build time (e.g. import.meta.env.VITE_STUDIO_URL).
  *
- * @param envValue - The env value to use when defined (e.g. import.meta.env.VITE_SAAS_URL)
+ * @param envValue - The env value to use when defined (e.g. import.meta.env.VITE_STUDIO_URL)
  * @param defaultPort - Port for localhost fallback when no env is set (default: 3000)
  */
 export function getBaseUrl(envValue?: string, defaultPort = 3000): string {
@@ -16,12 +16,12 @@ export function getBaseUrl(envValue?: string, defaultPort = 3000): string {
  * Returns the list of origins the app considers its own. Used as the
  * single source of truth for both the API CORS allow-list and better-auth's
  * `trustedOrigins` (origin/CSRF and callback/redirect URL validation), so the
- * two never drift apart. Always includes the SaaS app origin and adds the
+ * two never drift apart. Always includes the Studio app origin and adds the
  * marketing site and auth origins when configured.
  */
 export function getTrustedOrigins(): string[] {
-	const saasUrl = getBaseUrl(process.env.VITE_SAAS_URL, 3000);
+	const studioUrl = getBaseUrl(process.env.VITE_STUDIO_URL, 3000);
 	const marketingUrl = process.env.VITE_MARKETING_URL;
 	const authUrl = process.env.VITE_AUTH_URL;
-	return [...new Set([saasUrl, marketingUrl, authUrl].filter((url) => url !== undefined))];
+	return [...new Set([studioUrl, marketingUrl, authUrl].filter((url) => url !== undefined))];
 }

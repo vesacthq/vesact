@@ -31,7 +31,7 @@
 	],
 	"ignorePatterns": [
 		"apps/marketing/routeTree.gen.ts",
-		"apps/saas/routeTree.gen.ts",
+		"apps/studio/routeTree.gen.ts",
 		"apps/docs/src/routeTree.gen.ts",
 		"apps/marketing/.content-collections/**",
 		"tooling/tailwind/tailwind-animate.css"

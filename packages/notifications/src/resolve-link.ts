@@ -16,7 +16,7 @@ export function resolveNotificationLink(link: string | null | undefined): string
 	}
 
 	try {
-		return new URL(trimmed, getBaseUrl(process.env.VITE_SAAS_URL, 3000)).href;
+		return new URL(trimmed, getBaseUrl(process.env.VITE_STUDIO_URL, 3000)).href;
 	} catch {
 		return trimmed;
 	}

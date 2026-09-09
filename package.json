@@ -13,7 +13,8 @@
 		"check": "oxlint --fix && oxfmt --write",
 		"clean": "turbo clean",
 		"format": "oxfmt --write",
-		"format:check": "oxfmt --check"
+		"format:check": "oxfmt --check",
+		"secrets:pull": "sops -d secrets/studio.dev.env > apps/studio/.dev.vars"
 	},
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",

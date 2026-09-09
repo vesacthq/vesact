@@ -16,7 +16,7 @@ Use for application API operations exposed through Hono/oRPC. Do not use for Bet
 3. Chain `.route()` (HTTP method/path/tags), `.input()` with Zod 4, `.output()`, and `.handler()`. Use `ORPCError` codes for expected API failures.
 4. Keep database access in `@repo/database`; add a query under `packages/database/drizzle/queries/` instead of using Drizzle in the procedure.
 5. Register the procedure in `packages/api/modules/<domain>/router.ts`; register a new domain in `packages/api/orpc/router.ts`. `packages/api/index.ts` serves RPC under `/api/rpc` and OpenAPI routes under `/api`.
-6. Consume it through `orpc` from `apps/saas/modules/shared/lib/orpc-query-utils.ts`:
+6. Consume it through `orpc` from `apps/studio/modules/shared/lib/orpc-query-utils.ts`:
    ```ts
    useQuery(orpc.notifications.getPreferences.queryOptions());
    useMutation(orpc.payments.createCheckoutLink.mutationOptions());
@@ -41,4 +41,4 @@ Canonical references: `packages/api/modules/organizations/procedures/create-logo
 - Treating `protectedProcedure` as sufficient organization authorization.
 - Returning an undocumented shape without `.output()`.
 - Importing the raw oRPC client into React Query code when query utilities provide keys/options.
-- Editing `apps/saas/routes/api/$.ts` for each procedure; its catch-all already forwards all supported methods to Hono.
+- Editing `apps/studio/routes/api/$.ts` for each procedure; its catch-all already forwards all supported methods to Hono.

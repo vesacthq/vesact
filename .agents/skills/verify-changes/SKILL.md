@@ -30,16 +30,16 @@ Use this after implementation or while preparing a PR. Do not use it to decide p
    pnpm build
    pnpm test
    ```
-   These are four independent CI jobs. `pnpm verify` generates marketing content before checking Oxlint and Oxfmt. Root unit tests currently run only in `apps/saas` and `packages/api`.
+   These are four independent CI jobs. `pnpm verify` generates marketing content before checking Oxlint and Oxfmt. Root unit tests currently run only in `apps/studio` and `packages/api`.
 5. During iteration, run focused tests first:
    ```bash
    pnpm --filter @repo/api exec vitest run modules/payments/procedures/create-checkout-link.test.ts
-   pnpm --filter saas exec vitest run modules/auth/lib/redirects.test.ts
+   pnpm --filter studio exec vitest run modules/auth/lib/redirects.test.ts
    ```
 6. Run both app-scoped browser suites when matching CI or before declaring a PR fully verified:
    ```bash
    pnpm --filter marketing e2e:ci
-   pnpm --filter saas e2e:ci
+   pnpm --filter studio e2e:ci
    ```
    They install Playwright browsers and run headlessly. During local iteration, E2E may be skipped only for changes that cannot affect routes, rendering, auth, API/database behavior, runtime config, or shared UI; record that rationale. CI still requires both suites and a reachable `DATABASE_URL`.
 7. Review `git status --short` after generation. Never hand-edit `apps/*/routeTree.gen.ts` or `apps/marketing/.content-collections/`.

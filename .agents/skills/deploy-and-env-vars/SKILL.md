@@ -1,58 +1,55 @@
 ---
 name: deploy-and-env-vars
-description: "Use when linking deployment projects, changing remote environment variables, creating preview/production deployments, or inspecting deployment configuration."
+description: "Use when changing environment variables or secrets, adding a deploy target, or inspecting how preview and production get built and deployed on Cloudflare Workers."
 triggers: ["user"]
 ---
 
 # Deploy and environment variables
 
-## Scope
+Environments and the deploy pipeline are defined in `AGENTS.md` under
+"Environments & deployment"; this skill is the procedure.
 
-Use only after an explicit user request because linking, environment writes, and deployments mutate external state. Do not use for local-only `.env.local` setup.
+## Steps
 
-## Procedure
+1. Decide where the value belongs. Public build-time values (`VITE_*`) live in
+   `.github/scripts/select-target.sh` per target and, for the Worker runtime, in
+   the `vars` of `apps/<app>/wrangler.jsonc` (`env.preview.vars` for preview).
+   Anything secret goes in `secrets/<file>.env`, never in `wrangler.jsonc`,
+   workflow files, or GitHub secrets.
+2. Edit a secrets file with `sops secrets/<file>.env`. Worker secrets belong in
+   `studio.<target>.env`, migration URLs in `database.<target>.env`, CI-only
+   credentials in `ci.env`, local values in `studio.dev.env`. Commit the
+   encrypted file; `deploy.yml` syncs Worker secrets on the next deploy.
+3. After changing `studio.dev.env`, run `pnpm secrets:pull` so
+   `apps/studio/.dev.vars` matches.
+4. After changing `wrangler.jsonc`, run `pnpm --filter <app> exec wrangler types`
+   if bindings changed, then `pnpm type-check`.
+5. Verify locally with the same build the pipeline uses:
+   `CLOUDFLARE_ENV=preview pnpm --filter <app> build` for preview, plain
+   `pnpm --filter <app> build` for production, then
+   `pnpm --filter <app> exec wrangler deploy --dry-run`.
+6. Open a pull request; the preview deploy is the check. Production deploys
+   only from `main`.
 
-1. Inspect root/app `package.json`, each target `vite.config.ts`, `.env.local.example`, and platform settings. There is no checked-in `vercel.json` or `.vercel/` link; do not assume framework detection, build/output settings, or one project for the three web apps.
-2. Run local release gates first:
-   ```bash
-   pnpm verify
-   pnpm type-check
-   pnpm test
-   pnpm build
-   ```
-3. Inventory only variables used by the target app/package. Keep `DATABASE_URL`, `BETTER_AUTH_SECRET`, OAuth, mail, payment, S3, and AI credentials server-only. Only intended browser configuration uses `VITE_`; this repository does not use `NEXT_PUBLIC_`.
-4. On Vercel, confirm identity/linkage before mutation:
-   ```bash
-   vercel whoami
-   vercel link --repo
-   vercel env ls
-   ```
-   `vercel link --repo` is appropriate for a monorepo; `.vercel/repo.json` may map multiple projects. Run subsequent commands from the linked directory and confirm team/project, app root, install/build command, and Nitro output before mutation.
-5. Add values interactively with explicit environment scope so secrets do not appear in shell history:
-   ```bash
-   vercel env add <NAME> development
-   vercel env add <NAME> preview
-   vercel env add <NAME> production
-   ```
-6. Pull development values only when requested, noting that this overwrites the destination:
-   ```bash
-   vercel env pull .env.local --environment=development
-   ```
-7. Create a preview first with `vercel deploy`; inspect it with `vercel inspect <url>`. Verify the correct app, public route, and affected flow; for SaaS also verify `/api/health` plus auth/API behavior.
-8. Deploy production only on explicit instruction with `vercel deploy --prod`; report project, URL, target, status, commit, and post-deploy checks. If using `vercel build`, deploy that output with `--prebuilt`.
+## Adding an app or a preview target
 
-Canonical references: `.env.local.example`; `apps/saas/vite.config.ts` and `apps/marketing/vite.config.ts` load root env and expose only `VITE_`; all three web app Vite configs use Nitro; root `turbo.json` tracks `.output/**`.
+1. `env.preview` in the app's `wrangler.jsonc`: `workers_dev: true`, its own
+   `vars`, its own bindings.
+2. Its URLs in `.github/scripts/select-target.sh`, and a job in `deploy.yml`
+   modelled on the studio one.
+3. Secrets files under `secrets/` for the new Worker and, if it has a database,
+   a Neon branch, a Hyperdrive config and a `database.<target>.env`.
+4. The Google OAuth callback for the new `VITE_AUTH_URL`, if it signs users in.
+5. An Access application on the preview hostname with the two policies listed
+   in AGENTS.md, otherwise the smoke check cannot reach it.
 
-## Done
+## Pitfalls
 
-- Correct project/app, environment scopes, build command, and server/public variable boundaries are confirmed.
-- Local gates and preview verification pass before production.
-- No secret, `.env.local`, or `.vercel/` linkage data is committed.
-
-## Common mistakes
-
-- Deploying the monorepo as one assumed project without checking app roots.
-- Running commands from a directory that is not associated with the intended `.vercel` repo/project link.
-- Using `NEXT_PUBLIC_`; this Vite repository exposes `VITE_`.
-- Pulling over handcrafted `.env.local` values without warning.
-- Adding a secret to Preview but not Production, or sharing a production database with untrusted previews.
+- `vars` and bindings are not inherited by `env.preview`; redeclare them.
+- `CLOUDFLARE_ENV` selects the environment at build time; `wrangler deploy` takes
+  no `--env` because the Vite plugin already flattened the config.
+- Preview builds must not carry `VITE_POSTHOG_KEY`.
+- A new Worker has no secrets until the first `wrangler secret bulk`; the
+  pipeline runs it right after deploy.
+- Adding a recipient: add the age public key to `.sops.yaml`, then
+  `sops updatekeys secrets/*.env`.

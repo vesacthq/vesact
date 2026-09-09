@@ -4,6 +4,19 @@ This file applies to the whole `vesact` repository.
 Mirror existing conventions and prefer nearby canonical implementations.
 Explicit user instructions win; if a documented command fails, report it rather than inventing a workaround.
 
+## Product context
+
+Studio (`apps/studio`) is the first product; Relay, an API platform, is planned
+as the second. `CONTEXT.md` defines the product vocabulary; use its terms in
+code, UI copy and issues. `docs/product-architecture.md` and `docs/site-map.md`
+are working drafts: the vocabulary is settled, module scope and sequencing are
+not, so do not derive schemas or plans from them without asking.
+`docs/decisions.md` is the decision log; `docs/research/` holds interview notes
+and evaluations.
+
+Work is tracked in GitHub issues. The `deferred` label means "no start date; do
+it when the trigger in the first line of the issue is met".
+
 ## Stack
 
 - TanStack Start, TanStack Router, React, TypeScript, Vite, and Node.js 22+
@@ -15,22 +28,37 @@ Explicit user instructions win; if a documented command fails, report it rather 
 
 ### Environment
 
-Local configuration lives in two files, and they reach different runtimes.
+Secrets are committed encrypted under `secrets/` with sops + age; `.sops.yaml`
+lists the recipients. Outside the repository there are two GitHub secrets:
+`SOPS_AGE_KEY`, CI's age private key, and `TURBO_TOKEN` for the remote cache
+(`validate-prs.yml` never decrypts anything). Your own age key is
+`~/.config/sops/age/keys.txt`; keep a copy in the password manager, because
+without it every secret has to be re-entered. Adding a person means adding
+their age public key to `.sops.yaml` and running `sops updatekeys secrets/*.env`;
+rotating CI's key means a new `age-keygen`, `gh secret set SOPS_AGE_KEY`, then
+the same `updatekeys`.
 
-`.env.local` (copy it from `.env.local.example`) feeds the Vite build and the
-Node-side scripts. It is where `DATABASE_URL` goes for
-`pnpm --filter @repo/database push | generate | migrate | studio`, and where the
-`VITE_*` URLs that get inlined into the client bundle come from.
+| File                         | Reaches                                         |
+| ---------------------------- | ----------------------------------------------- |
+| `secrets/ci.env`             | GitHub Actions: Cloudflare, Turbo, Neon, Access |
+| `secrets/database.<env>.env` | `DATABASE_URL` for migrations, prod and preview |
+| `secrets/studio.<env>.env`   | Worker secrets, synced on every deploy          |
+| `secrets/studio.dev.env`     | `apps/studio/.dev.vars` via `pnpm secrets:pull` |
 
-`apps/saas/.dev.vars` (copy it from `apps/saas/.dev.vars.example`) is what the
-Worker reads at runtime. `.env.local` never reaches it: the running app sees
-`wrangler.jsonc` `vars`, which hold production values, unless `.dev.vars`
-overrides them. Without those overrides the local server derives Better Auth's
-`baseURL`, the OAuth callbacks, the trusted origins and the links in email from
-the production URLs. The app's own database connection comes from the Hyperdrive
-binding's `localConnectionString`, not from `DATABASE_URL`.
+Edit with `sops secrets/<file>.env`; never commit a decrypted file.
 
-OAuth, mail, payments, storage, and AI variables are only needed when using those
+Local configuration reaches two runtimes. `.env.local` (copy it from
+`.env.local.example`) feeds the Vite build and the Node-side scripts: `DATABASE_URL`
+for `pnpm --filter @repo/database push | generate | migrate | studio`, and the
+`VITE_*` URLs inlined into the client bundle. `apps/studio/.dev.vars` (from
+`pnpm secrets:pull`) is what the Worker reads at runtime; `.env.local` never
+reaches it. Without `.dev.vars` the local server sees `wrangler.jsonc` `vars`,
+which hold production values, and derives Better Auth's `baseURL`, the OAuth
+callbacks, the trusted origins and the links in email from them. The app's own
+database connection comes from the Hyperdrive binding's `localConnectionString`,
+not from `DATABASE_URL`.
+
+Mail, payments, storage, and AI variables are only needed when using those
 integrations.
 
 Start the local services with:
@@ -50,6 +78,18 @@ pnpm dev
 ```
 
 `pnpm dev` runs the workspace dev tasks through Turbo.
+
+### Running locally
+
+`pnpm dev` starts studio on 3000, marketing on 3001, docs on 3002 and the mail
+preview on 3003. A fresh database has no seed data: register the first account
+through the sign-up page. `push` applies the schema to the local database and
+`studio` opens Drizzle Studio against it. Analytics stays off locally
+(`import.meta.env.PROD` gates it). MinIO only matters for uploads:
+`docker compose up -d minio minio-setup`.
+
+Playwright starts its own dev server on 3100 and fails with `already used` when
+a stray server holds the port; reuse one only with `PW_REUSE_SERVER=1`.
 
 ### Root commands
 
@@ -72,10 +112,10 @@ Required gates:
 2. Before every commit, run `pnpm type-check`.
 3. Run the relevant tests before considering the change complete.
 
-The root test task runs Vitest in `apps/saas` and `packages/api`.
-Playwright tests are in `apps/marketing/tests` and `apps/saas/e2e`. E2E scripts
+The root test task runs Vitest in `apps/studio` and `packages/api`.
+Playwright tests are in `apps/marketing/tests` and `apps/studio/e2e`. E2E scripts
 are per app: use `pnpm --filter marketing e2e`, `pnpm --filter marketing e2e:ci`,
-`pnpm --filter saas e2e`, or `pnpm --filter saas e2e:ci`. E2E requires a running
+`pnpm --filter studio e2e`, or `pnpm --filter studio e2e:ci`. E2E requires a running
 application and database.
 
 ## Monorepo map
@@ -85,7 +125,7 @@ apps/
 ├── docs/          # TanStack Start/Fumadocs documentation
 ├── mail-preview/  # React Email preview
 ├── marketing/     # Public site, blog, and content
-└── saas/          # Authenticated product
+└── studio/          # Authenticated product
 packages/
 ├── ai/
 ├── api/
@@ -114,7 +154,7 @@ TypeScript, Vite, or TanStack path mappings. Use package exports such as
 
 Only app-local aliases are configured in the app `tsconfig.json` files.
 
-### `apps/saas/tsconfig.json`
+### `apps/studio/tsconfig.json`
 
 | Alias              | Target                      |
 | ------------------ | --------------------------- |
@@ -160,7 +200,7 @@ pnpm --filter @repo/database studio
 ```
 
 Do not hand-edit generated Drizzle migration files or route trees:
-`apps/marketing/routeTree.gen.ts`, `apps/saas/routeTree.gen.ts`, and
+`apps/marketing/routeTree.gen.ts`, `apps/studio/routeTree.gen.ts`, and
 `apps/docs/src/routeTree.gen.ts` are generated. Marketing content collections under
 `apps/marketing/.content-collections/` are also generated.
 
@@ -172,7 +212,7 @@ Create server-side notifications with `createNotification` from
 `packages/notifications/src/catalog.ts`; keep the database enum, catalog, and i18n labels in sync.
 
 For client data fetching, use the oRPC helpers in
-`apps/saas/modules/shared/lib/orpc-query-utils.ts` with TanStack Query.
+`apps/studio/modules/shared/lib/orpc-query-utils.ts` with TanStack Query.
 
 ### Client cache invalidation
 
@@ -188,7 +228,7 @@ keys before showing success UI. Do not rely on a full page reload.
   (admin org CRUD also refreshes `organizationListQueryKey`; member leave
   refreshes both the members query and the org switcher list).
 - Canonical examples: admin user delete in
-  `apps/saas/modules/admin/components/users/UserList.tsx`, invitation revoke in
+  `apps/studio/modules/admin/components/users/UserList.tsx`, invitation revoke in
   `OrganizationInvitationsList.tsx`, and passkey CRUD in `PasskeysBlock.tsx`.
 
 ## Framework patterns
@@ -197,19 +237,19 @@ keys before showing success UI. Do not rely on a full page reload.
 - Do not import from `next/*`, `next/navigation`, or other Next.js APIs.
 - Use TanStack Router route loaders and `createServerFn` for server-side work.
 - Use `throw redirect()` and `throw notFound()` from `@tanstack/react-router`.
-- Follow the auth guard in `apps/saas/routes/_authenticated/route.tsx`.
+- Follow the auth guard in `apps/studio/routes/_authenticated/route.tsx`.
 
 ## Auth & multi-tenancy
 
 - Server sessions use `getSession` from `@auth/lib/auth-server.server`.
 - Client session state uses `useSession` from `@auth/hooks/use-session`.
 - Scope organization data with the active organization helpers under
-  `apps/saas/modules/organizations`.
+  `apps/studio/modules/organizations`.
 - When changing auth flows, update relevant templates under `packages/mail/emails`,
   preserve audit hooks, and verify locale handling.
 
 Canonical auth example:
-`apps/saas/modules/auth/lib/auth-server.server.ts`.
+`apps/studio/modules/auth/lib/auth-server.server.ts`.
 
 ## Permissions (Permix)
 
@@ -217,11 +257,11 @@ Canonical auth example:
   `checkPermission`, `PermissionsDefinition`).
 - oRPC: `packages/api/orpc/permix.ts` + permissions attached in
   `packages/api/orpc/procedures.ts`.
-- SaaS server: `apps/saas/start.ts` (app-root `start.ts` because
+- Studio server: `apps/studio/start.ts` (app-root `start.ts` because
   `srcDirectory: "."`) registers Permix via `createMiddleware().server(...)`
   so server-only auth/DB imports are stripped from the client graph. Shared
-  helpers live in `apps/saas/modules/shared/lib/permix.ts`.
-- Router context + hydrate in `apps/saas/routes/__root.tsx` via
+  helpers live in `apps/studio/modules/shared/lib/permix.ts`.
+- Router context + hydrate in `apps/studio/routes/__root.tsx` via
   `get-permix-state.ts` (`createServerFn`, not a `*.server.*` module);
   client `PermixProvider` / `usePermissions()`.
 - Prefer `checkPermission(...)` / `usePermissions().check(...)` over
@@ -238,37 +278,82 @@ Canonical auth example:
 - Use `@tanstack/react-form` with Zod. Follow
   `apps/marketing/modules/home/components/ContactForm.tsx`.
 - Use `useTranslations`, `useFormatter`, and `IntlProvider` from `use-intl`.
-  Follow `apps/saas/modules/i18n/provider.tsx`.
+  Follow `apps/studio/modules/i18n/provider.tsx`.
 - Locale helpers and the `locale` cookie are configured in `packages/i18n/config.ts`.
 - Document titles use `documentTitle()` from `@shared/lib/document-title`
-  (`{page} – ${config.appName}`, en dash). Call it from every SaaS route `head()`.
+  (`{page} – ${config.appName}`, en dash). Call it from every Studio route `head()`.
   Routes without a page title (marketing homepage) keep `config.appName` alone.
 
 ## Config & environment variables
 
 Keep server-only variables unprefixed. Browser-visible variables use `VITE_`.
-Use `.env.local` for local secrets and never commit it. Vite app configuration
+Use `.env.local` for local values and never commit it; secrets live encrypted under `secrets/`. Vite app configuration
 uses the monorepo root as its environment directory.
 
-## Deployment
+## Environments & deployment
 
-Each app is a Cloudflare Worker on its own hostname, declared as a
-`custom_domain` route in the app's `wrangler.jsonc`:
+Each app is a Cloudflare Worker. Three environments, the same shape for every app:
 
-| App       | Hostname            |
-| --------- | ------------------- |
-| marketing | `www.vesact.com`    |
-| saas      | `studio.vesact.com` |
+|               | dev                                        | preview                                                  | prod                                              |
+| ------------- | ------------------------------------------ | -------------------------------------------------------- | ------------------------------------------------- |
+| Trigger       | `pnpm dev`                                 | pull request from this repository                        | push to `main`                                    |
+| Build         | `vite dev`                                 | `CLOUDFLARE_ENV=preview vite build`                      | `vite build`                                      |
+| Worker        | —                                          | `vesact-<app>-preview`                                   | `vesact-<app>`                                    |
+| Host          | `localhost:300x`                           | `vesact-<app>-preview.vesact.workers.dev`, behind Access | custom domain                                     |
+| Vars          | `.dev.vars`                                | `env.preview.vars` in `wrangler.jsonc`                   | top-level `vars`                                  |
+| Secrets       | `.dev.vars`                                | `secrets/studio.preview.env`                             | `secrets/studio.prod.env`                         |
+| Database      | local postgres via `localConnectionString` | Hyperdrive `vesact-preview` → Neon branch `preview`      | Hyperdrive `vesact-db` → Neon branch `production` |
+| Migrations    | `push`                                     | `migrate` against the preview branch before deploy       | `migrate` against production before deploy        |
+| Cookie domain | unset                                      | unset                                                    | `.vesact.com`                                     |
 
-`vesact.com` redirects to `www` through a Cloudflare Redirect Rule. That rule and
-the marketing zone route live in the Cloudflare account, not in this repository.
+| App       | prod                                   | preview                                       |
+| --------- | -------------------------------------- | --------------------------------------------- |
+| marketing | `www.vesact.com`                       | `vesact-marketing-preview.vesact.workers.dev` |
+| studio    | `studio.vesact.com`, `auth.vesact.com` | `vesact-studio-preview.vesact.workers.dev`    |
+
+`deploy.yml` runs one job per app: `select-target.sh` picks the target from the
+event, `load-env.sh` decrypts what the job needs into masked environment
+variables, then migrate → build → `wrangler deploy` → `wrangler secret bulk` →
+smoke check. The Cloudflare Vite plugin flattens the selected environment into
+`.output/server/wrangler.json` at build time, so `CLOUDFLARE_ENV` is set for the
+build and `wrangler deploy` takes no `--env`. Preview builds leave
+`VITE_POSTHOG_KEY` unset so their events stay out of production analytics.
+
+The preview database is one shared Neon branch; run the "Reset preview database"
+workflow to copy it fresh from production. Preview shares the production R2
+bucket.
+
+### Accounts and resources
+
+- Cloudflare account `6a8e5373d12070c930f09f1a82541a0b`, workers.dev subdomain
+  `vesact`. CI authenticates with the token in `secrets/ci.env`; manual
+  operations use `wrangler login`.
+- Neon project `ancient-morning-26822519` (Singapore), branches `production`
+  (default) and `preview`. Manage it with `neonctl` and `NEON_API_KEY` from
+  `secrets/ci.env`.
+- Hyperdrive `vesact-db` and `vesact-preview`; ids are in
+  `apps/studio/wrangler.jsonc`.
+- Each preview Worker has a Cloudflare Access application with two policies:
+  Allow for the owner's email, and Service Auth for the service token whose
+  credentials are `CF_ACCESS_CLIENT_ID` / `CF_ACCESS_CLIENT_SECRET` in
+  `secrets/ci.env`. A new preview Worker needs the same pair.
+- One Google OAuth client serves every environment; each needs its callback
+  `<VITE_AUTH_URL>/api/auth/callback/google` registered in Google Cloud.
+- `vesact.com` redirects to `www` through a Cloudflare Redirect Rule.
+
 A second product gets its own hostname; the app stays rooted at `/` so that
 origin-relative paths in the template keep working.
 
-`VITE_SAAS_URL` and `VITE_MARKETING_URL` are the public URLs the apps advertise:
-they drive Better Auth's `baseURL`, the CORS and trusted-origin lists, links in
-email, and whether analytics reports. They are read at build time, so a change
-needs a rebuild, not just a redeploy.
+`VITE_STUDIO_URL`, `VITE_AUTH_URL` and `VITE_MARKETING_URL` are the public URLs
+the apps advertise: they drive Better Auth's `baseURL`, the CORS and
+trusted-origin lists, links in email, and whether analytics reports. They are
+read at build time, so a change needs a rebuild, not just a redeploy.
+
+### Workflow
+
+Branch from `main` and open a pull request. `validate-prs.yml` runs lint, type
+check, build, unit and e2e; `deploy.yml` puts the branch on preview. Check the
+preview, then merge with a merge commit; the push to `main` deploys production.
 
 ## Dependencies & supply chain
 
@@ -300,28 +385,29 @@ More documentation: [https://supastarter.dev/docs/tanstack-start](https://supast
 
 ## Template sync
 
-This repository tracks the upstream supastarter template through the `template`
-remote. Keeping that channel open constrains how product code is added.
+This repository started from the supastarter template (`template` remote) and
+has diverged: the app directory is renamed, template files are edited freely,
+and merges are no longer attempted. Upstream is still read for dependency and
+security updates.
 
-- Add files and directories; do not edit template files. Product modules use
-  names the template will never create, such as `inbox`, `contacts`, and
-  `publishing`.
-- Six seams are unavoidable and conflict on any merge that touches them:
-  `packages/api/orpc/router.ts`, `packages/database/drizzle/schema/index.ts`,
-  `apps/saas/modules/shared/components/AppSidebar.tsx`,
-  `packages/permissions/definition.ts`, `packages/database/drizzle/client.ts`,
-  and `apps/saas/server.ts`. The last two carry the Cloudflare Workers
-  connection lifecycle; `.agents/skills/port-app-to-cloudflare` explains why.
-- Template files that were removed rather than edited: `packages/storage/provider/s3`
+- `git fetch template && git log --oneline template-reviewed..template/main`
+  lists what has not been looked at. `template-reviewed` is a tag: after going
+  through the range, move it with
+  `git tag -f template-reviewed template/main && git push -f origin template-reviewed`.
+- Take a commit with `git cherry-pick -x <sha>`. One that touches `apps/saas`
+  conflicts as "deleted by us"; apply it to `apps/studio` instead:
+  `git show <sha> -- apps/saas | sed 's#apps/saas#apps/studio#g' | git apply -3`.
+- For dependency bumps, copy the version into the `pnpm-workspace.yaml` catalog
+  and run `pnpm install` rather than cherry-picking lockfile changes.
+- Removed rather than edited, and not to be restored: `packages/storage/provider/s3`
   (the AWS SDK cannot construct a client on workerd; `provider/r2` signs with
-  aws4fetch instead) and the unused analytics providers under
-  `apps/marketing/modules/analytics/provider`. A sync that changes them arrives
-  as a delete/modify conflict; keep the deletion.
-- Register product routers as one sub-router so `router.ts` carries a single
-  added line rather than one per module.
-- Product tables belong in their own schema file, re-exported from
-  `packages/database/drizzle/schema/index.ts`. Never add them to `postgres.ts`.
-- Merge the template with a real merge commit. Squashing destroys the merge base,
-  and every later sync then replays commits that were already applied.
-- Repository-specific skills live in `.agents/skills/` under names the template
+  aws4fetch) and the unused analytics providers under
+  `apps/marketing/modules/analytics/provider`.
+- Product code uses names the template will never create (`inbox`, `contacts`,
+  `publishing`, `relay`), and product tables live in their own schema file
+  re-exported from `packages/database/drizzle/schema/index.ts`, never in
+  `postgres.ts`, so upstream changes to those files apply cleanly.
+- `.agents/skills/port-app-to-cloudflare` explains the Workers connection
+  lifecycle in `packages/database/drizzle/client.ts` and `apps/studio/server.ts`.
+  Repository-specific skills live in `.agents/skills/` under names the template
   will not use.

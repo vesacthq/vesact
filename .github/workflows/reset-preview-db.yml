@@ -1,0 +1,23 @@
+name: Reset preview database
+
+on:
+  workflow_dispatch:
+
+env:
+  SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+
+jobs:
+  reset:
+    name: Copy the Neon preview branch fresh from production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - name: Install sops
+        run: .github/scripts/install-sops.sh
+      - name: Load CI secrets
+        run: .github/scripts/load-env.sh secrets/ci.env
+      - name: Reset
+        run: npx --yes neonctl@4 branches reset preview --project-id ancient-morning-26822519 --parent
