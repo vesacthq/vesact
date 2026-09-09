@@ -39,7 +39,7 @@ export default defineConfig({
 	],
 	webServer: {
 		command: "pnpm --filter saas run dev",
-		url: `${baseURL}/studio/`,
+		url: baseURL,
 		env: {
 			...process.env,
 			PORT: e2ePort,

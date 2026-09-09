@@ -24,13 +24,3 @@ export function getTrustedOrigins(): string[] {
 	const marketingUrl = process.env.VITE_MARKETING_URL;
 	return [saasUrl, ...(marketingUrl ? [marketingUrl] : [])];
 }
-
-/**
- * Joins a path onto the SaaS app URL, keeping the app's own path when it is
- * mounted under one (e.g. `https://host/studio` + `login`). `new URL()` alone
- * would drop that prefix for absolute paths.
- */
-export function withAppPath(path: string, envValue = process.env.VITE_SAAS_URL): string {
-	const base = getBaseUrl(envValue, 3000).replace(/\/+$/, "");
-	return `${base}/${path.replace(/^\/+/, "")}`;
-}

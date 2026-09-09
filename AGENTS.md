@@ -17,8 +17,8 @@ Explicit user instructions win; if a documented command fails, report it rather 
 
 Copy `.env.local.example` to `.env.local`. For local boot, set `DATABASE_URL` to
 `postgresql://postgres:postgres@localhost:5433/vesact`, set `BETTER_AUTH_SECRET`,
-and keep the local `VITE_*` URLs from the example. OAuth, mail, payments, storage,
-and AI variables are only needed when using those integrations.
+and keep the local `VITE_*` URLs from the example. OAuth, mail, payments,
+storage, and AI variables are only needed when using those integrations.
 
 Start the local services with:
 
@@ -26,7 +26,7 @@ Start the local services with:
 docker compose up -d postgres
 ```
 
-The `postgres` service is PostgreSQL 16 on port 5432. The compose file also defines
+The `postgres` service is PostgreSQL 16, published on host port 5433. The compose file also defines
 MinIO (`minio` and `minio-setup`) for S3-compatible storage when storage features are used.
 
 ### Install and run
@@ -236,6 +236,26 @@ Canonical auth example:
 Keep server-only variables unprefixed. Browser-visible variables use `VITE_`.
 Use `.env.local` for local secrets and never commit it. Vite app configuration
 uses the monorepo root as its environment directory.
+
+## Deployment
+
+Each app is a Cloudflare Worker on its own hostname, declared as a
+`custom_domain` route in the app's `wrangler.jsonc`:
+
+| App       | Hostname            |
+| --------- | ------------------- |
+| marketing | `www.vesact.com`    |
+| saas      | `studio.vesact.com` |
+
+`vesact.com` redirects to `www` through a Cloudflare Redirect Rule. That rule and
+the marketing zone route live in the Cloudflare account, not in this repository.
+A second product gets its own hostname; the app stays rooted at `/` so that
+origin-relative paths in the template keep working.
+
+`VITE_SAAS_URL` and `VITE_MARKETING_URL` are the public URLs the apps advertise:
+they drive Better Auth's `baseURL`, the CORS and trusted-origin lists, links in
+email, and whether analytics reports. They are read at build time, so a change
+needs a rebuild, not just a redeploy.
 
 ## Dependencies & supply chain
 

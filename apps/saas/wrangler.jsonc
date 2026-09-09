@@ -6,9 +6,9 @@
 	"compatibility_flags": ["nodejs_compat"],
 	"main": "./server.ts",
 	"observability": { "enabled": true },
-	"routes": [{ "pattern": "www.vesact.com/studio*", "zone_name": "vesact.com" }],
+	"routes": [{ "pattern": "studio.vesact.com", "custom_domain": true }],
 	"vars": {
-		"VITE_SAAS_URL": "https://www.vesact.com/studio",
+		"VITE_SAAS_URL": "https://studio.vesact.com",
 		"VITE_MARKETING_URL": "https://www.vesact.com",
 	},
 	"hyperdrive": [

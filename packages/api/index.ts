@@ -1,7 +1,7 @@
 import { auth } from "@repo/auth";
 import { logger } from "@repo/logs";
 import { webhookHandler as paymentsWebhookHandler } from "@repo/payments";
-import { getBaseUrl, getTrustedOrigins } from "@repo/utils";
+import { getTrustedOrigins } from "@repo/utils";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger as honoLogger } from "hono/logger";
@@ -11,13 +11,12 @@ import { openApiHandler, rpcHandler } from "./orpc/handler";
 
 export { router } from "./orpc/router";
 
-const basePath = new URL(getBaseUrl(process.env.VITE_SAAS_URL, 3000)).pathname.replace(/\/+$/, "");
 const allowedOrigins = getTrustedOrigins();
 const isProduction = process.env.NODE_ENV === "production";
 const enableApiDocs = process.env.ENABLE_API_DOCS === "true" || !isProduction;
 
 export const app = new Hono()
-	.basePath(`${basePath}/api`)
+	.basePath("/api")
 	// Security headers — a reasonable default for API responses. Apps that
 	// need a stricter CSP can extend this stack.
 	.use(
@@ -52,7 +51,7 @@ export const app = new Hono()
 	.get("/health", (c) => c.text("OK"))
 	// oRPC handlers (both RPC and OpenAPI)
 	.use("*", async (c, next) => {
-		if (!enableApiDocs && c.req.path.startsWith(`${basePath}/api/docs`)) {
+		if (!enableApiDocs && c.req.path.startsWith("/api/docs")) {
 			return c.notFound();
 		}
 
@@ -62,7 +61,7 @@ export const app = new Hono()
 
 		const isRpc = c.req.path.includes("/rpc/");
 		const handler = isRpc ? rpcHandler : openApiHandler;
-		const prefix = (isRpc ? `${basePath}/api/rpc` : `${basePath}/api`) as `/${string}`;
+		const prefix = isRpc ? "/api/rpc" : "/api";
 
 		const { matched, response } = await handler.handle(c.req.raw, {
 			prefix,
