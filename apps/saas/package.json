@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build",
+		"build": "vite build && node scripts/nest-client-output.mts studio",
 		"start": "wrangler dev",
 		"clean": "git clean -xdf .cache .turbo dist node_modules .output",
 		"e2e": "pnpm exec playwright test --ui",

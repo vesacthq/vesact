@@ -54,7 +54,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 			{
 				rel: "icon",
 				type: "image/png",
-				href: "/icon.png",
+				href: `${import.meta.env.BASE_URL}icon.png`,
 			},
 			{
 				rel: "stylesheet",

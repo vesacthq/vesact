@@ -12,7 +12,7 @@ import { logger } from "@repo/logs";
 import { sendEmail } from "@repo/mail";
 import { createWelcomeNotification } from "@repo/notifications";
 import { cancelSubscription } from "@repo/payments";
-import { getBaseUrl, getTrustedOrigins } from "@repo/utils";
+import { getTrustedOrigins, withAppPath } from "@repo/utils";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError, createAuthMiddleware } from "better-auth/api";
@@ -35,10 +35,8 @@ const getLocaleFromRequest = (request?: Request) => {
 	return normalizeLocale(cookies[i18nConfig.localeCookieName]);
 };
 
-const appUrl = getBaseUrl(process.env.VITE_SAAS_URL, 3000);
-
 export const auth = betterAuth({
-	baseURL: appUrl,
+	baseURL: withAppPath("api/auth"),
 	// Explicit allow-list of origins better-auth accepts for origin/CSRF and
 	// callback/redirect URL validation. A wildcard ("*") here disables that
 	// protection — e.g. it lets an attacker-controlled `callbackURL` drive an
@@ -276,10 +274,7 @@ export const auth = betterAuth({
 				const locale = getLocaleFromRequest(request);
 				const existingUser = await getUserByEmail(email);
 
-				const url = new URL(
-					existingUser ? "/login" : "/signup",
-					getBaseUrl(process.env.VITE_SAAS_URL, 3000),
-				);
+				const url = new URL(withAppPath(existingUser ? "login" : "signup"));
 
 				url.searchParams.set("invitationId", id);
 				url.searchParams.set("email", email);

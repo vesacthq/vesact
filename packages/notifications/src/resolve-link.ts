@@ -1,4 +1,4 @@
-import { getBaseUrl } from "@repo/utils";
+import { withAppPath } from "@repo/utils";
 
 export function resolveNotificationLink(link: string | null | undefined): string | null {
 	if (link == null) {
@@ -16,7 +16,7 @@ export function resolveNotificationLink(link: string | null | undefined): string
 	}
 
 	try {
-		return new URL(trimmed, getBaseUrl(process.env.VITE_SAAS_URL, 3000)).href;
+		return new URL(withAppPath(trimmed)).href;
 	} catch {
 		return trimmed;
 	}

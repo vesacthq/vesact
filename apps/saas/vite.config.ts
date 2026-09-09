@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
 	Object.assign(process.env, loadEnv(mode, monorepoRoot, ""));
 
 	return {
+		base: "/studio/",
 		build: {
 			outDir: ".output",
 		},
