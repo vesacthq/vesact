@@ -5,6 +5,7 @@ import { useTranslations } from "@i18n/intl";
 import { OrganizationInvitationAlert } from "@organizations/components/OrganizationInvitationAlert";
 import { authClient } from "@repo/auth/client";
 import { config as authConfig } from "@repo/auth/config";
+import { cn } from "@repo/ui";
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
 import { Button } from "@repo/ui/components/button";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@repo/ui/components/form";
@@ -26,7 +27,7 @@ import { useState } from "react";
 import { withQuery } from "ufo";
 import { z } from "zod";
 
-import { type OAuthProvider, oAuthProviders } from "../constants/oauth-providers";
+import type { OAuthProvider } from "../constants/oauth-providers";
 import { lastUsedLoginMethodIds } from "../lib/last-used-login-method";
 import { getSafeRedirectPath } from "../lib/redirects";
 import { LastUsedBadge } from "./LastUsedBadge";
@@ -44,8 +45,10 @@ interface AuthSearch extends Record<string, string | undefined> {
 	redirectTo?: string;
 }
 
-export function LoginForm() {
+export function LoginForm({ oAuthProviders }: { oAuthProviders: OAuthProvider[] }) {
 	const t = useTranslations();
+	const socialProviders =
+		authConfig.enableSignup && authConfig.enableSocialLogin ? oAuthProviders : [];
 	const { getAuthErrorMessage } = useAuthErrorMessages();
 	const router = useRouter();
 	const queryClient = useQueryClient();
@@ -267,8 +270,7 @@ export function LoginForm() {
 						</form>
 					</Form>
 
-					{(authConfig.enablePasskeys ||
-						(authConfig.enableSignup && authConfig.enableSocialLogin)) && (
+					{(authConfig.enablePasskeys || socialProviders.length > 0) && (
 						<>
 							<div className="my-6 h-4 relative">
 								<hr className="top-2 relative" />
@@ -277,12 +279,15 @@ export function LoginForm() {
 								</p>
 							</div>
 
-							<div className="gap-2 sm:grid-cols-2 grid grid-cols-1 items-stretch">
-								{authConfig.enableSignup &&
-									authConfig.enableSocialLogin &&
-									Object.keys(oAuthProviders).map((providerId) => (
-										<SocialSigninButton key={providerId} provider={providerId as OAuthProvider} />
-									))}
+							<div
+								className={cn(
+									"gap-2 grid grid-cols-1 items-stretch",
+									socialProviders.length > 1 && "sm:grid-cols-2",
+								)}
+							>
+								{socialProviders.map((provider) => (
+									<SocialSigninButton key={provider} provider={provider} />
+								))}
 
 								{authConfig.enablePasskeys && (
 									<Button

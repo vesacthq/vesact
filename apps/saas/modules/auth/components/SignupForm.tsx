@@ -5,6 +5,7 @@ import { useTranslations } from "@i18n/intl";
 import { OrganizationInvitationAlert } from "@organizations/components/OrganizationInvitationAlert";
 import { authClient } from "@repo/auth/client";
 import { config as authConfig } from "@repo/auth/config";
+import { cn } from "@repo/ui";
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -27,7 +28,7 @@ import { useEffect } from "react";
 import { withQuery } from "ufo";
 import { z } from "zod";
 
-import { type OAuthProvider, oAuthProviders } from "../constants/oauth-providers";
+import type { OAuthProvider } from "../constants/oauth-providers";
 import { getSafeRedirectPath } from "../lib/redirects";
 import { SocialSigninButton } from "./SocialSigninButton";
 
@@ -43,7 +44,13 @@ interface AuthSearch extends Record<string, string | undefined> {
 	redirectTo?: string;
 }
 
-export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
+export function SignupForm({
+	prefillEmail,
+	oAuthProviders,
+}: {
+	prefillEmail?: string;
+	oAuthProviders: OAuthProvider[];
+}) {
 	const t = useTranslations();
 	const router = useRouter();
 	const { user, loaded: sessionLoaded } = useSession();
@@ -218,7 +225,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 						</form>
 					</Form>
 
-					{authConfig.enableSignup && authConfig.enableSocialLogin && (
+					{authConfig.enableSignup && authConfig.enableSocialLogin && oAuthProviders.length > 0 && (
 						<>
 							<div className="my-6 h-4 relative">
 								<hr className="top-2 relative" />
@@ -227,9 +234,14 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 								</p>
 							</div>
 
-							<div className="gap-2 sm:grid-cols-2 grid grid-cols-1 items-stretch">
-								{Object.keys(oAuthProviders).map((providerId) => (
-									<SocialSigninButton key={providerId} provider={providerId as OAuthProvider} />
+							<div
+								className={cn(
+									"gap-2 grid grid-cols-1 items-stretch",
+									oAuthProviders.length > 1 && "sm:grid-cols-2",
+								)}
+							>
+								{oAuthProviders.map((provider) => (
+									<SocialSigninButton key={provider} provider={provider} />
 								))}
 							</div>
 						</>

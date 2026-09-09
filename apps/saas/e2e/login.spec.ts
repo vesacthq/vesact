@@ -73,7 +73,7 @@ test.describe("login page", () => {
 		await context.addCookies([
 			{
 				name: "better-auth.last_used_login_method",
-				value: "github",
+				value: "google",
 				url: baseURL ?? "http://localhost:3100",
 			},
 		]);
@@ -81,8 +81,7 @@ test.describe("login page", () => {
 		await page.goto("/login");
 		await waitForAuthPageHydration(page);
 
-		await expect(page.getByRole("button", { name: /github/i })).toContainText("Last used");
-		await expect(page.getByRole("button", { name: /google/i })).not.toContainText("Last used");
+		await expect(page.getByRole("button", { name: /google/i })).toContainText("Last used");
 		await expect(page.getByRole("tab", { name: "Password" })).not.toContainText("Last used");
 	});
 });

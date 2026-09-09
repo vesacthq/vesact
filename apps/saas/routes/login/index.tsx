@@ -1,5 +1,6 @@
 import { LoginForm } from "@auth/components/LoginForm";
 import { getSession } from "@auth/lib/auth-server.server";
+import { getEnabledOAuthProviders } from "@auth/lib/enabled-oauth-providers";
 import { getSafeRedirectPath } from "@auth/lib/redirects";
 import { config } from "@config";
 import { AuthWrapper } from "@shared/components/AuthWrapper";
@@ -34,6 +35,8 @@ export const Route = createFileRoute("/login/")({
 				href: getSafeRedirectPath(deps.redirectTo, config.redirectAfterSignIn),
 			});
 		}
+
+		return { oAuthProviders: unwrapServerFnResult(await getEnabledOAuthProviders()) };
 	},
 	component: LoginPage,
 	head: () => ({
@@ -42,9 +45,11 @@ export const Route = createFileRoute("/login/")({
 });
 
 function LoginPage() {
+	const { oAuthProviders } = Route.useLoaderData();
+
 	return (
 		<AuthWrapper>
-			<LoginForm />
+			<LoginForm oAuthProviders={oAuthProviders} />
 		</AuthWrapper>
 	);
 }
