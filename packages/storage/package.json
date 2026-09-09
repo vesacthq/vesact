@@ -8,9 +8,8 @@
 		"type-check": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@aws-sdk/client-s3": "catalog:",
-		"@aws-sdk/s3-request-presigner": "catalog:",
-		"@repo/logs": "workspace:*"
+		"@repo/logs": "workspace:*",
+		"aws4fetch": "1.0.20"
 	},
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",

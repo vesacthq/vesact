@@ -18,9 +18,6 @@ catalogs:
     '@aws-sdk/client-s3':
       specifier: 3.1127.0
       version: 3.1127.0
-    '@aws-sdk/s3-request-presigner':
-      specifier: 3.1127.0
-      version: 3.1127.0
     '@base-ui/react':
       specifier: ^1.8.0
       version: 1.8.0
@@ -1148,15 +1145,12 @@ importers:
 
   packages/storage:
     dependencies:
-      '@aws-sdk/client-s3':
-        specifier: 'catalog:'
-        version: 3.1127.0
-      '@aws-sdk/s3-request-presigner':
-        specifier: 'catalog:'
-        version: 3.1127.0
       '@repo/logs':
         specifier: workspace:*
         version: link:../logs
+      aws4fetch:
+        specifier: 1.0.20
+        version: 1.0.20
     devDependencies:
       '@repo/tsconfig':
         specifier: workspace:*
@@ -1358,10 +1352,6 @@ packages:
 
   '@aws-sdk/nested-clients@3.997.44':
     resolution: {integrity: sha512-NhEgryjlBF9w38ZXqGymQV28IhkYa1mKhlbYnqIis57AYwWGVYfUPgg/qC2rLRqOUfblxx++irvju10kVTa8Vw==}
-    engines: {node: '>=20.0.0'}
-
-  '@aws-sdk/s3-request-presigner@3.1127.0':
-    resolution: {integrity: sha512-vl3WBaE2fMqfnEhyqulKT6ZIPNsCR2caCps92tyt1yGfLVlDXScSXBDXf4m3E2ejXBb4pplX0EdwBukJyBXtBg==}
     engines: {node: '>=20.0.0'}
 
   '@aws-sdk/signature-v4-multi-region@3.996.46':
@@ -4902,6 +4892,9 @@ packages:
     hasBin: true
     peerDependencies:
       postcss: ^8.1.0
+
+  aws4fetch@1.0.20:
+    resolution: {integrity: sha512-/djoAN709iY65ETD6LKCtyyEI04XIBP5xVvfmNxsEP0uJB5tyaGBztSryRr4HqMStr9R06PisQE7m9zDTXKu6g==}
 
   axios@1.19.0:
     resolution: {integrity: sha512-ht/iuYZXEjFxLH/Hkezgd7m6JKlHHXEUSneaDz8uZe1Gj5QZtCnpyDsckvAiEnT89OEbCLmnte4R4sn7P0EKFw==}
@@ -8781,15 +8774,6 @@ snapshots:
       '@smithy/types': 4.17.2
       tslib: 2.8.1
 
-  '@aws-sdk/s3-request-presigner@3.1127.0':
-    dependencies:
-      '@aws-sdk/core': 3.977.9
-      '@aws-sdk/signature-v4-multi-region': 3.996.46
-      '@aws-sdk/types': 3.974.5
-      '@smithy/core': 3.33.3
-      '@smithy/types': 4.17.2
-      tslib: 2.8.1
-
   '@aws-sdk/signature-v4-multi-region@3.996.46':
     dependencies:
       '@aws-sdk/types': 3.974.5
@@ -12053,6 +12037,8 @@ snapshots:
       picocolors: 1.1.1
       postcss: 8.5.28
       postcss-value-parser: 4.2.0
+
+  aws4fetch@1.0.20: {}
 
   axios@1.19.0(debug@4.4.3):
     dependencies:
