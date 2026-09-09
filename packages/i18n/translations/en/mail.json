@@ -14,9 +14,9 @@
 		"subject": "Reset your password"
 	},
 	"magicLink": {
-		"body": "Hey,\nyou requested a login email from supastarter.\n\nClick the link below to login.",
+		"body": "Hey,\nyou requested a login email from Vesact.\n\nClick the link below to login.",
 		"login": "Login",
-		"subject": "Login to supastarter"
+		"subject": "Login to Vesact"
 	},
 	"notification": {
 		"openInApp": "Open this notification in the app:",

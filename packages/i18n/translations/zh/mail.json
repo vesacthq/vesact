@@ -14,9 +14,9 @@
 		"subject": "重置你的密码"
 	},
 	"magicLink": {
-		"body": "你好，\n你在 supastarter 请求了登录邮件。\n\n点击下方链接登录。",
+		"body": "你好，\n你在 Vesact 请求了登录邮件。\n\n点击下方链接登录。",
 		"login": "登录",
-		"subject": "登录 supastarter"
+		"subject": "登录 Vesact"
 	},
 	"notification": {
 		"openInApp": "在应用中打开此通知：",

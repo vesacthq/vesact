@@ -1,7 +1,7 @@
 import type { SaasConfig } from "./types";
 
 export const config = {
-	appName: "supastarter for TanStack Start",
+	appName: "Studio",
 	docsUrl: import.meta.env.VITE_DOCS_URL as string | undefined,
 	marketingUrl: import.meta.env.VITE_MARKETING_URL as string | undefined,
 	enabledThemes: ["light", "dark"],

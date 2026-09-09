@@ -3,7 +3,6 @@ import { useTranslations } from "@i18n/intl";
 import { cn, ColorModeToggle, Logo } from "@repo/ui";
 import type { PropsWithChildren } from "react";
 
-import { Footer } from "./Footer";
 import { LocaleSwitch } from "./LocaleSwitch";
 
 export function AuthWrapper({
@@ -38,8 +37,6 @@ export function AuthWrapper({
 				<div className="container flex justify-center">
 					<main className={cn("max-w-md w-full", contentClass)}>{children}</main>
 				</div>
-
-				<Footer />
 			</div>
 		</div>
 	);

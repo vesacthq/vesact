@@ -14,9 +14,9 @@
 		"subject": "Réinitialisez votre mot de passe"
 	},
 	"magicLink": {
-		"body": "Bonjour,\nvous avez demandé un e-mail de connexion de supastarter.\n\nCliquez sur le lien ci-dessous pour vous connecter.",
+		"body": "Bonjour,\nvous avez demandé un e-mail de connexion de Vesact.\n\nCliquez sur le lien ci-dessous pour vous connecter.",
 		"login": "Connexion",
-		"subject": "Connexion à supastarter"
+		"subject": "Connexion à Vesact"
 	},
 	"notification": {
 		"openInApp": "Ouvrez cette notification dans l'application :",

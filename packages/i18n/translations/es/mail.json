@@ -14,9 +14,9 @@
 		"subject": "Restablece tu contraseña"
 	},
 	"magicLink": {
-		"body": "Hola,\nsolicitaste un correo de inicio de sesión de supastarter.\n\nHaz clic en el enlace de abajo para iniciar sesión.",
+		"body": "Hola,\nsolicitaste un correo de inicio de sesión de Vesact.\n\nHaz clic en el enlace de abajo para iniciar sesión.",
 		"login": "Iniciar sesión",
-		"subject": "Iniciar sesión en supastarter"
+		"subject": "Iniciar sesión en Vesact"
 	},
 	"notification": {
 		"openInApp": "Abre esta notificación en la aplicación:",
