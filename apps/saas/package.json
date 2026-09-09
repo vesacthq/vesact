@@ -22,6 +22,7 @@
 		"@bprogress/react": "catalog:",
 		"@orpc/client": "catalog:",
 		"@orpc/tanstack-query": "catalog:",
+		"@repo/analytics": "workspace:*",
 		"@repo/api": "workspace:*",
 		"@repo/auth": "workspace:*",
 		"@repo/database": "workspace:*",

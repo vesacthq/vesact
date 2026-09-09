@@ -302,8 +302,7 @@
 			"features": "功能",
 			"pricing": "定价",
 			"privacyPolicy": "隐私政策",
-			"termsAndConditions": "服务条款",
-			"builtWith": "基于 supastarter 构建"
+			"termsAndConditions": "服务条款"
 		},
 		"menu": {
 			"blog": "博客",

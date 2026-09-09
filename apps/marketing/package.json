@@ -20,6 +20,7 @@
 	"dependencies": {
 		"@bprogress/react": "catalog:",
 		"@fontsource/noto-serif-sc": "^5.3.0",
+		"@repo/analytics": "workspace:*",
 		"@repo/i18n": "workspace:*",
 		"@repo/logs": "workspace:*",
 		"@repo/payments": "workspace:*",

@@ -1,0 +1,16 @@
+{
+	"name": "@repo/analytics",
+	"version": "0.0.0",
+	"main": "./index.ts",
+	"scripts": {
+		"clean": "git clean -xdf .cache .turbo dist node_modules",
+		"type-check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"posthog-js": "1.428.3"
+	},
+	"devDependencies": {
+		"@repo/tsconfig": "workspace:*",
+		"@types/node": "catalog:"
+	}
+}

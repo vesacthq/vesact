@@ -17,6 +17,7 @@ env:
   VITE_SAAS_URL: "https://studio.vesact.com"
   VITE_MARKETING_URL: "https://www.vesact.com"
   VITE_POSTHOG_HOST: "https://e.vesact.com"
+  # Public project key: it is compiled into the client bundle by design.
   VITE_POSTHOG_KEY: "phc_uLUk93bEHjHERp7hMxbDRiRPG4PefxhnzTkSGWYscgjR"
 
 jobs:
@@ -43,6 +44,9 @@ jobs:
         if: github.event_name == 'pull_request'
         run: pnpm exec wrangler versions upload
         working-directory: apps/marketing
+      - name: Smoke check
+        if: github.event_name == 'push'
+        run: .github/scripts/smoke-check.sh https://www.vesact.com/
 
   saas:
     name: SaaS
@@ -62,3 +66,5 @@ jobs:
       - name: Deploy
         run: pnpm exec wrangler deploy
         working-directory: apps/saas
+      - name: Smoke check
+        run: .github/scripts/smoke-check.sh https://studio.vesact.com/login https://studio.vesact.com/api/health

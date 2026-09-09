@@ -1,42 +1,29 @@
 import { useSession } from "@auth/hooks/use-session";
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
-import { posthog, startAnalytics } from "@shared/lib/analytics";
-import { useEffect, useState } from "react";
+import { identifyUser, setOrganization, startAnalytics } from "@repo/analytics";
+import { useEffect } from "react";
 
 export function Analytics() {
 	const { user } = useSession();
 	const { activeOrganization } = useActiveOrganization();
-	const [ready, setReady] = useState(false);
 
 	useEffect(() => {
-		let active = true;
-		void startAnalytics().then(() => {
-			if (active) {
-				setReady(true);
-			}
+		startAnalytics({
+			product: "studio",
+			key: import.meta.env.VITE_POSTHOG_KEY as string | undefined,
+			host: import.meta.env.VITE_POSTHOG_HOST as string | undefined,
+			appUrl: import.meta.env.VITE_SAAS_URL as string | undefined,
+			enabled: import.meta.env.PROD,
 		});
-		return () => {
-			active = false;
-		};
 	}, []);
 
 	useEffect(() => {
-		if (!ready) {
-			return;
-		}
-		if (user) {
-			posthog()?.identify(user.id);
-		} else {
-			posthog()?.reset();
-		}
-	}, [ready, user]);
+		identifyUser(user?.id ?? null);
+	}, [user]);
 
 	useEffect(() => {
-		if (!ready || !activeOrganization) {
-			return;
-		}
-		posthog()?.group("organization", activeOrganization.id);
-	}, [ready, activeOrganization]);
+		setOrganization(activeOrganization?.id ?? null);
+	}, [activeOrganization]);
 
 	return null;
 }
