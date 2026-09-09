@@ -312,6 +312,11 @@ remote. Keeping that channel open constrains how product code is added.
   `packages/permissions/definition.ts`, `packages/database/drizzle/client.ts`,
   and `apps/saas/server.ts`. The last two carry the Cloudflare Workers
   connection lifecycle; `.agents/skills/port-app-to-cloudflare` explains why.
+- Template files that were removed rather than edited: `packages/storage/provider/s3`
+  (the AWS SDK cannot construct a client on workerd; `provider/r2` signs with
+  aws4fetch instead) and the unused analytics providers under
+  `apps/marketing/modules/analytics/provider`. A sync that changes them arrives
+  as a delete/modify conflict; keep the deletion.
 - Register product routers as one sub-router so `router.ts` carries a single
   added line rather than one per module.
 - Product tables belong in their own schema file, re-exported from

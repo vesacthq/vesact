@@ -12,13 +12,6 @@ export interface StorageConfig {
 	bucketNames: StorageBucketNamesConfig;
 }
 
-export type CreateBucketHandler = (
-	name: string,
-	options?: {
-		public?: boolean;
-	},
-) => Promise<void>;
-
 export type GetSignedUploadUrlHandler = (
 	path: string,
 	options: {
