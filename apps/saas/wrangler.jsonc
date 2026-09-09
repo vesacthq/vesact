@@ -14,6 +14,8 @@
 		"VITE_SAAS_URL": "https://studio.vesact.com",
 		"VITE_AUTH_URL": "https://auth.vesact.com",
 		"AUTH_COOKIE_DOMAIN": ".vesact.com",
+		"S3_ENDPOINT": "https://6a8e5373d12070c930f09f1a82541a0b.r2.cloudflarestorage.com",
+		"S3_REGION": "auto",
 		"VITE_MARKETING_URL": "https://www.vesact.com",
 	},
 	"hyperdrive": [
