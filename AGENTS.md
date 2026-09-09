@@ -15,10 +15,23 @@ Explicit user instructions win; if a documented command fails, report it rather 
 
 ### Environment
 
-Copy `.env.local.example` to `.env.local`. For local boot, set `DATABASE_URL` to
-`postgresql://postgres:postgres@localhost:5433/vesact`, set `BETTER_AUTH_SECRET`,
-and keep the local `VITE_*` URLs from the example. OAuth, mail, payments,
-storage, and AI variables are only needed when using those integrations.
+Local configuration lives in two files, and they reach different runtimes.
+
+`.env.local` (copy it from `.env.local.example`) feeds the Vite build and the
+Node-side scripts. It is where `DATABASE_URL` goes for
+`pnpm --filter @repo/database push | generate | migrate | studio`, and where the
+`VITE_*` URLs that get inlined into the client bundle come from.
+
+`apps/saas/.dev.vars` (copy it from `apps/saas/.dev.vars.example`) is what the
+Worker reads at runtime. `.env.local` never reaches it: the running app sees
+`wrangler.jsonc` `vars`, which hold production values, unless `.dev.vars`
+overrides them. Without those overrides the local server derives Better Auth's
+`baseURL`, the OAuth callbacks, the trusted origins and the links in email from
+the production URLs. The app's own database connection comes from the Hyperdrive
+binding's `localConnectionString`, not from `DATABASE_URL`.
+
+OAuth, mail, payments, storage, and AI variables are only needed when using those
+integrations.
 
 Start the local services with:
 

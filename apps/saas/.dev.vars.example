@@ -1,0 +1,11 @@
+# Local values for the Worker runtime. `wrangler.jsonc` vars are production
+# values and apply to `pnpm dev` too, so anything the server reads has to be
+# overridden here — the root `.env.local` only reaches the Vite build.
+VITE_SAAS_URL="http://localhost:3000"
+VITE_AUTH_URL="http://localhost:3000"
+VITE_MARKETING_URL="http://localhost:3001"
+BETTER_AUTH_SECRET="A_RANDOM_SECRET_STRING"
+GOOGLE_CLIENT_ID="YOUR_GOOGLE_CLIENT_ID"
+GOOGLE_CLIENT_SECRET="YOUR_GOOGLE_CLIENT_SECRET"
+GITHUB_CLIENT_ID="YOUR_GITHUB_CLIENT_ID"
+GITHUB_CLIENT_SECRET="YOUR_GITHUB_CLIENT_SECRET"
