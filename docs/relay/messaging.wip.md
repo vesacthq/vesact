@@ -1,6 +1,6 @@
 # Relay Messaging
 
-A1 的产出：领域模型、状态语义、契约。原则和契约约定见 engineering.md。
+A2 的产出：领域模型、状态语义、契约。原则和契约约定见 engineering.md。
 
 ## 必须先定的语义
 

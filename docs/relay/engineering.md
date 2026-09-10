@@ -446,7 +446,7 @@ Content-Type: application/json
 
 ## 9. 里程碑
 
-按 #26 的 A0–A6 推进：A0 外部流程，A1 Messaging 设计，A2 骨架，A3 第一批权限（Messenger、Instagram 私信），A4 分批（评论与 comment to DM、发布、广告），A5 WhatsApp，A6 计费与对外开放。进度在 issue 里打勾。
+按 #26 的 A0–A6 推进：A0 外部流程，A1 骨架，A2 第一切片设计（Connections、Messaging），A3 第一批权限（Messenger、Instagram 私信），A4 分批（评论与 comment to DM、发布、广告），A5 WhatsApp，A6 计费与对外开放。进度在 issue 里打勾。
 
 ---
 

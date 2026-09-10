@@ -7,13 +7,14 @@
 - 不接 Zernio 托管，所有平台能力由 Relay 自己的应用直连各平台；开源客户端只搬组件。
 - 主机名：`relay.vesact.com` 控制台、`api.vesact.com` API、`developers.vesact.com` 文档。
 - 计费按接入的账号收。
+- A 轨先骨架后领域设计：租户链、限流、配额、用量、OpenAPI、webhook 落库都只依赖租户模型，先把最薄的一条链路跑到线上；conversation / message 等领域模型在第一个切片前设计，用真实 webhook payload 校验。
 - 代码位置：`apps/relay` 是 worker 和控制台，服务端逻辑先放 `packages/api/modules/relay`，有第二个消费方再拆包。
 - Studio 文档拆成 overview（定位、用户、产品逻辑、边界、分期）和 architecture（模块、导航、联动、数据规则）。
 
 ## 2026-09-10 Relay 申请阶段的载体
 
 - 审核载体是 Relay 自己的控制台，不运行 Zernio 的开源客户端，只搬它们的组件（MIT）。理由：Meta 只认 App ID；那些页面本来就是控制台要有的；不用先做一层 Zernio 形状的兼容 API 再换掉。
-- API key、scope、限流、配额用 `@better-auth/api-key`，A2 就上；计费等权限齐了再接。
+- API key、scope、限流、配额用 `@better-auth/api-key`，A1 就上；计费等权限齐了再接。
 - 设计规范放 `docs/design.wip.md`，组件层用 ReUI。
 
 ## 2026-09-10 Relay 的范围
