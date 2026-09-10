@@ -57,3 +57,7 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
   pipeline runs it right after deploy.
 - Adding a recipient: add the age public key to `.sops.yaml`, then
   `sops updatekeys secrets/*.env`.
+- Anything a browser calls cross-origin on preview (`auth.preview`, a future
+  `api.preview` used from another hostname) needs its own Access application
+  with a Bypass policy: Access rejects CORS preflights and its cookie does not
+  carry over to a second hostname.
