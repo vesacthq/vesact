@@ -39,7 +39,9 @@ export default defineConfig({
 	],
 	webServer: {
 		command: "pnpm --filter studio run dev",
-		url: baseURL,
+		// "/" redirects signed-out visitors to the auth app, which is not running
+		// here; the health probe answers on this server.
+		url: `${baseURL}/api/health`,
 		env: {
 			...process.env,
 			PORT: e2ePort,
