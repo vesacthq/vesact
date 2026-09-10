@@ -83,8 +83,8 @@ function RootNotFound() {
 	return (
 		<div className="max-w-xl px-6 py-20 gap-4 mx-auto flex min-h-[60vh] flex-col items-center justify-center text-center">
 			<h1 className="text-4xl font-bold">404</h1>
-			<Link to="/login" className="text-sm text-primary">
-				Go to login
+			<Link to="/account" className="text-sm text-primary">
+				Go to your account
 			</Link>
 		</div>
 	);

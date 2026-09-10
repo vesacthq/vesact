@@ -1,4 +1,4 @@
-import { getMessagesForLocaleSync, type AuthMessages } from "@repo/i18n";
+import { getMessagesForLocaleSync, type AccountMessages } from "@repo/i18n";
 import { getCurrentLocale } from "@repo/i18n/runtime";
 import { useRouterState } from "@tanstack/react-router";
 import type { PropsWithChildren } from "react";
@@ -8,7 +8,7 @@ export function I18nProvider({ children }: PropsWithChildren) {
 	useRouterState({ select: (s) => s.location.pathname });
 
 	const locale = getCurrentLocale();
-	const messages = getMessagesForLocaleSync<AuthMessages>(locale, "auth");
+	const messages = getMessagesForLocaleSync<AccountMessages>(locale, "account");
 
 	return (
 		<IntlProvider locale={locale} messages={messages} timeZone="UTC">

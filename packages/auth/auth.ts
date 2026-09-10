@@ -12,7 +12,7 @@ import { logger } from "@repo/logs";
 import { sendEmail } from "@repo/mail";
 import { createWelcomeNotification } from "@repo/notifications";
 import { cancelSubscription } from "@repo/payments";
-import { getBaseUrl, getTrustedOrigins } from "@repo/utils";
+import { getBaseUrl, getCookieDomain, getTrustedOrigins } from "@repo/utils";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError, createAuthMiddleware } from "better-auth/api";
@@ -27,6 +27,7 @@ import {
 import { parseCookie as parseCookies } from "cookie";
 
 import { config } from "./config";
+import { ac, roles } from "./lib/access";
 import { updateSeatsInOrganizationSubscription } from "./lib/organization";
 import { invitationOnlyPlugin } from "./plugins/invitation-only";
 
@@ -38,7 +39,7 @@ const getLocaleFromRequest = (request?: Request) => {
 // The account center owns the auth endpoints, so every product shares one login
 // and one set of OAuth callbacks.
 const accountUrl = getBaseUrl(process.env.VITE_ACCOUNT_URL, 3004);
-const cookieDomain = process.env.AUTH_COOKIE_DOMAIN;
+const cookieDomain = getCookieDomain(accountUrl);
 
 export const auth = betterAuth({
 	baseURL: accountUrl,
@@ -55,8 +56,8 @@ export const auth = betterAuth({
 		database: {
 			generateId: false,
 		},
-		// Set to the parent domain in deployed environments so the session is
-		// readable from every product subdomain.
+		// The parent domain in deployed environments, so the session is readable
+		// from every product subdomain.
 		crossSubDomainCookies: cookieDomain ? { enabled: true, domain: cookieDomain } : undefined,
 		// Preview and production share the browser; a distinct prefix keeps their
 		// session cookies from shadowing each other.
@@ -276,14 +277,13 @@ export const auth = betterAuth({
 			},
 		}),
 		organization({
+			ac,
+			roles,
 			sendInvitationEmail: async ({ email, id, organization }, request) => {
 				const locale = getLocaleFromRequest(request);
 				const existingUser = await getUserByEmail(email);
 
-				const url = new URL(
-					existingUser ? "/login" : "/signup",
-					getBaseUrl(process.env.VITE_STUDIO_URL, 3000),
-				);
+				const url = new URL(existingUser ? "/login" : "/signup", accountUrl);
 
 				url.searchParams.set("invitationId", id);
 				url.searchParams.set("email", email);
@@ -320,8 +320,6 @@ export type ActiveOrganization = NonNullable<
 >;
 
 export type Organization = typeof auth.$Infer.Organization;
-
-export type OrganizationMemberRole = ActiveOrganization["members"][number]["role"];
 
 export type OrganizationInvitationStatus = typeof auth.$Infer.Invitation.status;
 

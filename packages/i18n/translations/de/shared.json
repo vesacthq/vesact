@@ -82,5 +82,26 @@
 			"light": "Hell",
 			"dark": "Dunkel"
 		}
+	},
+	"settings": {
+		"menu": {
+			"account": {
+				"billing": "Abrechnung",
+				"notifications": "Benachrichtigungen",
+				"security": "Sicherheit",
+				"title": "Konto",
+				"profile": "Profil"
+			},
+			"organization": {
+				"billing": "Abrechnung",
+				"general": "Allgemein",
+				"members": "Mitglieder",
+				"title": "Organisation"
+			},
+			"organizations": {
+				"title": "Organisationen",
+				"new": "Neue Organisation"
+			}
+		}
 	}
 }

@@ -1,0 +1,107 @@
+import { config } from "@config";
+import { useTranslations } from "@i18n/intl";
+import { OrganizationLogo } from "@organizations/components/OrganizationLogo";
+import { organizationListQueryKey, setActiveOrganization } from "@organizations/lib/api";
+import { authClient } from "@repo/auth/client";
+import { Button } from "@repo/ui/components/button";
+import { Spinner } from "@repo/ui/components/spinner";
+import { toast } from "@repo/ui/components/toast";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "@tanstack/react-router";
+import { CheckIcon, XIcon } from "lucide-react";
+import { useState } from "react";
+
+export function OrganizationInvitationModal({
+	invitationId,
+	organizationName,
+	organizationSlug,
+	logoUrl,
+}: {
+	invitationId: string;
+	organizationName: string;
+	organizationSlug: string;
+	logoUrl?: string;
+}) {
+	const t = useTranslations();
+	const router = useRouter();
+	const queryClient = useQueryClient();
+	const [submitting, setSubmitting] = useState<false | "accept" | "reject">(false);
+
+	const onSelectAnswer = async (accept: boolean) => {
+		setSubmitting(accept ? "accept" : "reject");
+		try {
+			if (accept) {
+				const { error } = await authClient.organization.acceptInvitation({ invitationId });
+
+				if (error) {
+					throw error;
+				}
+
+				await setActiveOrganization(organizationSlug);
+				await queryClient.invalidateQueries({ queryKey: organizationListQueryKey });
+
+				// The invitation came from a product: land in the organization there.
+				window.location.assign(new URL(`/${organizationSlug}`, config.studioUrl).toString());
+			} else {
+				const { error } = await authClient.organization.rejectInvitation({ invitationId });
+
+				if (error) {
+					throw error;
+				}
+
+				void router.navigate({ to: "/orgs", replace: true });
+			}
+		} catch {
+			toast.add({ title: t("auth.errors.unknown"), type: "error" });
+		} finally {
+			setSubmitting(false);
+		}
+	};
+
+	return (
+		<div>
+			<h1 className="font-bold text-xl md:text-2xl">{t("organizations.invitationModal.title")}</h1>
+			<p className="mt-1 mb-6 text-foreground/60">
+				{t("organizations.invitationModal.description", {
+					organizationName,
+				})}
+			</p>
+
+			<div className="mb-6 gap-3 p-2 flex items-center rounded-lg border">
+				<OrganizationLogo name={organizationName} logoUrl={logoUrl} className="size-12" />
+				<div>
+					<strong className="font-medium text-lg">{organizationName}</strong>
+				</div>
+			</div>
+
+			<div className="gap-2 flex">
+				<Button
+					className="flex-1"
+					variant="secondary"
+					onClick={() => onSelectAnswer(false)}
+					disabled={!!submitting}
+				>
+					{submitting === "reject" ? (
+						<Spinner data-icon="inline-start" />
+					) : (
+						<XIcon data-icon="inline-start" />
+					)}
+					{t("organizations.invitationModal.decline")}
+				</Button>
+				<Button
+					className="flex-1"
+					variant="default"
+					onClick={() => onSelectAnswer(true)}
+					disabled={!!submitting}
+				>
+					{submitting === "accept" ? (
+						<Spinner data-icon="inline-start" />
+					) : (
+						<CheckIcon data-icon="inline-start" />
+					)}
+					{t("organizations.invitationModal.accept")}
+				</Button>
+			</div>
+		</div>
+	);
+}

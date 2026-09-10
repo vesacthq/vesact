@@ -13,6 +13,17 @@ export function getBaseUrl(envValue?: string, defaultPort = 3000): string {
 }
 
 /**
+ * The domain a session cookie must be set on so every product sees it: the
+ * parent of the account center's hostname (`account.vesact.com` →
+ * `.vesact.com`, `account.preview.vesact.com` → `.preview.vesact.com`).
+ * `localhost` has no parent, so local cookies stay host-only.
+ */
+export function getCookieDomain(url: string): string | undefined {
+	const labels = new URL(url).hostname.split(".");
+	return labels.length >= 3 ? `.${labels.slice(1).join(".")}` : undefined;
+}
+
+/**
  * Returns the list of origins the app considers its own. Used as the
  * single source of truth for both the API CORS allow-list and better-auth's
  * `trustedOrigins` (origin/CSRF and callback/redirect URL validation), so the

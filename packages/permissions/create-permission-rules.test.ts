@@ -90,6 +90,19 @@ describe("createPermissionRules matrix", () => {
 				organizationAccessBillingPortal: false,
 			},
 		},
+		{
+			label: "member with a Studio role in the comma-separated column",
+			user: { role: "user" },
+			membershipRole: "member,studio:member",
+			expected: {
+				adminAccess: false,
+				organizationRead: true,
+				organizationManage: false,
+				organizationDelete: false,
+				organizationManageBilling: false,
+				organizationAccessBillingPortal: false,
+			},
+		},
 	] as const)("$label", ({ user, membershipRole, expected }) => {
 		const rules = createPermissionRules({ user, membershipRole });
 
@@ -116,5 +129,31 @@ describe("createPermissionRules matrix", () => {
 		expect(checkPermission({ user, membershipRole }, "organization.accessBillingPortal")).toBe(
 			expected.organizationAccessBillingPortal,
 		);
+	});
+});
+
+describe("product access", () => {
+	it.each([
+		["owner", { studio: [true, true], relay: [true, true] }],
+		["admin", { studio: [true, true], relay: [true, true] }],
+		["member", { studio: [false, false], relay: [false, false] }],
+		["member,studio:member", { studio: [true, false], relay: [false, false] }],
+		["member,studio:admin,relay:developer", { studio: [true, true], relay: [true, false] }],
+		["member,relay:admin", { studio: [false, false], relay: [true, true] }],
+		[null, { studio: [false, false], relay: [false, false] }],
+	] as const)("%s", (membershipRole, expected) => {
+		const rules = createPermissionRules({ user: { role: "user" }, membershipRole });
+
+		expect([rules.studio.access, rules.studio.manage]).toEqual(expected.studio);
+		expect([rules.relay.access, rules.relay.manage]).toEqual(expected.relay);
+		expect(checkPermission({ user: { role: "user" }, membershipRole }, "studio.access")).toBe(
+			expected.studio[0],
+		);
+	});
+
+	it("does not let a global admin into a product without membership", () => {
+		const rules = createPermissionRules({ user: { role: "admin" }, membershipRole: null });
+
+		expect(rules.studio.access).toBe(false);
 	});
 });

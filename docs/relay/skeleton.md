@@ -36,7 +36,7 @@ A 轨的第一步：把 Relay 最薄的一条端到端链路跑到线上，后�
 内容：
 
 - `apps/relay`：照 `apps/studio` 建 `vite.config.ts`、`wrangler.jsonc`（prod + `env.preview`）、`server.ts`（Hyperdrive 延迟加载 + 路径分发）、`start.ts`、`router.tsx`、`routes/__root.tsx`。
-- vars：`VITE_RELAY_URL`、`VITE_RELAY_API_URL`、`VITE_ACCOUNT_URL`、`META_APP_ID`；prod 加 `AUTH_COOKIE_DOMAIN=.vesact.com`。
+- vars：`VITE_RELAY_URL`、`VITE_RELAY_API_URL`、`VITE_ACCOUNT_URL`、`META_APP_ID`；preview 加 `AUTH_COOKIE_PREFIX=vesact-preview`。
 - secrets：`secrets/relay.{prod,preview,dev}.env`，内容是对应 `studio.*.env` 的认证与邮件项（`BETTER_AUTH_SECRET` 必须同值）加 `META_APP_SECRET`、`META_WEBHOOK_VERIFY_TOKEN`。`pnpm secrets:pull` 同时产出 `apps/relay/.dev.vars`。
 - CI：`deploy.yml` 加 `relay` job，`needs: studio`，表由 studio job 的 migrate 建；`select-target.sh` 加 relay 的 URL；smoke 打 `/v1/health` 和 `/login`。
 - Cloudflare：prod 和 preview 各两个 custom domain，先在 API 或面板上挂好再首次部署；preview 的 Access 由 `*.preview.vesact.com` 通配应用覆盖，另建一个路径为 `api.preview.vesact.com/webhooks` 的 Access 应用，策略 Bypass Everyone，Meta 才打得到。

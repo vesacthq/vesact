@@ -1,15 +1,17 @@
+import { accountCenterUrl } from "@auth/lib/account-urls";
 import { useTranslations } from "@i18n/intl";
 import { OrganizationLogo } from "@organizations/components/OrganizationLogo";
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { useOrganizationListQuery } from "@organizations/lib/api";
 import { config } from "@repo/auth/config";
 import { Card } from "@repo/ui/components/card";
-import { Link, useRouter } from "@tanstack/react-router";
+import { useRouter, useRouterState } from "@tanstack/react-router";
 import { ChevronRightIcon, PlusCircleIcon } from "lucide-react";
 
 export function OrganizationsGrid() {
 	const t = useTranslations();
 	const router = useRouter();
+	const currentHref = useRouterState({ select: (state) => state.location.href });
 
 	const { setActiveOrganization } = useActiveOrganization();
 	const { data: allOrganizations } = useOrganizationListQuery();
@@ -42,15 +44,15 @@ export function OrganizationsGrid() {
 				))}
 
 				{config.organizations.enableUsersToCreateOrganizations && (
-					<Link
-						to="/new-organization"
+					<a
+						href={accountCenterUrl("/orgs/new", currentHref)}
 						className="gap-2 p-4 flex h-full items-center justify-center rounded-2xl bg-primary/5 text-primary transition-colors duration-150 hover:bg-primary/10"
 					>
 						<PlusCircleIcon />
 						<span className="font-medium text-sm">
 							{t("organizations.organizationsGrid.createNewOrganization")}
 						</span>
-					</Link>
+					</a>
 				)}
 			</div>
 		</div>

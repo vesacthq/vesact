@@ -1,10 +1,4 @@
 {
-	"checkoutReturn": {
-		"loading": "Finalisation de votre achat…",
-		"timeout": "La confirmation prend plus de temps que d'habitude. Vous pouvez réessayer ou choisir un plan à nouveau.",
-		"retry": "Réessayer",
-		"choosePlan": "Choisir un plan"
-	},
 	"admin": {
 		"menu": {
 			"organizations": "Organisations",
@@ -33,7 +27,9 @@
 					"success": "L'organisation a été enregistrée."
 				},
 				"save": "Enregistrer",
-				"updateTitle": "Modifier l'organisation"
+				"updateTitle": "Modifier l'organisation",
+				"membersNote": "Les administrateurs de l'organisation gèrent les membres et l'accès aux produits dans le centre de compte.",
+				"openMembers": "Ouvrir les membres"
 			},
 			"loading": "Chargement des organisations...",
 			"membersCount": "{count} {count, plural, one {membre} other {membres}}",
@@ -139,10 +135,6 @@
 			}
 		}
 	},
-	"choosePlan": {
-		"title": "Choisissez votre forfait",
-		"description": "Pour continuer, veuillez sélectionner un forfait."
-	},
 	"documentation": {
 		"title": "Documentation"
 	},
@@ -152,45 +144,7 @@
 		"goToDashboard": "Aller au tableau de bord",
 		"goToHomepage": "Aller à l'accueil"
 	},
-	"onboarding": {
-		"account": {
-			"avatar": "Avatar",
-			"avatarDescription": "Cliquez sur le cercle ou déposez une image pour télécharger votre avatar.",
-			"name": "Nom"
-		},
-		"continue": "Continuer",
-		"message": "Quelques étapes rapides pour commencer.",
-		"notifications": {
-			"accountSetupFailed": "Nous sommes désolés, nous n'avons pas pu configurer votre compte. Veuillez réessayer plus tard."
-		},
-		"pricing": {
-			"planSelected": "Votre plan a été sélectionné avec succès.",
-			"skip": "Passer pour le moment"
-		},
-		"step": "Étape {step} / {total}",
-		"title": "Configurez votre compte"
-	},
 	"organizations": {
-		"createForm": {
-			"name": "Nom de l'organisation",
-			"notifications": {
-				"error": "Nous sommes désolés, nous n'avons pas pu créer votre organisation. Veuillez réessayer plus tard.",
-				"success": "Votre organisation a été créée. Vous pouvez maintenant inviter des membres."
-			},
-			"submit": "Créer l'organisation",
-			"subtitle": "Entrez un nom pour votre organisation pour commencer. Vous pourrez modifier le nom plus tard dans les paramètres de l'organisation.",
-			"title": "Créer une organisation"
-		},
-		"invitationAlert": {
-			"description": "Vous devez vous connecter ou créer un compte pour rejoindre l'organisation.",
-			"title": "Vous avez été invité à rejoindre une organisation."
-		},
-		"invitationModal": {
-			"accept": "Accepter",
-			"decline": "Refuser",
-			"description": "Vous avez été invité à rejoindre l'organisation {organizationName}. Souhaitez-vous accepter l'invitation et rejoindre l'organisation ?",
-			"title": "Rejoindre l'organisation"
-		},
 		"organizationSelect": {
 			"createNewOrganization": "Créer une nouvelle organisation",
 			"organizations": "Organisations",
@@ -200,264 +154,17 @@
 			"createNewOrganization": "Créer une nouvelle organisation",
 			"title": "Vos organisations"
 		},
-		"roles": {
-			"admin": "Administrateur",
-			"member": "Membre",
-			"owner": "Propriétaire",
-			"info": {
-				"description": "Les rôles sont classés du moins au plus d'accès :",
-				"title": "Permissions des rôles"
-			}
-		},
-		"settings": {
-			"changeName": {
-				"title": "Nom de l'organisation"
-			},
-			"deleteOrganization": {
-				"confirmation": "Êtes-vous sûr de vouloir supprimer votre organisation ?",
-				"description": "Supprimer définitivement votre organisation. Une fois supprimée, il n'y a pas de retour en arrière possible. Pour confirmer, veuillez entrer votre mot de passe ci-dessous :",
-				"submit": "Supprimer l'organisation",
-				"title": "Supprimer l'organisation"
-			},
-			"logo": {
-				"description": "Téléchargez un logo pour votre organisation.",
-				"title": "Logo de l'organisation"
-			},
-			"members": {
-				"activeMembers": "Membres actifs",
-				"description": "Consultez tous les membres actifs et les invitations en attente de votre organisation.",
-				"invitations": {
-					"empty": "Vous n'avez pas encore invité de membres.",
-					"expiresAt": "Expire le {date}",
-					"invitationStatus": {
-						"accepted": "Acceptée",
-						"canceled": "Annulée",
-						"pending": "En attente",
-						"rejected": "Refusée"
-					},
-					"revoke": "Révoquer l'invitation",
-					"resend": "Renvoyer l'invitation"
-				},
-				"inviteMember": {
-					"description": "Pour inviter un nouveau membre, envoyez-lui une invitation.",
-					"email": "E-mail",
-					"notifications": {
-						"error": {
-							"description": "Impossible d'inviter le membre. Veuillez réessayer plus tard.",
-							"title": "Impossible d'inviter le membre"
-						},
-						"success": {
-							"description": "Le membre a été invité.",
-							"title": "Membre invité"
-						}
-					},
-					"role": "Rôle",
-					"submit": "Inviter",
-					"title": "Inviter un membre"
-				},
-				"leaveOrganization": "Quitter l'organisation",
-				"notifications": {
-					"removeMember": {
-						"error": {
-							"description": "Impossible de retirer le membre de votre organisation. Veuillez réessayer."
-						},
-						"loading": {
-							"description": "Retrait du membre de l'organisation..."
-						},
-						"success": {
-							"description": "Le membre a été retiré avec succès de votre organisation."
-						}
-					},
-					"revokeInvitation": {
-						"error": {
-							"description": "L'invitation n'a pas pu être révoquée. Veuillez réessayer plus tard."
-						},
-						"loading": {
-							"description": "Révocation de l'invitation..."
-						},
-						"success": {
-							"description": "L'invitation a été révoquée."
-						}
-					},
-					"updateMembership": {
-						"error": {
-							"description": "Impossible de mettre à jour l'adhésion à l'organisation. Veuillez réessayer."
-						},
-						"loading": {
-							"description": "Mise à jour de l'adhésion..."
-						},
-						"success": {
-							"description": "L'adhésion a été mise à jour avec succès"
-						}
-					},
-					"resendInvitation": {
-						"loading": {
-							"description": "Renvoyant l'invitation..."
-						},
-						"success": {
-							"description": "Invitation envoyée"
-						},
-						"error": {
-							"description": "Impossible d'envoyer l'invitation. Veuillez réessayer."
-						}
-					}
-				},
-				"pendingInvitations": "Invitations en attente",
-				"removeMember": "Retirer le membre",
-				"title": "Membres"
-			},
-			"notifications": {
-				"organizationDeleted": "Votre organisation a été supprimée.",
-				"organizationNameNotUpdated": "Impossible de mettre à jour le nom de votre organisation. Veuillez réessayer plus tard.",
-				"organizationNameUpdated": "Le nom de votre organisation a été mis à jour.",
-				"organizationNotDeleted": "Impossible de supprimer votre organisation. Veuillez réessayer plus tard."
-			},
-			"subtitle": "Gérez les paramètres de l'organisation.",
-			"title": "Organisation",
-			"dangerZone": {
-				"title": "Zone de danger"
-			}
-		},
 		"start": {
 			"subtitle": "Bienvenue sur la page de démarrage de cette organisation !"
+		},
+		"noAccess": {
+			"title": "Pas d'accès à Studio",
+			"description": "Vous êtes membre de {organization}, mais Studio n'est pas activé pour vous. Un administrateur de l'organisation peut vous donner l'accès dans le centre de compte.",
+			"members": "Ouvrir les membres"
 		}
-	},
-	"settings": {
-		"account": {
-			"avatar": {
-				"description": "Pour changer votre avatar, cliquez sur l'image dans ce bloc et sélectionnez un fichier sur votre ordinateur à télécharger.",
-				"notifications": {
-					"error": "Impossible de mettre à jour l'avatar",
-					"success": "L'avatar a été mis à jour avec succès"
-				},
-				"title": "Votre avatar"
-			},
-			"changeEmail": {
-				"description": "Pour changer votre e-mail, entrez le nouvel e-mail et enregistrez. Vous devrez confirmer le nouvel e-mail avant qu'il ne soit actif.",
-				"notifications": {
-					"error": "Impossible de mettre à jour l'e-mail",
-					"success": "L'e-mail a été mis à jour avec succès"
-				},
-				"title": "Votre e-mail"
-			},
-			"changeName": {
-				"notifications": {
-					"error": "Impossible de mettre à jour le nom",
-					"success": "Le nom a été mis à jour avec succès"
-				},
-				"title": "Votre nom"
-			},
-			"dangerZone": {
-				"title": "Zone dangereuse"
-			},
-			"deleteAccount": {
-				"confirmation": "Êtes-vous sûr de vouloir supprimer votre compte ?",
-				"description": "Supprimer définitivement votre compte. Une fois supprimé, il n'y a pas de retour en arrière possible. Pour confirmer, veuillez entrer votre mot de passe ci-dessous :",
-				"notifications": {
-					"error": "Impossible de supprimer le compte",
-					"success": "Le compte a été supprimé avec succès"
-				},
-				"submit": "Supprimer le compte",
-				"title": "Supprimer le compte"
-			},
-			"language": {
-				"description": "Pour changer la langue de l'application pour votre compte, sélectionnez une langue dans la liste et cliquez sur enregistrer.",
-				"notifications": {
-					"error": "Impossible de mettre à jour la langue",
-					"success": "La langue a été mise à jour avec succès"
-				},
-				"title": "Votre langue"
-			},
-			"notificationPreferences": {
-				"description": "Choisissez les e-mails que nous envoyons. Les notifications in-app s'affichent dans le menu cloche tant que vous êtes connecté.",
-				"emailNewsletter": "Newsletter et astuces",
-				"emailProductUpdates": "Mises à jour produit et nouveautés",
-				"emailAccountSecurity": "Sécurité du compte et alertes de connexion",
-				"emailAccountSecurityHint": "Recommandé — messages importants sur votre compte et vos connexions.",
-				"title": "Notifications par e-mail",
-				"saved": "Vos préférences de notification ont été mises à jour."
-			},
-			"subtitle": "Gérez les paramètres de votre compte personnel.",
-			"title": "Paramètres du compte",
-			"securityLink": {
-				"title": "Sécurité",
-				"description": "Mot de passe, passkeys, double authentification et sessions actives se gèrent dans votre compte.",
-				"open": "Ouvrir la sécurité du compte"
-			}
-		},
-		"billing": {
-			"createCustomerPortal": {
-				"label": "Gérer la facturation",
-				"notifications": {
-					"error": {
-						"title": "Impossible de créer une session du portail client. Veuillez réessayer."
-					}
-				}
-			},
-			"activePlan": {
-				"status": {
-					"active": "Actif",
-					"canceled": "Annulé",
-					"expired": "Expiré",
-					"incomplete": "Incomplet",
-					"past_due": "En retard",
-					"paused": "En pause",
-					"trialing": "En essai",
-					"unpaid": "Impayé"
-				},
-				"title": "Votre forfait"
-			},
-			"changePlan": {
-				"description": "Choisissez un forfait auquel vous abonner.",
-				"title": "Changer de forfait"
-			},
-			"title": "Facturation"
-		},
-		"notificationsPage": {
-			"title": "Notifications",
-			"description": "Choisissez comment vous recevez les notifications. Les options désactivées sont enregistrées ; tout est activé par défaut.",
-			"groups": {
-				"general": {
-					"title": "Général"
-				}
-			},
-			"types": {
-				"APP_UPDATE": {
-					"label": "Mises à jour de l'application"
-				}
-			},
-			"columns": {
-				"type": "Notification",
-				"inApp": "Dans l'application",
-				"email": "E-mail"
-			}
-		},
-		"menu": {
-			"account": {
-				"billing": "Facturation",
-				"dangerZone": "Zone de danger",
-				"general": "Général",
-				"notifications": "Notifications",
-				"security": "Sécurité",
-				"title": "Compte"
-			},
-			"organization": {
-				"billing": "Facturation",
-				"general": "Général",
-				"members": "Membres",
-				"title": "Organisation",
-				"dangerZone": "Zone de danger"
-			}
-		},
-		"save": "Enregistrer"
 	},
 	"start": {
 		"subtitle": "Consultez les dernières statistiques de votre entreprise.",
 		"welcome": "Bienvenue {name} !"
-	},
-	"auth": {
-		"errors": {
-			"unknown": "Une erreur s'est produite. Veuillez réessayer."
-		}
 	}
 }

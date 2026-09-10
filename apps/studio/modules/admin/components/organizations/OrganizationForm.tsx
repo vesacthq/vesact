@@ -1,7 +1,6 @@
 import { getAdminPath } from "@admin/lib/links";
+import { accountCenterUrl } from "@auth/lib/account-urls";
 import { useTranslations } from "@i18n/intl";
-import { InviteMemberForm } from "@organizations/components/InviteMemberForm";
-import { OrganizationMembersBlock } from "@organizations/components/OrganizationMembersBlock";
 import {
 	fullOrganizationQueryKey,
 	organizationListQueryKey,
@@ -25,7 +24,8 @@ import { toast } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "@tanstack/react-router";
+import { useRouter, useRouterState } from "@tanstack/react-router";
+import { ExternalLinkIcon } from "lucide-react";
 import { z } from "zod";
 
 const organizationFormSchema = z.object({
@@ -35,6 +35,7 @@ const organizationFormSchema = z.object({
 export function OrganizationForm({ organizationId }: { organizationId: string }) {
 	const t = useTranslations();
 	const router = useRouter();
+	const currentHref = useRouterState({ select: (state) => state.location.href });
 
 	const { data: organization } = useFullOrganizationQuery(organizationId);
 
@@ -139,10 +140,26 @@ export function OrganizationForm({ organizationId }: { organizationId: string })
 			</Card>
 
 			{organization && (
-				<>
-					<OrganizationMembersBlock organizationId={organization.id} />
-					<InviteMemberForm organizationId={organization.id} />
-				</>
+				<Card>
+					<CardContent className="gap-4 flex flex-wrap items-center justify-between">
+						<p className="text-sm text-foreground/60">
+							{t("admin.organizations.form.membersNote")}
+						</p>
+						<Button
+							variant="secondary"
+							nativeButton={false}
+							render={(props) => (
+								<a
+									{...props}
+									href={accountCenterUrl(`/orgs/${organization.slug}/members`, currentHref)}
+								>
+									<ExternalLinkIcon aria-hidden="true" />
+									{t("admin.organizations.form.openMembers")}
+								</a>
+							)}
+						/>
+					</CardContent>
+				</Card>
 			)}
 		</div>
 	);

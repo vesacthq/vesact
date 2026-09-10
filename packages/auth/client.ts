@@ -10,13 +10,14 @@ import {
 import { createAuthClient } from "better-auth/react";
 
 import type { auth } from ".";
+import { ac, roles } from "./lib/access";
 
 export const authClient = createAuthClient({
 	baseURL: import.meta.env.VITE_ACCOUNT_URL as string | undefined,
 	plugins: [
 		inferAdditionalFields<typeof auth>(),
 		magicLinkClient(),
-		organizationClient(),
+		organizationClient({ ac, roles }),
 		adminClient(),
 		passkeyClient(),
 		twoFactorClient(),
