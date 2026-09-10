@@ -12,7 +12,7 @@ import { createAuthClient } from "better-auth/react";
 import type { auth } from ".";
 
 export const authClient = createAuthClient({
-	baseURL: import.meta.env.VITE_AUTH_URL as string | undefined,
+	baseURL: import.meta.env.VITE_ACCOUNT_URL as string | undefined,
 	plugins: [
 		inferAdditionalFields<typeof auth>(),
 		magicLinkClient(),

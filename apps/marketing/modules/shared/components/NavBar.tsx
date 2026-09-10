@@ -11,7 +11,7 @@ import { useTranslations } from "use-intl";
 export function NavBar() {
 	const t = useTranslations();
 	const localePathname = useLocalePathname();
-	const loginUrl = config.authUrl && `${String(config.authUrl).replace(/\/$/, "")}/login`;
+	const loginUrl = config.accountUrl && `${String(config.accountUrl).replace(/\/$/, "")}/login`;
 
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const [isTop, setIsTop] = useState(true);

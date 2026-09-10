@@ -38,7 +38,7 @@ export default defineConfig({
 		},
 	],
 	webServer: {
-		command: "pnpm --filter auth run dev",
+		command: "pnpm --filter account run dev",
 		url: baseURL,
 		env: {
 			...process.env,

@@ -17,11 +17,11 @@ export function getBaseUrl(envValue?: string, defaultPort = 3000): string {
  * single source of truth for both the API CORS allow-list and better-auth's
  * `trustedOrigins` (origin/CSRF and callback/redirect URL validation), so the
  * two never drift apart. Always includes the Studio app origin and adds the
- * marketing site and auth origins when configured.
+ * marketing site and account center origins when configured.
  */
 export function getTrustedOrigins(): string[] {
 	const studioUrl = getBaseUrl(process.env.VITE_STUDIO_URL, 3000);
 	const marketingUrl = process.env.VITE_MARKETING_URL;
-	const authUrl = process.env.VITE_AUTH_URL;
-	return [...new Set([studioUrl, marketingUrl, authUrl].filter((url) => url !== undefined))];
+	const accountUrl = process.env.VITE_ACCOUNT_URL;
+	return [...new Set([studioUrl, marketingUrl, accountUrl].filter((url) => url !== undefined))];
 }

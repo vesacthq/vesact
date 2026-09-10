@@ -5,7 +5,7 @@ import { getSafeRedirectUrl } from "./redirects";
 const options = {
 	fallback: "https://studio.vesact.com/",
 	allowedOrigins: ["https://studio.vesact.com", "https://relay.vesact.com"],
-	base: "https://auth.vesact.com",
+	base: "https://account.vesact.com",
 };
 
 describe("getSafeRedirectUrl", () => {
