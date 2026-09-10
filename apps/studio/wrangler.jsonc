@@ -28,12 +28,18 @@
 	],
 	"env": {
 		"preview": {
-			"workers_dev": true,
+			"workers_dev": false,
 			"observability": { "enabled": true },
+			"routes": [
+				{ "pattern": "studio.preview.vesact.com", "custom_domain": true },
+				{ "pattern": "auth.preview.vesact.com", "custom_domain": true },
+			],
 			"vars": {
-				"VITE_STUDIO_URL": "https://vesact-studio-preview.vesact.workers.dev",
-				"VITE_AUTH_URL": "https://vesact-studio-preview.vesact.workers.dev",
-				"VITE_MARKETING_URL": "https://vesact-marketing-preview.vesact.workers.dev",
+				"VITE_STUDIO_URL": "https://studio.preview.vesact.com",
+				"VITE_AUTH_URL": "https://auth.preview.vesact.com",
+				"VITE_MARKETING_URL": "https://www.preview.vesact.com",
+				"AUTH_COOKIE_DOMAIN": ".preview.vesact.com",
+				"AUTH_COOKIE_PREFIX": "vesact-preview",
 				"S3_ENDPOINT": "https://6a8e5373d12070c930f09f1a82541a0b.r2.cloudflarestorage.com",
 				"S3_REGION": "auto",
 			},

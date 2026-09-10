@@ -5,7 +5,7 @@
 ## 2026-09-11 Relay API 约定与骨架
 
 - 约定值填在 engineering.md §8.3，范围与验收在 skeleton.md。几个取舍：限流头用 `X-RateLimit-*`，IETF 的 `RateLimit` 结构化头仍是草案；幂等按 Stripe 的语义，IETF 草案已过期；出站 webhook 用 Standard Webhooks，客户各语言有现成校验库。
-- 认证按环境分开：prod 走 `auth.vesact.com` 共享会话；preview 和 dev 由 Relay worker 自己挂 `/api/auth`，因为 `workers.dev` 在 Public Suffix List 上，两个 preview worker 的 cookie 互不可见。
+- preview 迁到 `*.preview.vesact.com`（`studio.preview`、`auth.preview`、`www.preview`），cookie 域 `.preview.vesact.com`，Better Auth cookie 前缀 `vesact-preview`，防止和 prod 的 `.vesact.com` cookie 互相遮蔽；一个 Access 通配应用覆盖全部。理由：`workers.dev` 在 Public Suffix List 上，两个 preview worker 之间无法共享登录态，Relay 一上来就会撞上；preview 和 prod 同构后，Relay 三个环境都用 Studio 的 auth，不用自己挂。
 - Relay 的表（含 Better Auth 的 `apikey`）放 `schema/relay.ts`，`client.ts` 改为导入 schema index；`postgres.ts` 不动。
 
 ## 2026-09-11 Relay 定稿的几项

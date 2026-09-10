@@ -294,22 +294,22 @@ uses the monorepo root as its environment directory.
 
 Each app is a Cloudflare Worker. Three environments, the same shape for every app:
 
-|               | dev                                        | preview                                                  | prod                                              |
-| ------------- | ------------------------------------------ | -------------------------------------------------------- | ------------------------------------------------- |
-| Trigger       | `pnpm dev`                                 | pull request from this repository                        | push to `main`                                    |
-| Build         | `vite dev`                                 | `CLOUDFLARE_ENV=preview vite build`                      | `vite build`                                      |
-| Worker        | —                                          | `vesact-<app>-preview`                                   | `vesact-<app>`                                    |
-| Host          | `localhost:300x`                           | `vesact-<app>-preview.vesact.workers.dev`, behind Access | custom domain                                     |
-| Vars          | `.dev.vars`                                | `env.preview.vars` in `wrangler.jsonc`                   | top-level `vars`                                  |
-| Secrets       | `.dev.vars`                                | `secrets/studio.preview.env`                             | `secrets/studio.prod.env`                         |
-| Database      | local postgres via `localConnectionString` | Hyperdrive `vesact-preview` → Neon branch `preview`      | Hyperdrive `vesact-db` → Neon branch `production` |
-| Migrations    | `push`                                     | `migrate` against the preview branch before deploy       | `migrate` against production before deploy        |
-| Cookie domain | unset                                      | unset                                                    | `.vesact.com`                                     |
+|               | dev                                        | preview                                             | prod                                              |
+| ------------- | ------------------------------------------ | --------------------------------------------------- | ------------------------------------------------- |
+| Trigger       | `pnpm dev`                                 | pull request from this repository                   | push to `main`                                    |
+| Build         | `vite dev`                                 | `CLOUDFLARE_ENV=preview vite build`                 | `vite build`                                      |
+| Worker        | —                                          | `vesact-<app>-preview`                              | `vesact-<app>`                                    |
+| Host          | `localhost:300x`                           | `<app>.preview.vesact.com`, behind Access           | custom domain                                     |
+| Vars          | `.dev.vars`                                | `env.preview.vars` in `wrangler.jsonc`              | top-level `vars`                                  |
+| Secrets       | `.dev.vars`                                | `secrets/studio.preview.env`                        | `secrets/studio.prod.env`                         |
+| Database      | local postgres via `localConnectionString` | Hyperdrive `vesact-preview` → Neon branch `preview` | Hyperdrive `vesact-db` → Neon branch `production` |
+| Migrations    | `push`                                     | `migrate` against the preview branch before deploy  | `migrate` against production before deploy        |
+| Cookie domain | unset                                      | `.preview.vesact.com`, prefix `vesact-preview`      | `.vesact.com`                                     |
 
-| App       | prod                                   | preview                                       |
-| --------- | -------------------------------------- | --------------------------------------------- |
-| marketing | `www.vesact.com`                       | `vesact-marketing-preview.vesact.workers.dev` |
-| studio    | `studio.vesact.com`, `auth.vesact.com` | `vesact-studio-preview.vesact.workers.dev`    |
+| App       | prod                                   | preview                                                |
+| --------- | -------------------------------------- | ------------------------------------------------------ |
+| marketing | `www.vesact.com`                       | `www.preview.vesact.com`                               |
+| studio    | `studio.vesact.com`, `auth.vesact.com` | `studio.preview.vesact.com`, `auth.preview.vesact.com` |
 
 `deploy.yml` runs one job per app: `select-target.sh` picks the target from the
 event, `load-env.sh` decrypts what the job needs into masked environment
@@ -333,10 +333,15 @@ bucket.
   `secrets/ci.env`.
 - Hyperdrive `vesact-db` and `vesact-preview`; ids are in
   `apps/studio/wrangler.jsonc`.
-- Each preview Worker has a Cloudflare Access application with two policies:
-  Allow for the owner's email, and Service Auth for the service token whose
-  credentials are `CF_ACCESS_CLIENT_ID` / `CF_ACCESS_CLIENT_SECRET` in
-  `secrets/ci.env`. A new preview Worker needs the same pair.
+- One Cloudflare Access application covers `*.preview.vesact.com` with two
+  policies: Allow for the owner's email, and Service Auth for the service token
+  whose credentials are `CF_ACCESS_CLIENT_ID` / `CF_ACCESS_CLIENT_SECRET` in
+  `secrets/ci.env`. A new preview hostname is covered automatically; a path
+  that outside services must reach gets its own, more specific application
+  with a Bypass policy.
+- Preview hostnames live under `preview.vesact.com` rather than `workers.dev`
+  because `workers.dev` is on the Public Suffix List: no cookie can span two
+  Workers there, so products could not share a login.
 - One Google OAuth client serves every environment; each needs its callback
   `<VITE_AUTH_URL>/api/auth/callback/google` registered in Google Cloud.
 - `vesact.com` redirects to `www` through a Cloudflare Redirect Rule.

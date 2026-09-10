@@ -10,8 +10,9 @@
 	"routes": [{ "pattern": "www.vesact.com", "custom_domain": true }],
 	"env": {
 		"preview": {
-			"workers_dev": true,
+			"workers_dev": false,
 			"observability": { "enabled": true },
+			"routes": [{ "pattern": "www.preview.vesact.com", "custom_domain": true }],
 		},
 	},
 }

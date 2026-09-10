@@ -58,6 +58,9 @@ export const auth = betterAuth({
 		// Set to the parent domain in deployed environments so the session is
 		// readable from every product subdomain.
 		crossSubDomainCookies: cookieDomain ? { enabled: true, domain: cookieDomain } : undefined,
+		// Preview and production share the browser; a distinct prefix keeps their
+		// session cookies from shadowing each other.
+		cookiePrefix: process.env.AUTH_COOKIE_PREFIX,
 	},
 	session: {
 		expiresIn: config.sessionCookieMaxAge,
