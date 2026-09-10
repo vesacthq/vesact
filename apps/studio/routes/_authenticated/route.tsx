@@ -1,5 +1,6 @@
 import { SessionProvider } from "@auth/components/SessionProvider";
 import { getActiveOrganizationById, getSession } from "@auth/lib/auth-server.server";
+import { loginUrl } from "@auth/lib/login-url";
 import { ActiveOrganizationProvider } from "@organizations/components/ActiveOrganizationProvider";
 import { ConfirmationAlertProvider } from "@shared/components/ConfirmationAlertProvider";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
@@ -24,12 +25,12 @@ type AuthenticatedRouteSession = Awaited<ReturnType<typeof getSession>>;
 type AuthenticatedRouteActiveOrganization = Awaited<ReturnType<typeof getActiveOrganizationById>>;
 
 export const Route = createFileRoute("/_authenticated")({
-	loader: async () => {
+	loader: async ({ location }) => {
 		const session = unwrapServerFnResult<AuthenticatedRouteSession>(
 			await loadSessionForAuthenticatedRouteFn(),
 		);
 		if (!session) {
-			throw redirect({ href: "/login" });
+			throw redirect({ href: loginUrl(location.href) });
 		}
 		const activeOrganization = session.session.activeOrganizationId
 			? unwrapServerFnResult<AuthenticatedRouteActiveOrganization>(

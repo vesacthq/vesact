@@ -7,10 +7,7 @@
 	"main": "./server.ts",
 	"observability": { "enabled": true },
 	"workers_dev": false,
-	"routes": [
-		{ "pattern": "studio.vesact.com", "custom_domain": true },
-		{ "pattern": "auth.vesact.com", "custom_domain": true },
-	],
+	"routes": [{ "pattern": "studio.vesact.com", "custom_domain": true }],
 	"vars": {
 		"VITE_STUDIO_URL": "https://studio.vesact.com",
 		"VITE_AUTH_URL": "https://auth.vesact.com",
@@ -30,10 +27,7 @@
 		"preview": {
 			"workers_dev": false,
 			"observability": { "enabled": true },
-			"routes": [
-				{ "pattern": "studio.preview.vesact.com", "custom_domain": true },
-				{ "pattern": "auth.preview.vesact.com", "custom_domain": true },
-			],
+			"routes": [{ "pattern": "studio.preview.vesact.com", "custom_domain": true }],
 			"vars": {
 				"VITE_STUDIO_URL": "https://studio.preview.vesact.com",
 				"VITE_AUTH_URL": "https://auth.preview.vesact.com",

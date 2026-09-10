@@ -1,0 +1,45 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "vesact-auth",
+	"account_id": "6a8e5373d12070c930f09f1a82541a0b",
+	"compatibility_date": "2026-09-03",
+	"compatibility_flags": ["nodejs_compat"],
+	"main": "./server.ts",
+	"observability": { "enabled": true },
+	"workers_dev": false,
+	"routes": [{ "pattern": "auth.vesact.com", "custom_domain": true }],
+	"vars": {
+		"VITE_AUTH_URL": "https://auth.vesact.com",
+		"VITE_STUDIO_URL": "https://studio.vesact.com",
+		"VITE_MARKETING_URL": "https://www.vesact.com",
+		"AUTH_COOKIE_DOMAIN": ".vesact.com",
+	},
+	"hyperdrive": [
+		{
+			"binding": "HYPERDRIVE",
+			"id": "44e2ab6c84854ade9fe521c963bb55f9",
+			"localConnectionString": "postgresql://postgres:postgres@localhost:5433/vesact",
+		},
+	],
+	"env": {
+		"preview": {
+			"workers_dev": false,
+			"observability": { "enabled": true },
+			"routes": [{ "pattern": "auth.preview.vesact.com", "custom_domain": true }],
+			"vars": {
+				"VITE_AUTH_URL": "https://auth.preview.vesact.com",
+				"VITE_STUDIO_URL": "https://studio.preview.vesact.com",
+				"VITE_MARKETING_URL": "https://www.preview.vesact.com",
+				"AUTH_COOKIE_DOMAIN": ".preview.vesact.com",
+				"AUTH_COOKIE_PREFIX": "vesact-preview",
+			},
+			"hyperdrive": [
+				{
+					"binding": "HYPERDRIVE",
+					"id": "fb0bfe560d4d48fa8fed9078ad1eeade",
+					"localConnectionString": "postgresql://postgres:postgres@localhost:5433/vesact",
+				},
+			],
+		},
+	},
+}

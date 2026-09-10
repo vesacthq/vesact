@@ -17,11 +17,12 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
    Anything secret goes in `secrets/<file>.env`, never in `wrangler.jsonc`,
    workflow files, or GitHub secrets.
 2. Edit a secrets file with `sops secrets/<file>.env`. Worker secrets belong in
-   `studio.<target>.env`, migration URLs in `database.<target>.env`, CI-only
-   credentials in `ci.env`, local values in `studio.dev.env`. Commit the
-   encrypted file; `deploy.yml` syncs Worker secrets on the next deploy.
-3. After changing `studio.dev.env`, run `pnpm secrets:pull` so
-   `apps/studio/.dev.vars` matches.
+   `<app>.<target>.env` (`studio`, `auth`), migration URLs in
+   `database.<target>.env`, CI-only credentials in `ci.env`, local values in
+   `<app>.dev.env`. Commit the encrypted file; `deploy.yml` syncs Worker
+   secrets on the next deploy.
+3. After changing an `<app>.dev.env`, run `pnpm secrets:pull` so the app's
+   `.dev.vars` matches.
 4. After changing `wrangler.jsonc`, run `pnpm --filter <app> exec wrangler types`
    if bindings changed, then `pnpm type-check`.
 5. Verify locally with the same build the pipeline uses:

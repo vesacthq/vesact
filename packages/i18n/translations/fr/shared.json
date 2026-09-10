@@ -58,5 +58,29 @@
 		"yearly": "Annuel",
 		"perSeat": "place",
 		"badge": "Tarifs"
+	},
+	"common": {
+		"confirmation": {
+			"cancel": "Annuler",
+			"confirm": "Confirmer"
+		},
+		"actions": {
+			"continue": "Continuer",
+			"verify": "Vérifier"
+		},
+		"colorMode": {
+			"system": "Système",
+			"light": "Clair",
+			"dark": "Sombre"
+		},
+		"passwordCriteria": {
+			"minLength": "Min. 8 caractères",
+			"upperAndLowercase": "Majuscules et minuscules",
+			"number": "Chiffre",
+			"specialCharacter": "Caractère spécial"
+		},
+		"aria": {
+			"language": "Langue"
+		}
 	}
 }

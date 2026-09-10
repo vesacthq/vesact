@@ -58,5 +58,29 @@
 		"yearly": "Jährlich",
 		"perSeat": "Sitz",
 		"badge": "Preise"
+	},
+	"common": {
+		"confirmation": {
+			"cancel": "Abbrechen",
+			"confirm": "Bestätigen"
+		},
+		"actions": {
+			"continue": "Weiter",
+			"verify": "Überprüfen Sie"
+		},
+		"passwordCriteria": {
+			"minLength": "Min. 8 Zeichen",
+			"upperAndLowercase": "Groß- & Kleinbuchstaben",
+			"number": "Zahl",
+			"specialCharacter": "Sonderzeichen"
+		},
+		"aria": {
+			"language": "Sprache"
+		},
+		"colorMode": {
+			"system": "System",
+			"light": "Hell",
+			"dark": "Dunkel"
+		}
 	}
 }

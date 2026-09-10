@@ -2,7 +2,7 @@ import { toMerged } from "es-toolkit";
 
 import { config, type Locale } from "../config";
 
-export type TranslationScope = "marketing" | "studio" | "mail";
+export type TranslationScope = "marketing" | "studio" | "auth" | "mail";
 
 async function importLocaleMessages<T>(
 	locale: Locale,
