@@ -46,6 +46,7 @@ export function OrganizationMembersList() {
 		{ user, membershipRole: serializeMemberRoles(ownRoles) },
 		"organization.manage",
 	);
+	const isOwner = getOrganizationRole(ownRoles) === "owner";
 
 	const updateRoles = async (memberId: string, roles: MemberRole[]) => {
 		const update = async () => {
@@ -136,8 +137,8 @@ export function OrganizationMembersList() {
 						organization.members.map((member) => {
 							const roles = parseMemberRoles(member.role);
 							const organizationRole = getOrganizationRole(roles) ?? "member";
-							const isOwner = organizationRole === "owner";
-							const isOrganizationAdmin = isOwner || organizationRole === "admin";
+							const memberIsOwner = organizationRole === "owner";
+							const isOrganizationAdmin = memberIsOwner || organizationRole === "admin";
 							const isSelf = member.userId === user?.id;
 
 							return (
@@ -161,7 +162,8 @@ export function OrganizationMembersList() {
 											<TableCell>
 												<OrganizationRoleSelect
 													value={organizationRole}
-													disabled={isOwner}
+													disabled={memberIsOwner}
+													allowOwner={isOwner}
 													onSelect={(role) =>
 														updateRoles(member.id, withOrganizationRole(roles, role))
 													}

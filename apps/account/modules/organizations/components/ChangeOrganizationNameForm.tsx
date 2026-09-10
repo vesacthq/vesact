@@ -38,14 +38,14 @@ export function ChangeOrganizationNameForm({ disabled }: { disabled?: boolean })
 				await refetch();
 
 				toast.add({
-					title: t("organizations.settings.changeName.notifications.success"),
+					title: t("organizations.settings.notifications.organizationNameUpdated"),
 					type: "success",
 				});
 
 				formApi.reset({ name });
 			} catch {
 				toast.add({
-					title: t("organizations.settings.changeName.notifications.error"),
+					title: t("organizations.settings.notifications.organizationNameNotUpdated"),
 					type: "error",
 				});
 			}

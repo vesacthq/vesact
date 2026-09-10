@@ -10,7 +10,7 @@ export interface ProductUrl {
 	url: string | undefined;
 }
 
-export const products: ProductUrl[] = [
+const products: ProductUrl[] = [
 	{ name: "Studio", url: studioUrl },
 	{ name: "Relay", url: relayUrl },
 	{ name: "Vesact", url: marketingUrl },
@@ -28,7 +28,7 @@ function toOrigin(value: string | undefined): string | null {
 	}
 }
 
-export const allowedRedirectOrigins = [...products.map((product) => product.url), accountOrigin]
+const allowedRedirectOrigins = [...products.map((product) => product.url), accountOrigin]
 	.map(toOrigin)
 	.filter((origin): origin is string => origin !== null);
 

@@ -55,7 +55,7 @@ A 轨的第一步：把 Relay 最薄的一条端到端链路跑到线上，后�
 
 - `@better-auth/api-key` 1.7.3（与 better-auth 同版本）装进 `packages/auth`，配置 `references: "organization"`、`defaultPrefix: "relay_"`、默认 `rateLimitMax: 300`、`rateLimitTimeWindow: 60_000`、`remaining: null`，允许不过期。
 - `apikey` 表放 `packages/database/drizzle/schema/relay.ts`；`client.ts` 改为导入 `./schema`（index），Better Auth 的 adapter 和 `db.query` 才看得到；生成迁移。
-- key 属于组织。创建、吊销、列出走 Better Auth 的端点，需要会话且用户是该组织成员。`permissions` 命名 `{ "<资源>": ["read" | "write"] }`，A1 不填、不检查。
+- key 属于组织。创建、吊销、列出走 Better Auth 的端点，需要会话且用户在该组织有 Relay 访问（`relay.access`，见 docs/account/overview.md §4）。`permissions` 命名 `{ "<资源>": ["read" | "write"] }`，A1 不填、不检查。
 
 验收：
 

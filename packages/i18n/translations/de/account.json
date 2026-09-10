@@ -119,7 +119,8 @@
 					"error": "Avatar konnte nicht aktualisiert werden",
 					"success": "Avatar wurde erfolgreich aktualisiert"
 				},
-				"title": "Dein Avatar"
+				"title": "Dein Avatar",
+				"delete": "Avatar löschen"
 			},
 			"changeEmail": {
 				"description": "Um deine E-Mail zu ändern, ändere sie im Eingabefeld und drücke auf Speichern. Du musst die neue E-Mail bestätigen, bevor sie aktiv wird.",
@@ -368,7 +369,12 @@
 			},
 			"logo": {
 				"description": "Lade ein Logo für deine Organisation hoch.",
-				"title": "Logo der Organisation"
+				"title": "Logo der Organisation",
+				"delete": "Logo löschen",
+				"notifications": {
+					"error": "Organisationslogo konnte nicht aktualisiert werden",
+					"success": "Organisationslogo wurde aktualisiert"
+				}
 			},
 			"members": {
 				"activeMembers": "Aktive Mitglieder",

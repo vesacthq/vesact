@@ -15,6 +15,13 @@
 			"when": 1788865210049,
 			"tag": "0001_wonderful_morg",
 			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "7",
+			"when": 1789071428763,
+			"tag": "0002_backfill_member_product_roles",
+			"breakpoints": true
 		}
 	]
 }
