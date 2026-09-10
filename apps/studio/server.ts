@@ -1,25 +1,22 @@
+import { getBaseUrl } from "@repo/utils";
 import type { Register } from "@tanstack/react-router";
 import type { RequestOptions } from "@tanstack/react-start/server";
 import { env } from "cloudflare:workers";
 
 let server: (typeof import("./src/server"))["default"] | undefined;
 
-const appUrl = import.meta.env.VITE_STUDIO_URL as string | undefined;
-const authUrl = import.meta.env.VITE_AUTH_URL as string | undefined;
+const authUrl = getBaseUrl(import.meta.env.VITE_AUTH_URL as string | undefined, 3004);
 
-// The auth hostname routes to this Worker but is not a second address for the
-// app: it answers auth endpoints and sends everything else back to the app.
-const authOnlyHostname =
-	appUrl && authUrl && new URL(authUrl).hostname !== new URL(appUrl).hostname
-		? new URL(authUrl).hostname
-		: undefined;
+// The auth pages moved to the auth app; links that predate the move still work.
+const legacyAuthPath =
+	/^(?:\/[a-z]{2})?\/(?:login|signup|forgot-password|reset-password|verify)(?:\/|$)/;
 
 export default {
 	async fetch(request: Request, options?: RequestOptions<Register>) {
 		const url = new URL(request.url);
 
-		if (appUrl && url.hostname === authOnlyHostname && !url.pathname.startsWith("/api/auth")) {
-			return Response.redirect(new URL(`${url.pathname}${url.search}`, appUrl).toString(), 302);
+		if (legacyAuthPath.test(url.pathname)) {
+			return Response.redirect(new URL(`${url.pathname}${url.search}`, authUrl).toString(), 302);
 		}
 
 		// Hyperdrive only hands out its connection string inside a request, and

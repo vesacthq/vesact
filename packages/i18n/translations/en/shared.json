@@ -58,5 +58,29 @@
 		"yearly": "Yearly",
 		"perSeat": "seat",
 		"badge": "Pricing"
+	},
+	"common": {
+		"confirmation": {
+			"cancel": "Cancel",
+			"confirm": "Confirm"
+		},
+		"actions": {
+			"continue": "Continue",
+			"verify": "Verify"
+		},
+		"colorMode": {
+			"system": "System",
+			"light": "Light",
+			"dark": "Dark"
+		},
+		"passwordCriteria": {
+			"minLength": "Min. 8 characters",
+			"upperAndLowercase": "Upper & lowercase",
+			"number": "Number",
+			"specialCharacter": "Special character"
+		},
+		"aria": {
+			"language": "Language"
+		}
 	}
 }

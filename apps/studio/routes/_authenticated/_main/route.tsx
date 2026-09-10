@@ -1,4 +1,5 @@
 import { getOrganizationList, getSession } from "@auth/lib/auth-server.server";
+import { loginUrl } from "@auth/lib/login-url";
 import { listPurchases as listPurchasesProcedure } from "@repo/api/modules/payments/procedures/list-purchases";
 import { config as authConfig } from "@repo/auth/config";
 import { config as paymentsConfig } from "@repo/payments/config";
@@ -8,12 +9,13 @@ import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 
-const enforceMainAppGuardsForRouteFn = createServerFn({ method: "GET", strict: false }).handler(
-	async () => {
+const enforceMainAppGuardsForRouteFn = createServerFn({ method: "GET", strict: false })
+	.validator((href: string) => href)
+	.handler(async ({ data: href }) => {
 		const session = await getSession();
 
 		if (!session) {
-			throw redirect({ href: "/login" });
+			throw redirect({ href: loginUrl(href) });
 		}
 
 		if (authConfig.users.enableOnboarding && !session.user.onboardingComplete) {
@@ -51,12 +53,11 @@ const enforceMainAppGuardsForRouteFn = createServerFn({ method: "GET", strict: f
 
 		const cookie = getRequestHeaders().get("cookie") ?? "";
 		return !/(?:^|;\s*)sidebar_state=false(?:;|$)/.test(cookie);
-	},
-);
+	});
 
 export const Route = createFileRoute("/_authenticated/_main")({
-	loader: async () => {
-		const sidebarDefaultOpen = await enforceMainAppGuardsForRouteFn();
+	loader: async ({ location }) => {
+		const sidebarDefaultOpen = await enforceMainAppGuardsForRouteFn({ data: location.href });
 		return { sidebarDefaultOpen };
 	},
 	component: MainLayout,

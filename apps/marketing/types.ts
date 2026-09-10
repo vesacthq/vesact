@@ -17,6 +17,10 @@ export interface MarketingConfig {
 	 */
 	studioUrl?: string;
 	/**
+	 * Absolute URL for the auth app that hosts login and signup. Set `VITE_AUTH_URL`.
+	 */
+	authUrl?: string;
+	/**
 	 * Theme options available on the marketing site.
 	 */
 	enabledThemes: readonly Theme[];

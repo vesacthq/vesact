@@ -15,4 +15,10 @@ export {
 	stripLocaleFromPath,
 } from "./shared";
 export { default as defaultMailTranslations } from "./translations/en/mail.json";
-export type { MailMessages, MarketingMessages, StudioMessages, SharedMessages } from "./types";
+export type {
+	AuthMessages,
+	MailMessages,
+	MarketingMessages,
+	StudioMessages,
+	SharedMessages,
+} from "./types";

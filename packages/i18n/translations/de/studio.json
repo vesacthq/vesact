@@ -139,109 +139,6 @@
 			}
 		}
 	},
-	"auth": {
-		"errors": {
-			"credentialAccountNotFound": "Konto nicht gefunden.",
-			"emailCanNotBeUpdated": "E-Mail konnte nicht aktualisiert werden.",
-			"emailNotVerified": "Bitte verifiziere zunächst deine E-Mail, bevor du dich anmeldest.",
-			"failedToCreateSession": "Eine Sitzung konnte nicht erstellt werden.",
-			"failedToCreateUser": "Benutzer konnte nicht erstellt werden.",
-			"failedToGetSession": "Session konnte nicht geladen werden.",
-			"failedToGetUserInfo": "Benutzerinformationen konnten nicht geladen werden.",
-			"failedToUpdateUser": "Benutzer konnte nicht aktualisiert werden.",
-			"idTokenNotSupported": "ID-Token wird nicht unterstützt.",
-			"invalidEmail": "Die eingegebene E-Mail ist ungültig.",
-			"invalidEmailOrPassword": "Die von dir eingegebenen Anmeldedaten sind ungültig. Bitte überprüfe sie und versuche es erneut.",
-			"invalidInvitation": "Die Einladung ist ungültig oder abgelaufen.",
-			"invalidPassword": "Das eingegebene Passwort ist falsch.",
-			"invalidToken": "Das von dir eingegebene Token ist ungültig oder abgelaufen.",
-			"passwordTooLong": "Das Passwort ist zu lang.",
-			"passwordTooShort": "Das Passwort ist zu kurz.",
-			"providerNotFound": "Dieser Anbieter wird nicht unterstützt.",
-			"socialAccountAlreadyLinked": "Dieses Konto ist bereits mit einem Benutzer verknüpft.",
-			"unknown": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
-			"userAlreadyExists": "Dieser Benutzer existiert bereits.",
-			"userAlreadyExistsUseAnotherEmail": "Benutzer existiert bereits. Verwenden Sie eine andere E-Mail.",
-			"userEmailNotFound": "E-Mail nicht gefunden.",
-			"userNotFound": "Dieser Benutzer existiert nicht",
-			"sessionExpired": "Die Sitzung ist abgelaufen.",
-			"accountNotFound": "Konto nicht gefunden",
-			"failedToUnlinkLastAccount": "Konto kann nicht entkoppelt werden"
-		},
-		"forgotPassword": {
-			"backToSignin": "Zurück zum Login",
-			"email": "E-Mail",
-			"hints": {
-				"linkNotSent": {
-					"message": "Es tut uns leid, aber wir konnten keinen Link zum Zurücksetzen des Passworts senden. \nBitte versuche es später noch einmal.",
-					"title": "Link nicht gesendet"
-				},
-				"linkSent": {
-					"message": "Wir haben dir einen Link zum Fortfahren gesendet. \nBitte überprüfe deinen Posteingang.",
-					"title": "Link gesendet"
-				}
-			},
-			"message": "Bitte gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurücksetzen deines Passworts.",
-			"submit": "Link senden",
-			"title": "Hast du dein Passwort vergessen?"
-		},
-		"login": {
-			"continueWith": "Oder weiter mit",
-			"createAnAccount": "Ein Konto erstellen",
-			"dontHaveAnAccount": "Du hast noch kein Konto?",
-			"forgotPassword": "Passwort vergessen?",
-			"hints": {
-				"invalidCredentials": "Die von dir eingegebenen Anmeldeinformationen sind ungültig. \nBitte versuche es erneut.",
-				"socialSigninFailed": "Anmeldung fehlgeschlagen. Bitte versuche es erneut.",
-				"linkSent": {
-					"message": "Wir haben dir einen Link zum Fortfahren gesendet. \nBitte überprüfe deinen Posteingang.",
-					"title": "Link gesendet"
-				}
-			},
-			"lastUsed": "Zuletzt verwendet",
-			"loginWithPasskey": "Anmeldung mit Passkey",
-			"modes": {
-				"magicLink": "Magischer Link",
-				"password": "Passwort"
-			},
-			"submit": "Anmelden",
-			"subtitle": "Bitte gib deine Zugangsdaten ein, um dich anzumelden.",
-			"title": "Willkommen zurück",
-			"sendMagicLink": "Anmelde-Link senden"
-		},
-		"resetPassword": {
-			"backToSignin": "Zurück zu Signin",
-			"hints": {
-				"error": "Es tut uns leid, aber wir konnten dein Passwort nicht zurücksetzen. Bitte versuche es erneut.",
-				"success": "Dein Passwort wurde erfolgreich zurückgesetzt."
-			},
-			"message": "Bitte gib ein neues Passwort ein.",
-			"newPassword": "Neues Passwort",
-			"submit": "Passwort zurücksetzen",
-			"title": "Dein Passwort zurücksetzen"
-		},
-		"signup": {
-			"alreadyHaveAccount": "Du hast bereits ein Konto?",
-			"email": "Email",
-			"hints": {
-				"signupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht erstellen. \nBitte versuche es später noch einmal.",
-				"verifyEmail": "Wir haben dir einen Link zur Bestätigung deiner E-Mail-Adresse gesendet. \nBitte überprüfe deinen Posteingang."
-			},
-			"message": "Wir freuen uns, dass du dich uns anschließen möchtest. \nBitte fülle das untenstehende Formular aus, um dein Konto zu erstellen.",
-			"name": "Name",
-			"password": "Passwort",
-			"signIn": "Anmelden",
-			"submit": "Benutzerkonto erstellen",
-			"title": "Ein Konto erstellen"
-		},
-		"verify": {
-			"backToSignin": "Zurück zur Anmeldung",
-			"code": "Einmaliges Passwort",
-			"message": "Gib das Einmalpasswort aus deiner Authentifizierungs-App ein, um fortzufahren.",
-			"submit": "Verifizieren",
-			"title": "Verifiziere dein Konto"
-		}
-	},
 	"choosePlan": {
 		"title": "Wähle einen Plan",
 		"description": "Um weiterzumachen, wähle bitte einen Plan aus."
@@ -479,107 +376,13 @@
 				"title": "E-Mail-Benachrichtigungen",
 				"saved": "Deine Benachrichtigungseinstellungen wurden aktualisiert."
 			},
-			"security": {
-				"activeSessions": {
-					"description": "Dies sind alle aktiven Sitzungen deines Kontos. Klicke auf das X, um eine bestimmte Sitzung zu beenden.",
-					"title": "Aktive Sitzungen",
-					"notifications": {
-						"revokeSession": {
-							"success": "Session beendet"
-						}
-					},
-					"currentSession": "Aktuelle Sitzung"
-				},
-				"changePassword": {
-					"currentPassword": "Aktuelles Passwort",
-					"newPassword": "Neues Passwort",
-					"notifications": {
-						"error": "Passwort kann nicht aktualisiert werden",
-						"success": "Passwort wurde erfolgreich aktualisiert"
-					},
-					"title": "Dein Passwort"
-				},
-				"connectedAccounts": {
-					"connect": "Verbinden",
-					"connected": "Verbunden",
-					"disconnect": "Trennen",
-					"title": "Verbundene Konten"
-				},
-				"passkeys": {
-					"addPasskey": "Passkey hinzufügen",
-					"description": "Verwende Passkeys als sichere alternative zu Passwörtern.",
-					"notifications": {
-						"addPasskey": {
-							"error": {
-								"title": "Kann keinen Hauptschlüssel hinzufügen"
-							},
-							"success": {
-								"title": "Passkey hinzugefügt"
-							}
-						},
-						"deletePasskey": {
-							"error": {
-								"title": "Der Hauptschlüssel konnte nicht gelöscht werden"
-							},
-							"loading": {
-								"title": "Hauptschlüssel löschen..."
-							},
-							"success": {
-								"title": "Passkey gelöscht"
-							}
-						}
-					},
-					"title": "Passwörter"
-				},
-				"setPassword": {
-					"description": "Du hast noch kein Passwort festgelegt. Um ein solches festzulegen, musst du den Ablauf der Passwortrücksetzung durchlaufen. Klicke auf die Schaltfläche unten, um eine E-Mail zum Zurücksetzen deines Passworts zu senden, und folge den Anweisungen in der E-Mail.",
-					"notifications": {
-						"error": "Der Link zum Festlegen des Passworts konnte nicht gesendet werden. Bitte versuche es erneut.",
-						"success": "Prüfen deinen Posteingang auf den Link, um Ihr Passwort festzulegen."
-					},
-					"submit": "Passwort festlegen",
-					"title": "Dein Passwort"
-				},
-				"title": "Sicherheit",
-				"twoFactor": {
-					"description": "Füge deinem Konto eine zusätzliche Sicherheitsebene hinzu.",
-					"dialog": {
-						"password": {
-							"description": "Bitte verifiziere dein Konto, indem du dein Passwort eingibst:",
-							"label": "Dein Passwort:",
-							"title": "Mit Passwort verifizieren"
-						},
-						"totpUrl": {
-							"code": "Geben Sie den 6-stelligen Code ein, um die Einrichtung zu bestätigen:",
-							"description": "Verwende deine bevorzugte Authentifizierungs-App und scanne den QR-Code damit oder gib das unten stehende Geheimnis manuell ein, um die Zwei-Faktor-Authentifizierung einzurichten.",
-							"title": "Zwei-Faktor-Authentifizierung aktivieren"
-						}
-					},
-					"disable": "Zwei-Faktor-Authentifizierung deaktivieren",
-					"enable": "Zwei-Faktor-Authentifizierung aktivieren",
-					"enabled": "Du hast die Zwei-Faktor-Authentifizierung für dein Konto aktiviert.",
-					"notifications": {
-						"disable": {
-							"success": {
-								"title": "Die Zwei-Faktor-Authentifizierung wurde erfolgreich deaktiviert."
-							}
-						},
-						"enable": {
-							"error": {
-								"title": "Dein Konto konnte mit dem angegebenen Passwort nicht verifiziert werden. Bitte versuche es erneut."
-							}
-						},
-						"verify": {
-							"success": {
-								"title": "Die Zwei-Faktor-Authentifizierung wurde erfolgreich aktiviert."
-							}
-						}
-					},
-					"title": "Zwei-Faktor-Authentifizierung"
-				}
-			},
 			"subtitle": "Verwalte die Einstellungen deines persönlichen Kontos.",
-			"title": "Kontoeinstellungen"
+			"title": "Kontoeinstellungen",
+			"securityLink": {
+				"title": "Sicherheit",
+				"description": "Passwort, Passkeys, Zwei-Faktor und aktive Sitzungen werden im Konto verwaltet.",
+				"open": "Kontosicherheit öffnen"
+			}
 		},
 		"billing": {
 			"createCustomerPortal": {
@@ -654,28 +457,9 @@
 		"subtitle": "Sieh dir die neuesten Statistiken über dein großartiges Unternehmen an.",
 		"welcome": "Willkommen {name}!"
 	},
-	"common": {
-		"confirmation": {
-			"cancel": "Abbrechen",
-			"confirm": "Bestätigen"
-		},
-		"actions": {
-			"continue": "Weiter",
-			"verify": "Überprüfen Sie"
-		},
-		"passwordCriteria": {
-			"minLength": "Min. 8 Zeichen",
-			"upperAndLowercase": "Groß- & Kleinbuchstaben",
-			"number": "Zahl",
-			"specialCharacter": "Sonderzeichen"
-		},
-		"aria": {
-			"language": "Sprache"
-		},
-		"colorMode": {
-			"system": "System",
-			"light": "Hell",
-			"dark": "Dunkel"
+	"auth": {
+		"errors": {
+			"unknown": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
 		}
 	}
 }

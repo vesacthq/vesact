@@ -11,7 +11,7 @@ import { useTranslations } from "use-intl";
 export function NavBar() {
 	const t = useTranslations();
 	const localePathname = useLocalePathname();
-	const studioUrl = config.studioUrl;
+	const loginUrl = config.authUrl && `${String(config.authUrl).replace(/\/$/, "")}/login`;
 
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const [isTop, setIsTop] = useState(true);
@@ -158,9 +158,9 @@ export function NavBar() {
 										</LocaleLink>
 									))}
 
-									{config.studioUrl && (
+									{loginUrl && (
 										<a
-											href={config.studioUrl}
+											href={loginUrl}
 											className="px-3 py-2 text-base block text-primary"
 											onClick={handleMobileMenuClose}
 										>
@@ -171,7 +171,7 @@ export function NavBar() {
 							</SheetContent>
 						</Sheet>
 
-						{studioUrl && (
+						{loginUrl && (
 							<Button
 								className="lg:flex hidden border-primary/30 text-primary hover:bg-primary/10 hover:text-primary"
 								variant="outline"
@@ -179,7 +179,7 @@ export function NavBar() {
 								render={(props) => {
 									const { children: linkChildren, ...rest } = props;
 									return (
-										<a href={studioUrl} {...(rest as unknown as ComponentPropsWithoutRef<"a">)}>
+										<a href={loginUrl} {...(rest as unknown as ComponentPropsWithoutRef<"a">)}>
 											{linkChildren}
 										</a>
 									);

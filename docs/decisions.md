@@ -2,6 +2,12 @@
 
 倒序。只写结论和理由，过程在对应的 issue 里。
 
+## 2026-09-11 身份与租户的边界
+
+- 登录、注册、找回密码、邮箱验证、个人安全设置在独立的 `apps/auth`（`auth.vesact.com`），它同时提供 Better Auth 端点。产品自己不带这些页面，未登录跳 `auth.vesact.com/login?redirectTo=…`，登录完跳回；日常操作不换域名。
+- 组织、成员、邀请、角色、权限在各产品里。组织跨产品共享，产品是组织上的开通项；角色带产品前缀（`studio:admin`、`relay:developer`），权限 statement 按产品命名空间，用 Better Auth 的 access control。对应 Atlassian 的三层：组织成员、产品访问、产品内权限。
+- 没有 `redirectTo` 时登录后去 Studio。
+
 ## 2026-09-11 Relay API 约定与骨架
 
 - 约定值填在 engineering.md §8.3，范围与验收在 skeleton.md。几个取舍：限流头用 `X-RateLimit-*`，IETF 的 `RateLimit` 结构化头仍是草案；幂等按 Stripe 的语义，IETF 草案已过期；出站 webhook 用 Standard Webhooks，客户各语言有现成校验库。

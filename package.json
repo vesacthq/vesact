@@ -14,7 +14,7 @@
 		"clean": "turbo clean",
 		"format": "oxfmt --write",
 		"format:check": "oxfmt --check",
-		"secrets:pull": "sops -d secrets/studio.dev.env > apps/studio/.dev.vars"
+		"secrets:pull": "sops -d secrets/studio.dev.env > apps/studio/.dev.vars && sops -d secrets/auth.dev.env > apps/auth/.dev.vars"
 	},
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",

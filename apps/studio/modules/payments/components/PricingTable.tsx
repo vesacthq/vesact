@@ -11,7 +11,6 @@ import { Tabs, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 import { useLocaleCurrency } from "@shared/hooks/locale-currency";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "@tanstack/react-router";
 import { ArrowRightIcon, BadgePercentIcon, CheckIcon, StarIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -35,7 +34,6 @@ export function PricingTable({
 }) {
 	const t = useTranslations();
 	const format = useFormatter();
-	const router = useRouter();
 	const localeCurrency = useLocaleCurrency();
 	const [loading, setLoading] = useState<PlanId | false>(false);
 	const [interval, setInterval] = useState<"month" | "year">("month");
@@ -48,7 +46,7 @@ export function PricingTable({
 
 	const onSelectPlan = async (planId: PlanId, selection?: PlanSelection) => {
 		if (!(userId || organizationId)) {
-			void router.navigate({ to: "/signup" });
+			window.location.assign(`${import.meta.env.VITE_AUTH_URL ?? "http://localhost:3004"}/signup`);
 			return;
 		}
 

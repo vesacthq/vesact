@@ -7,6 +7,7 @@ if [ "${GITHUB_EVENT_NAME:-}" = "push" ]; then
 	cat >> "$GITHUB_ENV" <<'ENV'
 TARGET=prod
 STUDIO_WORKER=vesact-studio
+AUTH_WORKER=vesact-auth
 VITE_STUDIO_URL=https://studio.vesact.com
 VITE_AUTH_URL=https://auth.vesact.com
 VITE_MARKETING_URL=https://www.vesact.com
@@ -19,6 +20,7 @@ else
 TARGET=preview
 CLOUDFLARE_ENV=preview
 STUDIO_WORKER=vesact-studio-preview
+AUTH_WORKER=vesact-auth-preview
 VITE_STUDIO_URL=https://studio.preview.vesact.com
 VITE_AUTH_URL=https://auth.preview.vesact.com
 VITE_MARKETING_URL=https://www.preview.vesact.com

@@ -1,4 +1,5 @@
 import { getOrganizationList, getSession } from "@auth/lib/auth-server.server";
+import { loginUrl } from "@auth/lib/login-url";
 import { useTranslations } from "@i18n/intl";
 import { OrganizationsGrid } from "@organizations/components/OrganizationsGrid";
 import { config as authConfig } from "@repo/auth/config";
@@ -23,11 +24,11 @@ type MainIndexSession = Awaited<ReturnType<typeof getSession>>;
 type MainIndexOrganizations = Awaited<ReturnType<typeof getOrganizationList>>;
 
 export const Route = createFileRoute("/_authenticated/_main/")({
-	loader: async () => {
+	loader: async ({ location }) => {
 		const session = unwrapServerFnResult<MainIndexSession>(await loadSessionForMainIndexRouteFn());
 
 		if (!session) {
-			throw redirect({ href: "/login" });
+			throw redirect({ href: loginUrl(location.href) });
 		}
 
 		const organizations = unwrapServerFnResult<MainIndexOrganizations>(

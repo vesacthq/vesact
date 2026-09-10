@@ -16,7 +16,7 @@ export function PricingSection() {
 	const [interval, setBillingInterval] = useState<"month" | "year">("month");
 
 	const signupUrl = useMemo(
-		() => config.studioUrl && `${String(config.studioUrl).replace(/\/$/, "")}/signup`,
+		() => config.authUrl && `${String(config.authUrl).replace(/\/$/, "")}/signup`,
 		[],
 	);
 

@@ -12,12 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthenticatedMainRouteRouteImport } from './routes/_authenticated/_main/route'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
-import { Route as ForgotPasswordIndexRouteImport } from './routes/forgot-password/index'
 import { Route as ImageProxySplatRouteImport } from './routes/image-proxy/$'
-import { Route as LoginIndexRouteImport } from './routes/login/index'
-import { Route as ResetPasswordIndexRouteImport } from './routes/reset-password/index'
-import { Route as SignupIndexRouteImport } from './routes/signup/index'
-import { Route as VerifyIndexRouteImport } from './routes/verify/index'
 import { Route as AuthenticatedMainIndexRouteImport } from './routes/_authenticated/_main/index'
 import { Route as AuthenticatedMainAdminRouteRouteImport } from './routes/_authenticated/_main/admin/route'
 import { Route as AuthenticatedMainSettingsRouteRouteImport } from './routes/_authenticated/_main/settings/route'
@@ -37,7 +32,6 @@ import { Route as AuthenticatedMainAdminUsersIndexRouteImport } from './routes/_
 import { Route as AuthenticatedMainSettingsBillingIndexRouteImport } from './routes/_authenticated/_main/settings/billing/index'
 import { Route as AuthenticatedMainSettingsGeneralIndexRouteImport } from './routes/_authenticated/_main/settings/general/index'
 import { Route as AuthenticatedMainSettingsNotificationsIndexRouteImport } from './routes/_authenticated/_main/settings/notifications/index'
-import { Route as AuthenticatedMainSettingsSecurityIndexRouteImport } from './routes/_authenticated/_main/settings/security/index'
 import { Route as AuthenticatedMainOrganizationSlugSettingsBillingIndexRouteImport } from './routes/_authenticated/_main/$organizationSlug/settings/billing/index'
 import { Route as AuthenticatedMainOrganizationSlugSettingsGeneralIndexRouteImport } from './routes/_authenticated/_main/$organizationSlug/settings/general/index'
 import { Route as AuthenticatedMainOrganizationSlugSettingsMembersIndexRouteImport } from './routes/_authenticated/_main/$organizationSlug/settings/members/index'
@@ -57,34 +51,9 @@ const ApiSplatRoute = ApiSplatRouteImport.update({
   path: '/api/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ForgotPasswordIndexRoute = ForgotPasswordIndexRouteImport.update({
-  id: '/forgot-password/',
-  path: '/forgot-password/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ImageProxySplatRoute = ImageProxySplatRouteImport.update({
   id: '/image-proxy/$',
   path: '/image-proxy/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginIndexRoute = LoginIndexRouteImport.update({
-  id: '/login/',
-  path: '/login/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordIndexRoute = ResetPasswordIndexRouteImport.update({
-  id: '/reset-password/',
-  path: '/reset-password/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SignupIndexRoute = SignupIndexRouteImport.update({
-  id: '/signup/',
-  path: '/signup/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VerifyIndexRoute = VerifyIndexRouteImport.update({
-  id: '/verify/',
-  path: '/verify/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedMainIndexRoute = AuthenticatedMainIndexRouteImport.update({
@@ -200,12 +169,6 @@ const AuthenticatedMainSettingsNotificationsIndexRoute =
     path: '/notifications/',
     getParentRoute: () => AuthenticatedMainSettingsRouteRoute,
   } as any)
-const AuthenticatedMainSettingsSecurityIndexRoute =
-  AuthenticatedMainSettingsSecurityIndexRouteImport.update({
-    id: '/security/',
-    path: '/security/',
-    getParentRoute: () => AuthenticatedMainSettingsRouteRoute,
-  } as any)
 const AuthenticatedMainOrganizationSlugSettingsBillingIndexRoute =
   AuthenticatedMainOrganizationSlugSettingsBillingIndexRouteImport.update({
     id: '/billing/',
@@ -241,11 +204,6 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedMainIndexRoute
   '/api/$': typeof ApiSplatRoute
   '/image-proxy/$': typeof ImageProxySplatRoute
-  '/forgot-password/': typeof ForgotPasswordIndexRoute
-  '/login/': typeof LoginIndexRoute
-  '/reset-password/': typeof ResetPasswordIndexRoute
-  '/signup/': typeof SignupIndexRoute
-  '/verify/': typeof VerifyIndexRoute
   '/admin': typeof AuthenticatedMainAdminRouteRouteWithChildren
   '/settings': typeof AuthenticatedMainSettingsRouteRouteWithChildren
   '/checkout-return/': typeof AuthenticatedCheckoutReturnIndexRoute
@@ -264,7 +222,6 @@ export interface FileRoutesByFullPath {
   '/settings/billing/': typeof AuthenticatedMainSettingsBillingIndexRoute
   '/settings/general/': typeof AuthenticatedMainSettingsGeneralIndexRoute
   '/settings/notifications/': typeof AuthenticatedMainSettingsNotificationsIndexRoute
-  '/settings/security/': typeof AuthenticatedMainSettingsSecurityIndexRoute
   '/$organizationSlug/settings/billing/': typeof AuthenticatedMainOrganizationSlugSettingsBillingIndexRoute
   '/$organizationSlug/settings/general/': typeof AuthenticatedMainOrganizationSlugSettingsGeneralIndexRoute
   '/$organizationSlug/settings/members/': typeof AuthenticatedMainOrganizationSlugSettingsMembersIndexRoute
@@ -275,11 +232,6 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedMainIndexRoute
   '/api/$': typeof ApiSplatRoute
   '/image-proxy/$': typeof ImageProxySplatRoute
-  '/forgot-password': typeof ForgotPasswordIndexRoute
-  '/login': typeof LoginIndexRoute
-  '/reset-password': typeof ResetPasswordIndexRoute
-  '/signup': typeof SignupIndexRoute
-  '/verify': typeof VerifyIndexRoute
   '/checkout-return': typeof AuthenticatedCheckoutReturnIndexRoute
   '/choose-plan': typeof AuthenticatedChoosePlanIndexRoute
   '/new-organization': typeof AuthenticatedNewOrganizationIndexRoute
@@ -295,7 +247,6 @@ export interface FileRoutesByTo {
   '/settings/billing': typeof AuthenticatedMainSettingsBillingIndexRoute
   '/settings/general': typeof AuthenticatedMainSettingsGeneralIndexRoute
   '/settings/notifications': typeof AuthenticatedMainSettingsNotificationsIndexRoute
-  '/settings/security': typeof AuthenticatedMainSettingsSecurityIndexRoute
   '/$organizationSlug/settings/billing': typeof AuthenticatedMainOrganizationSlugSettingsBillingIndexRoute
   '/$organizationSlug/settings/general': typeof AuthenticatedMainOrganizationSlugSettingsGeneralIndexRoute
   '/$organizationSlug/settings/members': typeof AuthenticatedMainOrganizationSlugSettingsMembersIndexRoute
@@ -308,11 +259,6 @@ export interface FileRoutesById {
   '/_authenticated/_main': typeof AuthenticatedMainRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
   '/image-proxy/$': typeof ImageProxySplatRoute
-  '/forgot-password/': typeof ForgotPasswordIndexRoute
-  '/login/': typeof LoginIndexRoute
-  '/reset-password/': typeof ResetPasswordIndexRoute
-  '/signup/': typeof SignupIndexRoute
-  '/verify/': typeof VerifyIndexRoute
   '/_authenticated/_main/admin': typeof AuthenticatedMainAdminRouteRouteWithChildren
   '/_authenticated/_main/settings': typeof AuthenticatedMainSettingsRouteRouteWithChildren
   '/_authenticated/_main/': typeof AuthenticatedMainIndexRoute
@@ -332,7 +278,6 @@ export interface FileRoutesById {
   '/_authenticated/_main/settings/billing/': typeof AuthenticatedMainSettingsBillingIndexRoute
   '/_authenticated/_main/settings/general/': typeof AuthenticatedMainSettingsGeneralIndexRoute
   '/_authenticated/_main/settings/notifications/': typeof AuthenticatedMainSettingsNotificationsIndexRoute
-  '/_authenticated/_main/settings/security/': typeof AuthenticatedMainSettingsSecurityIndexRoute
   '/_authenticated/_main/$organizationSlug/settings/billing/': typeof AuthenticatedMainOrganizationSlugSettingsBillingIndexRoute
   '/_authenticated/_main/$organizationSlug/settings/general/': typeof AuthenticatedMainOrganizationSlugSettingsGeneralIndexRoute
   '/_authenticated/_main/$organizationSlug/settings/members/': typeof AuthenticatedMainOrganizationSlugSettingsMembersIndexRoute
@@ -345,11 +290,6 @@ export interface FileRouteTypes {
     | '/'
     | '/api/$'
     | '/image-proxy/$'
-    | '/forgot-password/'
-    | '/login/'
-    | '/reset-password/'
-    | '/signup/'
-    | '/verify/'
     | '/admin'
     | '/settings'
     | '/checkout-return/'
@@ -368,7 +308,6 @@ export interface FileRouteTypes {
     | '/settings/billing/'
     | '/settings/general/'
     | '/settings/notifications/'
-    | '/settings/security/'
     | '/$organizationSlug/settings/billing/'
     | '/$organizationSlug/settings/general/'
     | '/$organizationSlug/settings/members/'
@@ -379,11 +318,6 @@ export interface FileRouteTypes {
     | '/'
     | '/api/$'
     | '/image-proxy/$'
-    | '/forgot-password'
-    | '/login'
-    | '/reset-password'
-    | '/signup'
-    | '/verify'
     | '/checkout-return'
     | '/choose-plan'
     | '/new-organization'
@@ -399,7 +333,6 @@ export interface FileRouteTypes {
     | '/settings/billing'
     | '/settings/general'
     | '/settings/notifications'
-    | '/settings/security'
     | '/$organizationSlug/settings/billing'
     | '/$organizationSlug/settings/general'
     | '/$organizationSlug/settings/members'
@@ -411,11 +344,6 @@ export interface FileRouteTypes {
     | '/_authenticated/_main'
     | '/api/$'
     | '/image-proxy/$'
-    | '/forgot-password/'
-    | '/login/'
-    | '/reset-password/'
-    | '/signup/'
-    | '/verify/'
     | '/_authenticated/_main/admin'
     | '/_authenticated/_main/settings'
     | '/_authenticated/_main/'
@@ -435,7 +363,6 @@ export interface FileRouteTypes {
     | '/_authenticated/_main/settings/billing/'
     | '/_authenticated/_main/settings/general/'
     | '/_authenticated/_main/settings/notifications/'
-    | '/_authenticated/_main/settings/security/'
     | '/_authenticated/_main/$organizationSlug/settings/billing/'
     | '/_authenticated/_main/$organizationSlug/settings/general/'
     | '/_authenticated/_main/$organizationSlug/settings/members/'
@@ -447,11 +374,6 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   ApiSplatRoute: typeof ApiSplatRoute
   ImageProxySplatRoute: typeof ImageProxySplatRoute
-  ForgotPasswordIndexRoute: typeof ForgotPasswordIndexRoute
-  LoginIndexRoute: typeof LoginIndexRoute
-  ResetPasswordIndexRoute: typeof ResetPasswordIndexRoute
-  SignupIndexRoute: typeof SignupIndexRoute
-  VerifyIndexRoute: typeof VerifyIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -477,46 +399,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/forgot-password/': {
-      id: '/forgot-password/'
-      path: '/forgot-password'
-      fullPath: '/forgot-password/'
-      preLoaderRoute: typeof ForgotPasswordIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/image-proxy/$': {
       id: '/image-proxy/$'
       path: '/image-proxy/$'
       fullPath: '/image-proxy/$'
       preLoaderRoute: typeof ImageProxySplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login/': {
-      id: '/login/'
-      path: '/login'
-      fullPath: '/login/'
-      preLoaderRoute: typeof LoginIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password/': {
-      id: '/reset-password/'
-      path: '/reset-password'
-      fullPath: '/reset-password/'
-      preLoaderRoute: typeof ResetPasswordIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/signup/': {
-      id: '/signup/'
-      path: '/signup'
-      fullPath: '/signup/'
-      preLoaderRoute: typeof SignupIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/verify/': {
-      id: '/verify/'
-      path: '/verify'
-      fullPath: '/verify/'
-      preLoaderRoute: typeof VerifyIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/_main/': {
@@ -652,13 +539,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMainSettingsNotificationsIndexRouteImport
       parentRoute: typeof AuthenticatedMainSettingsRouteRoute
     }
-    '/_authenticated/_main/settings/security/': {
-      id: '/_authenticated/_main/settings/security/'
-      path: '/security'
-      fullPath: '/settings/security/'
-      preLoaderRoute: typeof AuthenticatedMainSettingsSecurityIndexRouteImport
-      parentRoute: typeof AuthenticatedMainSettingsRouteRoute
-    }
     '/_authenticated/_main/$organizationSlug/settings/billing/': {
       id: '/_authenticated/_main/$organizationSlug/settings/billing/'
       path: '/billing'
@@ -728,7 +608,6 @@ interface AuthenticatedMainSettingsRouteRouteChildren {
   AuthenticatedMainSettingsBillingIndexRoute: typeof AuthenticatedMainSettingsBillingIndexRoute
   AuthenticatedMainSettingsGeneralIndexRoute: typeof AuthenticatedMainSettingsGeneralIndexRoute
   AuthenticatedMainSettingsNotificationsIndexRoute: typeof AuthenticatedMainSettingsNotificationsIndexRoute
-  AuthenticatedMainSettingsSecurityIndexRoute: typeof AuthenticatedMainSettingsSecurityIndexRoute
 }
 
 const AuthenticatedMainSettingsRouteRouteChildren: AuthenticatedMainSettingsRouteRouteChildren =
@@ -740,8 +619,6 @@ const AuthenticatedMainSettingsRouteRouteChildren: AuthenticatedMainSettingsRout
       AuthenticatedMainSettingsGeneralIndexRoute,
     AuthenticatedMainSettingsNotificationsIndexRoute:
       AuthenticatedMainSettingsNotificationsIndexRoute,
-    AuthenticatedMainSettingsSecurityIndexRoute:
-      AuthenticatedMainSettingsSecurityIndexRoute,
   }
 
 const AuthenticatedMainSettingsRouteRouteWithChildren =
@@ -828,11 +705,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   ApiSplatRoute: ApiSplatRoute,
   ImageProxySplatRoute: ImageProxySplatRoute,
-  ForgotPasswordIndexRoute: ForgotPasswordIndexRoute,
-  LoginIndexRoute: LoginIndexRoute,
-  ResetPasswordIndexRoute: ResetPasswordIndexRoute,
-  SignupIndexRoute: SignupIndexRoute,
-  VerifyIndexRoute: VerifyIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

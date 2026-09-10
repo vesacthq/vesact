@@ -1,4 +1,5 @@
 import { useTranslations } from "@i18n/intl";
+import { AccountSecurityLink } from "@settings/components/AccountSecurityLink";
 import { ChangeEmailForm } from "@settings/components/ChangeEmailForm";
 import { ChangeNameForm } from "@settings/components/ChangeNameForm";
 import { DeleteAccountForm } from "@settings/components/DeleteAccountForm";
@@ -24,6 +25,7 @@ function SettingsGeneralPage() {
 				<ChangeNameForm />
 				<ChangeEmailForm />
 				<UserLanguageForm />
+				<AccountSecurityLink />
 				<DeleteAccountForm />
 			</SettingsList>
 		</div>

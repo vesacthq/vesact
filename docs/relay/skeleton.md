@@ -17,17 +17,17 @@ A 轨的第一步：把 Relay 最薄的一条端到端链路跑到线上，后�
 
 ## 3. 拓扑
 
-|        | prod                                                           | preview                                                                                                       | dev                                                          |
-| ------ | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| Worker | `vesact-relay`                                                 | `vesact-relay-preview`                                                                                        | `pnpm --filter relay dev`，端口 3004                         |
-| 控制台 | `relay.vesact.com`                                             | `relay.preview.vesact.com`                                                                                    | `localhost:3004`                                             |
-| API    | `api.vesact.com`                                               | `api.preview.vesact.com`                                                                                      | `localhost:3004`                                             |
-| 认证   | `auth.vesact.com`（Studio 的 worker），cookie 域 `.vesact.com` | `auth.preview.vesact.com`（Studio preview 的 worker），cookie 域 `.preview.vesact.com`，前缀 `vesact-preview` | `localhost:3000`（Studio dev），localhost 的 cookie 不分端口 |
-| 数据库 | Hyperdrive `vesact-db` → Neon `production`                     | Hyperdrive `vesact-preview` → Neon `preview`                                                                  | docker postgres 5433                                         |
+|        | prod                                                      | preview                                                                           | dev                                            |
+| ------ | --------------------------------------------------------- | --------------------------------------------------------------------------------- | ---------------------------------------------- |
+| Worker | `vesact-relay`                                            | `vesact-relay-preview`                                                            | `pnpm --filter relay dev`，端口 3005           |
+| 控制台 | `relay.vesact.com`                                        | `relay.preview.vesact.com`                                                        | `localhost:3005`                               |
+| API    | `api.vesact.com`                                          | `api.preview.vesact.com`                                                          | `localhost:3005`                               |
+| 认证   | `auth.vesact.com`（`apps/auth`），cookie 域 `.vesact.com` | `auth.preview.vesact.com`，cookie 域 `.preview.vesact.com`，前缀 `vesact-preview` | `localhost:3004`，localhost 的 cookie 不分端口 |
+| 数据库 | Hyperdrive `vesact-db` → Neon `production`                | Hyperdrive `vesact-preview` → Neon `preview`                                      | docker postgres 5433                           |
 
 一个 worker 每个环境挂两个 custom domain，按路径前缀分发：`/v1/*`、`/webhooks/*`、`/oauth/*` 进 Hono，其余进 TanStack Start 控制台。API 主机名上的非 API 路径返回 404 JSON，其他情况不看主机名。
 
-三个环境的认证都由 Studio 的 worker 提供。Relay 不挂 Better Auth 的 handler，只在进程内用同一个 `packages/auth` 实例校验 key 和读会话；会话 cookie 设在环境的父域上，两个产品共享登录态。preview 能和 prod 同构，是因为 preview 主机名在 `preview.vesact.com` 下；`workers.dev` 在 Public Suffix List 上做不到这一点，preview 已经迁走。
+三个环境的认证都由 `apps/auth` 提供：登录、注册、找回密码、个人安全页和 Better Auth 端点。Relay 不挂 Better Auth 的 handler，只在进程内用同一个 `packages/auth` 实例校验 key 和读会话；会话 cookie 设在环境的父域上，两个产品共享登录态。preview 能和 prod 同构，是因为 preview 主机名在 `preview.vesact.com` 下；`workers.dev` 在 Public Suffix List 上做不到这一点，preview 已经迁走。
 
 ## 4. 交付项
 
@@ -138,14 +138,14 @@ A 轨的第一步：把 Relay 最薄的一条端到端链路跑到线上，后�
 
 内容：
 
-- 路由：`/login`（Studio 的登录表单和方式）、`/`（有组织进组织首页，没有则建组织）、`/settings/api-keys`（列表、创建后显示一次明文、吊销）。
-- 认证：Better Auth client `baseURL` 为 `VITE_AUTH_URL`，三个环境都指向 Studio 的 auth 主机。`getTrustedOrigins()` 加 `VITE_RELAY_URL`，Studio 的 wrangler vars（prod 与 preview）和 `select-target.sh` 也加这个变量，因为 auth handler 和它的 CORS 跑在 Studio worker 里。
-- 模块从 `apps/studio/modules/{auth,organizations,shared}` 复制需要的部分，第四次重复再抽到 packages。
+- 路由：`/`（有组织进组织首页，没有则建组织）、`/settings/api-keys`（列表、创建后显示一次明文、吊销）。没有登录页：未登录时照 Studio 的 `loginUrl()` 跳 `auth.vesact.com/login?redirectTo=…`。
+- 认证：Better Auth client `baseURL` 为 `VITE_AUTH_URL`。`getTrustedOrigins()` 加 `VITE_RELAY_URL`，auth 和 Studio 的 wrangler vars（prod 与 preview）和 `select-target.sh` 也加这个变量，auth 才会把用户送回 Relay。
+- 模块从 `apps/studio/modules/{organizations,shared}` 复制需要的部分，第四次重复再抽到 packages。
 - i18n scope `relay`，locale 集合与 Studio 相同。
 
 验收：
 
-- prod：在 Studio 已登录的浏览器打开 `relay.vesact.com` 直接是登录态；未登录进 `/login`，Google 登录后回到控制台。
+- prod：在 Studio 已登录的浏览器打开 `relay.vesact.com` 直接是登录态；未登录跳到 `auth.vesact.com/login`，登录后回到控制台原来的地址。
 - preview：在 Studio preview 已登录的浏览器打开 `relay.preview.vesact.com` 直接是登录态。
 - 创建 key 后 4.3 的脚本用它能过；吊销后 401。
 - 组织 A 的用户看不到组织 B 的 key。

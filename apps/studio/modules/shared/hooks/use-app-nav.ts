@@ -61,7 +61,6 @@ export function useAppNav() {
 
 		const accountChildren = [
 			child(t("settings.menu.account.general"), "/settings/general"),
-			child(t("settings.menu.account.security"), "/settings/security"),
 			child(t("settings.menu.account.notifications"), "/settings/notifications"),
 			...(paymentsConfig.billingAttachedTo === "user"
 				? [child(t("settings.menu.account.billing"), "/settings/billing")]
