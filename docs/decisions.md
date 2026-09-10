@@ -2,9 +2,18 @@
 
 倒序。只写结论和理由，过程在对应的 issue 里。
 
-## 2026-09-10 Relay 申请阶段的壳
+## 2026-09-11 Relay 定稿的几项
 
-- 用 Zernio 的开源客户端（unified-inbox、ads-dashboard、latewiz、zernflow，均 MIT）配 Relay 自己的 API 做各平台审核的载体，图快；之后换成自己的实现。
+- 不接 Zernio 托管，所有平台能力由 Relay 自己的应用直连各平台；开源客户端只搬组件。
+- 主机名：`relay.vesact.com` 控制台、`api.vesact.com` API、`developers.vesact.com` 文档。
+- 计费按接入的账号收。
+- 代码位置：`apps/relay` 是 worker 和控制台，服务端逻辑先放 `packages/api/modules/relay`，有第二个消费方再拆包。
+- Studio 文档拆成 overview（定位、用户、产品逻辑、边界、分期）和 architecture（模块、导航、联动、数据规则）。
+
+## 2026-09-10 Relay 申请阶段的载体
+
+- 审核载体是 Relay 自己的控制台，不运行 Zernio 的开源客户端，只搬它们的组件（MIT）。理由：Meta 只认 App ID；那些页面本来就是控制台要有的；不用先做一层 Zernio 形状的兼容 API 再换掉。
+- API key、scope、限流、配额用 `@better-auth/api-key`，A2 就上；计费等权限齐了再接。
 - 设计规范放 `docs/design.wip.md`，组件层用 ReUI。
 
 ## 2026-09-10 Relay 的范围

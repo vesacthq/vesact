@@ -1,8 +1,6 @@
 # Studio 术语
 
-跨境卖家的社媒聊单产品：内容引流，私信聊单，翻译与 AI 辅助成单。
-
-架构见 architecture.wip.md。
+定位见 overview.wip.md，架构见 architecture.wip.md。
 
 ## 聊天
 

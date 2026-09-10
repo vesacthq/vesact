@@ -11,7 +11,7 @@ description: "Use when a change affects documentation: repository conventions, p
 | -------------------------------------------- | ------------------------------------ | ----------------------------------------------------------- |
 | Conventions, environments, commands, aliases | `AGENTS.md`                          | whoever changes the convention                              |
 | Studio vocabulary, architecture, site map    | `docs/studio/*.wip.md`               | product; ask before changing a term or the scope            |
-| Relay overview                               | `docs/relay/overview.wip.md`         | product                                                     |
+| Relay overview                               | `docs/relay/overview.md`             | product                                                     |
 | Platform facts, research conclusions         | `docs/reference/*.md`                | whoever verified the fact                                   |
 | Decisions                                    | `docs/decisions.md`                  | append one dated entry: conclusion and reason, newest first |
 | Relay developer docs                         | `apps/docs/content/*.mdx` (Fumadocs) | engineering                                                 |
