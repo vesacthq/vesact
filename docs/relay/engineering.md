@@ -493,14 +493,15 @@ Content-Type: application/json
 
 ## 11. 对标学习：一个具体问题对应一个参考
 
-| 当前问题           | 参考                              | 学什么                                         | 不照搬什么                                        |
-| ------------------ | --------------------------------- | ---------------------------------------------- | ------------------------------------------------- |
-| 授权与连接生命周期 | Apideck Vault [R4]                | 客户、连接、可调用状态、暂停与撤销的区别。     | 完整 Integration Marketplace 和通用连接管理平台。 |
-| 会话和参与者       | Twilio Conversations Classic [R5] | 参与者身份、渠道地址绑定、会话边界。           | 跨所有渠道自动合并会话，以及旧 API 参数风格。     |
-| 平台差异           | Merge Supplemental Data [R6]      | 原始数据、字段扩展与原生操作的边界。           | 第一版动态表单和任意 Passthrough。                |
-| 幂等与不确定结果   | Stripe [R3]                       | 操作与尝试分开、不能仅凭 HTTP 错误重做副作用。 | 把 Stripe 的实际保证宣称为所有平台的保证。        |
-| 客户 Webhook       | Svix [R7]                         | 事件与投递分开，失败记录、重投与恢复。         | 第一版自建完整 Webhook SaaS。                     |
-| 后续指标和广告     | Meta/TikTok/Google 官方 API 文档  | 原生对象、指标定义、状态、限制和审核条件。     | 同名指标直接合并，或把不同广告层级强行等同。      |
+| 当前问题           | 参考                              | 学什么                                                                                                                                                                    | 不照搬什么                                                                                                                                                                                   |
+| ------------------ | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 授权与连接生命周期 | Apideck Vault [R4]                | 客户、连接、可调用状态、暂停与撤销的区别。                                                                                                                                | 完整 Integration Marketplace 和通用连接管理平台。                                                                                                                                            |
+| 会话和参与者       | Twilio Conversations Classic [R5] | 参与者身份、渠道地址绑定、会话边界。                                                                                                                                      | 跨所有渠道自动合并会话，以及旧 API 参数风格。                                                                                                                                                |
+| 平台差异           | Merge Supplemental Data [R6]      | 原始数据、字段扩展与原生操作的边界。                                                                                                                                      | 第一版动态表单和任意 Passthrough。                                                                                                                                                           |
+| 幂等与不确定结果   | Stripe [R3]                       | 操作与尝试分开、不能仅凭 HTTP 错误重做副作用。                                                                                                                            | 把 Stripe 的实际保证宣称为所有平台的保证。                                                                                                                                                   |
+| 客户 Webhook       | Svix [R7]                         | 事件与投递分开，失败记录、重投与恢复。                                                                                                                                    | 第一版自建完整 Webhook SaaS。                                                                                                                                                                |
+| 后续指标和广告     | Meta/TikTok/Google 官方 API 文档  | 原生对象、指标定义、状态、限制和审核条件。                                                                                                                                | 同名指标直接合并，或把不同广告层级强行等同。                                                                                                                                                 |
+| 资源与字段词汇     | Zernio OpenAPI [R13]              | inbox / comments / posts / accounts / webhook 事件这几组的资源和字段：`deliveryStatus` 枚举、平台专用字段的命名与标注、事件名、错误码。它的字段经过 16 个平台的生产打磨。 | 信封、分页、ID 和 webhook 传输格式：719 个操作里分页 6 种写法、列表信封 5 种、`id`/`_id` 混用；消息 `id` 在列表里是平台 ID、在 webhook 里是内部 ID；签名没签时间戳。这些用我们 §8.3 的约定。 |
 
 学习节奏：遇到设计问题 → 阅读对应部分 → 写下取舍 → 实现与测试。不先安排“读完所有优秀规范”的大任务。
 
@@ -508,7 +509,7 @@ Content-Type: application/json
 
 ## 12. 官方参考资料与证据边界
 
-以下资料于 **2026-09-10** 核对，[R8]–[R12] 于 **2026-09-11** 核对。它们用于支持外部平台行为和领域参考，不代表本项目已经安装相关工具、拥有相关权限或完成实际联调。实现时应再次确认对应版本和当前权限。
+以下资料于 **2026-09-10** 核对，[R8]–[R13] 于 **2026-09-11** 核对。它们用于支持外部平台行为和领域参考，不代表本项目已经安装相关工具、拥有相关权限或完成实际联调。实现时应再次确认对应版本和当前权限。
 
 | 标记  | 官方资料                                   | 用途                               |
 | ----- | ------------------------------------------ | ---------------------------------- |
@@ -524,6 +525,7 @@ Content-Type: application/json
 | [R10] | Meta — Graph API Webhooks: Getting Started | 握手、签名、重试与批量。           |
 | [R11] | Meta — Messenger Platform Webhooks         | payload 结构、5 秒响应、乱序。     |
 | [R12] | Better Auth — API Key plugin               | key 校验、限流、配额。             |
+| [R13] | Zernio — OpenAPI 3.1 (`openapi.yaml`)      | 资源与字段词汇；见 §11 的取舍。    |
 
 [R1]: https://developers.cloudflare.com/queues/reference/delivery-guarantees/ "Cloudflare Queues delivery guarantees"
 [R2]: https://developers.cloudflare.com/queues/reference/how-queues-works/ "How Cloudflare Queues works"
@@ -537,6 +539,7 @@ Content-Type: application/json
 [R10]: https://developers.facebook.com/docs/graph-api/webhooks/getting-started "Graph API Webhooks getting started"
 [R11]: https://developers.facebook.com/docs/messenger-platform/webhooks "Messenger Platform webhooks"
 [R12]: https://www.better-auth.com/docs/plugins/api-key "Better Auth API Key plugin"
+[R13]: https://zernio.com/openapi.yaml "Zernio OpenAPI"
 
 ---
 
