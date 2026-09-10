@@ -8,241 +8,240 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AccountRouteRouteImport } from './routes/account/route'
-import { Route as AccountIndexRouteImport } from './routes/account/index'
-import { Route as ForgotPasswordIndexRouteImport } from './routes/forgot-password/index'
-import { Route as LoginIndexRouteImport } from './routes/login/index'
-import { Route as ResetPasswordIndexRouteImport } from './routes/reset-password/index'
-import { Route as SignupIndexRouteImport } from './routes/signup/index'
-import { Route as VerifyIndexRouteImport } from './routes/verify/index'
-import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as AccountIndexRouteImport } from "./routes/account/index";
+import { Route as AccountRouteRouteImport } from "./routes/account/route";
+import { Route as ApiAuthSplatRouteImport } from "./routes/api/auth/$";
+import { Route as ForgotPasswordIndexRouteImport } from "./routes/forgot-password/index";
+import { Route as IndexRouteImport } from "./routes/index";
+import { Route as LoginIndexRouteImport } from "./routes/login/index";
+import { Route as ResetPasswordIndexRouteImport } from "./routes/reset-password/index";
+import { Route as SignupIndexRouteImport } from "./routes/signup/index";
+import { Route as VerifyIndexRouteImport } from "./routes/verify/index";
 
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/",
+	path: "/",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const AccountRouteRoute = AccountRouteRouteImport.update({
-  id: '/account',
-  path: '/account',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/account",
+	path: "/account",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const AccountIndexRoute = AccountIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AccountRouteRoute,
-} as any)
+	id: "/",
+	path: "/",
+	getParentRoute: () => AccountRouteRoute,
+} as any);
 const ForgotPasswordIndexRoute = ForgotPasswordIndexRouteImport.update({
-  id: '/forgot-password/',
-  path: '/forgot-password/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/forgot-password/",
+	path: "/forgot-password/",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const LoginIndexRoute = LoginIndexRouteImport.update({
-  id: '/login/',
-  path: '/login/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/login/",
+	path: "/login/",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const ResetPasswordIndexRoute = ResetPasswordIndexRouteImport.update({
-  id: '/reset-password/',
-  path: '/reset-password/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/reset-password/",
+	path: "/reset-password/",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const SignupIndexRoute = SignupIndexRouteImport.update({
-  id: '/signup/',
-  path: '/signup/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/signup/",
+	path: "/signup/",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const VerifyIndexRoute = VerifyIndexRouteImport.update({
-  id: '/verify/',
-  path: '/verify/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/verify/",
+	path: "/verify/",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
-  id: '/api/auth/$',
-  path: '/api/auth/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/api/auth/$",
+	path: "/api/auth/$",
+	getParentRoute: () => rootRouteImport,
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/account': typeof AccountRouteRouteWithChildren
-  '/account/': typeof AccountIndexRoute
-  '/forgot-password/': typeof ForgotPasswordIndexRoute
-  '/login/': typeof LoginIndexRoute
-  '/reset-password/': typeof ResetPasswordIndexRoute
-  '/signup/': typeof SignupIndexRoute
-  '/verify/': typeof VerifyIndexRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
+	"/": typeof IndexRoute;
+	"/account": typeof AccountRouteRouteWithChildren;
+	"/account/": typeof AccountIndexRoute;
+	"/forgot-password/": typeof ForgotPasswordIndexRoute;
+	"/login/": typeof LoginIndexRoute;
+	"/reset-password/": typeof ResetPasswordIndexRoute;
+	"/signup/": typeof SignupIndexRoute;
+	"/verify/": typeof VerifyIndexRoute;
+	"/api/auth/$": typeof ApiAuthSplatRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/account': typeof AccountIndexRoute
-  '/forgot-password': typeof ForgotPasswordIndexRoute
-  '/login': typeof LoginIndexRoute
-  '/reset-password': typeof ResetPasswordIndexRoute
-  '/signup': typeof SignupIndexRoute
-  '/verify': typeof VerifyIndexRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
+	"/": typeof IndexRoute;
+	"/account": typeof AccountIndexRoute;
+	"/forgot-password": typeof ForgotPasswordIndexRoute;
+	"/login": typeof LoginIndexRoute;
+	"/reset-password": typeof ResetPasswordIndexRoute;
+	"/signup": typeof SignupIndexRoute;
+	"/verify": typeof VerifyIndexRoute;
+	"/api/auth/$": typeof ApiAuthSplatRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/account': typeof AccountRouteRouteWithChildren
-  '/account/': typeof AccountIndexRoute
-  '/forgot-password/': typeof ForgotPasswordIndexRoute
-  '/login/': typeof LoginIndexRoute
-  '/reset-password/': typeof ResetPasswordIndexRoute
-  '/signup/': typeof SignupIndexRoute
-  '/verify/': typeof VerifyIndexRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
+	__root__: typeof rootRouteImport;
+	"/": typeof IndexRoute;
+	"/account": typeof AccountRouteRouteWithChildren;
+	"/account/": typeof AccountIndexRoute;
+	"/forgot-password/": typeof ForgotPasswordIndexRoute;
+	"/login/": typeof LoginIndexRoute;
+	"/reset-password/": typeof ResetPasswordIndexRoute;
+	"/signup/": typeof SignupIndexRoute;
+	"/verify/": typeof VerifyIndexRoute;
+	"/api/auth/$": typeof ApiAuthSplatRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/account'
-    | '/account/'
-    | '/forgot-password/'
-    | '/login/'
-    | '/reset-password/'
-    | '/signup/'
-    | '/verify/'
-    | '/api/auth/$'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/account'
-    | '/forgot-password'
-    | '/login'
-    | '/reset-password'
-    | '/signup'
-    | '/verify'
-    | '/api/auth/$'
-  id:
-    | '__root__'
-    | '/'
-    | '/account'
-    | '/account/'
-    | '/forgot-password/'
-    | '/login/'
-    | '/reset-password/'
-    | '/signup/'
-    | '/verify/'
-    | '/api/auth/$'
-  fileRoutesById: FileRoutesById
+	fileRoutesByFullPath: FileRoutesByFullPath;
+	fullPaths:
+		| "/"
+		| "/account"
+		| "/account/"
+		| "/forgot-password/"
+		| "/login/"
+		| "/reset-password/"
+		| "/signup/"
+		| "/verify/"
+		| "/api/auth/$";
+	fileRoutesByTo: FileRoutesByTo;
+	to:
+		| "/"
+		| "/account"
+		| "/forgot-password"
+		| "/login"
+		| "/reset-password"
+		| "/signup"
+		| "/verify"
+		| "/api/auth/$";
+	id:
+		| "__root__"
+		| "/"
+		| "/account"
+		| "/account/"
+		| "/forgot-password/"
+		| "/login/"
+		| "/reset-password/"
+		| "/signup/"
+		| "/verify/"
+		| "/api/auth/$";
+	fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AccountRouteRoute: typeof AccountRouteRouteWithChildren
-  ForgotPasswordIndexRoute: typeof ForgotPasswordIndexRoute
-  LoginIndexRoute: typeof LoginIndexRoute
-  ResetPasswordIndexRoute: typeof ResetPasswordIndexRoute
-  SignupIndexRoute: typeof SignupIndexRoute
-  VerifyIndexRoute: typeof VerifyIndexRoute
-  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+	IndexRoute: typeof IndexRoute;
+	AccountRouteRoute: typeof AccountRouteRouteWithChildren;
+	ForgotPasswordIndexRoute: typeof ForgotPasswordIndexRoute;
+	LoginIndexRoute: typeof LoginIndexRoute;
+	ResetPasswordIndexRoute: typeof ResetPasswordIndexRoute;
+	SignupIndexRoute: typeof SignupIndexRoute;
+	VerifyIndexRoute: typeof VerifyIndexRoute;
+	ApiAuthSplatRoute: typeof ApiAuthSplatRoute;
 }
 
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/account': {
-      id: '/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AccountRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/account/': {
-      id: '/account/'
-      path: '/'
-      fullPath: '/account/'
-      preLoaderRoute: typeof AccountIndexRouteImport
-      parentRoute: typeof AccountRouteRoute
-    }
-    '/forgot-password/': {
-      id: '/forgot-password/'
-      path: '/forgot-password'
-      fullPath: '/forgot-password/'
-      preLoaderRoute: typeof ForgotPasswordIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login/': {
-      id: '/login/'
-      path: '/login'
-      fullPath: '/login/'
-      preLoaderRoute: typeof LoginIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password/': {
-      id: '/reset-password/'
-      path: '/reset-password'
-      fullPath: '/reset-password/'
-      preLoaderRoute: typeof ResetPasswordIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/signup/': {
-      id: '/signup/'
-      path: '/signup'
-      fullPath: '/signup/'
-      preLoaderRoute: typeof SignupIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/verify/': {
-      id: '/verify/'
-      path: '/verify'
-      fullPath: '/verify/'
-      preLoaderRoute: typeof VerifyIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/$': {
-      id: '/api/auth/$'
-      path: '/api/auth/$'
-      fullPath: '/api/auth/$'
-      preLoaderRoute: typeof ApiAuthSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-  }
+declare module "@tanstack/react-router" {
+	interface FileRoutesByPath {
+		"/": {
+			id: "/";
+			path: "/";
+			fullPath: "/";
+			preLoaderRoute: typeof IndexRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/account": {
+			id: "/account";
+			path: "/account";
+			fullPath: "/account";
+			preLoaderRoute: typeof AccountRouteRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/account/": {
+			id: "/account/";
+			path: "/";
+			fullPath: "/account/";
+			preLoaderRoute: typeof AccountIndexRouteImport;
+			parentRoute: typeof AccountRouteRoute;
+		};
+		"/forgot-password/": {
+			id: "/forgot-password/";
+			path: "/forgot-password";
+			fullPath: "/forgot-password/";
+			preLoaderRoute: typeof ForgotPasswordIndexRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/login/": {
+			id: "/login/";
+			path: "/login";
+			fullPath: "/login/";
+			preLoaderRoute: typeof LoginIndexRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/reset-password/": {
+			id: "/reset-password/";
+			path: "/reset-password";
+			fullPath: "/reset-password/";
+			preLoaderRoute: typeof ResetPasswordIndexRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/signup/": {
+			id: "/signup/";
+			path: "/signup";
+			fullPath: "/signup/";
+			preLoaderRoute: typeof SignupIndexRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/verify/": {
+			id: "/verify/";
+			path: "/verify";
+			fullPath: "/verify/";
+			preLoaderRoute: typeof VerifyIndexRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/api/auth/$": {
+			id: "/api/auth/$";
+			path: "/api/auth/$";
+			fullPath: "/api/auth/$";
+			preLoaderRoute: typeof ApiAuthSplatRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+	}
 }
 
 interface AccountRouteRouteChildren {
-  AccountIndexRoute: typeof AccountIndexRoute
+	AccountIndexRoute: typeof AccountIndexRoute;
 }
 
 const AccountRouteRouteChildren: AccountRouteRouteChildren = {
-  AccountIndexRoute: AccountIndexRoute,
-}
+	AccountIndexRoute: AccountIndexRoute,
+};
 
-const AccountRouteRouteWithChildren = AccountRouteRoute._addFileChildren(
-  AccountRouteRouteChildren,
-)
+const AccountRouteRouteWithChildren = AccountRouteRoute._addFileChildren(AccountRouteRouteChildren);
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AccountRouteRoute: AccountRouteRouteWithChildren,
-  ForgotPasswordIndexRoute: ForgotPasswordIndexRoute,
-  LoginIndexRoute: LoginIndexRoute,
-  ResetPasswordIndexRoute: ResetPasswordIndexRoute,
-  SignupIndexRoute: SignupIndexRoute,
-  VerifyIndexRoute: VerifyIndexRoute,
-  ApiAuthSplatRoute: ApiAuthSplatRoute,
-}
+	IndexRoute: IndexRoute,
+	AccountRouteRoute: AccountRouteRouteWithChildren,
+	ForgotPasswordIndexRoute: ForgotPasswordIndexRoute,
+	LoginIndexRoute: LoginIndexRoute,
+	ResetPasswordIndexRoute: ResetPasswordIndexRoute,
+	SignupIndexRoute: SignupIndexRoute,
+	VerifyIndexRoute: VerifyIndexRoute,
+	ApiAuthSplatRoute: ApiAuthSplatRoute,
+};
 export const routeTree = rootRouteImport
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+	._addFileChildren(rootRouteChildren)
+	._addFileTypes<FileRouteTypes>();
 
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
+import type { createStart } from "@tanstack/react-start";
+
+import type { getRouter } from "./router.tsx";
+declare module "@tanstack/react-start" {
+	interface Register {
+		ssr: true;
+		router: Awaited<ReturnType<typeof getRouter>>;
+	}
 }
