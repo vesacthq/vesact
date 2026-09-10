@@ -9,7 +9,7 @@ const accountUrl = getBaseUrl(import.meta.env.VITE_ACCOUNT_URL as string | undef
 
 // These pages moved to the account center; links that predate the move still work.
 const legacyAuthPath =
-	/^(?:\/[a-z]{2})?\/(?:login|signup|forgot-password|reset-password|verify|onboarding)(?:\/|$)/;
+	/^(?:\/[a-z]{2})?\/(?:login|signup|forgot-password|reset-password|verify|onboarding|admin)(?:\/|$)/;
 
 export default {
 	async fetch(request: Request, options?: RequestOptions<Register>) {

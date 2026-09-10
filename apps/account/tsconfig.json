@@ -10,6 +10,7 @@
 			"@config": ["./config"],
 			"@auth/*": ["./modules/auth/*"],
 			"@account/*": ["./modules/account/*"],
+			"@admin/*": ["./modules/admin/*"],
 			"@organizations/*": ["./modules/organizations/*"],
 			"@onboarding/*": ["./modules/onboarding/*"],
 			"@payments/*": ["./modules/payments/*"],

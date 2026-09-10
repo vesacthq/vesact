@@ -1,13 +1,10 @@
-import { getAdminPath } from "@admin/lib/links";
-import { accountCenterUrl } from "@auth/lib/account-urls";
-import { useTranslations } from "@i18n/intl";
 import {
-	fullOrganizationQueryKey,
-	organizationListQueryKey,
-	useCreateOrganizationMutation,
-	useFullOrganizationQuery,
+	adminOrganizationQueryKey,
+	useAdminOrganizationQuery,
 	useUpdateOrganizationMutation,
-} from "@organizations/lib/api";
+} from "@admin/lib/api";
+import { useTranslations } from "@i18n/intl";
+import { organizationListQueryKey, useCreateOrganizationMutation } from "@organizations/lib/api";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import {
@@ -24,8 +21,8 @@ import { toast } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter, useRouterState } from "@tanstack/react-router";
-import { ExternalLinkIcon } from "lucide-react";
+import { Link, useRouter } from "@tanstack/react-router";
+import { ArrowRightIcon } from "lucide-react";
 import { z } from "zod";
 
 const organizationFormSchema = z.object({
@@ -35,9 +32,8 @@ const organizationFormSchema = z.object({
 export function OrganizationForm({ organizationId }: { organizationId: string }) {
 	const t = useTranslations();
 	const router = useRouter();
-	const currentHref = useRouterState({ select: (state) => state.location.href });
 
-	const { data: organization } = useFullOrganizationQuery(organizationId);
+	const { data: organization } = useAdminOrganizationQuery(organizationId);
 
 	const updateOrganizationMutation = useUpdateOrganizationMutation();
 	const createOrganizationMutation = useCreateOrganizationMutation();
@@ -64,7 +60,7 @@ export function OrganizationForm({ organizationId }: { organizationId: string })
 					throw new Error("Could not save organization");
 				}
 
-				queryClient.setQueryData(fullOrganizationQueryKey(organizationId), newOrganization);
+				queryClient.setQueryData(adminOrganizationQueryKey(organizationId), newOrganization);
 
 				await Promise.all([
 					queryClient.invalidateQueries({
@@ -79,7 +75,9 @@ export function OrganizationForm({ organizationId }: { organizationId: string })
 
 				if (!organization) {
 					void router.navigate({
-						to: getAdminPath(`/organizations/${newOrganization.id}`),
+						to: "/admin/organizations/$organizationId",
+						params: { organizationId: newOrganization.id },
+						search: true,
 						replace: true,
 					});
 				}
@@ -148,16 +146,17 @@ export function OrganizationForm({ organizationId }: { organizationId: string })
 						<Button
 							variant="secondary"
 							nativeButton={false}
-							render={(props) => (
-								<a
-									{...props}
-									href={accountCenterUrl(`/orgs/${organization.slug}/members`, currentHref)}
-								>
-									<ExternalLinkIcon aria-hidden="true" />
-									{t("admin.organizations.form.openMembers")}
-								</a>
-							)}
-						/>
+							render={
+								<Link
+									to="/orgs/$organizationSlug/members"
+									params={{ organizationSlug: organization.slug }}
+									search={(prev) => ({ from: prev.from })}
+								/>
+							}
+						>
+							{t("admin.organizations.form.openMembers")}
+							<ArrowRightIcon aria-hidden="true" />
+						</Button>
 					</CardContent>
 				</Card>
 			)}

@@ -101,6 +101,11 @@
 			"organizations": {
 				"title": "Organizaciones",
 				"new": "Nueva organización"
+			},
+			"admin": {
+				"title": "Administración",
+				"users": "Usuarios",
+				"organizations": "Organizaciones"
 			}
 		}
 	}

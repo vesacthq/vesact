@@ -52,11 +52,6 @@ export function useAppNav() {
 	const startHref = basePath || "/";
 
 	const items = useMemo<AppNavItem[]>(() => {
-		const child = (label: string, href: string): AppNavChild => ({
-			label,
-			href,
-			isActive: pathname === href || pathname.startsWith(`${href}/`),
-		});
 		// Account center pages open with `from` so their back button returns here.
 		const external = (label: string, path: string): AppNavChild => ({
 			label,
@@ -91,9 +86,9 @@ export function useAppNav() {
 				: undefined;
 
 		const adminChildren = [
-			child(t("admin.menu.users"), "/admin/users"),
+			external(t("settings.menu.admin.users"), "/admin/users"),
 			...(authConfig.organizations.enable
-				? [child(t("admin.menu.organizations"), "/admin/organizations")]
+				? [external(t("settings.menu.admin.organizations"), "/admin/organizations")]
 				: []),
 		];
 
@@ -138,9 +133,10 @@ export function useAppNav() {
 				? [
 						{
 							label: t("app.menu.admin"),
-							href: "/admin/users",
+							href: adminChildren[0].href,
 							icon: ShieldUserIcon,
-							isActive: pathname.startsWith("/admin/"),
+							isActive: false,
+							external: true,
 							children: adminChildren,
 						},
 					]

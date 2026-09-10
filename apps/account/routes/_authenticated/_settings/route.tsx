@@ -4,7 +4,7 @@ import { SettingsShell } from "@shared/components/SettingsShell";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 
-interface SettingsSearch extends Record<string, string | undefined> {
+interface SettingsSearch {
 	/** Absolute URL of the product page that linked here; the header's back button returns to it. */
 	from?: string;
 }

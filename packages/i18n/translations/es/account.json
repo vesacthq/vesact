@@ -519,5 +519,106 @@
 		"timeout": "La confirmación está tardando más de lo habitual. Puedes reintentarlo o elegir un plan de nuevo.",
 		"retry": "Comprobar de nuevo",
 		"backToBilling": "Volver a facturación"
+	},
+	"admin": {
+		"organizations": {
+			"backToList": "Volver a organizaciones",
+			"confirmDelete": {
+				"confirm": "Eliminar",
+				"message": "¿Estás seguro de que deseas eliminar esta organización? Esta acción no se puede deshacer.",
+				"title": "Eliminar organización"
+			},
+			"create": "Crear",
+			"delete": "Eliminar",
+			"deleteOrganization": {
+				"deleted": "¡La organización se ha eliminado correctamente!",
+				"deleting": "Eliminando organización...",
+				"notDeleted": "No se pudo eliminar la organización. Por favor, inténtalo de nuevo."
+			},
+			"edit": "Editar",
+			"form": {
+				"createTitle": "Crear una organización",
+				"name": "Nombre de la organización",
+				"notifications": {
+					"error": "No se pudo guardar la organización. Por favor, inténtalo más tarde.",
+					"success": "La organización se ha guardado correctamente."
+				},
+				"save": "Guardar",
+				"updateTitle": "Editar organización",
+				"membersNote": "Los administradores de la organización gestionan los miembros y el acceso a productos en su página de miembros.",
+				"openMembers": "Abrir miembros"
+			},
+			"loading": "Cargando organizaciones...",
+			"membersCount": "{count} {count, plural, one {miembro} other {miembros}}",
+			"search": "Buscar una organización...",
+			"title": "Gestionar organizaciones"
+		},
+		"title": "Administración",
+		"users": {
+			"ban": {
+				"actions": {
+					"ban": "Bloquear usuario",
+					"banning": "Bloqueando usuario...",
+					"confirmBan": "Bloquear usuario",
+					"unban": "Desbloquear usuario"
+				},
+				"dialog": {
+					"description": "Impide que {name} inicie sesión y revoca todas sus sesiones activas.",
+					"title": "Bloquear usuario"
+				},
+				"fields": {
+					"expiration": "Fecha de vencimiento (opcional)",
+					"reason": "Motivo"
+				},
+				"notifications": {
+					"banError": "No se pudo bloquear al usuario. Inténtalo de nuevo.",
+					"banSuccess": "El usuario ha sido bloqueado.",
+					"unbanError": "No se pudo desbloquear al usuario. Inténtalo de nuevo.",
+					"unbanSuccess": "El usuario ha sido desbloqueado.",
+					"unbanning": "Desbloqueando usuario..."
+				},
+				"status": {
+					"banned": "Bloqueado",
+					"expires": "Vence: {date}",
+					"permanent": "Bloqueo permanente",
+					"reason": "Motivo: {reason}"
+				},
+				"validation": {
+					"expirationFuture": "Elige hoy o una fecha futura.",
+					"reasonRequired": "Introduce un motivo para el bloqueo."
+				}
+			},
+			"confirmDelete": {
+				"confirm": "Eliminar",
+				"message": "¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.",
+				"title": "Eliminar usuario"
+			},
+			"delete": "Eliminar",
+			"deleteUser": {
+				"deleted": "¡El usuario se ha eliminado correctamente!",
+				"deleting": "Eliminando usuario...",
+				"notDeleted": "No se pudo eliminar el usuario. Por favor, inténtalo de nuevo."
+			},
+			"emailVerified": {
+				"verified": "Correo verificado",
+				"waiting": "Correo pendiente de verificación"
+			},
+			"impersonate": "Suplantar",
+			"impersonation": {
+				"impersonating": "Suplantando como {name}..."
+			},
+			"loading": "Cargando usuarios...",
+			"resendVerificationMail": {
+				"error": "No se pudo reenviar el correo de verificación. Por favor, inténtalo de nuevo.",
+				"submitting": "Reenviando correo de verificación...",
+				"success": "El correo de verificación ha sido enviado.",
+				"title": "Reenviar correo de verificación"
+			},
+			"search": "Buscar por nombre o correo...",
+			"title": "Gestionar usuarios",
+			"assignAdminRole": "Asignar rol de administrador",
+			"removeAdminRole": "Quitar rol de administrador"
+		},
+		"description": "Gestiona tu aplicación."
 	}
 }

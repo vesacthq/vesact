@@ -27,4 +27,11 @@ test.describe("authentication guard", () => {
 		expect(response.status()).toBe(302);
 		expect(response.headers().location).toMatch(/\/onboarding$/);
 	});
+
+	test("redirects the old admin path to the account center", async ({ request }) => {
+		const response = await request.get("/admin/users", { maxRedirects: 0 });
+
+		expect(response.status()).toBe(302);
+		expect(response.headers().location).toMatch(/\/admin\/users$/);
+	});
 });

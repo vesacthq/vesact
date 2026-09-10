@@ -15,14 +15,8 @@ import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as ImageProxySplatRouteImport } from './routes/image-proxy/$'
 import { Route as AuthenticatedMainIndexRouteImport } from './routes/_authenticated/_main/index'
 import { Route as AuthenticatedMainOrganizationSlugRouteRouteImport } from './routes/_authenticated/_main/$organizationSlug/route'
-import { Route as AuthenticatedMainAdminRouteRouteImport } from './routes/_authenticated/_main/admin/route'
 import { Route as AuthenticatedMainOrganizationSlugIndexRouteImport } from './routes/_authenticated/_main/$organizationSlug/index'
-import { Route as AuthenticatedMainAdminIndexRouteImport } from './routes/_authenticated/_main/admin/index'
 import { Route as AuthenticatedMainChatbotIndexRouteImport } from './routes/_authenticated/_main/chatbot/index'
-import { Route as AuthenticatedMainAdminOrganizationsIndexRouteImport } from './routes/_authenticated/_main/admin/organizations/index'
-import { Route as AuthenticatedMainAdminUsersIndexRouteImport } from './routes/_authenticated/_main/admin/users/index'
-import { Route as AuthenticatedMainAdminOrganizationsOrganizationIdIndexRouteImport } from './routes/_authenticated/_main/admin/organizations/$organizationId/index'
-import { Route as AuthenticatedMainAdminOrganizationsNewIndexRouteImport } from './routes/_authenticated/_main/admin/organizations/new/index'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
@@ -53,23 +47,11 @@ const AuthenticatedMainOrganizationSlugRouteRoute =
     path: '/$organizationSlug',
     getParentRoute: () => AuthenticatedMainRouteRoute,
   } as any)
-const AuthenticatedMainAdminRouteRoute =
-  AuthenticatedMainAdminRouteRouteImport.update({
-    id: '/admin',
-    path: '/admin',
-    getParentRoute: () => AuthenticatedMainRouteRoute,
-  } as any)
 const AuthenticatedMainOrganizationSlugIndexRoute =
   AuthenticatedMainOrganizationSlugIndexRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedMainOrganizationSlugRouteRoute,
-  } as any)
-const AuthenticatedMainAdminIndexRoute =
-  AuthenticatedMainAdminIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthenticatedMainAdminRouteRoute,
   } as any)
 const AuthenticatedMainChatbotIndexRoute =
   AuthenticatedMainChatbotIndexRouteImport.update({
@@ -77,56 +59,21 @@ const AuthenticatedMainChatbotIndexRoute =
     path: '/chatbot/',
     getParentRoute: () => AuthenticatedMainRouteRoute,
   } as any)
-const AuthenticatedMainAdminOrganizationsIndexRoute =
-  AuthenticatedMainAdminOrganizationsIndexRouteImport.update({
-    id: '/organizations/',
-    path: '/organizations/',
-    getParentRoute: () => AuthenticatedMainAdminRouteRoute,
-  } as any)
-const AuthenticatedMainAdminUsersIndexRoute =
-  AuthenticatedMainAdminUsersIndexRouteImport.update({
-    id: '/users/',
-    path: '/users/',
-    getParentRoute: () => AuthenticatedMainAdminRouteRoute,
-  } as any)
-const AuthenticatedMainAdminOrganizationsOrganizationIdIndexRoute =
-  AuthenticatedMainAdminOrganizationsOrganizationIdIndexRouteImport.update({
-    id: '/organizations/$organizationId/',
-    path: '/organizations/$organizationId/',
-    getParentRoute: () => AuthenticatedMainAdminRouteRoute,
-  } as any)
-const AuthenticatedMainAdminOrganizationsNewIndexRoute =
-  AuthenticatedMainAdminOrganizationsNewIndexRouteImport.update({
-    id: '/organizations/new/',
-    path: '/organizations/new/',
-    getParentRoute: () => AuthenticatedMainAdminRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedMainIndexRoute
   '/api/$': typeof ApiSplatRoute
   '/image-proxy/$': typeof ImageProxySplatRoute
   '/$organizationSlug': typeof AuthenticatedMainOrganizationSlugRouteRouteWithChildren
-  '/admin': typeof AuthenticatedMainAdminRouteRouteWithChildren
   '/$organizationSlug/': typeof AuthenticatedMainOrganizationSlugIndexRoute
-  '/admin/': typeof AuthenticatedMainAdminIndexRoute
   '/chatbot/': typeof AuthenticatedMainChatbotIndexRoute
-  '/admin/organizations/': typeof AuthenticatedMainAdminOrganizationsIndexRoute
-  '/admin/users/': typeof AuthenticatedMainAdminUsersIndexRoute
-  '/admin/organizations/$organizationId/': typeof AuthenticatedMainAdminOrganizationsOrganizationIdIndexRoute
-  '/admin/organizations/new/': typeof AuthenticatedMainAdminOrganizationsNewIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AuthenticatedMainIndexRoute
   '/api/$': typeof ApiSplatRoute
   '/image-proxy/$': typeof ImageProxySplatRoute
   '/$organizationSlug': typeof AuthenticatedMainOrganizationSlugIndexRoute
-  '/admin': typeof AuthenticatedMainAdminIndexRoute
   '/chatbot': typeof AuthenticatedMainChatbotIndexRoute
-  '/admin/organizations': typeof AuthenticatedMainAdminOrganizationsIndexRoute
-  '/admin/users': typeof AuthenticatedMainAdminUsersIndexRoute
-  '/admin/organizations/$organizationId': typeof AuthenticatedMainAdminOrganizationsOrganizationIdIndexRoute
-  '/admin/organizations/new': typeof AuthenticatedMainAdminOrganizationsNewIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -135,15 +82,9 @@ export interface FileRoutesById {
   '/api/$': typeof ApiSplatRoute
   '/image-proxy/$': typeof ImageProxySplatRoute
   '/_authenticated/_main/$organizationSlug': typeof AuthenticatedMainOrganizationSlugRouteRouteWithChildren
-  '/_authenticated/_main/admin': typeof AuthenticatedMainAdminRouteRouteWithChildren
   '/_authenticated/_main/': typeof AuthenticatedMainIndexRoute
   '/_authenticated/_main/$organizationSlug/': typeof AuthenticatedMainOrganizationSlugIndexRoute
-  '/_authenticated/_main/admin/': typeof AuthenticatedMainAdminIndexRoute
   '/_authenticated/_main/chatbot/': typeof AuthenticatedMainChatbotIndexRoute
-  '/_authenticated/_main/admin/organizations/': typeof AuthenticatedMainAdminOrganizationsIndexRoute
-  '/_authenticated/_main/admin/users/': typeof AuthenticatedMainAdminUsersIndexRoute
-  '/_authenticated/_main/admin/organizations/$organizationId/': typeof AuthenticatedMainAdminOrganizationsOrganizationIdIndexRoute
-  '/_authenticated/_main/admin/organizations/new/': typeof AuthenticatedMainAdminOrganizationsNewIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -152,26 +93,10 @@ export interface FileRouteTypes {
     | '/api/$'
     | '/image-proxy/$'
     | '/$organizationSlug'
-    | '/admin'
     | '/$organizationSlug/'
-    | '/admin/'
     | '/chatbot/'
-    | '/admin/organizations/'
-    | '/admin/users/'
-    | '/admin/organizations/$organizationId/'
-    | '/admin/organizations/new/'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/api/$'
-    | '/image-proxy/$'
-    | '/$organizationSlug'
-    | '/admin'
-    | '/chatbot'
-    | '/admin/organizations'
-    | '/admin/users'
-    | '/admin/organizations/$organizationId'
-    | '/admin/organizations/new'
+  to: '/' | '/api/$' | '/image-proxy/$' | '/$organizationSlug' | '/chatbot'
   id:
     | '__root__'
     | '/_authenticated'
@@ -179,15 +104,9 @@ export interface FileRouteTypes {
     | '/api/$'
     | '/image-proxy/$'
     | '/_authenticated/_main/$organizationSlug'
-    | '/_authenticated/_main/admin'
     | '/_authenticated/_main/'
     | '/_authenticated/_main/$organizationSlug/'
-    | '/_authenticated/_main/admin/'
     | '/_authenticated/_main/chatbot/'
-    | '/_authenticated/_main/admin/organizations/'
-    | '/_authenticated/_main/admin/users/'
-    | '/_authenticated/_main/admin/organizations/$organizationId/'
-    | '/_authenticated/_main/admin/organizations/new/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -240,13 +159,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMainOrganizationSlugRouteRouteImport
       parentRoute: typeof AuthenticatedMainRouteRoute
     }
-    '/_authenticated/_main/admin': {
-      id: '/_authenticated/_main/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AuthenticatedMainAdminRouteRouteImport
-      parentRoute: typeof AuthenticatedMainRouteRoute
-    }
     '/_authenticated/_main/$organizationSlug/': {
       id: '/_authenticated/_main/$organizationSlug/'
       path: '/'
@@ -254,47 +166,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMainOrganizationSlugIndexRouteImport
       parentRoute: typeof AuthenticatedMainOrganizationSlugRouteRoute
     }
-    '/_authenticated/_main/admin/': {
-      id: '/_authenticated/_main/admin/'
-      path: '/'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AuthenticatedMainAdminIndexRouteImport
-      parentRoute: typeof AuthenticatedMainAdminRouteRoute
-    }
     '/_authenticated/_main/chatbot/': {
       id: '/_authenticated/_main/chatbot/'
       path: '/chatbot'
       fullPath: '/chatbot/'
       preLoaderRoute: typeof AuthenticatedMainChatbotIndexRouteImport
       parentRoute: typeof AuthenticatedMainRouteRoute
-    }
-    '/_authenticated/_main/admin/organizations/': {
-      id: '/_authenticated/_main/admin/organizations/'
-      path: '/organizations'
-      fullPath: '/admin/organizations/'
-      preLoaderRoute: typeof AuthenticatedMainAdminOrganizationsIndexRouteImport
-      parentRoute: typeof AuthenticatedMainAdminRouteRoute
-    }
-    '/_authenticated/_main/admin/users/': {
-      id: '/_authenticated/_main/admin/users/'
-      path: '/users'
-      fullPath: '/admin/users/'
-      preLoaderRoute: typeof AuthenticatedMainAdminUsersIndexRouteImport
-      parentRoute: typeof AuthenticatedMainAdminRouteRoute
-    }
-    '/_authenticated/_main/admin/organizations/$organizationId/': {
-      id: '/_authenticated/_main/admin/organizations/$organizationId/'
-      path: '/organizations/$organizationId'
-      fullPath: '/admin/organizations/$organizationId/'
-      preLoaderRoute: typeof AuthenticatedMainAdminOrganizationsOrganizationIdIndexRouteImport
-      parentRoute: typeof AuthenticatedMainAdminRouteRoute
-    }
-    '/_authenticated/_main/admin/organizations/new/': {
-      id: '/_authenticated/_main/admin/organizations/new/'
-      path: '/organizations/new'
-      fullPath: '/admin/organizations/new/'
-      preLoaderRoute: typeof AuthenticatedMainAdminOrganizationsNewIndexRouteImport
-      parentRoute: typeof AuthenticatedMainAdminRouteRoute
     }
   }
 }
@@ -314,35 +191,8 @@ const AuthenticatedMainOrganizationSlugRouteRouteWithChildren =
     AuthenticatedMainOrganizationSlugRouteRouteChildren,
   )
 
-interface AuthenticatedMainAdminRouteRouteChildren {
-  AuthenticatedMainAdminIndexRoute: typeof AuthenticatedMainAdminIndexRoute
-  AuthenticatedMainAdminOrganizationsIndexRoute: typeof AuthenticatedMainAdminOrganizationsIndexRoute
-  AuthenticatedMainAdminUsersIndexRoute: typeof AuthenticatedMainAdminUsersIndexRoute
-  AuthenticatedMainAdminOrganizationsOrganizationIdIndexRoute: typeof AuthenticatedMainAdminOrganizationsOrganizationIdIndexRoute
-  AuthenticatedMainAdminOrganizationsNewIndexRoute: typeof AuthenticatedMainAdminOrganizationsNewIndexRoute
-}
-
-const AuthenticatedMainAdminRouteRouteChildren: AuthenticatedMainAdminRouteRouteChildren =
-  {
-    AuthenticatedMainAdminIndexRoute: AuthenticatedMainAdminIndexRoute,
-    AuthenticatedMainAdminOrganizationsIndexRoute:
-      AuthenticatedMainAdminOrganizationsIndexRoute,
-    AuthenticatedMainAdminUsersIndexRoute:
-      AuthenticatedMainAdminUsersIndexRoute,
-    AuthenticatedMainAdminOrganizationsOrganizationIdIndexRoute:
-      AuthenticatedMainAdminOrganizationsOrganizationIdIndexRoute,
-    AuthenticatedMainAdminOrganizationsNewIndexRoute:
-      AuthenticatedMainAdminOrganizationsNewIndexRoute,
-  }
-
-const AuthenticatedMainAdminRouteRouteWithChildren =
-  AuthenticatedMainAdminRouteRoute._addFileChildren(
-    AuthenticatedMainAdminRouteRouteChildren,
-  )
-
 interface AuthenticatedMainRouteRouteChildren {
   AuthenticatedMainOrganizationSlugRouteRoute: typeof AuthenticatedMainOrganizationSlugRouteRouteWithChildren
-  AuthenticatedMainAdminRouteRoute: typeof AuthenticatedMainAdminRouteRouteWithChildren
   AuthenticatedMainIndexRoute: typeof AuthenticatedMainIndexRoute
   AuthenticatedMainChatbotIndexRoute: typeof AuthenticatedMainChatbotIndexRoute
 }
@@ -351,8 +201,6 @@ const AuthenticatedMainRouteRouteChildren: AuthenticatedMainRouteRouteChildren =
   {
     AuthenticatedMainOrganizationSlugRouteRoute:
       AuthenticatedMainOrganizationSlugRouteRouteWithChildren,
-    AuthenticatedMainAdminRouteRoute:
-      AuthenticatedMainAdminRouteRouteWithChildren,
     AuthenticatedMainIndexRoute: AuthenticatedMainIndexRoute,
     AuthenticatedMainChatbotIndexRoute: AuthenticatedMainChatbotIndexRoute,
   }

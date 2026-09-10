@@ -1,4 +1,3 @@
-import { getAdminPath } from "@admin/lib/links";
 import { useTranslations } from "@i18n/intl";
 import { OrganizationLogo } from "@organizations/components/OrganizationLogo";
 import { organizationListQueryKey } from "@organizations/lib/api";
@@ -21,40 +20,41 @@ import { Pagination } from "@shared/components/Pagination";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { manualPaginationTableFeatures } from "@shared/lib/table-features";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { getRouteApi, Link } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
 import { flexRender, useTable } from "@tanstack/react-table";
 import { EditIcon, MoreVerticalIcon, PlusIcon, TrashIcon } from "lucide-react";
-import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
-import { useEffect, useMemo, useRef, type Ref } from "react";
-import { withQuery } from "ufo";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useDebounceValue } from "usehooks-ts";
 
 const ITEMS_PER_PAGE = 10;
+const route = getRouteApi("/_authenticated/_settings/admin/organizations/");
 
 export function OrganizationList() {
 	const t = useTranslations();
 	const { confirm } = useConfirmationAlert();
 	const queryClient = useQueryClient();
-	const [currentPage, setCurrentPage] = useQueryState("currentPage", parseAsInteger.withDefault(1));
-	const [searchTerm, setSearchTerm] = useQueryState("query", parseAsString.withDefault(""));
+	const { page: currentPage = 1, query: searchTerm = "" } = route.useSearch();
+	const navigate = route.useNavigate();
+	const setCurrentPage = useCallback(
+		(page: number) =>
+			navigate({
+				search: (prev) => ({ ...prev, page: page > 1 ? page : undefined }),
+				replace: true,
+			}),
+		[navigate],
+	);
+	const setSearchTerm = useCallback(
+		(query: string) =>
+			navigate({ search: (prev) => ({ ...prev, query: query || undefined }), replace: true }),
+		[navigate],
+	);
 	const [debouncedSearchTerm, setDebouncedSearchTerm] = useDebounceValue(searchTerm, 300, {
 		leading: true,
 		trailing: false,
 	});
 
 	const previousSearchTermRef = useRef(debouncedSearchTerm);
-
-	const getPathWithBackToParemeter = (path: string) => {
-		const searchParams = new URLSearchParams(window.location.search);
-		return withQuery(path, {
-			backTo: `${window.location.pathname}${searchParams.size ? `?${searchParams.toString()}` : ""}`,
-		});
-	};
-
-	const getOrganizationEditPath = (id: string) => {
-		return getPathWithBackToParemeter(getAdminPath(`/organizations/${id}`));
-	};
 
 	useEffect(() => {
 		setDebouncedSearchTerm(searchTerm);
@@ -126,7 +126,12 @@ export function OrganizationList() {
 					<div className="gap-2 flex items-center">
 						<OrganizationLogo name={name} logoUrl={logo} />
 						<div className="leading-tight">
-							<Link to={getOrganizationEditPath(id)} className="font-bold block">
+							<Link
+								to="/admin/organizations/$organizationId"
+								params={{ organizationId: id }}
+								search={true}
+								className="font-bold block"
+							>
 								{name}
 							</Link>
 							<small>
@@ -162,7 +167,9 @@ export function OrganizationList() {
 										render={(props) => (
 											<Link
 												{...props}
-												to={getOrganizationEditPath(id)}
+												to="/admin/organizations/$organizationId"
+												params={{ organizationId: id }}
+												search={true}
 												className={cn(props.className, "flex items-center")}
 											>
 												<EditIcon className="mr-2 size-4" />
@@ -211,18 +218,7 @@ export function OrganizationList() {
 				<Button
 					variant="secondary"
 					nativeButton={false}
-					render={(props) => {
-						const { ref, ...rest } = props;
-						return (
-							<Link
-								{...rest}
-								ref={ref as Ref<HTMLAnchorElement>}
-								to={getAdminPath("/organizations/new")}
-							>
-								{props.children}
-							</Link>
-						);
-					}}
+					render={<Link to="/admin/organizations/new" search={true} />}
 				>
 					<PlusIcon className="mr-1.5 size-4" />
 					{t("admin.organizations.create")}
