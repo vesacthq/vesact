@@ -2,7 +2,7 @@ import { and, eq, ilike, or, sql } from "drizzle-orm";
 import type { z } from "zod";
 
 import { db } from "../client";
-import { member, organization } from "../schema/postgres";
+import { organization } from "../schema/postgres";
 import type { OrganizationUpdateSchema } from "../zod";
 
 export async function getOrganizations({
@@ -20,7 +20,9 @@ export async function getOrganizations({
 		offset,
 		extras: {
 			membersCount:
-				sql<number>`(SELECT COUNT(*) FROM ${member} WHERE ${member.organizationId} = ${organization.id})`.as(
+				// Column refs inside `extras` are rendered against the outer table, so
+				// the inner table is spelled out.
+				sql<number>`(SELECT COUNT(*) FROM "member" WHERE "member"."organizationId" = ${organization.id})`.as(
 					"membersCount",
 				),
 		},
@@ -83,7 +85,9 @@ export async function getOrganizationWithPurchasesAndMembersCount(organizationId
 		},
 		extras: {
 			membersCount:
-				sql<number>`(SELECT COUNT(*) FROM ${member} WHERE ${member.organizationId} = ${organization.id})`.as(
+				// Column refs inside `extras` are rendered against the outer table, so
+				// the inner table is spelled out.
+				sql<number>`(SELECT COUNT(*) FROM "member" WHERE "member"."organizationId" = ${organization.id})`.as(
 					"membersCount",
 				),
 		},

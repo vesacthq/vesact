@@ -9,7 +9,11 @@ export type PermissionPath =
 	| "organization.manage"
 	| "organization.delete"
 	| "organization.manageBilling"
-	| "organization.accessBillingPortal";
+	| "organization.accessBillingPortal"
+	| "studio.access"
+	| "studio.manage"
+	| "relay.access"
+	| "relay.manage";
 
 /**
  * Evaluate a single permission against rules derived from the user + membership role.

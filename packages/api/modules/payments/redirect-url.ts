@@ -1,11 +1,11 @@
-import { getBaseUrl } from "@repo/utils";
+import { getTrustedOrigins } from "@repo/utils";
 import { z } from "zod";
 
-const allowedRedirectOrigin = new URL(getBaseUrl(process.env.VITE_STUDIO_URL, 3000)).origin;
+const allowedRedirectOrigins = getTrustedOrigins().map((url) => new URL(url).origin);
 
 function isAllowedRedirectUrl(redirectUrl: string) {
 	try {
-		return new URL(redirectUrl).origin === allowedRedirectOrigin;
+		return allowedRedirectOrigins.includes(new URL(redirectUrl).origin);
 	} catch {
 		return false;
 	}
@@ -14,6 +14,6 @@ function isAllowedRedirectUrl(redirectUrl: string) {
 export const paymentRedirectUrlSchema = z
 	.url()
 	.refine(isAllowedRedirectUrl, {
-		message: "Redirect URL must use the application origin",
+		message: "Redirect URL must use one of the application origins",
 	})
 	.optional();

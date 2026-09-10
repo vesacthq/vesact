@@ -16,7 +16,7 @@ export {
 } from "./shared";
 export { default as defaultMailTranslations } from "./translations/en/mail.json";
 export type {
-	AuthMessages,
+	AccountMessages,
 	MailMessages,
 	MarketingMessages,
 	StudioMessages,

@@ -1,4 +1,4 @@
-import { loginUrl } from "@auth/lib/login-url";
+import { loginUrl } from "@auth/lib/account-urls";
 import { useTranslations } from "@i18n/intl";
 import { checkPermission } from "@repo/permissions";
 import { PageHeader } from "@shared/components/PageHeader";

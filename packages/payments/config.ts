@@ -1,7 +1,7 @@
 import type { PaymentsConfig } from "./types";
 
 export const config: PaymentsConfig = {
-	billingAttachedTo: "user",
+	billingAttachedTo: "organization",
 	requireActiveSubscription: false,
 	plans: {
 		pro: {

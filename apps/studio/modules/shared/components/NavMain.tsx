@@ -28,6 +28,18 @@ import { type AppNavChild, type AppNavItem, useAppNav } from "../hooks/use-app-n
 
 type ParentNavItem = AppNavItem & { children: AppNavChild[] };
 
+function childLink(child: AppNavChild) {
+	return child.external ? (
+		(props: React.ComponentProps<"a">) => (
+			<a {...props} href={child.href}>
+				{props.children}
+			</a>
+		)
+	) : (
+		<Link to={child.href} preload="intent" />
+	);
+}
+
 function CollapsedNavItem({ item }: { item: ParentNavItem }) {
 	return (
 		<SidebarMenuItem>
@@ -48,11 +60,7 @@ function CollapsedNavItem({ item }: { item: ParentNavItem }) {
 					<DropdownMenuGroup>
 						<DropdownMenuLabel>{item.label}</DropdownMenuLabel>
 						{item.children.map((child) => (
-							<DropdownMenuItem
-								key={child.href}
-								nativeButton={false}
-								render={<Link to={child.href} preload="intent" />}
-							>
+							<DropdownMenuItem key={child.href} nativeButton={false} render={childLink(child)}>
 								{child.label}
 							</DropdownMenuItem>
 						))}
@@ -97,10 +105,7 @@ function ExpandedNavItem({
 				<SidebarMenuSub id={subMenuId}>
 					{item.children.map((child) => (
 						<SidebarMenuSubItem key={child.href}>
-							<SidebarMenuSubButton
-								isActive={child.isActive}
-								render={<Link to={child.href} preload="intent" />}
-							>
+							<SidebarMenuSubButton isActive={child.isActive} render={childLink(child)}>
 								<span>{child.label}</span>
 							</SidebarMenuSubButton>
 						</SidebarMenuSubItem>

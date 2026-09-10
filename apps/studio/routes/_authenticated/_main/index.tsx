@@ -1,5 +1,5 @@
+import { accountCenterUrl, loginUrl } from "@auth/lib/account-urls";
 import { getOrganizationList, getSession } from "@auth/lib/auth-server.server";
-import { loginUrl } from "@auth/lib/login-url";
 import { useTranslations } from "@i18n/intl";
 import { OrganizationsGrid } from "@organizations/components/OrganizationsGrid";
 import { config as authConfig } from "@repo/auth/config";
@@ -41,7 +41,7 @@ export const Route = createFileRoute("/_authenticated/_main/")({
 				organizations[0];
 
 			if (!organization) {
-				throw redirect({ href: "/new-organization" });
+				throw redirect({ href: accountCenterUrl("/orgs/new", location.href) });
 			}
 
 			throw redirect({ href: `/${organization.slug}` });

@@ -82,5 +82,26 @@
 		"aria": {
 			"language": "Langue"
 		}
+	},
+	"settings": {
+		"menu": {
+			"account": {
+				"billing": "Facturation",
+				"notifications": "Notifications",
+				"security": "Sécurité",
+				"title": "Compte",
+				"profile": "Profil"
+			},
+			"organization": {
+				"billing": "Facturation",
+				"general": "Général",
+				"members": "Membres",
+				"title": "Organisation"
+			},
+			"organizations": {
+				"title": "Organisations",
+				"new": "Nouvelle organisation"
+			}
+		}
 	}
 }

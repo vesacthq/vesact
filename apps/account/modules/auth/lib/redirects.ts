@@ -1,10 +1,19 @@
+import { withQuery } from "ufo";
+
 const accountOrigin = import.meta.env.VITE_ACCOUNT_URL;
 const studioUrl = import.meta.env.VITE_STUDIO_URL;
-const productOrigins = [
-	studioUrl,
-	import.meta.env.VITE_MARKETING_URL,
-	import.meta.env.VITE_RELAY_URL,
-	accountOrigin,
+const relayUrl = import.meta.env.VITE_RELAY_URL;
+const marketingUrl = import.meta.env.VITE_MARKETING_URL;
+
+export interface ProductUrl {
+	name: string;
+	url: string | undefined;
+}
+
+export const products: ProductUrl[] = [
+	{ name: "Studio", url: studioUrl },
+	{ name: "Relay", url: relayUrl },
+	{ name: "Vesact", url: marketingUrl },
 ];
 
 function toOrigin(value: string | undefined): string | null {
@@ -19,7 +28,7 @@ function toOrigin(value: string | undefined): string | null {
 	}
 }
 
-export const allowedRedirectOrigins = productOrigins
+export const allowedRedirectOrigins = [...products.map((product) => product.url), accountOrigin]
 	.map(toOrigin)
 	.filter((origin): origin is string => origin !== null);
 
@@ -70,8 +79,28 @@ function normalize(value: string | null | undefined, allowed: string[], base: st
 	}
 }
 
+/**
+ * Settings pages are opened from a product with `from=<absolute URL>`; the
+ * "back" button returns there. Without `from` it returns to Studio.
+ */
+export function getReturnUrl(
+	from: string | null | undefined,
+	options: { fallback: string; allowedOrigins?: string[] } = { fallback: studioUrl ?? "/" },
+): string {
+	return getSafeRedirectUrl(from, options);
+}
+
+export function productNameForUrl(url: string, knownProducts: ProductUrl[] = products): string {
+	const origin = toOrigin(url);
+	return knownProducts.find((product) => toOrigin(product.url) === origin)?.name ?? "Vesact";
+}
+
 export function invitationUrl(invitationId: string): string {
-	return new URL(`/organization-invitation/${invitationId}`, studioUrl).toString();
+	return `/invitations/${invitationId}`;
+}
+
+export function onboardingUrl(redirectTo: string): string {
+	return withQuery("/onboarding", { redirectTo });
 }
 
 /**

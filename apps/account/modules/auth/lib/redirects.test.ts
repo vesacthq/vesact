@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { getSafeRedirectUrl } from "./redirects";
+import { getReturnUrl, getSafeRedirectUrl, productNameForUrl } from "./redirects";
 
 const options = {
 	fallback: "https://studio.vesact.com/",
@@ -39,5 +39,30 @@ describe("getSafeRedirectUrl", () => {
 		expect(
 			getSafeRedirectUrl("https://attacker.example", { ...options, fallback: "//x.example" }),
 		).toBe("/");
+	});
+});
+
+describe("getReturnUrl", () => {
+	it("returns to the product the user came from, or to Studio", () => {
+		expect(getReturnUrl("https://relay.vesact.com/keys", options)).toBe(
+			"https://relay.vesact.com/keys",
+		);
+		expect(getReturnUrl("https://attacker.example/", options)).toBe("https://studio.vesact.com/");
+		expect(getReturnUrl(undefined, options)).toBe("https://studio.vesact.com/");
+	});
+});
+
+describe("productNameForUrl", () => {
+	const products = [
+		{ name: "Studio", url: "https://studio.vesact.com" },
+		{ name: "Relay", url: "https://relay.vesact.com" },
+		{ name: "Vesact", url: undefined },
+	];
+
+	it("names the product by origin", () => {
+		expect(productNameForUrl("https://studio.vesact.com/inbox", products)).toBe("Studio");
+		expect(productNameForUrl("https://relay.vesact.com/", products)).toBe("Relay");
+		expect(productNameForUrl("https://www.vesact.com/", products)).toBe("Vesact");
+		expect(productNameForUrl("not a url", products)).toBe("Vesact");
 	});
 });

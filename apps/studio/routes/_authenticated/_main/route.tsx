@@ -1,5 +1,5 @@
+import { accountCenterUrl, loginUrl, onboardingUrl } from "@auth/lib/account-urls";
 import { getOrganizationList, getSession } from "@auth/lib/auth-server.server";
-import { loginUrl } from "@auth/lib/login-url";
 import { listPurchases as listPurchasesProcedure } from "@repo/api/modules/payments/procedures/list-purchases";
 import { config as authConfig } from "@repo/auth/config";
 import { config as paymentsConfig } from "@repo/payments/config";
@@ -19,7 +19,7 @@ const enforceMainAppGuardsForRouteFn = createServerFn({ method: "GET", strict: f
 		}
 
 		if (authConfig.users.enableOnboarding && !session.user.onboardingComplete) {
-			throw redirect({ href: "/onboarding" });
+			throw redirect({ href: onboardingUrl(href) });
 		}
 
 		const organizations = await getOrganizationList();
@@ -30,7 +30,7 @@ const enforceMainAppGuardsForRouteFn = createServerFn({ method: "GET", strict: f
 				organizations[0];
 
 			if (!organization) {
-				throw redirect({ href: "/new-organization" });
+				throw redirect({ href: accountCenterUrl("/orgs/new", href) });
 			}
 		}
 
@@ -47,7 +47,13 @@ const enforceMainAppGuardsForRouteFn = createServerFn({ method: "GET", strict: f
 			const { activePlan } = createPurchasesHelper(purchases);
 
 			if (!activePlan) {
-				throw redirect({ href: "/choose-plan" });
+				const organization = organizations.find((org) => org.id === organizationId);
+				throw redirect({
+					href: accountCenterUrl(
+						organization ? `/orgs/${organization.slug}/billing` : "/orgs",
+						href,
+					),
+				});
 			}
 		}
 

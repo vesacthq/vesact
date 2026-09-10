@@ -1,4 +1,5 @@
 import { useSession } from "@auth/hooks/use-session";
+import { accountCenterUrl } from "@auth/lib/account-urls";
 import { config } from "@config";
 import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
@@ -19,13 +20,14 @@ import {
 	useSidebar,
 } from "@repo/ui/components/sidebar";
 import { UserAvatar } from "@shared/components/UserAvatar";
-import { Link } from "@tanstack/react-router";
+import { useRouterState } from "@tanstack/react-router";
 import { BookIcon, ChevronsUpDownIcon, HomeIcon, LogOutIcon, SettingsIcon } from "lucide-react";
 
 export function UserMenu() {
 	const t = useTranslations();
 	const { user } = useSession();
 	const { isMobile } = useSidebar();
+	const currentHref = useRouterState({ select: (state) => state.location.href });
 
 	const onLogout = async () => {
 		await authClient.signOut({
@@ -86,10 +88,15 @@ export function UserMenu() {
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
-							<DropdownMenuItem nativeButton={false} render={<Link to="/settings/general" />}>
-								<SettingsIcon aria-hidden="true" />
-								{t("app.userMenu.accountSettings")}
-							</DropdownMenuItem>
+							<DropdownMenuItem
+								nativeButton={false}
+								render={(props) => (
+									<a {...props} href={accountCenterUrl("/account", currentHref)}>
+										<SettingsIcon aria-hidden="true" />
+										{t("app.userMenu.accountSettings")}
+									</a>
+								)}
+							/>
 							{config.docsUrl && (
 								<DropdownMenuItem
 									nativeButton={false}

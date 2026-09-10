@@ -1,10 +1,4 @@
 {
-	"checkoutReturn": {
-		"loading": "Finalizing your purchase…",
-		"timeout": "Your purchase is taking longer than usual to confirm. You can retry or choose a plan again.",
-		"retry": "Check again",
-		"choosePlan": "Choose plan"
-	},
 	"admin": {
 		"menu": {
 			"organizations": "Organizations",
@@ -33,7 +27,9 @@
 					"success": "Organization has been saved."
 				},
 				"save": "Save",
-				"updateTitle": "Edit organization"
+				"updateTitle": "Edit organization",
+				"membersNote": "Members and product access are managed by the organization's admins in the account center.",
+				"openMembers": "Open members"
 			},
 			"loading": "Loading organizations...",
 			"membersCount": "{count} {count, plural, one {member} other {members}}",
@@ -136,10 +132,6 @@
 			}
 		}
 	},
-	"choosePlan": {
-		"title": "Choose your plan",
-		"description": "To continue, please select a plan."
-	},
 	"documentation": {
 		"title": "Documentation"
 	},
@@ -149,45 +141,7 @@
 		"goToDashboard": "Go to dashboard",
 		"goToHomepage": "Go to homepage"
 	},
-	"onboarding": {
-		"account": {
-			"avatar": "Avatar",
-			"avatarDescription": "Click the circle or drop an image to it to upload your avatar.",
-			"name": "Name"
-		},
-		"continue": "Continue",
-		"message": "Just a few quick steps to get you started.",
-		"notifications": {
-			"accountSetupFailed": "We are sorry, but we were unable to set up your account. Please try again later."
-		},
-		"pricing": {
-			"planSelected": "Your plan has been selected successfully.",
-			"skip": "Skip for now"
-		},
-		"step": "Step {step} / {total}",
-		"title": "Set up your account"
-	},
 	"organizations": {
-		"createForm": {
-			"name": "Organization name",
-			"notifications": {
-				"error": "We are sorry, but we were unable to create your organization. Please try again later.",
-				"success": "Your organization has been created. You can now invite members."
-			},
-			"submit": "Create organization",
-			"subtitle": "Enter a name for your organization to get started. You can change the name later in the organization settings.",
-			"title": "Create an organization"
-		},
-		"invitationAlert": {
-			"description": "You need to sign in or create an account to join the organization.",
-			"title": "You have been invited to join an organization."
-		},
-		"invitationModal": {
-			"accept": "Accept",
-			"decline": "Decline",
-			"description": "You have been invited to join the organization {organizationName}. Do you want to accept the invitation and join the organization?",
-			"title": "Join the organization"
-		},
 		"organizationSelect": {
 			"createNewOrganization": "Create new organization",
 			"organizations": "Organizations",
@@ -197,270 +151,17 @@
 			"createNewOrganization": "Create new organization",
 			"title": "Your organizations"
 		},
-		"roles": {
-			"admin": "Admin",
-			"member": "Member",
-			"owner": "Owner",
-			"info": {
-				"description": "Roles are listed from least to most access:",
-				"title": "Role permissions"
-			}
-		},
-		"settings": {
-			"changeName": {
-				"title": "Organization name"
-			},
-			"deleteOrganization": {
-				"confirmation": "Are you sure you want to delete your organization?",
-				"description": "Permanently delete your organization. Once you delete your organization, there is no going back. To confirm, please enter your password below:",
-				"submit": "Delete organization",
-				"title": "Delete organization"
-			},
-			"logo": {
-				"delete": "Delete logo",
-				"description": "Upload a logo for your organization.",
-				"notifications": {
-					"error": "Could not update organization logo",
-					"success": "Organization logo was updated successfully"
-				},
-				"title": "Organization logo"
-			},
-			"members": {
-				"activeMembers": "Active members",
-				"description": "See all active members and the pending invites of your organization.",
-				"invitations": {
-					"empty": "You have not invited any members yet.",
-					"expiresAt": "Expires at {date}",
-					"invitationStatus": {
-						"accepted": "Accepted",
-						"canceled": "Canceled",
-						"pending": "Pending",
-						"rejected": "Rejected"
-					},
-					"revoke": "Revoke invitation",
-					"resend": "Resend invitation"
-				},
-				"inviteMember": {
-					"description": "To invite a new member, send them an invitation.",
-					"email": "Email",
-					"notifications": {
-						"error": {
-							"description": "We were unable to invite the member. Please try again later.",
-							"title": "Could not invite member"
-						},
-						"success": {
-							"description": "The member has been invited.",
-							"title": "Member invited"
-						}
-					},
-					"role": "Role",
-					"submit": "Invite",
-					"title": "Invite member"
-				},
-				"leaveOrganization": "Leave organization",
-				"notifications": {
-					"removeMember": {
-						"error": {
-							"description": "Could not remove the member from your organization. Please try again."
-						},
-						"loading": {
-							"description": "Removing member from organization..."
-						},
-						"success": {
-							"description": "The member has been successfully removed from your organization."
-						}
-					},
-					"revokeInvitation": {
-						"error": {
-							"description": "The invitation could not be revoked. Please try again later."
-						},
-						"loading": {
-							"description": "Revoking invitation..."
-						},
-						"success": {
-							"description": "The invitation has been revoked."
-						}
-					},
-					"updateMembership": {
-						"error": {
-							"description": "Could not update organization membership. Please try again."
-						},
-						"loading": {
-							"description": "Updating membership..."
-						},
-						"success": {
-							"description": "Membership was updated successfully"
-						}
-					},
-					"resendInvitation": {
-						"loading": {
-							"description": "Resending invitation..."
-						},
-						"success": {
-							"description": "Invitation sent"
-						},
-						"error": {
-							"description": "Could not sent invitation. Please try again."
-						}
-					}
-				},
-				"pendingInvitations": "Pending invitations",
-				"removeMember": "Remove member",
-				"title": "Members"
-			},
-			"notifications": {
-				"organizationDeleted": "Your organization has been deleted.",
-				"organizationNameNotUpdated": "We were unable to update your organization name. Please try again later.",
-				"organizationNameUpdated": "Your organization name has been updated.",
-				"organizationNotDeleted": "We were unable to delete your organization. Please try again later."
-			},
-			"subtitle": "Manage the settings of the organization.",
-			"title": "Organization",
-			"dangerZone": {
-				"title": "Danger zone"
-			}
-		},
 		"start": {
 			"subtitle": "Welcome to the start page of this organization!"
+		},
+		"noAccess": {
+			"title": "No access to Studio",
+			"description": "You are a member of {organization}, but Studio is not enabled for you. An organization admin can grant access in the account center.",
+			"members": "Open members"
 		}
-	},
-	"settings": {
-		"account": {
-			"avatar": {
-				"delete": "Delete avatar",
-				"description": "To change your avatar click the picture in this block and select a file from your computer to upload.",
-				"notifications": {
-					"error": "Could not update avatar",
-					"success": "Avatar was updated successfully"
-				},
-				"title": "Your avatar"
-			},
-			"changeEmail": {
-				"description": "To change your email, enter the new email and hit save. You will have to confirm the new email before it will become active.",
-				"notifications": {
-					"error": "Could not update email",
-					"success": "Email was updated successfully"
-				},
-				"title": "Your email"
-			},
-			"changeName": {
-				"notifications": {
-					"error": "Could not update name",
-					"success": "Name was updated successfully"
-				},
-				"title": "Your name"
-			},
-			"dangerZone": {
-				"title": "Danger zone"
-			},
-			"deleteAccount": {
-				"confirmation": "Are you sure you want to delete your account?",
-				"description": "Permanently delete your account. Once you delete your account, there is no going back. To confirm, please enter your password below:",
-				"notifications": {
-					"error": "Could not delete account",
-					"success": "Account was deleted successfully"
-				},
-				"submit": "Delete account",
-				"title": "Delete account"
-			},
-			"language": {
-				"description": "To change the language of the app for your account, select a language from the list and click save.",
-				"notifications": {
-					"error": "Could not update language",
-					"success": "Language was updated successfully"
-				},
-				"title": "Your language"
-			},
-			"notificationPreferences": {
-				"description": "Choose which emails we send. In-app notifications always appear in the bell menu while you are signed in.",
-				"emailNewsletter": "Newsletter and tips",
-				"emailProductUpdates": "Product updates and features",
-				"emailAccountSecurity": "Account security and login alerts",
-				"emailAccountSecurityHint": "Recommended — important messages about your account and sign-in activity.",
-				"title": "Email notifications",
-				"saved": "Your notification preferences have been updated."
-			},
-			"subtitle": "Manage the settings of your personal account.",
-			"title": "Account settings",
-			"securityLink": {
-				"title": "Security",
-				"description": "Password, passkeys, two-factor and active sessions are managed in your account.",
-				"open": "Open account security"
-			}
-		},
-		"billing": {
-			"createCustomerPortal": {
-				"label": "Manage billing",
-				"notifications": {
-					"error": {
-						"title": "Could not create a customer portal session. Please try again."
-					}
-				}
-			},
-			"activePlan": {
-				"status": {
-					"active": "Active",
-					"canceled": "Canceled",
-					"expired": "Expired",
-					"incomplete": "Incomplete",
-					"past_due": "Past due",
-					"paused": "Paused",
-					"trialing": "Trialing",
-					"unpaid": "Unpaid"
-				},
-				"title": "Your plan"
-			},
-			"changePlan": {
-				"description": "Choose a plan to subscribe to.",
-				"title": "Change your plan"
-			},
-			"title": "Billing"
-		},
-		"notificationsPage": {
-			"title": "Notifications",
-			"description": "Choose how you receive notifications. Disabled options are stored; everything is enabled by default.",
-			"groups": {
-				"general": {
-					"title": "General"
-				}
-			},
-			"types": {
-				"APP_UPDATE": {
-					"label": "App updates"
-				}
-			},
-			"columns": {
-				"type": "Notification",
-				"inApp": "In-app",
-				"email": "Email"
-			}
-		},
-		"menu": {
-			"account": {
-				"billing": "Billing",
-				"dangerZone": "Danger zone",
-				"general": "General",
-				"notifications": "Notifications",
-				"security": "Security",
-				"title": "Account"
-			},
-			"organization": {
-				"billing": "Billing",
-				"general": "General",
-				"members": "Members",
-				"title": "Organization",
-				"dangerZone": "Danger zone"
-			}
-		},
-		"save": "Save"
 	},
 	"start": {
 		"subtitle": "See the latest stats of your awesome business.",
 		"welcome": "Welcome {name}!"
-	},
-	"auth": {
-		"errors": {
-			"unknown": "Something went wrong. Please try again."
-		}
 	}
 }

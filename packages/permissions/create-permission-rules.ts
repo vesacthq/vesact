@@ -1,4 +1,9 @@
-import type { OrganizationMemberRole } from "./definition";
+import {
+	getOrganizationRole,
+	getProductRole,
+	parseMemberRoles,
+	type Product,
+} from "./member-roles";
 
 export type PermissionUser = {
 	role?: string | null;
@@ -7,6 +12,11 @@ export type PermissionUser = {
 export type CreatePermissionRulesParams = {
 	user?: PermissionUser;
 	membershipRole?: string | null;
+};
+
+export type ProductPermissionRules = {
+	access: boolean;
+	manage: boolean;
 };
 
 export type PermissionRules = {
@@ -20,28 +30,35 @@ export type PermissionRules = {
 		manageBilling: boolean;
 		accessBillingPortal: boolean;
 	};
+	studio: ProductPermissionRules;
+	relay: ProductPermissionRules;
 };
-
-function isOrganizationMemberRole(
-	membershipRole: string | null | undefined,
-): membershipRole is OrganizationMemberRole {
-	return membershipRole === "owner" || membershipRole === "admin" || membershipRole === "member";
-}
 
 /**
  * Build a Permix rules object from the current user and optional org membership role.
- * Call sites that already resolved membership pass `membershipRole`; otherwise leave it null.
+ * Call sites that already resolved membership pass the raw `member.role` value;
+ * otherwise leave it null.
  */
 export function createPermissionRules({
 	user,
 	membershipRole = null,
 }: CreatePermissionRulesParams): PermissionRules {
 	const isGlobalAdmin = user?.role === "admin";
-	const normalizedMembershipRole = isOrganizationMemberRole(membershipRole) ? membershipRole : null;
-	const isMember = normalizedMembershipRole !== null;
-	const isOrganizationAdminRole =
-		normalizedMembershipRole === "owner" || normalizedMembershipRole === "admin";
-	const isOrganizationOwnerRole = normalizedMembershipRole === "owner";
+	const roles = parseMemberRoles(membershipRole);
+	const organizationRole = getOrganizationRole(roles);
+	const isMember = roles.length > 0;
+	const isOrganizationAdminRole = organizationRole === "owner" || organizationRole === "admin";
+	const isOrganizationOwnerRole = organizationRole === "owner";
+
+	// Organization owners and admins administer every product; a plain member
+	// only reaches the products they were granted a role in.
+	const product = (name: Product): ProductPermissionRules => {
+		const role = getProductRole(roles, name);
+		return {
+			access: isOrganizationAdminRole || role !== null,
+			manage: isOrganizationAdminRole || role === `${name}:admin`,
+		};
+	};
 
 	return {
 		admin: {
@@ -54,5 +71,7 @@ export function createPermissionRules({
 			manageBilling: isOrganizationAdminRole,
 			accessBillingPortal: isOrganizationOwnerRole,
 		},
+		studio: product("studio"),
+		relay: product("relay"),
 	};
 }

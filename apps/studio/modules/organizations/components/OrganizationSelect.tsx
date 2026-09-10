@@ -1,4 +1,5 @@
 import { useSession } from "@auth/hooks/use-session";
+import { accountCenterUrl } from "@auth/lib/account-urls";
 import { useTranslations } from "@i18n/intl";
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { useOrganizationListQuery } from "@organizations/lib/api";
@@ -22,7 +23,7 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@repo/ui/components/sidebar";
-import { Link, useRouter } from "@tanstack/react-router";
+import { useRouter, useRouterState } from "@tanstack/react-router";
 import { CheckIcon, ChevronsUpDownIcon, PlusIcon, UserIcon } from "lucide-react";
 
 import { OrganizationLogo } from "./OrganizationLogo";
@@ -49,6 +50,7 @@ export function OrganizationSelect() {
 	const { user } = useSession();
 	const router = useRouter();
 	const { isMobile } = useSidebar();
+	const currentHref = useRouterState({ select: (state) => state.location.href });
 	const { activeOrganization, setActiveOrganization } = useActiveOrganization();
 	const { data: allOrganizations } = useOrganizationListQuery();
 	const { planData } = usePlanData();
@@ -155,15 +157,17 @@ export function OrganizationSelect() {
 									<DropdownMenuItem
 										nativeButton={false}
 										className="gap-2 p-2"
-										render={<Link to="/new-organization" />}
-									>
-										<div className="size-6 flex items-center justify-center rounded-md border bg-transparent">
-											<PlusIcon aria-hidden="true" className="size-4" />
-										</div>
-										<div className="font-medium text-muted-foreground">
-											{t("organizations.organizationSelect.createNewOrganization")}
-										</div>
-									</DropdownMenuItem>
+										render={(props) => (
+											<a {...props} href={accountCenterUrl("/orgs/new", currentHref)}>
+												<div className="size-6 flex items-center justify-center rounded-md border bg-transparent">
+													<PlusIcon aria-hidden="true" className="size-4" />
+												</div>
+												<div className="font-medium text-muted-foreground">
+													{t("organizations.organizationSelect.createNewOrganization")}
+												</div>
+											</a>
+										)}
+									/>
 								</DropdownMenuGroup>
 							</>
 						)}

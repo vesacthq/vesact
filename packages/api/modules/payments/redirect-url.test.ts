@@ -4,8 +4,8 @@ import { describe, expect, it } from "vitest";
 import { paymentRedirectUrlSchema } from "./redirect-url";
 
 describe("paymentRedirectUrlSchema", () => {
-	it("accepts redirects on the Studio application origin", () => {
-		const applicationUrl = new URL(getBaseUrl(process.env.VITE_STUDIO_URL, 3000));
+	it("accepts redirects on the application origins", () => {
+		const applicationUrl = new URL(getBaseUrl(process.env.VITE_ACCOUNT_URL, 3004));
 		applicationUrl.pathname = "/checkout-return";
 		applicationUrl.searchParams.set("organizationId", "organization-1");
 
