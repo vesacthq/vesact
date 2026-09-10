@@ -51,6 +51,11 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
 ## Pitfalls
 
 - `vars` and bindings are not inherited by `env.preview`; redeclare them.
+- The session cookie domain is derived from `VITE_ACCOUNT_URL`; there is no
+  variable for it. Only the preview cookie prefix (`AUTH_COOKIE_PREFIX`) is set
+  by hand.
+- The account Worker uploads avatars and logos, so `secrets/account.<target>.env`
+  carries the same `S3_*` keys as the studio file.
 - `CLOUDFLARE_ENV` selects the environment at build time; `wrangler deploy` takes
   no `--env` because the Vite plugin already flattened the config.
 - Preview builds must not carry `VITE_POSTHOG_KEY`.

@@ -36,13 +36,13 @@ their age public key to `.sops.yaml` and running `sops updatekeys secrets/*.env`
 rotating CI's key means a new `age-keygen`, `gh secret set SOPS_AGE_KEY`, then
 the same `updatekeys`.
 
-| File                           | Reaches                                              |
-| ------------------------------ | ---------------------------------------------------- |
-| `secrets/ci.env`               | GitHub Actions: Cloudflare, Turbo, Neon, Access      |
-| `secrets/account.<target>.env` | The account Worker: Better Auth secret, Google, mail |
-| `secrets/database.<env>.env`   | `DATABASE_URL` for migrations, prod and preview      |
-| `secrets/studio.<env>.env`     | Worker secrets, synced on every deploy               |
-| `secrets/studio.dev.env`       | `apps/studio/.dev.vars` via `pnpm secrets:pull`      |
+| File                           | Reaches                                                  |
+| ------------------------------ | -------------------------------------------------------- |
+| `secrets/ci.env`               | GitHub Actions: Cloudflare, Turbo, Neon, Access          |
+| `secrets/account.<target>.env` | The account Worker: Better Auth secret, Google, mail, R2 |
+| `secrets/database.<env>.env`   | `DATABASE_URL` for migrations, prod and preview          |
+| `secrets/studio.<env>.env`     | Worker secrets, synced on every deploy                   |
+| `secrets/studio.dev.env`       | `apps/studio/.dev.vars` via `pnpm secrets:pull`          |
 
 Edit with `sops secrets/<file>.env`; never commit a decrypted file.
 
@@ -169,15 +169,21 @@ Only app-local aliases are configured in the app `tsconfig.json` files.
 | `@onboarding/*`    | `./modules/onboarding/*`    |
 | `@shared/*`        | `./modules/shared/*`        |
 
+`@settings/*` and `@onboarding/*` in Studio are reserved names with no module
+behind them any more; those pages live in the account center.
+
 ### `apps/account/tsconfig.json`
 
-| Alias        | Target                |
-| ------------ | --------------------- |
-| `@config`    | `./config`            |
-| `@auth/*`    | `./modules/auth/*`    |
-| `@account/*` | `./modules/account/*` |
-| `@i18n/*`    | `./modules/i18n/*`    |
-| `@shared/*`  | `./modules/shared/*`  |
+| Alias              | Target                      |
+| ------------------ | --------------------------- |
+| `@config`          | `./config`                  |
+| `@auth/*`          | `./modules/auth/*`          |
+| `@account/*`       | `./modules/account/*`       |
+| `@organizations/*` | `./modules/organizations/*` |
+| `@onboarding/*`    | `./modules/onboarding/*`    |
+| `@payments/*`      | `./modules/payments/*`      |
+| `@i18n/*`          | `./modules/i18n/*`          |
+| `@shared/*`        | `./modules/shared/*`        |
 
 ### `apps/marketing/tsconfig.json`
 
@@ -249,22 +255,44 @@ keys before showing success UI. Do not rely on a full page reload.
 - Use `throw redirect()` and `throw notFound()` from `@tanstack/react-router`.
 - Follow the auth guard in `apps/studio/routes/_authenticated/route.tsx`.
 
-## Auth & multi-tenancy
+## Account center & multi-tenancy
 
-- Login, signup, password reset, email verification and personal security
-  settings live in `apps/account` on `account.vesact.com`, which also serves the
-  Better Auth endpoints. Products never render those pages: a signed-out
-  request is redirected to `<VITE_ACCOUNT_URL>/login?redirectTo=<absolute URL>`
-  through `loginUrl()` in `apps/studio/modules/auth/lib/login-url.ts`, and the
-  auth app only sends users back to origins it knows (`getSafeRedirectUrl`).
-  The session cookie sits on the environment's parent domain, so one login
-  serves every product.
-- Organizations, members, invitations, roles and permissions stay inside each
-  product.
-- Server sessions use `getSession` from `@auth/lib/auth-server.server`.
-- Client session state uses `useSession` from `@auth/hooks/use-session`.
-- Scope organization data with the active organization helpers under
-  `apps/studio/modules/organizations`.
+One rule decides where a page goes: what exists independently of any product
+belongs to the account center (`apps/account`, `account.vesact.com`); what only
+makes sense with product data belongs to the product. `docs/account/overview.md`
+has the ownership table, the route table and the "operation → location" list.
+
+- The account center serves the Better Auth endpoints and every identity flow
+  (login, signup, password reset, verification), the profile, security and
+  notification settings, organizations, members, invitations, onboarding and
+  billing. Products keep the organization switcher, product settings and
+  product-internal permissions; they read organizations and members, never
+  edit them. Studio's platform-admin module stays in Studio for now.
+- Two link conventions, both built in `apps/studio/modules/auth/lib/account-urls.ts`:
+  identity flows take `redirectTo=<absolute URL>`, the place the flow ends
+  (`loginUrl()`, `onboardingUrl()`); settings pages take `from=<absolute URL>`,
+  the page the user left (`accountCenterUrl(path, from)`), and the account
+  center's header shows a back button to it, naming the product. The account
+  center only follows its own origins (`getSafeRedirectUrl`, `getReturnUrl`).
+- Sidebar entries that lead to the account center are plain links marked
+  `external` in `use-app-nav.ts`; they look like every other entry.
+- The session cookie sits on the parent domain of `VITE_ACCOUNT_URL`
+  (`getCookieDomain` in `@repo/utils`), so one login serves every product and
+  local development keeps host-only cookies.
+- Members carry one organization role (`owner`, `admin`, `member`) plus at most
+  one role per product (`studio:admin`, `studio:member`, `relay:admin`,
+  `relay:developer`) in `member.role`, comma-separated. Better Auth enforces
+  them on its own endpoints through `packages/auth/lib/access.ts`;
+  `@repo/permissions` parses the same value (`parseMemberRoles`) into Permix
+  rules, including `studio.access` / `relay.manage`. Owners and admins hold
+  every product. Studio checks `studio.access` in
+  `routes/_authenticated/_main/$organizationSlug/route.tsx` and renders a
+  denial that links to the account center's members page.
+- Server sessions use `getSession` from `@auth/lib/auth-server.server`; client
+  session state uses `useSession` from `@auth/hooks/use-session` (both apps).
+- Scope organization data in Studio with the active organization helpers under
+  `apps/studio/modules/organizations`; in the account center the `$organizationSlug`
+  layout provides `useOrganization()`.
 - When changing auth flows, update relevant templates under `packages/mail/emails`,
   preserve audit hooks, and verify locale handling.
 
@@ -290,7 +318,8 @@ Canonical auth example:
 - For user-scoped gates like `admin.access`, prefer `checkPermission({ user })`
   over `permix.getOrThrow(context).check(...)` so the gate does not depend on
   request-middleware setup having completed.
-- Better Auth `organization.*` client endpoints are not covered by Permix.
+- Better Auth `organization.*` client endpoints are not covered by Permix;
+  they are guarded by the roles in `packages/auth/lib/access.ts`.
 
 ## UI, forms, and i18n
 
@@ -302,6 +331,9 @@ Canonical auth example:
 - Use `useTranslations`, `useFormatter`, and `IntlProvider` from `use-intl`.
   Follow `apps/studio/modules/i18n/provider.tsx`.
 - Locale helpers and the `locale` cookie are configured in `packages/i18n/config.ts`.
+  Messages are scoped per app (`studio.json`, `account.json`, `marketing.json`,
+  `mail.json`) plus `shared.json`, which every scope receives; the settings menu
+  labels both apps show live in `shared.json` under `settings.menu`.
 - Document titles use `documentTitle()` from `@shared/lib/document-title`
   (`{page} – ${config.appName}`, en dash). Call it from every Studio route `head()`.
   Routes without a page title (marketing homepage) keep `config.appName` alone.
@@ -316,17 +348,17 @@ uses the monorepo root as its environment directory.
 
 Each app is a Cloudflare Worker. Three environments, the same shape for every app:
 
-|               | dev                                        | preview                                             | prod                                              |
-| ------------- | ------------------------------------------ | --------------------------------------------------- | ------------------------------------------------- |
-| Trigger       | `pnpm dev`                                 | pull request from this repository                   | push to `main`                                    |
-| Build         | `vite dev`                                 | `CLOUDFLARE_ENV=preview vite build`                 | `vite build`                                      |
-| Worker        | —                                          | `vesact-<app>-preview`                              | `vesact-<app>`                                    |
-| Host          | `localhost:300x`                           | `<app>.preview.vesact.com`, behind Access           | custom domain                                     |
-| Vars          | `.dev.vars`                                | `env.preview.vars` in `wrangler.jsonc`              | top-level `vars`                                  |
-| Secrets       | `.dev.vars`                                | `secrets/<app>.preview.env`                         | `secrets/<app>.prod.env`                          |
-| Database      | local postgres via `localConnectionString` | Hyperdrive `vesact-preview` → Neon branch `preview` | Hyperdrive `vesact-db` → Neon branch `production` |
-| Migrations    | `push`                                     | `migrate` against the preview branch before deploy  | `migrate` against production before deploy        |
-| Cookie domain | unset                                      | `.preview.vesact.com`, prefix `vesact-preview`      | `.vesact.com`                                     |
+|               | dev                                         | preview                                             | prod                                              |
+| ------------- | ------------------------------------------- | --------------------------------------------------- | ------------------------------------------------- |
+| Trigger       | `pnpm dev`                                  | pull request from this repository                   | push to `main`                                    |
+| Build         | `vite dev`                                  | `CLOUDFLARE_ENV=preview vite build`                 | `vite build`                                      |
+| Worker        | —                                           | `vesact-<app>-preview`                              | `vesact-<app>`                                    |
+| Host          | `localhost:300x`                            | `<app>.preview.vesact.com`, behind Access           | custom domain                                     |
+| Vars          | `.dev.vars`                                 | `env.preview.vars` in `wrangler.jsonc`              | top-level `vars`                                  |
+| Secrets       | `.dev.vars`                                 | `secrets/<app>.preview.env`                         | `secrets/<app>.prod.env`                          |
+| Database      | local postgres via `localConnectionString`  | Hyperdrive `vesact-preview` → Neon branch `preview` | Hyperdrive `vesact-db` → Neon branch `production` |
+| Migrations    | `push`                                      | `migrate` against the preview branch before deploy  | `migrate` against production before deploy        |
+| Cookie domain | host-only (derived from `VITE_ACCOUNT_URL`) | `.preview.vesact.com`, prefix `vesact-preview`      | `.vesact.com`                                     |
 
 | App       | prod                 | preview                      |
 | --------- | -------------------- | ---------------------------- |
@@ -431,11 +463,15 @@ security updates.
   `git show <sha> -- apps/saas | sed 's#apps/saas#apps/studio#g' | git apply -3`.
 - For dependency bumps, copy the version into the `pnpm-workspace.yaml` catalog
   and run `pnpm install` rather than cherry-picking lockfile changes.
-- Removed rather than edited, and not to be restored: the auth pages and forms under
+- Removed rather than edited, and not to be restored: everything that moved to
+  `apps/account`: the auth pages and forms under
   `apps/studio/routes/{login,signup,forgot-password,reset-password,verify}`,
-  `apps/studio/routes/_authenticated/_main/settings/security`,
-  `apps/studio/modules/auth/components` and the security blocks in
-  `apps/studio/modules/settings/components` (they moved to `apps/account`),
+  `apps/studio/routes/_authenticated/_main/settings`,
+  `apps/studio/routes/_authenticated/_main/$organizationSlug/settings`,
+  `apps/studio/routes/_authenticated/{onboarding,new-organization,organization-invitation,choose-plan,checkout-return}`,
+  `apps/studio/modules/{auth/components,settings,onboarding}`, the organization
+  forms, member and invitation lists in `apps/studio/modules/organizations/components`
+  and the plan components in `apps/studio/modules/payments/components`; also
   `packages/storage/provider/s3`
   (the AWS SDK cannot construct a client on workerd; `provider/r2` signs with
   aws4fetch) and the unused analytics providers under
