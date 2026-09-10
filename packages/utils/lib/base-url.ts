@@ -19,8 +19,10 @@ export function getBaseUrl(envValue?: string, defaultPort = 3000): string {
  * `localhost` has no parent, so local cookies stay host-only.
  */
 export function getCookieDomain(url: string): string | undefined {
-	const labels = new URL(url).hostname.split(".");
-	return labels.length >= 3 ? `.${labels.slice(1).join(".")}` : undefined;
+	const hostname = new URL(url).hostname;
+	const labels = hostname.split(".");
+	const isIpAddress = labels.every((label) => /^\d+$/.test(label));
+	return labels.length >= 3 && !isIpAddress ? `.${labels.slice(1).join(".")}` : undefined;
 }
 
 /**
