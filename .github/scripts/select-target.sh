@@ -19,8 +19,8 @@ else
 TARGET=preview
 CLOUDFLARE_ENV=preview
 STUDIO_WORKER=vesact-studio-preview
-VITE_STUDIO_URL=https://vesact-studio-preview.vesact.workers.dev
-VITE_AUTH_URL=https://vesact-studio-preview.vesact.workers.dev
-VITE_MARKETING_URL=https://vesact-marketing-preview.vesact.workers.dev
+VITE_STUDIO_URL=https://studio.preview.vesact.com
+VITE_AUTH_URL=https://auth.preview.vesact.com
+VITE_MARKETING_URL=https://www.preview.vesact.com
 ENV
 fi

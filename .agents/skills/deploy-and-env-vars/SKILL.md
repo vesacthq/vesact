@@ -33,15 +33,19 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
 
 ## Adding an app or a preview target
 
-1. `env.preview` in the app's `wrangler.jsonc`: `workers_dev: true`, its own
-   `vars`, its own bindings.
+1. `env.preview` in the app's `wrangler.jsonc`: `workers_dev: false`, a
+   `custom_domain` route on `<app>.preview.vesact.com`, its own `vars`, its own
+   bindings. Attach the hostname to the Worker in the dashboard or through the
+   API before the first deploy; the certificate takes a few minutes and the
+   smoke check will not wait for it.
 2. Its URLs in `.github/scripts/select-target.sh`, and a job in `deploy.yml`
    modelled on the studio one.
 3. Secrets files under `secrets/` for the new Worker and, if it has a database,
    a Neon branch, a Hyperdrive config and a `database.<target>.env`.
 4. The Google OAuth callback for the new `VITE_AUTH_URL`, if it signs users in.
-5. An Access application on the preview hostname with the two policies listed
-   in AGENTS.md, otherwise the smoke check cannot reach it.
+5. Nothing for Access: the `*.preview.vesact.com` application already covers
+   the hostname. A path that outside services must reach (a webhook) needs its
+   own, more specific application with a Bypass policy.
 
 ## Pitfalls
 
