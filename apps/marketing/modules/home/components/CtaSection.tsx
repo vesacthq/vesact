@@ -10,7 +10,7 @@ export function CtaSection() {
 	const t = useTranslations();
 
 	const signupUrl = useMemo(
-		() => config.authUrl && `${String(config.authUrl).replace(/\/$/, "")}/signup`,
+		() => config.accountUrl && `${String(config.accountUrl).replace(/\/$/, "")}/signup`,
 		[],
 	);
 

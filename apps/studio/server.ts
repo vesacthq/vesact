@@ -5,9 +5,9 @@ import { env } from "cloudflare:workers";
 
 let server: (typeof import("./src/server"))["default"] | undefined;
 
-const authUrl = getBaseUrl(import.meta.env.VITE_AUTH_URL as string | undefined, 3004);
+const accountUrl = getBaseUrl(import.meta.env.VITE_ACCOUNT_URL as string | undefined, 3004);
 
-// The auth pages moved to the auth app; links that predate the move still work.
+// The auth pages moved to the account center; links that predate the move still work.
 const legacyAuthPath =
 	/^(?:\/[a-z]{2})?\/(?:login|signup|forgot-password|reset-password|verify)(?:\/|$)/;
 
@@ -16,7 +16,7 @@ export default {
 		const url = new URL(request.url);
 
 		if (legacyAuthPath.test(url.pathname)) {
-			return Response.redirect(new URL(`${url.pathname}${url.search}`, authUrl).toString(), 302);
+			return Response.redirect(new URL(`${url.pathname}${url.search}`, accountUrl).toString(), 302);
 		}
 
 		// Hyperdrive only hands out its connection string inside a request, and

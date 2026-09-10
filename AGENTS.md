@@ -36,13 +36,13 @@ their age public key to `.sops.yaml` and running `sops updatekeys secrets/*.env`
 rotating CI's key means a new `age-keygen`, `gh secret set SOPS_AGE_KEY`, then
 the same `updatekeys`.
 
-| File                         | Reaches                                           |
-| ---------------------------- | ------------------------------------------------- |
-| `secrets/ci.env`             | GitHub Actions: Cloudflare, Turbo, Neon, Access   |
-| `secrets/auth.<target>.env`  | The auth Worker: Better Auth secret, Google, mail |
-| `secrets/database.<env>.env` | `DATABASE_URL` for migrations, prod and preview   |
-| `secrets/studio.<env>.env`   | Worker secrets, synced on every deploy            |
-| `secrets/studio.dev.env`     | `apps/studio/.dev.vars` via `pnpm secrets:pull`   |
+| File                           | Reaches                                              |
+| ------------------------------ | ---------------------------------------------------- |
+| `secrets/ci.env`               | GitHub Actions: Cloudflare, Turbo, Neon, Access      |
+| `secrets/account.<target>.env` | The account Worker: Better Auth secret, Google, mail |
+| `secrets/database.<env>.env`   | `DATABASE_URL` for migrations, prod and preview      |
+| `secrets/studio.<env>.env`     | Worker secrets, synced on every deploy               |
+| `secrets/studio.dev.env`       | `apps/studio/.dev.vars` via `pnpm secrets:pull`      |
 
 Edit with `sops secrets/<file>.env`; never commit a decrypted file.
 
@@ -80,7 +80,7 @@ pnpm dev
 
 ### Running locally
 
-`pnpm dev` starts studio on 3000, marketing on 3001, docs on 3002, auth on 3004 and the mail
+`pnpm dev` starts studio on 3000, marketing on 3001, docs on 3002, account on 3004 and the mail
 preview on 3003. A fresh database has no seed data: register the first account
 through the sign-up page. `push` applies the schema to the local database and
 `studio` opens Drizzle Studio against it. Analytics stays off locally
@@ -121,7 +121,7 @@ application and database.
 
 ```text
 apps/
-├── auth/          # Login, signup, password, account security; serves Better Auth
+├── account/       # Account center: login, profile, organizations, billing; serves Better Auth
 ├── docs/          # TanStack Start/Fumadocs documentation
 ├── mail-preview/  # React Email preview
 ├── marketing/     # Public site, blog, and content
@@ -169,7 +169,7 @@ Only app-local aliases are configured in the app `tsconfig.json` files.
 | `@onboarding/*`    | `./modules/onboarding/*`    |
 | `@shared/*`        | `./modules/shared/*`        |
 
-### `apps/auth/tsconfig.json`
+### `apps/account/tsconfig.json`
 
 | Alias        | Target                |
 | ------------ | --------------------- |
@@ -252,9 +252,9 @@ keys before showing success UI. Do not rely on a full page reload.
 ## Auth & multi-tenancy
 
 - Login, signup, password reset, email verification and personal security
-  settings live in `apps/auth` on `auth.vesact.com`, which also serves the
+  settings live in `apps/account` on `account.vesact.com`, which also serves the
   Better Auth endpoints. Products never render those pages: a signed-out
-  request is redirected to `<VITE_AUTH_URL>/login?redirectTo=<absolute URL>`
+  request is redirected to `<VITE_ACCOUNT_URL>/login?redirectTo=<absolute URL>`
   through `loginUrl()` in `apps/studio/modules/auth/lib/login-url.ts`, and the
   auth app only sends users back to origins it knows (`getSafeRedirectUrl`).
   The session cookie sits on the environment's parent domain, so one login
@@ -328,16 +328,16 @@ Each app is a Cloudflare Worker. Three environments, the same shape for every ap
 | Migrations    | `push`                                     | `migrate` against the preview branch before deploy  | `migrate` against production before deploy        |
 | Cookie domain | unset                                      | `.preview.vesact.com`, prefix `vesact-preview`      | `.vesact.com`                                     |
 
-| App       | prod                | preview                     |
-| --------- | ------------------- | --------------------------- |
-| marketing | `www.vesact.com`    | `www.preview.vesact.com`    |
-| auth      | `auth.vesact.com`   | `auth.preview.vesact.com`   |
-| studio    | `studio.vesact.com` | `studio.preview.vesact.com` |
+| App       | prod                 | preview                      |
+| --------- | -------------------- | ---------------------------- |
+| marketing | `www.vesact.com`     | `www.preview.vesact.com`     |
+| account   | `account.vesact.com` | `account.preview.vesact.com` |
+| studio    | `studio.vesact.com`  | `studio.preview.vesact.com`  |
 
 `deploy.yml` runs one job per app: `select-target.sh` picks the target from the
 event, `load-env.sh` decrypts what the job needs into masked environment
 variables, then build → `wrangler deploy` → `wrangler secret bulk` → smoke
-check. The auth job runs the database migration first; the studio job waits
+check. The account job runs the database migration first; the studio job waits
 for it. The Cloudflare Vite plugin flattens the selected environment into
 `.output/server/wrangler.json` at build time, so `CLOUDFLARE_ENV` is set for the
 build and `wrangler deploy` takes no `--env`. Preview builds leave
@@ -362,22 +362,24 @@ bucket.
   whose credentials are `CF_ACCESS_CLIENT_ID` / `CF_ACCESS_CLIENT_SECRET` in
   `secrets/ci.env`. A new preview hostname is covered automatically; a path
   that outside services must reach gets its own, more specific application
-  with a Bypass policy. `auth.preview.vesact.com/api/auth` is one such
+  with a Bypass policy. `account.preview.vesact.com/api/auth` is one such
   application: the products call it cross-origin, Access answers every CORS
   preflight with 403 and its cookie is per hostname, so the auth endpoints are
-  public on preview exactly as they are in production. The auth pages
+  public on preview exactly as they are in production. The account pages
   themselves stay behind Access.
+- `auth.vesact.com` and `auth.preview.vesact.com` stay attached to the account
+  Workers and answer with a 301 to the `account.` hostname until 2026-12.
 - Preview hostnames live under `preview.vesact.com` rather than `workers.dev`
   because `workers.dev` is on the Public Suffix List: no cookie can span two
   Workers there, so products could not share a login.
 - One Google OAuth client serves every environment; each needs its callback
-  `<VITE_AUTH_URL>/api/auth/callback/google` registered in Google Cloud.
+  `<VITE_ACCOUNT_URL>/api/auth/callback/google` registered in Google Cloud.
 - `vesact.com` redirects to `www` through a Cloudflare Redirect Rule.
 
 A second product gets its own hostname; the app stays rooted at `/` so that
 origin-relative paths in the template keep working.
 
-`VITE_STUDIO_URL`, `VITE_AUTH_URL` and `VITE_MARKETING_URL` are the public URLs
+`VITE_STUDIO_URL`, `VITE_ACCOUNT_URL` and `VITE_MARKETING_URL` are the public URLs
 the apps advertise: they drive Better Auth's `baseURL`, the CORS and
 trusted-origin lists, links in email, and whether analytics reports. They are
 read at build time, so a change needs a rebuild, not just a redeploy.
@@ -433,7 +435,7 @@ security updates.
   `apps/studio/routes/{login,signup,forgot-password,reset-password,verify}`,
   `apps/studio/routes/_authenticated/_main/settings/security`,
   `apps/studio/modules/auth/components` and the security blocks in
-  `apps/studio/modules/settings/components` (they moved to `apps/auth`),
+  `apps/studio/modules/settings/components` (they moved to `apps/account`),
   `packages/storage/provider/s3`
   (the AWS SDK cannot construct a client on workerd; `provider/r2` signs with
   aws4fetch) and the unused analytics providers under

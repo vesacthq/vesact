@@ -36,7 +36,7 @@ A 轨的第一步：把 Relay 最薄的一条端到端链路跑到线上，后�
 内容：
 
 - `apps/relay`：照 `apps/studio` 建 `vite.config.ts`、`wrangler.jsonc`（prod + `env.preview`）、`server.ts`（Hyperdrive 延迟加载 + 路径分发）、`start.ts`、`router.tsx`、`routes/__root.tsx`。
-- vars：`VITE_RELAY_URL`、`VITE_RELAY_API_URL`、`VITE_AUTH_URL`、`META_APP_ID`；prod 加 `AUTH_COOKIE_DOMAIN=.vesact.com`。
+- vars：`VITE_RELAY_URL`、`VITE_RELAY_API_URL`、`VITE_ACCOUNT_URL`、`META_APP_ID`；prod 加 `AUTH_COOKIE_DOMAIN=.vesact.com`。
 - secrets：`secrets/relay.{prod,preview,dev}.env`，内容是对应 `studio.*.env` 的认证与邮件项（`BETTER_AUTH_SECRET` 必须同值）加 `META_APP_SECRET`、`META_WEBHOOK_VERIFY_TOKEN`。`pnpm secrets:pull` 同时产出 `apps/relay/.dev.vars`。
 - CI：`deploy.yml` 加 `relay` job，`needs: studio`，表由 studio job 的 migrate 建；`select-target.sh` 加 relay 的 URL；smoke 打 `/v1/health` 和 `/login`。
 - Cloudflare：prod 和 preview 各两个 custom domain，先在 API 或面板上挂好再首次部署；preview 的 Access 由 `*.preview.vesact.com` 通配应用覆盖，另建一个路径为 `api.preview.vesact.com/webhooks` 的 Access 应用，策略 Bypass Everyone，Meta 才打得到。
@@ -139,13 +139,13 @@ A 轨的第一步：把 Relay 最薄的一条端到端链路跑到线上，后�
 内容：
 
 - 路由：`/`（有组织进组织首页，没有则提示去账号中心创建）、`/settings/api-keys`（列表、创建后显示一次明文、吊销）。没有登录页和成员页：未登录时照 Studio 的 `loginUrl()` 跳账号中心，成员和 Relay 访问在账号中心的成员页管，Relay 只读。
-- 认证：Better Auth client `baseURL` 为 `VITE_AUTH_URL`。`getTrustedOrigins()` 加 `VITE_RELAY_URL`，auth 和 Studio 的 wrangler vars（prod 与 preview）和 `select-target.sh` 也加这个变量，auth 才会把用户送回 Relay。
+- 认证：Better Auth client `baseURL` 为 `VITE_ACCOUNT_URL`。`getTrustedOrigins()` 加 `VITE_RELAY_URL`，auth 和 Studio 的 wrangler vars（prod 与 preview）和 `select-target.sh` 也加这个变量，auth 才会把用户送回 Relay。
 - 模块从 `apps/studio/modules/{organizations,shared}` 复制需要的部分，第四次重复再抽到 packages。
 - i18n scope `relay`，locale 集合与 Studio 相同。
 
 验收：
 
-- prod：在 Studio 已登录的浏览器打开 `relay.vesact.com` 直接是登录态；未登录跳到 `auth.vesact.com/login`，登录后回到控制台原来的地址。
+- prod：在 Studio 已登录的浏览器打开 `relay.vesact.com` 直接是登录态；未登录跳到 `account.vesact.com/login`，登录后回到控制台原来的地址。
 - preview：在 Studio preview 已登录的浏览器打开 `relay.preview.vesact.com` 直接是登录态。
 - 创建 key 后 4.3 的脚本用它能过；吊销后 401。
 - 组织 A 的用户看不到组织 B 的 key。

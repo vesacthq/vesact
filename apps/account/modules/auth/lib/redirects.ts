@@ -1,10 +1,10 @@
-const authOrigin = import.meta.env.VITE_AUTH_URL;
+const accountOrigin = import.meta.env.VITE_ACCOUNT_URL;
 const studioUrl = import.meta.env.VITE_STUDIO_URL;
 const productOrigins = [
 	studioUrl,
 	import.meta.env.VITE_MARKETING_URL,
 	import.meta.env.VITE_RELAY_URL,
-	authOrigin,
+	accountOrigin,
 ];
 
 function toOrigin(value: string | undefined): string | null {
@@ -35,7 +35,7 @@ export function getSafeRedirectUrl(
 	},
 ): string {
 	const allowed = options.allowedOrigins ?? allowedRedirectOrigins;
-	const base = options.base ?? authOrigin ?? "http://localhost";
+	const base = options.base ?? accountOrigin ?? "http://localhost";
 
 	return normalize(redirectTo, allowed, base) ?? normalize(options.fallback, allowed, base) ?? "/";
 }

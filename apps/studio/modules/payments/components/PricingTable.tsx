@@ -46,7 +46,9 @@ export function PricingTable({
 
 	const onSelectPlan = async (planId: PlanId, selection?: PlanSelection) => {
 		if (!(userId || organizationId)) {
-			window.location.assign(`${import.meta.env.VITE_AUTH_URL ?? "http://localhost:3004"}/signup`);
+			window.location.assign(
+				`${import.meta.env.VITE_ACCOUNT_URL ?? "http://localhost:3004"}/signup`,
+			);
 			return;
 		}
 

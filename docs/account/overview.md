@@ -16,7 +16,7 @@
 
 ## 2. 应用与主机名
 
-`apps/account`，worker `vesact-account`。prod `account.vesact.com`，preview `account.preview.vesact.com`，dev 端口 3004。它同时提供 Better Auth 端点，`VITE_ACCOUNT_URL` 是它的地址。`auth.vesact.com` 保留一个季度，301 到 account。
+`apps/account`，worker `vesact-account`。prod `account.vesact.com`，preview `account.preview.vesact.com`，dev 端口 3004。它同时提供 Better Auth 端点，`VITE_ACCOUNT_URL` 是它的地址。`auth.vesact.com` 和 `auth.preview.vesact.com` 继续挂在账号 worker 上，301 到 account，保留一个季度。
 
 路由：
 

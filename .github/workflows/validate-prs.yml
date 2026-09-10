@@ -10,7 +10,7 @@ env:
   BETTER_AUTH_SECRET: "better-auth-e2e-secret-1234567890"
   RESEND_API_KEY: "resend-api-key-1234567890"
   VITE_STUDIO_URL: "http://localhost:3000"
-  VITE_AUTH_URL: "http://localhost:3004"
+  VITE_ACCOUNT_URL: "http://localhost:3004"
   VITE_MARKETING_URL: "http://localhost:3001"
   VITE_DOCS_URL: "http://localhost:3002"
 
@@ -94,8 +94,8 @@ jobs:
         run: docker compose up -d minio minio-setup
       - name: Write the local Worker vars
         run: |
-          cat > apps/auth/.dev.vars <<'VARS'
-          VITE_AUTH_URL="http://localhost:3200"
+          cat > apps/account/.dev.vars <<'VARS'
+          VITE_ACCOUNT_URL="http://localhost:3200"
           VITE_STUDIO_URL="http://localhost:3100"
           VITE_MARKETING_URL="http://localhost:3001"
           BETTER_AUTH_SECRET="better-auth-e2e-secret-1234567890"
@@ -104,7 +104,7 @@ jobs:
           VARS
           cat > apps/studio/.dev.vars <<'VARS'
           VITE_STUDIO_URL="http://localhost:3100"
-          VITE_AUTH_URL="http://localhost:3200"
+          VITE_ACCOUNT_URL="http://localhost:3200"
           VITE_MARKETING_URL="http://localhost:3001"
           BETTER_AUTH_SECRET="better-auth-e2e-secret-1234567890"
           GOOGLE_CLIENT_ID="google-client-id"
@@ -117,7 +117,7 @@ jobs:
       - name: Run Playwright tests for the marketing app
         run: pnpm --filter marketing e2e:ci
       - name: Run Playwright tests for the auth app
-        run: pnpm --filter auth e2e:ci
+        run: pnpm --filter account e2e:ci
       - name: Run Playwright tests for the Studio app
         run: pnpm --filter studio e2e:ci
       - uses: actions/upload-artifact@v4

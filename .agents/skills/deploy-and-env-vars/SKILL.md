@@ -17,7 +17,7 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
    Anything secret goes in `secrets/<file>.env`, never in `wrangler.jsonc`,
    workflow files, or GitHub secrets.
 2. Edit a secrets file with `sops secrets/<file>.env`. Worker secrets belong in
-   `<app>.<target>.env` (`studio`, `auth`), migration URLs in
+   `<app>.<target>.env` (`studio`, `account`), migration URLs in
    `database.<target>.env`, CI-only credentials in `ci.env`, local values in
    `<app>.dev.env`. Commit the encrypted file; `deploy.yml` syncs Worker
    secrets on the next deploy.
@@ -43,7 +43,7 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
    modelled on the studio one.
 3. Secrets files under `secrets/` for the new Worker and, if it has a database,
    a Neon branch, a Hyperdrive config and a `database.<target>.env`.
-4. The Google OAuth callback for the new `VITE_AUTH_URL`, if it signs users in.
+4. The Google OAuth callback for the new `VITE_ACCOUNT_URL`, if it signs users in.
 5. Nothing for Access: the `*.preview.vesact.com` application already covers
    the hostname. A path that outside services must reach (a webhook) needs its
    own, more specific application with a Bypass policy.
@@ -58,7 +58,7 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
   pipeline runs it right after deploy.
 - Adding a recipient: add the age public key to `.sops.yaml`, then
   `sops updatekeys secrets/*.env`.
-- Anything a browser calls cross-origin on preview (`auth.preview`, a future
+- Anything a browser calls cross-origin on preview (`account.preview`, a future
   `api.preview` used from another hostname) needs its own Access application
   with a Bypass policy: Access rejects CORS preflights and its cookie does not
   carry over to a second hostname.

@@ -43,8 +43,8 @@ jobs:
       - name: Smoke check
         run: .github/scripts/smoke-check.sh "$VITE_MARKETING_URL/"
 
-  auth:
-    name: Auth
+  account:
+    name: Account
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
@@ -67,22 +67,22 @@ jobs:
       - name: Migrate
         run: pnpm --filter @repo/database migrate
       - name: Build
-        run: pnpm --filter auth build
+        run: pnpm --filter account build
       - name: Deploy
         run: pnpm exec wrangler deploy
-        working-directory: apps/auth
+        working-directory: apps/account
       - name: Sync secrets
         run: |
-          sops -d "../../secrets/auth.$TARGET.env" > "$RUNNER_TEMP/auth.env"
-          pnpm exec wrangler secret bulk "$RUNNER_TEMP/auth.env" --name "$AUTH_WORKER"
-          rm "$RUNNER_TEMP/auth.env"
-        working-directory: apps/auth
+          sops -d "../../secrets/account.$TARGET.env" > "$RUNNER_TEMP/account.env"
+          pnpm exec wrangler secret bulk "$RUNNER_TEMP/account.env" --name "$ACCOUNT_WORKER"
+          rm "$RUNNER_TEMP/account.env"
+        working-directory: apps/account
       - name: Smoke check
-        run: .github/scripts/smoke-check.sh "$VITE_AUTH_URL/login" "$VITE_AUTH_URL/api/auth/get-session"
+        run: .github/scripts/smoke-check.sh "$VITE_ACCOUNT_URL/login" "$VITE_ACCOUNT_URL/api/auth/get-session"
 
   studio:
     name: Studio
-    needs: auth
+    needs: account
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:

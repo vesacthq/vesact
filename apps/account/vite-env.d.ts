@@ -6,7 +6,7 @@ declare module "*.css?url" {
 }
 
 interface ImportMetaEnv {
-	readonly VITE_AUTH_URL?: string;
+	readonly VITE_ACCOUNT_URL?: string;
 	readonly VITE_STUDIO_URL?: string;
 	readonly VITE_MARKETING_URL?: string;
 	readonly VITE_RELAY_URL?: string;
