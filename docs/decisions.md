@@ -2,6 +2,12 @@
 
 倒序。只写结论和理由，过程在对应的 issue 里。
 
+## 2026-09-11 登录页归属
+
+- 登录、注册、找回密码页面在各产品自己的域名下（`studio.vesact.com/login`、`relay.vesact.com/login`），`auth.vesact.com` 只提供 Better Auth 端点、OAuth 回调和 cookie 域。理由：用户登录不换域名。不建独立的 auth app。
+- 主页的"登录"指向 Studio；Relay 的入口是 `relay.vesact.com` 和开发者文档。
+- 组织跨产品共享，产品是组织上的开通项；权限按产品定义、挂在同一套 organization 角色上；删用户、删组织的钩子要检查两个产品的数据。
+
 ## 2026-09-11 Relay API 约定与骨架
 
 - 约定值填在 engineering.md §8.3，范围与验收在 skeleton.md。几个取舍：限流头用 `X-RateLimit-*`，IETF 的 `RateLimit` 结构化头仍是草案；幂等按 Stripe 的语义，IETF 草案已过期；出站 webhook 用 Standard Webhooks，客户各语言有现成校验库。
