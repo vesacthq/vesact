@@ -1,6 +1,6 @@
 # Studio 产品架构
 
-术语以 CONTEXT.md 为准。站点结构见 site-map.md。
+术语以 vocabulary.wip.md 为准。站点结构见 site-map.wip.md。
 
 ## 用户与路径
 

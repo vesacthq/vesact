@@ -1,42 +1,36 @@
 ---
 name: update-the-docs
-description: "Use when updating repository-owned Fumadocs content or preparing an explicit handoff for Supastarter documentation maintained outside this repository."
+description: "Use when a change affects documentation: repository conventions, product vocabulary, decisions, Relay developer docs, or public marketing and legal content."
 ---
 
 # Update the docs
 
-## Scope
+## Where each kind of documentation lives
 
-Use for documentation affected by code changes. Do not assume the public `supastarter.dev/docs` source exists in this checkout.
+| Content                                      | File                                 | Owner of the wording                                        |
+| -------------------------------------------- | ------------------------------------ | ----------------------------------------------------------- |
+| Conventions, environments, commands, aliases | `AGENTS.md`                          | whoever changes the convention                              |
+| Studio vocabulary, architecture, site map    | `docs/studio/*.wip.md`               | product; ask before changing a term or the scope            |
+| Relay overview                               | `docs/relay/overview.wip.md`         | product                                                     |
+| Platform facts, research conclusions         | `docs/reference/*.md`                | whoever verified the fact                                   |
+| Decisions                                    | `docs/decisions.md`                  | append one dated entry: conclusion and reason, newest first |
+| Relay developer docs                         | `apps/docs/content/*.mdx` (Fumadocs) | engineering                                                 |
+| Public copy, legal pages                     | `apps/marketing/content/`            | product; legal pages are also platform-review material      |
 
 ## Procedure
 
-1. Classify ownership before editing:
-   - Starter-local docs UI/content: `apps/docs/`.
-   - Public marketing copy/blog/legal content: `apps/marketing/content/`.
-   - Supastarter product documentation hosted from another repository: prepare an out-of-repo handoff with page, required wording, links, and code references; do not invent a local path.
-2. For local Fumadocs pages, edit MDX under `apps/docs/content/`. `apps/docs/source.config.ts` defines `docs` from that directory; follow `apps/docs/content/index.mdx`. This checkout currently has no content-tree metadata file, so do not invent one.
-3. Update navigation metadata only when a corresponding metadata file actually exists.
-4. Keep code samples accurate for TanStack Start: `createFileRoute`, `createServerFn`, TanStack Form/Query, Drizzle scripts, root `.env.local`, and `VITE_` browser variables.
-5. Generate Fumadocs output and type-check using the actual (intentionally named) script, then build:
-   ```bash
-   pnpm --filter docs types:check
-   pnpm --filter docs build
-   ```
-6. Verify internal links and rendered MDX. `types:check` runs `fumadocs-mdx && tsc --noEmit`; never edit generated `apps/docs/src/routeTree.gen.ts`.
-7. When docs are out-of-repo, include the owning external page URL/topic and exact changes in the handoff; leave this repository unchanged except for code comments/readme material that truly belongs here.
-
-Canonical references: `apps/docs/source.config.ts`, `apps/docs/content/index.mdx`, and `apps/docs/package.json`.
-
-## Done
-
-- Correct ownership is established and local edits or external handoff cover the behavior change.
-- Local Fumadocs type-check/build and link review pass when applicable.
+1. Pick the file from the table. A convention that changed means `AGENTS.md`;
+   a choice between alternatives means `docs/decisions.md`; a user-visible
+   behaviour means marketing content.
+2. A `.wip.md` suffix means a draft: correct a term or a fact, do not restructure.
+   Finalising a draft means renaming it without the suffix and fixing references.
+3. For `apps/docs`, edit MDX under `apps/docs/content/`, then run
+   `pnpm --filter docs types:check` and `pnpm --filter docs build`. Never edit
+   `apps/docs/src/routeTree.gen.ts`.
+4. Run `pnpm format` before finishing; it formats Markdown tables.
 
 ## Common mistakes
 
-- Treating `apps/marketing/content/posts` as product documentation.
-- Inventing a local directory for an external docs repository.
-- Running `pnpm --filter docs type-check`; the current script is `types:check`.
-- Writing Next.js/RSC examples for this TanStack Start kit.
-- Hand-editing generated docs route trees.
+- Recording a decision inside `AGENTS.md` instead of `docs/decisions.md`.
+- Treating `apps/marketing/content` as product documentation.
+- Writing Next.js or RSC examples; this is TanStack Start.

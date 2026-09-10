@@ -2,6 +2,17 @@
 
 倒序。只写结论和理由，过程在对应的 issue 里。
 
+## 2026-09-10 Relay 申请阶段的壳
+
+- 用 Zernio 的开源客户端（unified-inbox、ads-dashboard、latewiz、zernflow，均 MIT）配 Relay 自己的 API 做各平台审核的载体，图快；之后换成自己的实现。
+- 设计规范放 `docs/design.wip.md`，组件层用 ReUI。
+
+## 2026-09-10 Relay 的范围
+
+- 第一版是壳：Zernio 开源的 inbox、ads、数据分析拼成一个应用，先拿去过各平台审核，再长成 API 产品。
+- API 按 Zernio 分六类：posting、comments、messaging、analytics、ads、comment to DM。
+- 文档分目录：`docs/studio`、`docs/relay`、`docs/reference`，草稿用 `.wip.md` 后缀。
+
 ## 2026-09-10 模板上游
 
 - 已从 supastarter 模板分叉：目录改名，模板文件随意改，不再 merge。
@@ -18,7 +29,6 @@
 
 - 第一个产品叫 Studio：`apps/studio`、worker `vesact-studio`、`studio.vesact.com`。
 - 第二个产品叫 Relay。主机名待定，倾向 `api.`、`console.`、`developers.vesact.com`。
-- 不用 saas、Ember。
 
 ## 2026-09-09 第二个产品的形态
 
@@ -31,3 +41,9 @@
 
 - 认证端点集中在 `auth.vesact.com`，会话 cookie 设在 `.vesact.com`，各产品共享同一个 Better Auth 实例和用户库。
 - 登录方式：邮箱（magic link、密码）、passkey、Google。不做 GitHub。
+
+## 2026-09-02 UI 组件库
+
+- 底座 shadcn（base-vega registry）+ Base UI；后台重件（data grid、filters、表单、日历）用 ReUI 免费层。
+- 营销页 blocks 买 shadcnblocks Pro；后台 blocks 需求成片时再买 ReUI Pro。
+- 不引入第二套体系：HeroUI Pro、Untitled UI、Tailwind Plus 不买。coss ui、Kibo UI 按需抄源码自管。

@@ -7,12 +7,10 @@ Explicit user instructions win; if a documented command fails, report it rather 
 ## Product context
 
 Studio (`apps/studio`) is the first product; Relay, an API platform, is planned
-as the second. `CONTEXT.md` defines the product vocabulary; use its terms in
-code, UI copy and issues. `docs/product-architecture.md` and `docs/site-map.md`
-are working drafts: the vocabulary is settled, module scope and sequencing are
-not, so do not derive schemas or plans from them without asking.
-`docs/decisions.md` is the decision log; `docs/research/` holds interview notes
-and evaluations.
+as the second. `docs/studio/` holds Studio's vocabulary, architecture and site map,
+`docs/relay/` the Relay overview, `docs/reference/` platform facts and research
+conclusions, `docs/decisions.md` the decision log. A `.wip.md` suffix means a
+draft: use its terms, but do not derive schemas or plans from it without asking.
 
 Work is tracked in GitHub issues. The `deferred` label means "no start date; do
 it when the trigger in the first line of the issue is met".
@@ -275,6 +273,8 @@ Canonical auth example:
 ## UI, forms, and i18n
 
 - Use components from `@repo/ui/components`; compose with Base UI primitives.
+  ReUI is the component layer. Visual rules, token targets and the chat
+  components live in `docs/design.wip.md`.
 - Use `@tanstack/react-form` with Zod. Follow
   `apps/marketing/modules/home/components/ContactForm.tsx`.
 - Use `useTranslations`, `useFormatter`, and `IntlProvider` from `use-intl`.
@@ -364,11 +364,8 @@ dependencies to the workspace package that imports them.
 ## Change management
 
 - Use conventional commits such as `feat:`, `fix:`, `docs:`, or `refactor:`.
-- Update `CHANGELOG.md` for consumer-impacting changes.
 - Update relevant docs under `apps/marketing/content` for user-facing behavior.
 - Update `AGENTS.md` when conventions, aliases, scripts, or app boundaries change.
-- Supastarter ships three starter kits. Keep changes generic and consider whether
-  an equivalent update belongs in the Next.js or Nuxt kit.
 
 ## Before you're done
 
@@ -379,7 +376,7 @@ dependencies to the workspace package that imports them.
 - [ ] No `console.log` statements were added
 - [ ] No unjustified `any` types were added
 - [ ] User-facing strings have translations
-- [ ] Relevant docs and `CHANGELOG.md` are updated
+- [ ] Relevant docs are updated
 
 More documentation: [https://supastarter.dev/docs/tanstack-start](https://supastarter.dev/docs/tanstack-start)
 
