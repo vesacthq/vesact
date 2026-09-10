@@ -119,7 +119,8 @@
 					"error": "Impossible de mettre à jour l'avatar",
 					"success": "L'avatar a été mis à jour avec succès"
 				},
-				"title": "Votre avatar"
+				"title": "Votre avatar",
+				"delete": "Supprimer l'avatar"
 			},
 			"changeEmail": {
 				"description": "Pour changer votre e-mail, entrez le nouvel e-mail et enregistrez. Vous devrez confirmer le nouvel e-mail avant qu'il ne soit actif.",
@@ -365,7 +366,12 @@
 			},
 			"logo": {
 				"description": "Téléchargez un logo pour votre organisation.",
-				"title": "Logo de l'organisation"
+				"title": "Logo de l'organisation",
+				"delete": "Supprimer le logo",
+				"notifications": {
+					"error": "Impossible de mettre à jour le logo de l'organisation",
+					"success": "Le logo de l'organisation a été mis à jour"
+				}
 			},
 			"members": {
 				"activeMembers": "Membres actifs",

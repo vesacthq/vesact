@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("authentication guard", () => {
-	test("sends a signed-out visitor to the auth app with a way back", async ({
+	test("sends a signed-out visitor to the account center with a way back", async ({
 		request,
 		baseURL,
 	}) => {

@@ -161,16 +161,11 @@ Only app-local aliases are configured in the app `tsconfig.json` files.
 | `@config`          | `./config`                  |
 | `@auth/*`          | `./modules/auth/*`          |
 | `@organizations/*` | `./modules/organizations/*` |
-| `@settings/*`      | `./modules/settings/*`      |
 | `@payments/*`      | `./modules/payments/*`      |
 | `@i18n/*`          | `./modules/i18n/*`          |
 | `@admin/*`         | `./modules/admin/*`         |
 | `@ai/*`            | `./modules/ai/*`            |
-| `@onboarding/*`    | `./modules/onboarding/*`    |
 | `@shared/*`        | `./modules/shared/*`        |
-
-`@settings/*` and `@onboarding/*` in Studio are reserved names with no module
-behind them any more; those pages live in the account center.
 
 ### `apps/account/tsconfig.json`
 

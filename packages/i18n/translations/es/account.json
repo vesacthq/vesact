@@ -119,7 +119,8 @@
 					"error": "No se pudo actualizar el avatar",
 					"success": "El avatar se actualizó correctamente"
 				},
-				"title": "Tu avatar"
+				"title": "Tu avatar",
+				"delete": "Eliminar avatar"
 			},
 			"changeEmail": {
 				"description": "Para cambiar tu correo, introduce el nuevo correo y guarda. Tendrás que confirmar el nuevo correo antes de que se active.",
@@ -365,7 +366,12 @@
 			},
 			"logo": {
 				"description": "Sube un logo para tu organización.",
-				"title": "Logo de la organización"
+				"title": "Logo de la organización",
+				"delete": "Eliminar logo",
+				"notifications": {
+					"error": "No se pudo actualizar el logo de la organización",
+					"success": "El logo de la organización se actualizó correctamente"
+				}
 			},
 			"members": {
 				"activeMembers": "Miembros activos",

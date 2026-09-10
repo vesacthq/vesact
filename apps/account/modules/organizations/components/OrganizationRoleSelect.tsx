@@ -8,16 +8,21 @@ import {
 	SelectValue,
 } from "@repo/ui/components/select";
 
+/** Only an owner can hand out the owner role; Better Auth rejects it otherwise. */
 export function OrganizationRoleSelect({
 	value,
 	onSelect,
 	disabled,
+	allowOwner = false,
 }: {
 	value: OrganizationRole;
 	onSelect: (value: OrganizationRole) => void;
 	disabled?: boolean;
+	allowOwner?: boolean;
 }) {
-	const options = useOrganizationRoleOptions();
+	const options = useOrganizationRoleOptions().filter(
+		(option) => allowOwner || option.value !== "owner" || option.value === value,
+	);
 
 	return (
 		<Select

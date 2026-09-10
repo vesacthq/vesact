@@ -4,7 +4,6 @@ export {
 	type CreatePermissionRulesParams,
 	type PermissionRules,
 	type PermissionUser,
-	type ProductPermissionRules,
 } from "./create-permission-rules";
 export type { PermissionsDefinition } from "./definition";
 export {

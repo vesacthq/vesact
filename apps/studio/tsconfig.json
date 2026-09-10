@@ -10,12 +10,10 @@
 			"@config": ["./config"],
 			"@organizations/*": ["./modules/organizations/*"],
 			"@auth/*": ["./modules/auth/*"],
-			"@settings/*": ["./modules/settings/*"],
 			"@payments/*": ["./modules/payments/*"],
 			"@i18n/*": ["./modules/i18n/*"],
 			"@admin/*": ["./modules/admin/*"],
 			"@ai/*": ["./modules/ai/*"],
-			"@onboarding/*": ["./modules/onboarding/*"],
 			"@shared/*": ["./modules/shared/*"]
 		}
 	},

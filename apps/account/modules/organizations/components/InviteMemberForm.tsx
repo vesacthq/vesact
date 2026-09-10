@@ -3,6 +3,7 @@ import { productNames } from "@organizations/hooks/member-roles";
 import { useOrganization } from "@organizations/hooks/use-organization";
 import { authClient } from "@repo/auth/client";
 import {
+	getOrganizationRole,
 	getProductRole,
 	type MemberRole,
 	organizationRoles,
@@ -38,7 +39,7 @@ const DEFAULT_PRODUCT_ROLES: ProductRole[] = ["studio:member"];
 
 export function InviteMemberForm() {
 	const t = useTranslations();
-	const { organization, refetch } = useOrganization();
+	const { organization, roles: ownRoles, refetch } = useOrganization();
 	const [productRolesToGrant, setProductRolesToGrant] =
 		useState<ProductRole[]>(DEFAULT_PRODUCT_ROLES);
 
@@ -128,6 +129,7 @@ export function InviteMemberForm() {
 											<OrganizationRoleSelect
 												value={field.state.value}
 												onSelect={(next) => field.handleChange(next)}
+												allowOwner={getOrganizationRole(ownRoles) === "owner"}
 											/>
 										</FormControl>
 									</FormItem>

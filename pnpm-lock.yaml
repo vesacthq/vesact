@@ -708,9 +708,6 @@ importers:
       '@repo/mail':
         specifier: workspace:*
         version: link:../../packages/mail
-      '@repo/notifications':
-        specifier: workspace:*
-        version: link:../../packages/notifications
       '@repo/payments':
         specifier: workspace:*
         version: link:../../packages/payments
@@ -759,9 +756,6 @@ importers:
       boring-avatars:
         specifier: 'catalog:'
         version: 2.0.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      class-variance-authority:
-        specifier: 'catalog:'
-        version: 0.7.1
       date-fns:
         specifier: 'catalog:'
         version: 4.4.0

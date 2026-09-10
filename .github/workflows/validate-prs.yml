@@ -120,7 +120,7 @@ jobs:
           VARS
       - name: Run Playwright tests for the marketing app
         run: pnpm --filter marketing e2e:ci
-      - name: Run Playwright tests for the auth app
+      - name: Run Playwright tests for the account app
         run: pnpm --filter account e2e:ci
       - name: Run Playwright tests for the Studio app
         run: pnpm --filter studio e2e:ci
