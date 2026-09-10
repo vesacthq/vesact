@@ -338,7 +338,10 @@ bucket.
   whose credentials are `CF_ACCESS_CLIENT_ID` / `CF_ACCESS_CLIENT_SECRET` in
   `secrets/ci.env`. A new preview hostname is covered automatically; a path
   that outside services must reach gets its own, more specific application
-  with a Bypass policy.
+  with a Bypass policy. `auth.preview.vesact.com` is one such application:
+  the browser calls it cross-origin from `studio.preview.vesact.com`, Access
+  answers every CORS preflight with 403 and its cookie is per hostname, so the
+  auth endpoints are public on preview exactly as they are in production.
 - Preview hostnames live under `preview.vesact.com` rather than `workers.dev`
   because `workers.dev` is on the Public Suffix List: no cookie can span two
   Workers there, so products could not share a login.
