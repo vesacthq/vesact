@@ -1,6 +1,6 @@
 # Studio 站点结构
 
-一级是侧栏，二级是页内导航或子页面，三级是页面区块。角色可见性见 product-architecture.md。
+一级是侧栏，二级是页内导航或子页面，三级是页面区块。角色可见性见 architecture.wip.md。
 
 ## 全局
 
