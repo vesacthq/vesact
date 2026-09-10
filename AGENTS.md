@@ -8,7 +8,7 @@ Explicit user instructions win; if a documented command fails, report it rather 
 
 Studio (`apps/studio`) is the first product; Relay, an API platform, is planned
 as the second. `docs/studio/` holds Studio's vocabulary, architecture and site map,
-`docs/relay/` Relay's overview, engineering design and messaging domain, `docs/reference/` platform facts and research
+`docs/relay/` Relay's overview, engineering design, milestone specs and messaging domain, `docs/reference/` platform facts and research
 conclusions, `docs/decisions.md` the decision log. A `.wip.md` suffix means a
 draft: use its terms, but do not derive schemas or plans from it without asking.
 

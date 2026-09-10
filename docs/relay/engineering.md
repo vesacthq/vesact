@@ -389,21 +389,22 @@ OAuth callback 和上游 Webhook 是专用入口，不与普通 API Key 请求�
 
 ### 8.3 契约共同约定
 
-| 事项               | 需要定下来的内容                                                                      |
-| ------------------ | ------------------------------------------------------------------------------------- |
-| **认证与归属**     | API Key 属于谁、可访问哪些资源；Studio 服务端如何调用；浏览器不得持有总权限服务密钥。 |
-| **公共 ID**        | 由 Relay 生成，不暴露供应商 ID 作为唯一业务身份。                                     |
-| **请求与响应**     | 输入、输出、PATCH 语义分清；数据库内部字段和凭据不进入公共响应。                      |
-| **异步写入**       | 2xx/202 的含义、查询入口、最终结果事件、结果未知的表达。                              |
-| **幂等**           | Key 作用域、有效期、请求摘要、处理中/已完成行为、相同 key 不同内容的错误。            |
-| **分页**           | 排序、opaque cursor、边界变化行为；不要把供应商 cursor 原样变成永久公共承诺。         |
-| **错误**           | 稳定机器码、可理解说明、request ID、安全的诊断信息；不只返回原始平台错误。            |
-| **时间与数据覆盖** | 统一时间表示，区分发生时间、接收时间、更新时间；说明缓存与历史覆盖。                  |
-| **扩展**           | 通用字段和平台专属参数分开，平台与参数类型关联；未知/不支持不能静默成功。             |
-| **版本与兼容性**   | 公共契约变更检查；新增枚举等也要评估客户端影响；已使用契约不得随意修改。              |
-| **Webhook**        | 稳定事件 ID、签名、版本、重投语义、可能的重复/乱序，以及查询补偿方式。                |
+已定，A1 落成中间件和 helper，后续端点不另定默认值。参考 §12 [R8]–[R12]。
 
-尚未确定的细节，例如幂等 TTL、分页默认大小、具体状态码，应在对应切片实现前确定并写入规范，不能散落成互相矛盾的默认值。
+| 事项               | 决定                                                                                                                                                                                                                                                                                                                                                                                             |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **认证与归属**     | `Authorization: Bearer <key>`；key 前缀 `relay_`，属于组织；Studio 服务端用自己组织的 key 调 `/v1`；浏览器不持有 key。                                                                                                                                                                                                                                                                           |
+| **公共 ID**        | `<类型>_<ULID>`：`acct_`、`conn_`、`conv_`、`msg_`、`evt_`、`req_`；text 主键；不暴露供应商 ID 作为业务身份。                                                                                                                                                                                                                                                                                    |
+| **请求与响应**     | JSON；输入、输出、PATCH 各自 schema；凭据和内部字段不进响应。                                                                                                                                                                                                                                                                                                                                    |
+| **异步写入**       | 202 加资源本体，`status: "queued"`；结果查资源本身；结果未知返回 `RESULT_UNKNOWN`。                                                                                                                                                                                                                                                                                                              |
+| **幂等**           | `Idempotency-Key`，只作用于 POST；不超过 255 字符；作用域 key + 路由；首个响应含 5xx 连状态码存 24h；同 key 同摘要回放原响应并带 `Idempotent-Replayed: true`；同 key 不同摘要 422 `IDEMPOTENCY_CONFLICT`；处理中 409 `IDEMPOTENCY_IN_FLIGHT`，不落库。                                                                                                                                           |
+| **分页**           | `limit` 默认 50、上限 200；`cursor` 不透明 base64url；响应 `{ data, nextCursor }`，没有更多时 `nextCursor` 为 `null`。                                                                                                                                                                                                                                                                           |
+| **错误**           | oRPC 错误体 `{ defined, code, status, message, data }`；每个响应带 `X-Request-Id`。内置码 `BAD_REQUEST`、`UNAUTHORIZED`、`FORBIDDEN`、`NOT_FOUND`、`CONFLICT`、`TOO_MANY_REQUESTS`、`INTERNAL_SERVER_ERROR`；自定义 `QUOTA_EXCEEDED` 429、`IDEMPOTENCY_CONFLICT` 422、`IDEMPOTENCY_IN_FLIGHT` 409、`RESULT_UNKNOWN` 502、`UPSTREAM_ERROR` 502 带 `data.platform` 和原样的 `data.platformError`。 |
+| **限流**           | 每 key 固定窗口，默认 300 次/分钟；响应带 `X-RateLimit-Limit`、`X-RateLimit-Remaining`、`X-RateLimit-Reset`（unix 秒），429 带 `Retry-After`。配额是独立计数，超出 `QUOTA_EXCEEDED`。                                                                                                                                                                                                            |
+| **时间与数据覆盖** | RFC 3339 UTC，`Z` 结尾；`createdAt`、`receivedAt`、`occurredAt` 分开；列表接口说明覆盖范围。                                                                                                                                                                                                                                                                                                     |
+| **扩展**           | 平台专属参数放 `platformParams.<platform>`；未知字段 `BAD_REQUEST`，不静默。                                                                                                                                                                                                                                                                                                                     |
+| **版本与兼容性**   | 路径 `/v1`；新增字段和枚举值是兼容变更，写进 changelog；删改字段进 `/v2`。                                                                                                                                                                                                                                                                                                                       |
+| **Webhook**        | Standard Webhooks：`webhook-id`（`evt_` ID，重投不变）、`webhook-timestamp`、`webhook-signature: v1,<base64 HMAC-SHA256("{id}.{timestamp}.{body}")>`；轮换期多个签名空格分隔；接收方按 5 分钟容差校时。                                                                                                                                                                                          |
 
 ### 8.4 文字发送示例
 
@@ -446,7 +447,7 @@ Content-Type: application/json
 
 ## 9. 里程碑
 
-按 #26 的 A0–A6 推进：A0 外部流程，A1 骨架，A2 第一切片设计（Connections、Messaging），A3 第一批权限（Messenger、Instagram 私信），A4 分批（评论与 comment to DM、发布、广告），A5 WhatsApp，A6 计费与对外开放。进度在 issue 里打勾。
+按 #26 的 A0–A6 推进：A0 外部流程，A1 骨架，A2 第一切片设计（Connections、Messaging），A3 第一批权限（Messenger、Instagram 私信），A4 分批（评论与 comment to DM、发布、广告），A5 WhatsApp，A6 计费与对外开放。进度在 issue 里打勾。A1 的范围和验收见 skeleton.md。
 
 ---
 
@@ -507,17 +508,22 @@ Content-Type: application/json
 
 ## 12. 官方参考资料与证据边界
 
-以下资料于 **2026-09-10** 核对。它们用于支持外部平台行为和领域参考，不代表本项目已经安装相关工具、拥有相关权限或完成实际联调。实现时应再次确认对应版本和当前权限。
+以下资料于 **2026-09-10** 核对，[R8]–[R12] 于 **2026-09-11** 核对。它们用于支持外部平台行为和领域参考，不代表本项目已经安装相关工具、拥有相关权限或完成实际联调。实现时应再次确认对应版本和当前权限。
 
-| 标记 | 官方资料                                   | 用途                               |
-| ---- | ------------------------------------------ | ---------------------------------- |
-| [R1] | Cloudflare Queues — Delivery guarantees    | 至少一次投递与消费者去重。         |
-| [R2] | Cloudflare Queues — How Queues Works       | 无顺序保证、队列角色与运行边界。   |
-| [R3] | Stripe — Advanced error handling           | 幂等、网络错误和结果不确定。       |
-| [R4] | Apideck — Vault OpenAPI                    | 连接与授权生命周期。               |
-| [R5] | Twilio Conversations Classic — Participant | 参与者与渠道绑定。                 |
-| [R6] | Merge — Supplemental Data                  | 通用模型、原始数据与原生扩展边界。 |
-| [R7] | Svix — Retry Schedule                      | 客户 Webhook 投递与恢复。          |
+| 标记  | 官方资料                                   | 用途                               |
+| ----- | ------------------------------------------ | ---------------------------------- |
+| [R1]  | Cloudflare Queues — Delivery guarantees    | 至少一次投递与消费者去重。         |
+| [R2]  | Cloudflare Queues — How Queues Works       | 无顺序保证、队列角色与运行边界。   |
+| [R3]  | Stripe — Advanced error handling           | 幂等、网络错误和结果不确定。       |
+| [R4]  | Apideck — Vault OpenAPI                    | 连接与授权生命周期。               |
+| [R5]  | Twilio Conversations Classic — Participant | 参与者与渠道绑定。                 |
+| [R6]  | Merge — Supplemental Data                  | 通用模型、原始数据与原生扩展边界。 |
+| [R7]  | Svix — Retry Schedule                      | 客户 Webhook 投递与恢复。          |
+| [R8]  | Stripe — Idempotent requests               | 幂等语义。                         |
+| [R9]  | Standard Webhooks — Specification          | 出站 Webhook 签名与头。            |
+| [R10] | Meta — Graph API Webhooks: Getting Started | 握手、签名、重试与批量。           |
+| [R11] | Meta — Messenger Platform Webhooks         | payload 结构、5 秒响应、乱序。     |
+| [R12] | Better Auth — API Key plugin               | key 校验、限流、配额。             |
 
 [R1]: https://developers.cloudflare.com/queues/reference/delivery-guarantees/ "Cloudflare Queues delivery guarantees"
 [R2]: https://developers.cloudflare.com/queues/reference/how-queues-works/ "How Cloudflare Queues works"
@@ -526,6 +532,11 @@ Content-Type: application/json
 [R5]: https://www.twilio.com/docs/conversations-classic/api/conversation-participant-resource "Twilio Conversations Classic Participant"
 [R6]: https://docs.merge.dev/merge-unified/supplemental-data/overview "Merge Supplemental Data"
 [R7]: https://docs.svix.com/retries "Svix retry schedule"
+[R8]: https://docs.stripe.com/api/idempotent_requests "Stripe idempotent requests"
+[R9]: https://github.com/standard-webhooks/standard-webhooks/blob/main/spec/standard-webhooks.md "Standard Webhooks specification"
+[R10]: https://developers.facebook.com/docs/graph-api/webhooks/getting-started "Graph API Webhooks getting started"
+[R11]: https://developers.facebook.com/docs/messenger-platform/webhooks "Messenger Platform webhooks"
+[R12]: https://www.better-auth.com/docs/plugins/api-key "Better Auth API Key plugin"
 
 ---
 
