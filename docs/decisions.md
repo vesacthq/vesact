@@ -2,6 +2,12 @@
 
 倒序。只写结论和理由，过程在对应的 issue 里。
 
+## 2026-09-11 Relay API 约定与骨架
+
+- 约定值填在 engineering.md §8.3，范围与验收在 skeleton.md。几个取舍：限流头用 `X-RateLimit-*`，IETF 的 `RateLimit` 结构化头仍是草案；幂等按 Stripe 的语义，IETF 草案已过期；出站 webhook 用 Standard Webhooks，客户各语言有现成校验库。
+- 认证按环境分开：prod 走 `auth.vesact.com` 共享会话；preview 和 dev 由 Relay worker 自己挂 `/api/auth`，因为 `workers.dev` 在 Public Suffix List 上，两个 preview worker 的 cookie 互不可见。
+- Relay 的表（含 Better Auth 的 `apikey`）放 `schema/relay.ts`，`client.ts` 改为导入 schema index；`postgres.ts` 不动。
+
 ## 2026-09-11 Relay 定稿的几项
 
 - 不接 Zernio 托管，所有平台能力由 Relay 自己的应用直连各平台；开源客户端只搬组件。
