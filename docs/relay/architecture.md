@@ -370,7 +370,7 @@ Content-Type: application/json
 
 `/v1` 用 API key：`Authorization: Bearer <key>`，key 属于组织，由 `@better-auth/api-key`（`references: "organization"`、`defaultPrefix: "relay_"`）签发和校验。创建、吊销、列出走 Better Auth 的端点，需要会话且用户在该组织有 Relay 访问（`relay.access`，见 ../account/architecture.md §5）。端点在账号中心的 worker 上，控制台跨域调用；插件按组织 access control 的 `apiKey` statement 检查每个操作，`packages/auth/lib/access.ts` 把它授予 admin 和 `relay:*` 角色。控制台用账号中心的会话；未登录时照 Studio 的 `loginUrl()` 跳账号中心。成员和 Relay 访问在账号中心的成员页管，Relay 只读。
 
-`/v1` 入口中间件链，顺序固定：request ID（`X-Request-Id: req_<ULID>`）→ 取 key → `verifyApiKey` 与错误码映射（`KEY_NOT_FOUND`、`KEY_EXPIRED`、`KEY_DISABLED` → 401 `UNAUTHORIZED` 且 `data.reason` 保留原码；`RATE_LIMITED` → 429 `TOO_MANY_REQUESTS`；`USAGE_EXCEEDED` → 429 `QUOTA_EXCEEDED`）→ 上下文 `{ organizationId, apiKeyId, permissions, requestId }` 与 `relayKeyProcedure` → 限流头 → `waitUntil` 写用量（写失败只记日志）。`/v1` 不设 CORS 头。
+`/v1` 入口中间件链，顺序固定：request ID（`X-Request-Id: req_<ULID>`）→ 取 key → `verifyApiKey` 与错误码映射（`INVALID_API_KEY`、`KEY_NOT_FOUND`、`KEY_EXPIRED`、`KEY_DISABLED` → 401 `UNAUTHORIZED` 且 `data.reason` 保留原码；`RATE_LIMITED` → 429 `TOO_MANY_REQUESTS`；`USAGE_EXCEEDED` → 429 `QUOTA_EXCEEDED`）→ 上下文 `{ organizationId, apiKeyId, permissions, requestId }` 与 `relayKeyProcedure` → 限流头 → `waitUntil` 写用量（写失败只记日志）。`/v1` 不设 CORS 头。
 
 ### 7.2 安全与诊断
 

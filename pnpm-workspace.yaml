@@ -14,6 +14,7 @@ catalog:
   "@aws-sdk/s3-request-presigner": 3.1127.0
   "@base-ui/react": ^1.8.0
   "@cloudflare/vite-plugin": ^1.54.4
+  "@better-auth/api-key": 1.7.3
   "@better-auth/passkey": 1.7.3
   "@bprogress/react": 1.2.7
   "@mdx-js/mdx": ^3.1.1
@@ -92,6 +93,7 @@ catalog:
   tsx: ^4.23.13
   typescript: 7.0.2
   ufo: ^1.6.4
+  ulid: ^3.0.2
   use-intl: ^4.14.2
   usehooks-ts: ^3.1.1
   uuid: ^14.0.2

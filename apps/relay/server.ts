@@ -1,9 +1,11 @@
+import { notFoundResponse } from "@repo/api/modules/relay/lib/errors";
 import { getBaseUrl } from "@repo/utils";
 import type { Register } from "@tanstack/react-router";
 import type { RequestOptions } from "@tanstack/react-start/server";
 import { env } from "cloudflare:workers";
+import type { ExecutionContext } from "hono";
 
-import { dispatch, notFound } from "./dispatch";
+import { dispatch } from "./dispatch";
 
 let api: (typeof import("./src/api"))["api"] | undefined;
 let server: (typeof import("./src/server"))["default"] | undefined;
@@ -23,12 +25,12 @@ function connectDatabase() {
 }
 
 export default {
-	async fetch(request: Request, options?: RequestOptions<Register>) {
+	async fetch(request: Request, options?: RequestOptions<Register>, ctx?: ExecutionContext) {
 		const url = new URL(request.url);
 		const target = dispatch(url, hosts);
 
 		if (target === "not-found") {
-			return notFound(request.method, url.pathname);
+			return notFoundResponse(request.method, url.pathname);
 		}
 
 		if (target === "api") {
@@ -37,7 +39,7 @@ export default {
 				api = (await import("./src/api")).api;
 			}
 
-			return api.fetch(request);
+			return api.fetch(request, options, ctx);
 		}
 
 		if (!server) {

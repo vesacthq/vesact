@@ -22,15 +22,3 @@ export function dispatch(url: URL, hosts: { consoleHost: string; apiHost: string
 
 	return "console";
 }
-
-export function notFound(method: string, pathname: string): Response {
-	return Response.json(
-		{
-			defined: false,
-			code: "NOT_FOUND",
-			status: 404,
-			message: `No route for ${method} ${pathname}`,
-		},
-		{ status: 404 },
-	);
-}
