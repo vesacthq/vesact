@@ -1,0 +1,11 @@
+{
+	"home": {
+		"signedInAs": "Sesión iniciada como {email}",
+		"accountCenter": "Centro de cuenta"
+	},
+	"errors": {
+		"title": "Algo salió mal",
+		"retry": "Reintentar",
+		"home": "Volver al inicio"
+	}
+}

@@ -47,6 +47,7 @@ the same `updatekeys`.
 | `secrets/account.<target>.env` | The account Worker: Better Auth secret, Google, mail, R2                                                                                                        |
 | `secrets/database.<env>.env`   | `DATABASE_URL` for migrations, prod and preview                                                                                                                 |
 | `secrets/studio.<env>.env`     | Worker secrets, synced on every deploy                                                                                                                          |
+| `secrets/relay.<env>.env`      | The Relay Worker: the studio keys without `S3_*` (same `BETTER_AUTH_SECRET`), plus `META_APP_SECRET` and `META_WEBHOOK_VERIFY_TOKEN`                            |
 | `secrets/<app>.dev.env`        | `apps/<app>/.dev.vars` via `pnpm secrets:pull`                                                                                                                  |
 | `secrets/meta.env`             | The Meta app "Vesact": ids, secrets, test tokens; keys explained in `docs/reference/meta.md`; copied into `relay.<target>.env` when Relay deploys               |
 | `secrets/company.yaml`         | Company facts: legal entity, registration numbers, Meta Business ID (keys visible, values encrypted)                                                            |
@@ -97,8 +98,8 @@ pnpm dev
 
 ### Running locally
 
-`pnpm dev` starts studio on 3000, marketing on 3001, docs on 3002, account on 3004 and the mail
-preview on 3003. A fresh database has no seed data: register the first account
+`pnpm dev` starts studio on 3000, marketing on 3001, docs on 3002, account on 3004, relay on
+3005 and the mail preview on 3003. A fresh database has no seed data: register the first account
 through the sign-up page. `push` applies the schema to the local database and
 `studio` opens Drizzle Studio against it. Without `RESEND_API_KEY` mail is
 logged to the console, so verification and magic-link URLs show up in the
@@ -157,7 +158,8 @@ apps/
 ├── docs/          # TanStack Start/Fumadocs documentation
 ├── mail-preview/  # React Email preview
 ├── marketing/     # Public site, blog, and content
-└── studio/          # Authenticated product
+├── relay/         # Relay: the API platform's Worker, `/v1` + webhooks on api., console on relay.
+└── studio/        # Authenticated product
 packages/
 ├── ai/
 ├── api/
@@ -401,17 +403,21 @@ Each app is a Cloudflare Worker. Three environments, the same shape for every ap
 | Migrations    | `push`                                      | `migrate` against the preview branch before deploy  | `migrate` against production before deploy        |
 | Cookie domain | host-only (derived from `VITE_ACCOUNT_URL`) | `.preview.vesact.com`, prefix `vesact-preview`      | `.vesact.com`                                     |
 
-| App       | prod                 | preview                      |
-| --------- | -------------------- | ---------------------------- |
-| marketing | `www.vesact.com`     | `www.preview.vesact.com`     |
-| account   | `account.vesact.com` | `account.preview.vesact.com` |
-| studio    | `studio.vesact.com`  | `studio.preview.vesact.com`  |
+| App       | prod                                                 | preview                                              |
+| --------- | ---------------------------------------------------- | ---------------------------------------------------- |
+| marketing | `www.vesact.com`                                     | `www.preview.vesact.com`                             |
+| account   | `account.vesact.com`                                 | `account.preview.vesact.com`                         |
+| studio    | `studio.vesact.com`                                  | `studio.preview.vesact.com`                          |
+| relay     | `relay.vesact.com` (console), `api.vesact.com` (API) | `relay.preview.vesact.com`, `api.preview.vesact.com` |
 
 `deploy.yml` runs one job per app: `select-target.sh` picks the target from the
 event, `load-env.sh` decrypts what the job needs into masked environment
 variables, then build → `wrangler deploy` → `wrangler secret bulk` → smoke
-check. The account job runs the database migration first; the studio job waits
-for it. The Cloudflare Vite plugin flattens the selected environment into
+check. The account job runs the database migration first; the studio and relay jobs
+wait for it. The relay Worker answers on two custom domains and dispatches by
+path (`docs/relay/architecture.md` §2); its smoke check hits `/v1/health` on
+the API host and `/` on the console host, following the redirect to the
+account center's login page. The Cloudflare Vite plugin flattens the selected environment into
 `.output/server/wrangler.json` at build time, so `CLOUDFLARE_ENV` is set for the
 build and `wrangler deploy` takes no `--env`. Preview builds leave
 `VITE_POSTHOG_KEY` unset so their events stay out of production analytics.
@@ -439,7 +445,8 @@ bucket.
   application: the products call it cross-origin, Access answers every CORS
   preflight with 403 and its cookie is per hostname, so the auth endpoints are
   public on preview exactly as they are in production. The account pages
-  themselves stay behind Access.
+  themselves stay behind Access. `api.preview.vesact.com/webhooks` is the
+  other one, so Meta can reach the preview webhook.
 - `auth.vesact.com` and `auth.preview.vesact.com` stay attached to the account
   Workers and answer with a 301 to the `account.` hostname until 2026-12.
 - Preview hostnames live under `preview.vesact.com` rather than `workers.dev`

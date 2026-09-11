@@ -14,7 +14,7 @@
 		"clean": "turbo clean",
 		"format": "oxfmt --write",
 		"format:check": "oxfmt --check",
-		"secrets:pull": "sops -d secrets/studio.dev.env > apps/studio/.dev.vars && sops -d secrets/account.dev.env > apps/account/.dev.vars",
+		"secrets:pull": "sops -d secrets/studio.dev.env > apps/studio/.dev.vars && sops -d secrets/account.dev.env > apps/account/.dev.vars && sops -d secrets/relay.dev.env > apps/relay/.dev.vars",
 		"status": "pnpm --filter @repo/scripts status"
 	},
 	"devDependencies": {

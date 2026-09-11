@@ -1,0 +1,11 @@
+{
+	"home": {
+		"signedInAs": "当前登录：{email}",
+		"accountCenter": "账号中心"
+	},
+	"errors": {
+		"title": "出错了",
+		"retry": "重试",
+		"home": "返回首页"
+	}
+}

@@ -1,0 +1,11 @@
+{
+	"home": {
+		"signedInAs": "Angemeldet als {email}",
+		"accountCenter": "Kontocenter"
+	},
+	"errors": {
+		"title": "Etwas ist schiefgelaufen",
+		"retry": "Erneut versuchen",
+		"home": "Zur Startseite"
+	}
+}

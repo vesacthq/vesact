@@ -17,7 +17,7 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
    Anything secret goes in `secrets/<file>.env`, never in `wrangler.jsonc`,
    workflow files, or GitHub secrets.
 2. Edit a secrets file with `sops secrets/<file>.env`. Worker secrets belong in
-   `<app>.<target>.env` (`studio`, `account`), migration URLs in
+   `<app>.<target>.env` (`studio`, `account`, `relay`), migration URLs in
    `database.<target>.env`, CI-only credentials in `ci.env`, local values in
    `<app>.dev.env`. Commit the encrypted file; `deploy.yml` syncs Worker
    secrets on the next deploy.
@@ -55,7 +55,13 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
   variable for it. Only the preview cookie prefix (`AUTH_COOKIE_PREFIX`) is set
   by hand.
 - The account Worker uploads avatars and logos, so `secrets/account.<target>.env`
-  carries the same `S3_*` keys as the studio file.
+  carries the same `S3_*` keys as the studio file. `secrets/relay.<target>.env`
+  is the studio file without `S3_*`, plus the Meta app secret and webhook verify
+  token; `BETTER_AUTH_SECRET` must match the other Workers or sessions are not
+  shared.
+- The relay Worker has two custom domains per environment (`relay.` and `api.`);
+  both routes go in the same `routes` array, and both hostnames need attaching
+  before the first deploy.
 - `CLOUDFLARE_ENV` selects the environment at build time; `wrangler deploy` takes
   no `--env` because the Vite plugin already flattened the config.
 - Preview builds must not carry `VITE_POSTHOG_KEY`.

@@ -8,8 +8,11 @@ if [ "${GITHUB_EVENT_NAME:-}" = "push" ]; then
 TARGET=prod
 STUDIO_WORKER=vesact-studio
 ACCOUNT_WORKER=vesact-account
+RELAY_WORKER=vesact-relay
 VITE_STUDIO_URL=https://studio.vesact.com
 VITE_ACCOUNT_URL=https://account.vesact.com
+VITE_RELAY_URL=https://relay.vesact.com
+VITE_RELAY_API_URL=https://api.vesact.com
 VITE_MARKETING_URL=https://www.vesact.com
 VITE_POSTHOG_HOST=https://e.vesact.com
 VITE_POSTHOG_KEY=phc_uLUk93bEHjHERp7hMxbDRiRPG4PefxhnzTkSGWYscgjR
@@ -21,8 +24,11 @@ TARGET=preview
 CLOUDFLARE_ENV=preview
 STUDIO_WORKER=vesact-studio-preview
 ACCOUNT_WORKER=vesact-account-preview
+RELAY_WORKER=vesact-relay-preview
 VITE_STUDIO_URL=https://studio.preview.vesact.com
 VITE_ACCOUNT_URL=https://account.preview.vesact.com
+VITE_RELAY_URL=https://relay.preview.vesact.com
+VITE_RELAY_API_URL=https://api.preview.vesact.com
 VITE_MARKETING_URL=https://www.preview.vesact.com
 ENV
 fi
