@@ -137,7 +137,7 @@ Required gates:
    and it catches files a dev server regenerated after your last `pnpm format`.
 
 The root test task runs Vitest in `apps/account`, `apps/marketing`, `apps/studio`,
-`packages/api` and `packages/permissions`. Playwright tests are in
+`packages/api`, `packages/permissions` and `packages/utils`. Playwright tests are in
 `apps/marketing/tests`, `apps/account/e2e` and `apps/studio/e2e`; run them per
 app with `pnpm --filter <app> e2e` (UI) or `e2e:ci`. Each config starts its own
 dev server (marketing 3001, studio 3100, account 3200). The account suite signs
@@ -467,6 +467,10 @@ build and `wrangler deploy` takes no `--env`. Preview builds leave
 assets otherwise answer `max-age=0, must-revalidate`, so browsers revalidate
 every hashed file on every page. The file applies to static assets only, never
 to Worker responses.
+The server entries wrap the Start handler in `withEarlyHints` (`@repo/utils`): it
+reads the rendered `<head>` and sets `Link: rel=preload` headers for the page's
+stylesheet and module scripts, which Cloudflare keeps per URL and sends to the
+next visitor as a 103 Early Hints before the Worker runs.
 
 The preview database is one shared Neon branch; run the "Reset preview database"
 workflow to copy it fresh from production. Preview shares the production R2

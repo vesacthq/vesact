@@ -1,4 +1,5 @@
 import { createLocaleCookieHeader, handleLocaleMiddleware } from "@repo/i18n/server";
+import { withEarlyHints } from "@repo/utils";
 import type { Register } from "@tanstack/react-router";
 import {
 	createStartHandler,
@@ -17,7 +18,7 @@ export default createServerEntry({
 			return redirect;
 		}
 
-		const response = await handler(req, opts);
+		const response = await withEarlyHints(await handler(req, opts));
 
 		if (setCookie) {
 			response.headers.append("Set-Cookie", createLocaleCookieHeader(setCookie.value));
