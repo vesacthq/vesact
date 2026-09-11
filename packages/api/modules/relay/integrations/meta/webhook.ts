@@ -3,13 +3,11 @@ import { logger } from "@repo/logs";
 import { Hono } from "hono";
 import { bodyLimit } from "hono/body-limit";
 
+import { sha256Hex } from "../../lib/digest";
+
 type Env = { Variables: { requestId: string } };
 
 const encoder = new TextEncoder();
-
-function hex(bytes: ArrayBuffer): string {
-	return Array.from(new Uint8Array(bytes), (byte) => byte.toString(16).padStart(2, "0")).join("");
-}
 
 function parseSignature(header: string | undefined): Uint8Array<ArrayBuffer> | undefined {
 	const digest = /^sha256=([0-9a-f]{64})$/i.exec(header ?? "")?.[1];
@@ -93,7 +91,7 @@ export const metaWebhook = new Hono<Env>()
 
 		await recordRelayInboundEvent({
 			platform: "meta",
-			bodySha256: hex(await crypto.subtle.digest("SHA-256", body)),
+			bodySha256: await sha256Hex(body),
 			payload,
 		});
 

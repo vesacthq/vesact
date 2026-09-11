@@ -374,6 +374,8 @@ Content-Type: application/json
 
 `/v1` 入口中间件链，顺序固定：request ID（`X-Request-Id: req_<ULID>`）→ 取 key → `verifyApiKey` 与错误码映射（`INVALID_API_KEY`、`KEY_NOT_FOUND`、`KEY_EXPIRED`、`KEY_DISABLED` → 401 `UNAUTHORIZED` 且 `data.reason` 保留原码；`RATE_LIMITED` → 429 `TOO_MANY_REQUESTS`；`USAGE_EXCEEDED` → 429 `QUOTA_EXCEEDED`）→ 上下文 `{ requestId, auth: { organizationId, apiKeyId, permissions, key }, trace }` 与 `relayKeyProcedure`（缺 `auth` 时自己抛 401，procedure 挂到别处也安全）→ 限流头 → `waitUntil` 写用量（写失败只记日志）。`/v1/health`、`/v1/openapi.json`、`/v1/docs` 只走 request ID，其余步骤跳过（`hono/combine` 的 `except`）。`/v1` 不设 CORS 头。
 
+幂等（§5.4.3 的语义）由 `lib/idempotency.ts` 的 `idempotent` 中间件实现，挂在具体的 POST 路由上、`relayKey` 之后；A1 没有 POST，A3 的发送端点第一个挂。摘要是原始 body 的 SHA-256，作用域是 `apiKeyId` + 路由模式（`hono/route` 的 `routePath`）。争用靠一条 upsert：插入 `in_flight` 行，或接管 `expiresAt` 已过的行；`in_flight` 行的 `expiresAt` 是 60 秒锁，请求中断后别人能接手，完成后改成 24 小时并存状态码和 body。没抢到就读行：`in_flight` → 409，摘要不同 → 422，否则回放并带 `Idempotent-Replayed: true`。oRPC 把 handler 的异常转成响应后才回到中间件，所以 5xx 也会存下来。
+
 ### 7.2 安全与诊断
 
 接触真实 token 前确认加密保存和密钥分离；OAuth 校验 state、回调与适用的 PKCE；Webhook 验签并限制负载；文件和客户 Webhook URL 做访问控制与 SSRF 防护，不能开放内网地址、元数据地址或任意凭据代理。

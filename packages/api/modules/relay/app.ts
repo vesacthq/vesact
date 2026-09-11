@@ -9,7 +9,7 @@ import { HTTPException } from "hono/http-exception";
 import type { RelayContext } from "./context";
 import { relayHandler } from "./handler";
 import { metaWebhook } from "./integrations/meta/webhook";
-import { errorPayload, internalError, notFoundError, type RelayHttpError } from "./lib/errors";
+import { internalError, notFoundError, reply } from "./lib/errors";
 import { newId } from "./lib/ids";
 import { mapVerifyError, missingKey, rateLimitHeaders } from "./lib/verify";
 
@@ -24,11 +24,6 @@ const requestId = createMiddleware<Env>(async (c, next) => {
 
 function bearerToken(header: string | undefined): string | undefined {
 	return /^Bearer\s+(\S+)$/i.exec(header ?? "")?.[1];
-}
-
-function reply(c: Context<Env>, error: RelayHttpError) {
-	const { status, headers, body } = errorPayload(error);
-	return c.newResponse(body, status, headers);
 }
 
 function background(c: Context<Env>, task: Promise<unknown>) {
