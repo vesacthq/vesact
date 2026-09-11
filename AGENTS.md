@@ -42,7 +42,7 @@ the same `updatekeys`.
 | `secrets/account.<target>.env` | The account Worker: Better Auth secret, Google, mail, R2 |
 | `secrets/database.<env>.env`   | `DATABASE_URL` for migrations, prod and preview          |
 | `secrets/studio.<env>.env`     | Worker secrets, synced on every deploy                   |
-| `secrets/studio.dev.env`       | `apps/studio/.dev.vars` via `pnpm secrets:pull`          |
+| `secrets/<app>.dev.env`        | `apps/<app>/.dev.vars` via `pnpm secrets:pull`           |
 
 Edit with `sops secrets/<file>.env`; never commit a decrypted file.
 
@@ -83,9 +83,13 @@ pnpm dev
 `pnpm dev` starts studio on 3000, marketing on 3001, docs on 3002, account on 3004 and the mail
 preview on 3003. A fresh database has no seed data: register the first account
 through the sign-up page. `push` applies the schema to the local database and
-`studio` opens Drizzle Studio against it. Analytics stays off locally
-(`import.meta.env.PROD` gates it). MinIO only matters for uploads:
-`docker compose up -d minio minio-setup`.
+`studio` opens Drizzle Studio against it. Without `RESEND_API_KEY` mail is
+logged to the console, so verification and magic-link URLs show up in the
+account dev server's output. `pnpm --filter @repo/scripts create:user` creates
+a verified user with a generated password and, on request, the `admin` role;
+that is how the first platform admin comes to exist, later ones are promoted
+from `/admin/users`. Analytics stays off locally (`import.meta.env.PROD` gates
+it). MinIO only matters for uploads: `docker compose up -d minio minio-setup`.
 
 Playwright starts its own dev server on 3100 and fails with `already used` when
 a stray server holds the port; reuse one only with `PW_REUSE_SERVER=1`.
@@ -110,18 +114,21 @@ Required gates:
 1. After every meaningful change, run `pnpm format` and `pnpm lint`.
 2. Before every commit, run `pnpm type-check`.
 3. Run the relevant tests before considering the change complete.
+4. Before pushing, run `pnpm verify`: it is the exact command of CI's lint job,
+   and it catches files a dev server regenerated after your last `pnpm format`.
 
-The root test task runs Vitest in `apps/studio` and `packages/api`.
-Playwright tests are in `apps/marketing/tests` and `apps/studio/e2e`. E2E scripts
-are per app: use `pnpm --filter marketing e2e`, `pnpm --filter marketing e2e:ci`,
-`pnpm --filter studio e2e`, or `pnpm --filter studio e2e:ci`. E2E requires a running
-application and database.
+The root test task runs Vitest in `apps/account`, `apps/marketing`, `apps/studio`,
+`packages/api` and `packages/permissions`. Playwright tests are in
+`apps/marketing/tests`, `apps/account/e2e` and `apps/studio/e2e`; run them per
+app with `pnpm --filter <app> e2e` (UI) or `e2e:ci`. Each config starts its own
+dev server (marketing 3001, studio 3100, account 3200) and needs the database;
+CI's e2e job runs all three with MinIO and generated `.dev.vars`.
 
 ## Monorepo map
 
 ```text
 apps/
-├── account/       # Account center: login, profile, organizations, billing; serves Better Auth
+├── account/       # Account center: login, profile, organizations, billing, platform admin; serves Better Auth
 ├── docs/          # TanStack Start/Fumadocs documentation
 ├── mail-preview/  # React Email preview
 ├── marketing/     # Public site, blog, and content
@@ -249,6 +256,11 @@ keys before showing success UI. Do not rely on a full page reload.
 - Use TanStack Router route loaders and `createServerFn` for server-side work.
 - Use `throw redirect()` and `throw notFound()` from `@tanstack/react-router`.
 - Follow the auth guard in `apps/studio/routes/_authenticated/route.tsx`.
+- List state that belongs in the URL (page, search term) uses the route's
+  `validateSearch` and `getRouteApi(...).useNavigate()`; links out of such a
+  page pass `search={(prev) => ({ from: prev.from })}` so that state stays on
+  the list. nuqs is Studio-only: its TanStack adapter re-renders the whole
+  query string as a path and collapses the `//` inside `from`.
 
 ## Account center & multi-tenancy
 
@@ -316,7 +328,14 @@ Canonical auth example:
   over `permix.getOrThrow(context).check(...)` so the gate does not depend on
   request-middleware setup having completed.
 - Better Auth `organization.*` client endpoints are not covered by Permix;
-  they are guarded by the roles in `packages/auth/lib/access.ts`.
+  they are guarded by the roles in `packages/auth/lib/access.ts`. They also
+  require the caller to be a member, so pages that act on any organization
+  (the platform admin) go through `adminProcedure` instead.
+- The account center has no Permix middleware or provider: routes and
+  components call `checkPermission` with the session user
+  (`admin.access`) or the member's roles (`organization.*`).
+- `admin.access` is `user.role === "admin"`; the `admin()` plugin has no
+  allow-list, so the first admin comes from `create:user` or the database.
 
 ## UI, forms, and i18n
 
@@ -403,7 +422,8 @@ bucket.
   Workers there, so products could not share a login.
 - One Google OAuth client serves every environment; each needs its callback
   `<VITE_ACCOUNT_URL>/api/auth/callback/google` registered in Google Cloud.
-- `vesact.com` redirects to `www` through a Cloudflare Redirect Rule.
+- `vesact.com` and `preview.vesact.com` redirect to their `www` hostnames through
+  Cloudflare Redirect Rules on a proxied `AAAA 100::` record each.
 
 A second product gets its own hostname; the app stays rooted at `/` so that
 origin-relative paths in the template keep working.
