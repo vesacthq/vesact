@@ -496,6 +496,10 @@ with `sops set`, and deploying.
   public on preview exactly as they are in production. The account pages
   themselves stay behind Access. `api.preview.vesact.com/webhooks` is the
   other one, so Meta can reach the preview webhook.
+  The zone's Bot Fight Mode runs before Access and cannot be skipped by a
+  WAF rule on the Free plan; when it challenges the deploy's smoke check the
+  log shows a 403 with `cf-mitigated: challenge`, and the fix is a zone
+  decision (turn it off, or upgrade and exempt the runner), not a workflow one.
 - `auth.vesact.com` and `auth.preview.vesact.com` stay attached to the account
   Workers and answer with a 301 to the `account.` hostname until 2026-12.
 - Preview hostnames live under `preview.vesact.com` rather than `workers.dev`

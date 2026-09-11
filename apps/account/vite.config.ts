@@ -22,6 +22,9 @@ export default defineConfig(({ mode }) => {
 		server: {
 			port: Number.parseInt(process.env.PORT ?? "3004", 10),
 			fs: { allow: [monorepoRoot] },
+			// The dev server would answer the products' preflights itself, without
+			// credentials; the app's own CORS middleware must see them, as in production.
+			cors: false,
 		},
 		plugins: [
 			cloudflare({ viteEnvironment: { name: "ssr" } }),

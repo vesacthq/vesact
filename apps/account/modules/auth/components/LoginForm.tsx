@@ -1,5 +1,5 @@
 import { useAuthErrorMessages } from "@auth/hooks/errors-messages";
-import { sessionQueryKey } from "@auth/lib/api";
+import { refreshSession } from "@auth/lib/api";
 import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import { config as authConfig } from "@repo/auth/config";
@@ -103,7 +103,7 @@ export function LoginForm({ oAuthProviders }: { oAuthProviders: OAuthProvider[] 
 						return;
 					}
 
-					await queryClient.invalidateQueries({ queryKey: sessionQueryKey });
+					await refreshSession(queryClient);
 					navigateTo(router, redirectUrl);
 				} else {
 					const { error } = await authClient.signIn.magicLink({
@@ -137,7 +137,13 @@ export function LoginForm({ oAuthProviders }: { oAuthProviders: OAuthProvider[] 
 
 	const signInWithPasskey = async () => {
 		try {
-			await authClient.signIn.passkey();
+			const { error } = await authClient.signIn.passkey();
+
+			if (error) {
+				throw error;
+			}
+
+			await refreshSession(queryClient);
 			navigateTo(router, redirectUrl);
 		} catch (e) {
 			form.setErrorMap({

@@ -1,6 +1,6 @@
 import type { Session } from "@repo/auth";
 import { authClient } from "@repo/auth/client";
-import { queryOptions, useQuery } from "@tanstack/react-query";
+import { type QueryClient, queryOptions, useQuery } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 
 import { getSession } from "./auth-server.server";
@@ -31,6 +31,15 @@ export const useSessionQuery = (initialData?: Session | null) => {
 		...(initialData ? { initialData } : {}),
 	});
 };
+
+/**
+ * A sign-in changes the answer the guards cached, and the login page may hold
+ * `null` with nothing observing it: read the session again, whatever the
+ * cache says, before the next client-side navigation.
+ */
+export function refreshSession(queryClient: QueryClient) {
+	return queryClient.fetchQuery({ ...sessionQueryOptions(), staleTime: 0 });
+}
 
 export const userAccountQueryKey = ["user", "accounts"] as const;
 export const useUserAccountsQuery = () => {

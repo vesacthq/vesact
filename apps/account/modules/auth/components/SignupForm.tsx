@@ -1,5 +1,6 @@
 import { useAuthErrorMessages } from "@auth/hooks/errors-messages";
 import { useSession } from "@auth/hooks/use-session";
+import { refreshSession } from "@auth/lib/api";
 import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import { config as authConfig } from "@repo/auth/config";
@@ -20,6 +21,7 @@ import { Spinner } from "@repo/ui/components/spinner";
 import { passwordSchema } from "@repo/utils";
 import { PasswordInput } from "@shared/components/PasswordInput";
 import { useForm, useStore } from "@tanstack/react-form";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { AlertTriangleIcon, ArrowRightIcon, MailboxIcon } from "lucide-react";
 import { useEffect } from "react";
@@ -52,6 +54,7 @@ export function SignupForm({
 }) {
 	const t = useTranslations();
 	const router = useRouter();
+	const queryClient = useQueryClient();
 	const { user, loaded: sessionLoaded } = useSession();
 	const { getAuthErrorMessage } = useAuthErrorMessages();
 	const search = useSearch({ strict: false }) as AuthSearch;
@@ -100,6 +103,7 @@ export function SignupForm({
 						throw acceptError;
 					}
 
+					await refreshSession(queryClient);
 					navigateTo(router, redirectUrl);
 				}
 			} catch (e) {
