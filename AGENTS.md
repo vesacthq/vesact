@@ -41,15 +41,18 @@ their age public key to `.sops.yaml` and running `sops updatekeys secrets/*.env`
 rotating CI's key means a new `age-keygen`, `gh secret set SOPS_AGE_KEY`, then
 the same `updatekeys`.
 
-| File                           | Reaches                                                  |
-| ------------------------------ | -------------------------------------------------------- |
-| `secrets/ci.env`               | GitHub Actions: Cloudflare, Turbo, Neon, Access          |
-| `secrets/account.<target>.env` | The account Worker: Better Auth secret, Google, mail, R2 |
-| `secrets/database.<env>.env`   | `DATABASE_URL` for migrations, prod and preview          |
-| `secrets/studio.<env>.env`     | Worker secrets, synced on every deploy                   |
-| `secrets/<app>.dev.env`        | `apps/<app>/.dev.vars` via `pnpm secrets:pull`           |
+| File                           | Reaches                                                                                                                                                         |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `secrets/ci.env`               | GitHub Actions: Cloudflare, Turbo, Neon, Access                                                                                                                 |
+| `secrets/account.<target>.env` | The account Worker: Better Auth secret, Google, mail, R2                                                                                                        |
+| `secrets/database.<env>.env`   | `DATABASE_URL` for migrations, prod and preview                                                                                                                 |
+| `secrets/studio.<env>.env`     | Worker secrets, synced on every deploy                                                                                                                          |
+| `secrets/<app>.dev.env`        | `apps/<app>/.dev.vars` via `pnpm secrets:pull`                                                                                                                  |
+| `secrets/meta.env`             | The Meta app "Vesact": ids, secrets, test tokens; keys explained in `docs/reference/meta.md`; copied into `relay.<target>.env` when Relay deploys               |
+| `secrets/company.yaml`         | Company facts: legal entity, registration numbers, Meta Business ID (keys visible, values encrypted)                                                            |
+| `secrets/files/*`              | Documents and archives encrypted whole (`sops --encrypt --input-type binary --output-type json`); decrypt with `sops -d --input-type json --output-type binary` |
 
-Edit with `sops secrets/<file>.env`; never commit a decrypted file.
+Edit with `sops secrets/<file>`; never commit a decrypted file. Anything under `secrets/` is encrypted by `.sops.yaml`.
 
 Local configuration reaches two runtimes. `.env.local` (copy it from
 `.env.local.example`) feeds the Vite build and the Node-side scripts: `DATABASE_URL`
