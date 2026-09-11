@@ -2,6 +2,11 @@
 
 倒序。只写结论和理由，过程在对应的 issue 里。
 
+## 2026-09-11 Hyperdrive 不缓存查询
+
+- 四个 Hyperdrive 配置（`vesact-db`、`vesact-preview`、`vesact-relay-db`、`vesact-relay-preview`）都关闭查询缓存。只有出现能忍旧数据的热读时，再加一个带缓存的配置，只让那条查询走它。
+- 理由：Hyperdrive 默认缓存只读查询 60 秒，写入不使缓存失效，也没有按查询绕过的手段，官方给的办法就是两个 binding 按查询路由。我们的读几乎都经 Better Auth 和 Drizzle 的同一个 `db`，而且都要求写后立即可见：建组织后列表 30 秒仍为空，Relay 的 key 计数在缓存期内空转、吊销的 key 继续有效。Hyperdrive 的价值在连接池，不在这层缓存。
+
 ## 2026-09-11 文档与进度的机制
 
 - 文档按回答的问题分四类，章节固定：`<app>/product.md`（做什么、给谁）、`<app>/architecture.md`（怎么做，arc42 裁剪的 8 节）、`decisions.md`（为什么）、`reference/`（外部事实，标核对日期）。状态写在 frontmatter（`status: draft | final`、`reviewed`），取代 `.wip.md` 后缀；草稿章节在文内标，不单开文件。范围、验收、顺序只在 issue 里，文档不带任务清单。规范和地图在 docs/README.md。

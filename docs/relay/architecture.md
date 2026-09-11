@@ -416,7 +416,7 @@ Content-Type: application/json
 
 - `BETTER_AUTH_SECRET` 两个 worker 必须同值，否则会话互不认。写进 secrets 的检查项。
 - 插件限流每次校验写一次 key 行。单库扛不住时在前面加 Workers Rate Limiting binding，契约不变。
-- Relay 的 Hyperdrive 必须关闭查询缓存。插件先读 key 行再带条件更新，读到 60 秒内的缓存就会一直更新失败、重读缓存，直到缓存过期；吊销的 key 也会在缓存期内继续有效。Studio 和账号中心的配置保留缓存，两边不共用。
+- Hyperdrive 的查询缓存全部关闭（../decisions.md 2026-09-11）。插件先读 key 行再带条件更新，读到缓存就会一直更新失败、重读缓存，直到缓存过期；吊销的 key 也会在缓存期内继续有效。
 - Meta 一个 App 只能一个回调 URL，指向 prod；preview 只靠 curl 验证。
 - `client.ts` 改导入是模板的六个缝之一，同步上游时留意。
 

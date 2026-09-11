@@ -458,12 +458,14 @@ bucket.
 - Neon project `ancient-morning-26822519` (Singapore), branches `production`
   (default) and `preview`. Manage it with `neonctl` and `NEON_API_KEY` from
   `secrets/ci.env`.
-- Hyperdrive `vesact-db` and `vesact-preview` for studio and account; ids are in
-  `apps/studio/wrangler.jsonc`. Relay has its own pair, `vesact-relay-db` and
-  `vesact-relay-preview`, with query caching disabled: the api-key plugin
-  reads a key row and then updates it under a condition, and Hyperdrive's
-  60-second cache of the read makes that loop until the cache expires and
-  keeps a revoked key alive. Ids are in `apps/relay/wrangler.jsonc`.
+- Hyperdrive `vesact-db` and `vesact-preview` for studio and account (ids in
+  `apps/studio/wrangler.jsonc`), `vesact-relay-db` and `vesact-relay-preview`
+  for relay (ids in `apps/relay/wrangler.jsonc`). All four have query caching
+  disabled: Hyperdrive would otherwise serve a read for up to 60 seconds
+  after a write, and nothing here tolerates that (an organization missing
+  from its list after creation, a revoked key still verifying). Add a cached
+  configuration only for a specific hot read that can be stale, and route
+  just that query through it.
 - One Cloudflare Access application covers `*.preview.vesact.com` with two
   policies: Allow for the owner's email, and Service Auth for the service token
   whose credentials are `CF_ACCESS_CLIENT_ID` / `CF_ACCESS_CLIENT_SECRET` in
