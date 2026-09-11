@@ -289,7 +289,7 @@ each authenticated call writes a `relay_api_usage` row after the response.
 document is generated from the router on request (contracts change only in
 zod, there is no hand-written spec) and Scalar renders it at `/v1/docs`.
 `idempotent` in `lib/idempotency.ts` is mounted per POST route after the key
-check (none yet): it keeps the first response for 24 hours per key, route and
+check (none yet): it keeps the first response for 24 hours per key, path and
 `Idempotency-Key`, replays it for the same body, and answers 422 for another
 body or 409 while the first request runs.
 Errors, even those raised before a procedure, use oRPC's body shape. Relay's
