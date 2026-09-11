@@ -54,6 +54,15 @@ the same `updatekeys`.
 
 Edit with `sops secrets/<file>`; never commit a decrypted file. Anything under `secrets/` is encrypted by `.sops.yaml`.
 
+`secrets/` is part of the project context, encrypted only because the repository
+is public. When a task needs what is in there, decrypt and read it:
+`sops -d secrets/<file>` for `.env` and `.yaml`,
+`sops -d --input-type json --output-type binary secrets/files/<name>.json > /tmp/<name>`
+for documents. Add a document with
+`sops --encrypt --input-type binary --output-type json --filename-override secrets/files/<name>.json <path> > secrets/files/<name>.json`;
+the file name is the index, so make it say what the document is and its date.
+Decrypted values never go into docs, issues, commit messages or chat replies.
+
 Local configuration reaches two runtimes. `.env.local` (copy it from
 `.env.local.example`) feeds the Vite build and the Node-side scripts: `DATABASE_URL`
 for `pnpm --filter @repo/database push | generate | migrate | studio`, and the
