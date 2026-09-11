@@ -23,17 +23,18 @@
 
 ## 地图
 
-| 文件                      | 状态                                                       |
-| ------------------------- | ---------------------------------------------------------- |
-| `decisions.md`            | 定稿                                                       |
-| `relay/product.md`        | 定稿                                                       |
-| `relay/architecture.md`   | 定稿；§5.5 Messaging 领域是草稿，A2 产出                   |
-| `account/architecture.md` | 定稿，已实现                                               |
-| `studio/product.md`       | 草稿                                                       |
-| `studio/architecture.md`  | 草稿                                                       |
-| `shared/design-system.md` | 草稿                                                       |
-| `reference/channels.md`   | 事实：广告到聊天的链路、Zernio 能做什么、App Review 看什么 |
-| `reference/research.md`   | 事实：访谈结论                                             |
+| 文件                      | 状态                                                                             |
+| ------------------------- | -------------------------------------------------------------------------------- |
+| `decisions.md`            | 定稿                                                                             |
+| `relay/product.md`        | 定稿                                                                             |
+| `relay/architecture.md`   | 定稿；§5.5 Messaging 领域是草稿，A2 产出                                         |
+| `account/architecture.md` | 定稿，已实现                                                                     |
+| `studio/product.md`       | 草稿                                                                             |
+| `studio/architecture.md`  | 草稿                                                                             |
+| `shared/design-system.md` | 草稿                                                                             |
+| `reference/channels.md`   | 事实：广告到聊天的链路、Zernio 能做什么、App Review 看什么                       |
+| `reference/research.md`   | 事实：访谈结论                                                                   |
+| `reference/meta.md`       | 事实：Meta 主体、应用、权限、资产、liaodan 残留、到期；凭据在 `secrets/meta.env` |
 
 ## 规则
 
