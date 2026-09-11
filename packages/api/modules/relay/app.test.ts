@@ -60,6 +60,39 @@ describe("GET /v1/health", () => {
 	});
 });
 
+describe("the public routes", () => {
+	it("serves the OpenAPI document without a key", async () => {
+		vi.stubEnv("VITE_RELAY_API_URL", "https://api.example.com");
+		const response = await relayApp.request("/v1/openapi.json");
+		expect(response.status).toBe(200);
+		expect(response.headers.get("X-Request-Id")).toMatch(/^req_/);
+
+		const spec = await response.json();
+		expect(spec.openapi).toMatch(/^3\.1\./);
+		expect(spec.info.title).toBe("Relay API");
+		expect(spec.servers).toEqual([{ url: "https://api.example.com/v1" }]);
+		expect(spec.security).toEqual([{ bearerAuth: [] }]);
+		expect(spec.components.securitySchemes.bearerAuth).toEqual({ type: "http", scheme: "bearer" });
+		expect(spec.paths["/health"].get.security).toEqual([]);
+		expect(Object.keys(spec.paths["/me"].get.responses)).toEqual(
+			expect.arrayContaining(["200", "401", "429"]),
+		);
+		expect(verifyApiKey).not.toHaveBeenCalled();
+		expect(recordRelayApiUsage).not.toHaveBeenCalled();
+		vi.unstubAllEnvs();
+	});
+
+	it("renders the reference page without a key", async () => {
+		const response = await relayApp.request("/v1/docs");
+		expect(response.status).toBe(200);
+		expect(response.headers.get("Content-Type")).toMatch(/text\/html/);
+		const html = await response.text();
+		expect(html).toContain("Scalar.createApiReference");
+		expect(html).toContain("Relay API");
+		expect(verifyApiKey).not.toHaveBeenCalled();
+	});
+});
+
 describe("/v1 authentication", () => {
 	it("rejects a request without a bearer token", async () => {
 		const response = await relayApp.request("/v1/me");

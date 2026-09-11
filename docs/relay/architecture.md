@@ -364,7 +364,7 @@ Content-Type: application/json
 - secrets：`secrets/relay.{prod,preview,dev}.env`，内容是同环境 `studio.*.env` 去掉 `S3_*` 的键（`BETTER_AUTH_SECRET` 必须同值）加 `META_APP_SECRET`、`META_WEBHOOK_VERIFY_TOKEN`。`pnpm secrets:pull` 同时产出 `apps/relay/.dev.vars`。
 - CI：`deploy.yml` 的 `relay` job，`needs: account`，表由 account job 的 migrate 建；`select-target.sh` 给出 relay 的 URL。部署后没有 HTTP 探测：zone 的 Bot Fight Mode 会挑战 runner 的 curl。
 - Cloudflare：preview 的 Access 由 `*.preview.vesact.com` 通配应用覆盖，另有一个路径为 `api.preview.vesact.com/webhooks` 的 Access 应用，策略 Bypass Everyone，Meta 才打得到。Meta 一个 App 只能一个回调 URL，指向 prod；preview 只靠 curl 验证。
-- `GET /v1/health` 无鉴权，返回 `{ "status": "ok" }`。
+- `/v1/health`、`/v1/openapi.json`、`/v1/docs` 无鉴权。spec 由 `OpenAPIReferencePlugin` 每次请求从 router 生成，没有手写副本：`info.title` 是 `Relay API`，`servers` 是 `VITE_RELAY_API_URL` + `/v1`，`components.securitySchemes.bearerAuth` 配全局 `security`，`/health` 用 route 的 `spec` 覆盖成无需鉴权。docs 页是 Scalar，spec 内联，脚本从 jsDelivr 加载，页面里填 key 可以直接调接口。
 
 ## 7. 横切
 
@@ -372,7 +372,7 @@ Content-Type: application/json
 
 `/v1` 用 API key：`Authorization: Bearer <key>`，key 属于组织，由 `@better-auth/api-key`（`references: "organization"`、`defaultPrefix: "relay_"`）签发和校验。创建、吊销、列出走 Better Auth 的端点，需要会话且用户在该组织有 Relay 访问（`relay.access`，见 ../account/architecture.md §5）。端点在账号中心的 worker 上，控制台跨域调用；插件按组织 access control 的 `apiKey` statement 检查每个操作，`packages/auth/lib/access.ts` 把它授予 admin 和 `relay:*` 角色。控制台用账号中心的会话；未登录时照 Studio 的 `loginUrl()` 跳账号中心。成员和 Relay 访问在账号中心的成员页管，Relay 只读。
 
-`/v1` 入口中间件链，顺序固定：request ID（`X-Request-Id: req_<ULID>`）→ 取 key → `verifyApiKey` 与错误码映射（`INVALID_API_KEY`、`KEY_NOT_FOUND`、`KEY_EXPIRED`、`KEY_DISABLED` → 401 `UNAUTHORIZED` 且 `data.reason` 保留原码；`RATE_LIMITED` → 429 `TOO_MANY_REQUESTS`；`USAGE_EXCEEDED` → 429 `QUOTA_EXCEEDED`）→ 上下文 `{ organizationId, apiKeyId, permissions, requestId }` 与 `relayKeyProcedure` → 限流头 → `waitUntil` 写用量（写失败只记日志）。`/v1` 不设 CORS 头。
+`/v1` 入口中间件链，顺序固定：request ID（`X-Request-Id: req_<ULID>`）→ 取 key → `verifyApiKey` 与错误码映射（`INVALID_API_KEY`、`KEY_NOT_FOUND`、`KEY_EXPIRED`、`KEY_DISABLED` → 401 `UNAUTHORIZED` 且 `data.reason` 保留原码；`RATE_LIMITED` → 429 `TOO_MANY_REQUESTS`；`USAGE_EXCEEDED` → 429 `QUOTA_EXCEEDED`）→ 上下文 `{ requestId, auth: { organizationId, apiKeyId, permissions, key }, trace }` 与 `relayKeyProcedure`（缺 `auth` 时自己抛 401，procedure 挂到别处也安全）→ 限流头 → `waitUntil` 写用量（写失败只记日志）。`/v1/health`、`/v1/openapi.json`、`/v1/docs` 只走 request ID，其余步骤跳过（`hono/combine` 的 `except`）。`/v1` 不设 CORS 头。
 
 ### 7.2 安全与诊断
 

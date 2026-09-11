@@ -98,6 +98,44 @@ async function main() {
 		const deleted = await createKey({});
 		await deleteApiKeysByIds([deleted.id]);
 
+		await check(
+			"GET /v1/openapi.json → 3.1 with /health and /me; /me answers 401 and 429",
+			async () => {
+				const response = await fetch(`${baseUrl}/v1/openapi.json`, { headers: accessHeaders() });
+				if (response.status !== 200) {
+					return `got ${response.status}`;
+				}
+				const spec = (await response.json()) as {
+					openapi?: string;
+					security?: unknown[];
+					paths?: Record<string, { get?: { responses?: Record<string, unknown> } }>;
+				};
+				if (!spec.openapi?.startsWith("3.1.")) {
+					return `openapi was ${spec.openapi}`;
+				}
+				if (!spec.paths?.["/health"] || !spec.paths["/me"]) {
+					return `paths were ${Object.keys(spec.paths ?? {}).join(", ")}`;
+				}
+				if (!spec.security?.length) {
+					return "no document-level security";
+				}
+				const responses = Object.keys(spec.paths["/me"].get?.responses ?? {});
+				return (
+					(responses.includes("401") && responses.includes("429")) ||
+					`/me responses were ${responses.join(", ")}`
+				);
+			},
+		);
+
+		await check("GET /v1/docs → HTML reference page", async () => {
+			const response = await fetch(`${baseUrl}/v1/docs`, { headers: accessHeaders() });
+			if (response.status !== 200) {
+				return `got ${response.status}`;
+			}
+			const type = response.headers.get("content-type") ?? "";
+			return type.includes("text/html") || `content-type was ${type}`;
+		});
+
 		await check("no Authorization → 401 UNAUTHORIZED with X-Request-Id", async () => {
 			const { response, body } = await me();
 			const status = expectStatus(response, body, 401, "UNAUTHORIZED", "MISSING_KEY");
