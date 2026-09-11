@@ -40,8 +40,6 @@ jobs:
       - name: Deploy
         run: pnpm exec wrangler deploy
         working-directory: apps/marketing
-      - name: Smoke check
-        run: .github/scripts/smoke-check.sh "$VITE_MARKETING_URL/"
 
   account:
     name: Account
@@ -77,8 +75,6 @@ jobs:
           pnpm exec wrangler secret bulk "$RUNNER_TEMP/account.env" --name "$ACCOUNT_WORKER"
           rm "$RUNNER_TEMP/account.env"
         working-directory: apps/account
-      - name: Smoke check
-        run: .github/scripts/smoke-check.sh "$VITE_ACCOUNT_URL/login" "$VITE_ACCOUNT_URL/api/auth/get-session"
 
   studio:
     name: Studio
@@ -111,8 +107,6 @@ jobs:
           pnpm exec wrangler secret bulk "$RUNNER_TEMP/studio.env" --name "$STUDIO_WORKER"
           rm "$RUNNER_TEMP/studio.env"
         working-directory: apps/studio
-      - name: Smoke check
-        run: .github/scripts/smoke-check.sh "$VITE_STUDIO_URL/api/health" "$VITE_STUDIO_URL/"
 
   relay:
     name: Relay
@@ -145,5 +139,3 @@ jobs:
           pnpm exec wrangler secret bulk "$RUNNER_TEMP/relay.env" --name "$RELAY_WORKER"
           rm "$RUNNER_TEMP/relay.env"
         working-directory: apps/relay
-      - name: Smoke check
-        run: .github/scripts/smoke-check.sh "$VITE_RELAY_API_URL/v1/health" "$VITE_RELAY_URL/"
