@@ -83,6 +83,11 @@ jobs:
     needs: [lint, type-check, build, unit]
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5433/vesact
+      # The client bundles read these; they must name the ports Playwright serves
+      # the apps on, the same ones the .dev.vars below give the Workers.
+      VITE_ACCOUNT_URL: http://localhost:3200
+      VITE_STUDIO_URL: http://localhost:3100
+      VITE_MARKETING_URL: http://localhost:3001
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -134,5 +139,10 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
-          path: apps/studio/playwright-report/
+          path: |
+            apps/marketing/playwright-report/
+            apps/account/playwright-report/
+            apps/account/test-results/
+            apps/studio/playwright-report/
+            apps/studio/test-results/
           retention-days: 30

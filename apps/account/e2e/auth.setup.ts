@@ -15,8 +15,12 @@ async function signIn(
 	await page.getByRole("tab", { name: "Password" }).click();
 	await page.getByRole("textbox", { name: /email/i }).fill(email);
 	await page.locator('input[autocomplete="current-password"]').fill(password);
-	await page.getByRole("button", { name: "Sign in" }).click();
-	await page.waitForURL("**/account");
+	const [response] = await Promise.all([
+		page.waitForResponse((candidate) => candidate.url().includes("/api/auth/sign-in/email")),
+		page.getByRole("button", { name: "Sign in" }).click(),
+	]);
+	expect(response.status(), await response.text()).toBe(200);
+	await expect(page).toHaveURL(/\/account(\?|$)/);
 
 	await context.storageState({ path: statePath });
 	await context.close();
