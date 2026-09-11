@@ -4,11 +4,12 @@ import { logger } from "@repo/logs";
 import { type Context, Hono } from "hono";
 import { except } from "hono/combine";
 import { createMiddleware } from "hono/factory";
+import { HTTPException } from "hono/http-exception";
 
 import type { RelayContext } from "./context";
 import { relayHandler } from "./handler";
 import { metaWebhook } from "./integrations/meta/webhook";
-import { errorPayload, notFoundError, type RelayHttpError } from "./lib/errors";
+import { errorPayload, internalError, notFoundError, type RelayHttpError } from "./lib/errors";
 import { newId } from "./lib/ids";
 import { mapVerifyError, missingKey, rateLimitHeaders } from "./lib/verify";
 
@@ -103,4 +104,12 @@ export const relayApp = new Hono<Env>()
 			? c.newResponse(response.body, response)
 			: reply(c, notFoundError(c.req.method, c.req.path));
 	})
-	.notFound((c) => reply(c, notFoundError(c.req.method, c.req.path)));
+	.notFound((c) => reply(c, notFoundError(c.req.method, c.req.path)))
+	.onError((error, c) => {
+		if (error instanceof HTTPException) {
+			return error.getResponse();
+		}
+
+		logger.error(error, { requestId: c.get("requestId") });
+		return reply(c, internalError());
+	});

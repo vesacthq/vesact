@@ -296,8 +296,8 @@ script's header for the arguments).
 Meta's webhook is `GET`/`POST /webhooks/meta` in
 `packages/api/modules/relay/integrations/meta/webhook.ts`: the handshake checks
 `META_WEBHOOK_VERIFY_TOKEN`, the POST verifies `X-Hub-Signature-256` against
-`META_APP_SECRET` and stores the raw body in `relay_inbound_event`, deduplicated
-by its SHA-256; nothing is parsed yet. Its acceptance run is
+`META_APP_SECRET` and stores the parsed body in `relay_inbound_event`, deduplicated
+by the raw body's SHA-256; nothing is parsed yet. Its acceptance run is
 `pnpm --filter @repo/scripts relay:webhook-acceptance`.
 
 ### Client cache invalidation

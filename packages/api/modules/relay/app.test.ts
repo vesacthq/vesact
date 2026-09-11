@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@repo/auth", () => ({
 	auth: { api: { verifyApiKey: vi.fn() } },
@@ -14,6 +14,7 @@ vi.mock("@repo/logs", () => ({
 
 import { auth } from "@repo/auth";
 import { recordRelayApiUsage } from "@repo/database";
+import { logger } from "@repo/logs";
 
 import { relayApp } from "./app";
 
@@ -51,6 +52,10 @@ beforeEach(() => {
 	vi.clearAllMocks();
 });
 
+afterEach(() => {
+	vi.unstubAllEnvs();
+});
+
 describe("GET /v1/health", () => {
 	it("answers without a key", async () => {
 		const response = await relayApp.request("/v1/health");
@@ -79,7 +84,6 @@ describe("the public routes", () => {
 		);
 		expect(verifyApiKey).not.toHaveBeenCalled();
 		expect(recordRelayApiUsage).not.toHaveBeenCalled();
-		vi.unstubAllEnvs();
 	});
 
 	it("renders the reference page without a key", async () => {
@@ -131,6 +135,26 @@ describe("/v1 authentication", () => {
 		expect(response.status).toBe(429);
 		expect(response.headers.get("Retry-After")).toBe("5");
 		expect(await response.json()).toMatchObject({ code: "TOO_MANY_REQUESTS", status: 429 });
+	});
+
+	it("answers 500 in the same error shape when verifying the key throws", async () => {
+		verifyApiKey.mockRejectedValueOnce(new Error("connection refused"));
+		const response = await relayApp.request("/v1/me", {
+			headers: { Authorization: "Bearer relay_good" },
+		});
+		expect(response.status).toBe(500);
+		expect(response.headers.get("X-Request-Id")).toMatch(/^req_/);
+		expect(await response.json()).toEqual({
+			defined: false,
+			code: "INTERNAL_SERVER_ERROR",
+			status: 500,
+			message: "Internal server error",
+		});
+		expect(logger.error).toHaveBeenCalledWith(
+			expect.any(Error),
+			expect.objectContaining({ requestId: response.headers.get("X-Request-Id") }),
+		);
+		expect(recordRelayApiUsage).not.toHaveBeenCalled();
 	});
 
 	it("turns an exhausted quota into 429 QUOTA_EXCEEDED", async () => {
