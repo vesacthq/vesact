@@ -25,19 +25,18 @@ export const ac = createAccessControl(statement);
 const everyProduct = {
 	studio: ["access", "manage"],
 	relay: ["access", "manage"],
-	apiKey: ["create", "read", "update", "delete"],
 } as const;
 
 // Relay's API keys belong to the organization; the api-key plugin checks
 // these actions on its own endpoints.
-const relayKeys = { apiKey: ["create", "read", "update", "delete"] } as const;
+const apiKeys = { apiKey: ["create", "read", "update", "delete"] } as const;
 
 export const roles = {
-	owner: ac.newRole({ ...ownerAc.statements, ...everyProduct }),
-	admin: ac.newRole({ ...adminAc.statements, ...everyProduct }),
+	owner: ac.newRole({ ...ownerAc.statements, ...everyProduct, ...apiKeys }),
+	admin: ac.newRole({ ...adminAc.statements, ...everyProduct, ...apiKeys }),
 	member: ac.newRole({ ...memberAc.statements }),
 	"studio:admin": ac.newRole({ studio: ["access", "manage"] }),
 	"studio:member": ac.newRole({ studio: ["access"] }),
-	"relay:admin": ac.newRole({ relay: ["access", "manage"], ...relayKeys }),
-	"relay:developer": ac.newRole({ relay: ["access"], ...relayKeys }),
+	"relay:admin": ac.newRole({ relay: ["access", "manage"], ...apiKeys }),
+	"relay:developer": ac.newRole({ relay: ["access"], ...apiKeys }),
 };

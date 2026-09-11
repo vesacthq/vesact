@@ -3,7 +3,6 @@ import { recordRelayApiUsage } from "@repo/database";
 import { logger } from "@repo/logs";
 import { type Context, Hono } from "hono";
 import { createMiddleware } from "hono/factory";
-import { timing } from "hono/timing";
 
 import type { RelayContext } from "./context";
 import { relayHandler } from "./handler";
@@ -86,7 +85,6 @@ const relayKey = createMiddleware<Env>(async (c, next) => {
 
 export const relayApp = new Hono<Env>()
 	.use("/v1/*", requestId)
-	.use("/v1/*", timing())
 	.get("/v1/health", (c) => c.json({ status: "ok" }))
 	.use("/v1/*", relayKey)
 	.all("/v1/*", async (c) => {
