@@ -22,7 +22,7 @@
 	"hyperdrive": [
 		{
 			"binding": "HYPERDRIVE",
-			"id": "44e2ab6c84854ade9fe521c963bb55f9",
+			"id": "e315ab6ab7df4ab994a998b58d386e46",
 			"localConnectionString": "postgresql://postgres:postgres@localhost:5433/vesact",
 		},
 	],
@@ -46,7 +46,7 @@
 			"hyperdrive": [
 				{
 					"binding": "HYPERDRIVE",
-					"id": "fb0bfe560d4d48fa8fed9078ad1eeade",
+					"id": "797530bd947f4a5f8ca1b10a9ae2d176",
 					"localConnectionString": "postgresql://postgres:postgres@localhost:5433/vesact",
 				},
 			],

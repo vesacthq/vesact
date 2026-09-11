@@ -453,8 +453,12 @@ bucket.
 - Neon project `ancient-morning-26822519` (Singapore), branches `production`
   (default) and `preview`. Manage it with `neonctl` and `NEON_API_KEY` from
   `secrets/ci.env`.
-- Hyperdrive `vesact-db` and `vesact-preview`; ids are in
-  `apps/studio/wrangler.jsonc`.
+- Hyperdrive `vesact-db` and `vesact-preview` for studio and account; ids are in
+  `apps/studio/wrangler.jsonc`. Relay has its own pair, `vesact-relay-db` and
+  `vesact-relay-preview`, with query caching disabled: the api-key plugin
+  reads a key row and then updates it under a condition, and Hyperdrive's
+  60-second cache of the read makes that loop until the cache expires and
+  keeps a revoked key alive. Ids are in `apps/relay/wrangler.jsonc`.
 - One Cloudflare Access application covers `*.preview.vesact.com` with two
   policies: Allow for the owner's email, and Service Auth for the service token
   whose credentials are `CF_ACCESS_CLIENT_ID` / `CF_ACCESS_CLIENT_SECRET` in
