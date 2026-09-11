@@ -463,6 +463,10 @@ path (`docs/relay/architecture.md` §2). The Cloudflare Vite plugin flattens the
 `.output/server/wrangler.json` at build time, so `CLOUDFLARE_ENV` is set for the
 build and `wrangler deploy` takes no `--env`. Preview builds leave
 `VITE_POSTHOG_KEY` unset so their events stay out of production analytics.
+`apps/<app>/public/_headers` marks `/assets/*` immutable for a year: Workers static
+assets otherwise answer `max-age=0, must-revalidate`, so browsers revalidate
+every hashed file on every page. The file applies to static assets only, never
+to Worker responses.
 
 The preview database is one shared Neon branch; run the "Reset preview database"
 workflow to copy it fresh from production. Preview shares the production R2
