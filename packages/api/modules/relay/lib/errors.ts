@@ -1,8 +1,13 @@
 import { ORPCError } from "@orpc/client";
 
 export interface RelayHttpError {
-	status: 401 | 404 | 429;
-	code: "UNAUTHORIZED" | "NOT_FOUND" | "TOO_MANY_REQUESTS" | "QUOTA_EXCEEDED";
+	status: 401 | 404 | 429 | 500;
+	code:
+		| "UNAUTHORIZED"
+		| "NOT_FOUND"
+		| "TOO_MANY_REQUESTS"
+		| "QUOTA_EXCEEDED"
+		| "INTERNAL_SERVER_ERROR";
 	message: string;
 	data?: { reason: string };
 	retryAfterSeconds?: number;
@@ -40,6 +45,10 @@ export function errorPayload(error: RelayHttpError): ErrorPayload {
 
 export function notFoundError(method: string, pathname: string): RelayHttpError {
 	return { status: 404, code: "NOT_FOUND", message: `No route for ${method} ${pathname}` };
+}
+
+export function internalError(): RelayHttpError {
+	return { status: 500, code: "INTERNAL_SERVER_ERROR", message: "Internal server error" };
 }
 
 export function notFoundResponse(method: string, pathname: string): Response {

@@ -30,7 +30,7 @@ function parseSignature(header: string | undefined): Uint8Array<ArrayBuffer> | u
  * Meta signs the raw body with the app secret. Verifying inside Web Crypto
  * keeps the comparison constant-time.
  */
-export async function verifyMetaSignature(
+async function verifyMetaSignature(
 	secret: string,
 	body: ArrayBuffer,
 	header: string | undefined,

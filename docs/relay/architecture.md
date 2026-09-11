@@ -235,7 +235,7 @@ Stripe 的错误文档将某些服务端错误明确视为不确定结果；借�
     → 更新领域数据并可靠记录待发送事件
 ```
 
-Meta 的入口是 `GET`/`POST /webhooks/meta`，代码在 `integrations/meta/webhook.ts`。GET 是订阅握手：`hub.mode=subscribe` 且 `hub.verify_token` 等于 `META_WEBHOOK_VERIFY_TOKEN` 才回 `hub.challenge`，否则 403。POST 读原始 body（上限 5 MB），`X-Hub-Signature-256` 与 `HMAC-SHA256(body, META_APP_SECRET)` 在 Web Crypto 里做常量时间比较；不匹配 401 且不落库，匹配则整个 body 作为一行写入 `relay_inbound_event`（`platform=meta`，`bodySha256` 唯一，重复投递静默忽略），写入成功后才回 200，失败 500 让 Meta 重试。这一步不解析事件，`processedAt` 留给 A3 的处理链；Meta 一批最多 1000 条更新，拆分与按事件身份去重都在那一步。
+Meta 的入口是 `GET`/`POST /webhooks/meta`，代码在 `integrations/meta/webhook.ts`。GET 是订阅握手：`hub.mode=subscribe` 且 `hub.verify_token` 等于 `META_WEBHOOK_VERIFY_TOKEN` 才回 `hub.challenge`，否则 403。POST 读原始 body（上限 5 MB），`X-Hub-Signature-256` 与 `HMAC-SHA256(body, META_APP_SECRET)` 在 Web Crypto 里做常量时间比较；不匹配 401 且不落库，匹配则解析后的 JSON 作为一行写入 `relay_inbound_event`（`platform=meta`，`bodySha256` 是原始字节的摘要，唯一，重复投递静默忽略），写入成功后才回 200，失败 500 让 Meta 重试。这一步不解析事件，`processedAt` 留给 A3 的处理链；Meta 一批最多 1000 条更新，拆分与按事件身份去重都在那一步。
 
 出站：
 
@@ -364,7 +364,7 @@ Content-Type: application/json
 - secrets：`secrets/relay.{prod,preview,dev}.env`，内容是同环境 `studio.*.env` 去掉 `S3_*` 的键（`BETTER_AUTH_SECRET` 必须同值）加 `META_APP_SECRET`、`META_WEBHOOK_VERIFY_TOKEN`。`pnpm secrets:pull` 同时产出 `apps/relay/.dev.vars`。
 - CI：`deploy.yml` 的 `relay` job，`needs: account`，表由 account job 的 migrate 建；`select-target.sh` 给出 relay 的 URL。部署后没有 HTTP 探测：zone 的 Bot Fight Mode 会挑战 runner 的 curl。
 - Cloudflare：preview 的 Access 由 `*.preview.vesact.com` 通配应用覆盖，另有一个路径为 `api.preview.vesact.com/webhooks` 的 Access 应用，策略 Bypass Everyone，Meta 才打得到。Meta 一个 App 只能一个回调 URL，指向 prod；preview 只靠 curl 验证。
-- `/v1/health`、`/v1/openapi.json`、`/v1/docs` 无鉴权。spec 由 `OpenAPIReferencePlugin` 每次请求从 router 生成，没有手写副本：`info.title` 是 `Relay API`，`servers` 是 `VITE_RELAY_API_URL` + `/v1`，`components.securitySchemes.bearerAuth` 配全局 `security`，`/health` 用 route 的 `spec` 覆盖成无需鉴权。docs 页是 Scalar，spec 内联，脚本从 jsDelivr 加载，页面里填 key 可以直接调接口。
+- `/v1/health`、`/v1/openapi.json`、`/v1/docs` 无鉴权。spec 由 `OpenAPIReferencePlugin` 每次请求从 router 生成，没有手写副本：`info.title` 是 `Relay API`，`servers` 是 `VITE_RELAY_API_URL` + `/v1`，`components.securitySchemes.bearerAuth` 配全局 `security`，`/health` 用 route 的 `spec` 覆盖成无需鉴权。docs 页是 Scalar，spec 内联，脚本从 jsDelivr 加载，页面里填 key 可以直接调接口；要在 `api.` 域打开，`servers` 指向那里而 `/v1` 不设 CORS，从 `relay.` 域打开的页面调不到接口。
 
 ## 7. 横切
 
