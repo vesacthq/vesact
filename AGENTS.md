@@ -211,8 +211,8 @@ pnpm --filter @repo/database studio
 ```
 
 Do not hand-edit generated Drizzle migration files or route trees:
-`apps/marketing/routeTree.gen.ts`, `apps/studio/routeTree.gen.ts`, and
-`apps/docs/src/routeTree.gen.ts` are generated. Marketing content collections under
+`apps/marketing/routeTree.gen.ts`, `apps/studio/routeTree.gen.ts`,
+`apps/account/routeTree.gen.ts`, and `apps/docs/src/routeTree.gen.ts` are generated. Marketing content collections under
 `apps/marketing/.content-collections/` are also generated.
 
 ### Notifications
