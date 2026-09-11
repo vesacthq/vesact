@@ -15,21 +15,43 @@ import { Input } from "@repo/ui/components/input";
 import { Spinner } from "@repo/ui/components/spinner";
 import { toast } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
-import { useForm } from "@tanstack/react-form";
+import { useForm, useStore } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
 import { ArrowRightIcon } from "lucide-react";
+import { useEffect } from "react";
 import { z } from "zod";
 
 const organizationFormSchema = z.object({
 	name: z.string().min(1),
 });
 
+type AdminOrganization = NonNullable<ReturnType<typeof useAdminOrganizationQuery>["data"]>;
+
 export function OrganizationForm({ organizationId }: { organizationId: string }) {
+	const router = useRouter();
+	const isEditing = organizationId !== "new";
+	const { data: organization, isError } = useAdminOrganizationQuery(organizationId);
+
+	useEffect(() => {
+		if (isEditing && isError) {
+			void router.navigate({ to: "/admin/organizations", search: true, replace: true });
+		}
+	}, [isEditing, isError, router]);
+
+	if (isEditing && !organization) {
+		return <Spinner className="size-6 mx-auto text-primary" />;
+	}
+
+	// The router keeps this component mounted when /new becomes /$id; the key
+	// gives the saved organization a fresh form instead of the create form's state.
+	return <OrganizationFormFields key={organization?.id ?? "new"} organization={organization} />;
+}
+
+function OrganizationFormFields({ organization }: { organization: AdminOrganization | undefined }) {
 	const t = useTranslations();
 	const router = useRouter();
-
-	const { data: organization } = useAdminOrganizationQuery(organizationId);
+	const organizationId = organization?.id ?? "new";
 
 	const updateOrganizationMutation = useUpdateOrganizationMutation();
 	const createOrganizationMutation = useCreateOrganizationMutation();
@@ -71,7 +93,8 @@ export function OrganizationForm({ organizationId }: { organizationId: string })
 				toast.add({ title: t("admin.organizations.form.notifications.success"), type: "success" });
 
 				if (!organization) {
-					void router.navigate({
+					// Awaited so the create form stays disabled until the edit route has replaced it.
+					await router.navigate({
 						to: "/admin/organizations/$organizationId",
 						params: { organizationId: newOrganization.id },
 						search: true,
@@ -84,7 +107,7 @@ export function OrganizationForm({ organizationId }: { organizationId: string })
 		},
 	});
 
-	const isSaving = updateOrganizationMutation.isPending || createOrganizationMutation.isPending;
+	const isSaving = useStore(form.store, (state) => state.isSubmitting);
 
 	return (
 		<div className="gap-4 grid grid-cols-1">

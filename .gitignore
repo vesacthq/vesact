@@ -12,6 +12,7 @@ playwright-report/
 test-results/
 **/test-results/
 **/playwright-report/
+**/e2e/.auth/
 
 # apps
 out/
