@@ -5,7 +5,7 @@ reviewed: 2026-09-11
 
 # Meta
 
-本文回答 Meta 这边我们有什么、缺什么、什么时候到期。凭据在 `secrets/meta.env`（键的含义见 §8），盘点原件整体加密在 `secrets/files/meta-inventory-2026-09-11.md.json`。来源：开发者后台、Business Suite、liaodan 生产库，2026-09-11 核对。
+本文回答 Meta 这边我们有什么、缺什么、什么时候到期。凭据在 `secrets/meta.env`（键的含义见 §9），盘点原件整体加密在 `secrets/files/meta-inventory-2026-09-11.md.json`。来源：开发者后台、Business Suite、liaodan 生产库，2026-09-11 核对。
 
 ## 1. 主体与验证
 
@@ -32,7 +32,19 @@ reviewed: 2026-09-11
 
 账号下另有 7 个应用（Mutual AI agent、CEO Assistant、AI-CRM、Trenz、Mutual Fulfillment、Muutal dropshipping、Trenz - WABA 测试应用），与 Vesact 无关，未盘点。
 
-## 3. 权限
+## 3. 授权入口
+
+三条入口，一条对一个渠道，终点都是一个 token 加几个资产 ID，落在 Relay 的 Connection 上（A2 设计）。Facebook Login（个人账号）不用，登录走 Google。
+
+| 渠道              | 入口                        | 应用那边                                         | Relay 代码 |
+| ----------------- | --------------------------- | ------------------------------------------------ | ---------- |
+| Messenger（Page） | Facebook Login for Business | 已配好；§4 两个 Page 的 token 就是这么来的       | A3         |
+| Instagram         | Instagram Login             | `instagram_business_*` 已批；§4 的 IG token 同上 | A3         |
+| WhatsApp          | Embedded Signup             | Tech Provider 已过，configuration ID 在 secrets  | A5         |
+
+Embedded Signup 是 Facebook Login for Business 的 WhatsApp 专用版：Meta 托管的弹窗，客户选企业、建 WABA、加号码、授权，返回一个 code 换 token。
+
+## 4. 权限
 
 Instagram 用的是 `instagram_business_*` 这一族（Instagram API with Instagram Login）。`instagram_*` 是经 Facebook Login 的另一族，两族名字不能互推。
 
@@ -67,7 +79,20 @@ A3（#67）要的五个权限已经全部批了，A3 不用再提交审核。A4 
 
 被拒原因没读出来，详情页超时。
 
-## 4. 资产与 token
+### 申请顺序
+
+四批，串行，每批跟一个页面做完，因为录屏要演示权限在应用里的用法。同一批放一次提交。批和批之间不能并行；能并行的是不依赖代码的外部事项（法务三页、改应用 URL、TikTok 账号）。
+
+| 批  | 什么时候           | 提交什么                                                                               |
+| --- | ------------------ | -------------------------------------------------------------------------------------- |
+| 0   | 现在               | Human Agent 重提，先读两次拒绝原因；顺手核 business_management 的应用级状态            |
+| 1   | A4 评论页做完      | pages_read_user_content、pages_manage_engagement、instagram_business_manage_comments   |
+| 2   | A4 发帖页做完      | pages_manage_posts、instagram_business_content_publish；Threads 见 #76                 |
+| 3   | 数据页或广告页做完 | read_insights、instagram_business_manage_insights、ads_read（先加 Marketing API 用例） |
+
+A3 的消息功能不在表里，权限已经全批。ads_management、TikTok、YouTube、Google Ads 在这四批之后。
+
+## 5. 资产与 token
 
 | 资产                            | ID                                                         | 用途             | token                                                 |
 | ------------------------------- | ---------------------------------------------------------- | ---------------- | ----------------------------------------------------- |
@@ -80,7 +105,7 @@ A3（#67）要的五个权限已经全部批了，A3 不用再提交审核。A4 
 
 这些 token 在 A3 的 OAuth 做出来之前用来手工测试。
 
-## 5. 旧项目残留（liaodan）
+## 6. 旧项目残留（liaodan）
 
 liaodan 是上一个产品，要关掉；应用保留。下面这些从 liaodan 改成 Relay：
 
@@ -95,7 +120,7 @@ liaodan 是上一个产品，要关掉；应用保留。下面这些从 liaodan 
 
 顺序：vesact.com 法务三页 → 改应用的 URL 与邮箱 → Human Agent 审核结束 → Relay 的 webhook 上线 → 关 liaodan。审核进行中改 URL 没有问题，但审核员会打开网站，liaodan.ai 至少活到这次审核结束。
 
-## 6. 到期与提醒
+## 7. 到期与提醒
 
 | 日期       | 事项                                                         |
 | ---------- | ------------------------------------------------------------ |
@@ -105,11 +130,11 @@ liaodan 是上一个产品，要关掉；应用保留。下面这些从 liaodan 
 | 2026-12-04 | Alexis B Dream 同上                                          |
 | 每年       | 已批权限要续期，续期跟着 Data Use Checkup                    |
 
-## 7. 未核对
+## 8. 未核对
 
 Facebook Login 的回调白名单、后台各 webhook 配置页、App roles 名单、Alert Inbox 的 5 条、三次被拒的原因。用到时再查。
 
-## 8. `secrets/meta.env` 的键
+## 9. `secrets/meta.env` 的键
 
 | 键                                                     | 是什么                                                    |
 | ------------------------------------------------------ | --------------------------------------------------------- |
