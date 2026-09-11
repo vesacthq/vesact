@@ -1,6 +1,6 @@
 import { claimIdempotencyKey, completeIdempotencyKey, findIdempotencyKey } from "@repo/database";
+import { logger } from "@repo/logs";
 import { createMiddleware } from "hono/factory";
-import { routePath } from "hono/route";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 
 import type { RelayContext } from "../context";
@@ -14,7 +14,7 @@ const responseTtlMs = 24 * 60 * 60 * 1000;
 /** A request that has not completed by then lost its claim; a retry takes over. */
 const lockMs = 60 * 1000;
 
-export function keyTooLong(): RelayHttpError {
+function keyTooLong(): RelayHttpError {
 	return {
 		status: 400,
 		code: "BAD_REQUEST",
@@ -22,7 +22,7 @@ export function keyTooLong(): RelayHttpError {
 	};
 }
 
-export function inFlight(): RelayHttpError {
+function inFlight(): RelayHttpError {
 	return {
 		status: 409,
 		code: "IDEMPOTENCY_IN_FLIGHT",
@@ -30,7 +30,7 @@ export function inFlight(): RelayHttpError {
 	};
 }
 
-export function conflict(): RelayHttpError {
+function conflict(): RelayHttpError {
 	return {
 		status: 422,
 		code: "IDEMPOTENCY_CONFLICT",
@@ -38,11 +38,7 @@ export function conflict(): RelayHttpError {
 	};
 }
 
-/**
- * Mount on one POST route, after `relayKey`. The first response is kept for
- * 24 hours under (key id, route, Idempotency-Key) and replayed for the same
- * body; a different body is a conflict, a request still running a 409.
- */
+/** Mount on one POST route, after `relayKey`. */
 export const idempotent = createMiddleware<Env>(async (c, next) => {
 	const key = c.req.header("Idempotency-Key");
 
@@ -60,7 +56,7 @@ export const idempotent = createMiddleware<Env>(async (c, next) => {
 		throw new Error("idempotent must run after relayKey");
 	}
 
-	const scope = { apiKeyId, routeKey: routePath(c), key };
+	const scope = { apiKeyId, routeKey: c.req.path, key };
 	const requestHash = await sha256Hex(await c.req.raw.clone().arrayBuffer());
 	const claimed = await claimIdempotencyKey(scope, requestHash, new Date(Date.now() + lockMs));
 
@@ -83,9 +79,13 @@ export const idempotent = createMiddleware<Env>(async (c, next) => {
 
 	await next();
 
+	// The handler's side effects happened; a failed write must not turn its
+	// answer into a 500 that invites a retry. The lock then lapses on its own.
 	await completeIdempotencyKey(scope, {
 		responseStatus: c.res.status,
 		responseBody: await c.res.clone().text(),
 		expiresAt: new Date(Date.now() + responseTtlMs),
+	}).catch((error: unknown) => {
+		logger.error(error, { ctx: "completeIdempotencyKey", requestId: c.get("requestId") });
 	});
 });

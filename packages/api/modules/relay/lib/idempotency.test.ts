@@ -13,6 +13,10 @@ const rows = new Map<string, Row>();
 const scopeKey = (scope: { apiKeyId: string; routeKey: string; key: string }) =>
 	`${scope.apiKeyId}|${scope.routeKey}|${scope.key}`;
 
+vi.mock("@repo/logs", () => ({
+	logger: { error: vi.fn(), warn: vi.fn(), log: vi.fn() },
+}));
+
 vi.mock("@repo/database", () => ({
 	claimIdempotencyKey: vi.fn(async (scope, requestHash: string, lockUntil: Date) => {
 		const existing = rows.get(scopeKey(scope));
@@ -51,6 +55,7 @@ vi.mock("@repo/database", () => ({
 }));
 
 import { completeIdempotencyKey } from "@repo/database";
+import { logger } from "@repo/logs";
 
 import type { RelayContext } from "../context";
 import { idempotent } from "./idempotency";
@@ -84,6 +89,10 @@ function build(apiKeyId = "key_1") {
 		.post("/v1/failing", idempotent, (c) => {
 			handled.push("failing");
 			return c.json({ code: "BAD_GATEWAY", status: 502 }, 502);
+		})
+		.post("/v1/things/:id/replies", idempotent, (c) => {
+			handled.push(`reply:${c.req.param("id")}`);
+			return c.json({ thing: c.req.param("id") }, 201);
 		});
 }
 
@@ -195,12 +204,27 @@ describe("idempotent", () => {
 		expect(handled).toEqual(["a"]);
 	});
 
-	it("scopes keys by API key and route", async () => {
+	it("scopes keys by API key and request path, path parameters included", async () => {
 		const app = build();
 		await post(app, "/v1/things", { name: "a" }, "k1");
 		expect((await post(build("key_2"), "/v1/things", { name: "a" }, "k1")).status).toBe(201);
 		expect((await post(app, "/v1/failing", { name: "a" }, "k1")).status).toBe(502);
-		expect(handled).toEqual(["a", "a", "failing"]);
+		await post(app, "/v1/things/1/replies", { name: "a" }, "k1");
+		const other = await post(app, "/v1/things/2/replies", { name: "a" }, "k1");
+		expect(other.headers.get("Idempotent-Replayed")).toBeNull();
+		expect(await other.json()).toEqual({ thing: "2" });
+		expect(handled).toEqual(["a", "a", "failing", "reply:1", "reply:2"]);
+	});
+
+	it("returns the handler's response even when storing it fails", async () => {
+		vi.mocked(completeIdempotencyKey).mockRejectedValueOnce(new Error("connection reset"));
+		const response = await post(build(), "/v1/things", { name: "a" }, "k1");
+		expect(response.status).toBe(201);
+		expect(await response.json()).toEqual({ id: 1, name: "a" });
+		expect(logger.error).toHaveBeenCalledWith(
+			expect.any(Error),
+			expect.objectContaining({ ctx: "completeIdempotencyKey", requestId: "req_test" }),
+		);
 	});
 
 	it("stores and replays a 5xx response too", async () => {
