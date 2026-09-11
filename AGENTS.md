@@ -448,7 +448,10 @@ build and `wrangler deploy` takes no `--env`. Preview builds leave
 
 The preview database is one shared Neon branch; run the "Reset preview database"
 workflow to copy it fresh from production. Preview shares the production R2
-bucket.
+bucket. The `avatars` bucket's CORS rule allows `PUT` from
+`account.vesact.com` and `account.preview.vesact.com`, the only hostnames that
+upload from the browser; a new uploading hostname has to be added there or the
+presigned PUT fails with a CORS error.
 
 ### Accounts and resources
 
