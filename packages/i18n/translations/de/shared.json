@@ -75,7 +75,8 @@
 			"specialCharacter": "Sonderzeichen"
 		},
 		"aria": {
-			"language": "Sprache"
+			"language": "Sprache",
+			"openMenu": "Menü öffnen"
 		},
 		"colorMode": {
 			"system": "System",

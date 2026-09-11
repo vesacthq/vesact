@@ -124,12 +124,12 @@ app with `pnpm --filter <app> e2e` (UI) or `e2e:ci`. Each config starts its own
 dev server (marketing 3001, studio 3100, account 3200). The account suite signs
 in through the login page as two users that `e2e/auth.setup.ts` seeds straight
 into the database (`e2e/fixtures/users.ts`), so it needs Postgres with the
-schema pushed; run it locally as `PW_PORT=3004 pnpm --filter account e2e`, on
-the port the app's `.dev.vars` and `.env.local` already name, otherwise Better
-Auth rejects the sign-in as a foreign origin. CI's e2e job starts Postgres and
-MinIO, pushes the schema and runs all three suites with generated `.dev.vars`
-and job-level `VITE_*` URLs for the same ports; the workflow-level ones name
-the regular dev ports and would send the browser to a server that is not there.
+schema pushed. Its config serves the app on the port `VITE_ACCOUNT_URL` names
+(3004 locally, from `.env.local`), the only port at which the client bundle,
+the Worker and the server agree; stop a running account dev server first or set
+`PW_REUSE_SERVER=1`. CI's e2e job starts Postgres and MinIO, pushes the schema
+and runs all three suites with generated `.dev.vars` and job-level `VITE_*`
+URLs for the ports it serves.
 
 ## Monorepo map
 

@@ -7,8 +7,13 @@ import dotenv from "dotenv";
 const configDir = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(configDir, "../../.env.local") });
 
-/** Port for the app under test (override with `PW_PORT` if needed). */
-const e2ePort = process.env.PW_PORT ?? "3200";
+/**
+ * The app is served on the port its advertised URL names, so the client bundle,
+ * the Worker and the server Playwright starts agree. Override with `PW_PORT`.
+ */
+const e2ePort =
+	process.env.PW_PORT ??
+	(new URL(process.env.VITE_ACCOUNT_URL ?? "http://localhost:3200").port || "3200");
 const baseURL = `http://localhost:${e2ePort}`;
 
 /**
