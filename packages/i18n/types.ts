@@ -1,6 +1,7 @@
 import type accountMessages from "./translations/en/account.json";
 import type mailMessages from "./translations/en/mail.json";
 import type marketingMessages from "./translations/en/marketing.json";
+import type relayMessages from "./translations/en/relay.json";
 import type sharedMessages from "./translations/en/shared.json";
 import type studioMessages from "./translations/en/studio.json";
 
@@ -40,4 +41,5 @@ export type SharedMessages = typeof sharedMessages;
 export type MarketingMessages = typeof marketingMessages & SharedMessages;
 export type StudioMessages = typeof studioMessages & SharedMessages;
 export type AccountMessages = typeof accountMessages & SharedMessages;
+export type RelayMessages = typeof relayMessages & SharedMessages;
 export type MailMessages = typeof mailMessages;

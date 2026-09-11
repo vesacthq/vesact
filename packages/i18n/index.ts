@@ -19,6 +19,7 @@ export type {
 	AccountMessages,
 	MailMessages,
 	MarketingMessages,
+	RelayMessages,
 	StudioMessages,
 	SharedMessages,
 } from "./types";

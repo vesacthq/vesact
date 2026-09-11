@@ -113,3 +113,37 @@ jobs:
         working-directory: apps/studio
       - name: Smoke check
         run: .github/scripts/smoke-check.sh "$VITE_STUDIO_URL/api/health" "$VITE_STUDIO_URL/"
+
+  relay:
+    name: Relay
+    needs: account
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Select target
+        run: .github/scripts/select-target.sh
+      - name: Install sops
+        run: .github/scripts/install-sops.sh
+      - name: Load CI secrets
+        run: .github/scripts/load-env.sh secrets/ci.env
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm --filter relay build
+      - name: Deploy
+        run: pnpm exec wrangler deploy
+        working-directory: apps/relay
+      - name: Sync secrets
+        run: |
+          sops -d "../../secrets/relay.$TARGET.env" > "$RUNNER_TEMP/relay.env"
+          pnpm exec wrangler secret bulk "$RUNNER_TEMP/relay.env" --name "$RELAY_WORKER"
+          rm "$RUNNER_TEMP/relay.env"
+        working-directory: apps/relay
+      - name: Smoke check
+        run: .github/scripts/smoke-check.sh "$VITE_RELAY_API_URL/v1/health" "$VITE_RELAY_URL/"

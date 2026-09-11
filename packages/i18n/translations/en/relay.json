@@ -1,0 +1,11 @@
+{
+	"home": {
+		"signedInAs": "Signed in as {email}",
+		"accountCenter": "Account center"
+	},
+	"errors": {
+		"title": "Something went wrong",
+		"retry": "Try again",
+		"home": "Back to home"
+	}
+}

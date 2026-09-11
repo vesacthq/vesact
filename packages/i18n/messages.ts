@@ -7,26 +7,31 @@ import { normalizeLocale } from "./shared";
 import deAccount from "./translations/de/account.json";
 import deMail from "./translations/de/mail.json";
 import deMarketing from "./translations/de/marketing.json";
+import deRelay from "./translations/de/relay.json";
 import deShared from "./translations/de/shared.json";
 import deStudio from "./translations/de/studio.json";
 import enAccount from "./translations/en/account.json";
 import enMail from "./translations/en/mail.json";
 import enMarketing from "./translations/en/marketing.json";
+import enRelay from "./translations/en/relay.json";
 import enShared from "./translations/en/shared.json";
 import enStudio from "./translations/en/studio.json";
 import esAccount from "./translations/es/account.json";
 import esMail from "./translations/es/mail.json";
 import esMarketing from "./translations/es/marketing.json";
+import esRelay from "./translations/es/relay.json";
 import esShared from "./translations/es/shared.json";
 import esStudio from "./translations/es/studio.json";
 import frAccount from "./translations/fr/account.json";
 import frMail from "./translations/fr/mail.json";
 import frMarketing from "./translations/fr/marketing.json";
+import frRelay from "./translations/fr/relay.json";
 import frShared from "./translations/fr/shared.json";
 import frStudio from "./translations/fr/studio.json";
 import zhAccount from "./translations/zh/account.json";
 import zhMail from "./translations/zh/mail.json";
 import zhMarketing from "./translations/zh/marketing.json";
+import zhRelay from "./translations/zh/relay.json";
 import zhShared from "./translations/zh/shared.json";
 import zhStudio from "./translations/zh/studio.json";
 
@@ -37,6 +42,7 @@ const scopedMessages = {
 		account: enAccount,
 		mail: enMail,
 		marketing: enMarketing,
+		relay: enRelay,
 		studio: enStudio,
 		shared: enShared,
 	},
@@ -44,6 +50,7 @@ const scopedMessages = {
 		account: deAccount,
 		mail: deMail,
 		marketing: deMarketing,
+		relay: deRelay,
 		studio: deStudio,
 		shared: deShared,
 	},
@@ -51,6 +58,7 @@ const scopedMessages = {
 		account: esAccount,
 		mail: esMail,
 		marketing: esMarketing,
+		relay: esRelay,
 		studio: esStudio,
 		shared: esShared,
 	},
@@ -58,6 +66,7 @@ const scopedMessages = {
 		account: frAccount,
 		mail: frMail,
 		marketing: frMarketing,
+		relay: frRelay,
 		studio: frStudio,
 		shared: frShared,
 	},
@@ -65,6 +74,7 @@ const scopedMessages = {
 		account: zhAccount,
 		mail: zhMail,
 		marketing: zhMarketing,
+		relay: zhRelay,
 		studio: zhStudio,
 		shared: zhShared,
 	},
