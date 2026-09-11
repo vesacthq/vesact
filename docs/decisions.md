@@ -2,6 +2,12 @@
 
 倒序。只写结论和理由，过程在对应的 issue 里。
 
+## 2026-09-11 文档与进度的机制
+
+- 文档按回答的问题分四类，章节固定：`<app>/product.md`（做什么、给谁）、`<app>/architecture.md`（怎么做，arc42 裁剪的 8 节）、`decisions.md`（为什么）、`reference/`（外部事实，标核对日期）。状态写在 frontmatter（`status: draft | final`、`reviewed`），取代 `.wip.md` 后缀；草稿章节在文内标，不单开文件。范围、验收、顺序只在 issue 里，文档不带任务清单。规范和地图在 docs/README.md。
+- 进度只在 GitHub：轨道 → 阶段 → 交付项三层 issue 用 sub-issue 挂接；GitHub Project「Vesact」是视图层，Status 四列 Backlog / Next / Now / Done，Now 全仓库只有一个；`pnpm status` 从 issue 生成当前状态。
+- 理由：原先按体裁命名的文件（overview、skeleton、engineering）把同一问题散在几处，状态编码在文件名里，进度写在文档里必然过期。调研了 arc42、Diátaxis、MADR、Oxide RFD、Google design doc 和 docs-as-code，取"按问题分类、固定章节、状态是元数据、文档随代码走 PR"四条，舍弃编号归档，git 历史就是归档。不上 Linear：一个人的项目不值第二个系统。
+
 ## 2026-09-11 平台管理搬入账号中心
 
 - Studio 的 admin 模块（全部用户与组织：封禁、模拟登录、全局管理员角色，组织的增删改）搬到账号中心 `/admin/*`。Studio 侧栏保留 Admin 入口，是带 `from` 的外链。
@@ -12,7 +18,7 @@
 - 凡是脱离任何一个产品仍然存在的东西放账号中心（`apps/account`，`account.vesact.com`）：身份、个人资料、组织、成员与每个产品的访问和角色、计费。产品只留产品设置和产品内的资源权限，组织和成员只读。这条取代上一条里"组织、成员在各产品里"的说法。
 - 理由：两个产品对称，没有谁去谁家里管成员的问题；账号中心里全是低频的设置操作，每天干活的界面永远在产品内；一条规则决定新功能放哪。Google、Atlassian、Microsoft 是这个形状，Vercel 是把账号中心塞进主产品的简化版。
 - 不做单一壳应用：Relay 要作为独立产品卖给开发者，有自己的域名和品牌。
-- 用户不迷惑的三条：同一件事只在一处可改；入口在产品的设置菜单里且视觉一致；每个链接带 `from`，做完回原页。方案见 docs/account/overview.md。
+- 用户不迷惑的三条：同一件事只在一处可改；入口在产品的设置菜单里且视觉一致；每个链接带 `from`，做完回原页。方案见 docs/account/architecture.md。
 
 ## 2026-09-11 身份与租户的边界
 
@@ -22,7 +28,7 @@
 
 ## 2026-09-11 Relay API 约定与骨架
 
-- 约定值填在 engineering.md §8.3，范围与验收在 skeleton.md。几个取舍：限流头用 `X-RateLimit-*`，IETF 的 `RateLimit` 结构化头仍是草案；幂等按 Stripe 的语义，IETF 草案已过期；出站 webhook 用 Standard Webhooks，客户各语言有现成校验库。
+- 约定值在 relay/architecture.md §5.4.3，范围与验收在 #34–#39。几个取舍：限流头用 `X-RateLimit-*`，IETF 的 `RateLimit` 结构化头仍是草案；幂等按 Stripe 的语义，IETF 草案已过期；出站 webhook 用 Standard Webhooks，客户各语言有现成校验库。
 - preview 迁到 `*.preview.vesact.com`（`studio.preview`、`account.preview`、`www.preview`），cookie 域 `.preview.vesact.com`，Better Auth cookie 前缀 `vesact-preview`，防止和 prod 的 `.vesact.com` cookie 互相遮蔽；一个 Access 通配应用覆盖全部。理由：`workers.dev` 在 Public Suffix List 上，两个 preview worker 之间无法共享登录态，Relay 一上来就会撞上；preview 和 prod 同构后，Relay 三个环境都用 Studio 的 auth，不用自己挂。
 - Relay 的表（含 Better Auth 的 `apikey`）放 `schema/relay.ts`，`client.ts` 改为导入 schema index；`postgres.ts` 不动。
 
@@ -35,11 +41,16 @@
 - 代码位置：`apps/relay` 是 worker 和控制台，服务端逻辑先放 `packages/api/modules/relay`，有第二个消费方再拆包。
 - Studio 文档拆成 overview（定位、用户、产品逻辑、边界、分期）和 architecture（模块、导航、联动、数据规则）。
 
+## 2026-09-10 Relay 的架构基线
+
+- 契约驱动的模块化单体；沿用现有框架、ORM、认证、部署和测试工具，缺什么补什么。普通 TypeScript 组织业务，暂不全栈引入 Effect，也不引入新的通用集成或任务平台。任务执行缺失时，CF Queues + Neon 持久化任务 + Cron 补偿是默认增量方案，Execution 动工时定稿。
+- 理由：第一轮目标是一个 Meta 渠道上的文字收发闭环，底座已经在 Cloudflare 和 Neon 上跑着；新依赖要回答解决了哪个当前问题。全文见 relay/architecture.md。
+
 ## 2026-09-10 Relay 申请阶段的载体
 
 - 审核载体是 Relay 自己的控制台，不运行 Zernio 的开源客户端，只搬它们的组件（MIT）。理由：Meta 只认 App ID；那些页面本来就是控制台要有的；不用先做一层 Zernio 形状的兼容 API 再换掉。
 - API key、scope、限流、配额用 `@better-auth/api-key`，A1 就上；计费等权限齐了再接。
-- 设计规范放 `docs/design.wip.md`，组件层用 ReUI。
+- 设计规范放 `docs/shared/design-system.md`（当时是 `docs/design.wip.md`），组件层用 ReUI。
 
 ## 2026-09-10 Relay 的范围
 

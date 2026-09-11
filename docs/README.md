@@ -1,32 +1,44 @@
-# 文档地图
+# 文档
 
-日常推进靠对话和 issue。这里的文件是设计和决策的落点，供查证，不需要通读。
+日常推进靠对话和 GitHub。这个目录放设计和决策，供查证，不需要通读。
 
-## 只看三处
+## 现在在哪
 
-- 现在在哪：#26 是 Relay A 轨的看板，进行中的子 issue 里有范围和验收。账号中心见 #45。
-- 为什么这么定：decisions.md，倒序，每条只有结论和理由，过程在对应的 issue 里。
-- 想核对某个设计：按下表找那一份，只读对应章节。
+- 看板：[github.com/orgs/vesacthq/projects/1](https://github.com/orgs/vesacthq/projects/1)。Board 视图四列 Backlog / Next / Now / Done，Now 全仓库只有一个。
+- 命令行：`pnpm status`，从 issue 生成同一份状态：各轨道各阶段的进度、Now 的验收勾选、接下来的 issue、最近合并的 PR。
+- 轨道 issue：#26 Relay A 轨（阶段 #64–#70），#45 账号中心（已完成）。交付项 issue 正文固定三节：范围、验收、依赖；验收是复选框，合并 PR 时勾。
 
-## 每个文件回答什么
+## 四种文档
 
-| 文件                         | 回答的问题                                                           | 状态               |
-| ---------------------------- | -------------------------------------------------------------------- | ------------------ |
-| `decisions.md`               | 为什么这么定                                                         | 定稿，随 PR 追加   |
-| `relay/overview.md`          | Relay 是什么，三个主机名各做什么                                     | 定稿               |
-| `relay/engineering.md`       | Relay 的架构、原则、契约约定、参考资料。§0 是一页摘要                | 定稿               |
-| `relay/skeleton.md`          | A1 的范围、验收、顺序                                                | 定稿，对应 #34–#39 |
-| `relay/messaging.wip.md`     | 消息领域模型                                                         | 草稿，A2 产出      |
-| `account/overview.md`        | 账号中心放什么、路由、每个操作在哪                                   | 定稿，已实现       |
-| `studio/overview.wip.md`     | Studio 的定位、用户、分期                                            | 草稿               |
-| `studio/vocabulary.wip.md`   | Studio 术语                                                          | 草稿               |
-| `studio/architecture.wip.md` | Studio 的模块、导航、联动、数据规则                                  | 草稿               |
-| `studio/site-map.wip.md`     | Studio 的页面结构                                                    | 草稿               |
-| `design.wip.md`              | 视觉与组件规范                                                       | 草稿               |
-| `reference/channels.md`      | 渠道平台的事实：广告到聊天的链路、Zernio 能做什么、App Review 看什么 | 事实，标核对日期   |
-| `reference/research.md`      | 访谈和调研的结论                                                     | 事实               |
+每个文件只回答一个问题，章节固定，同名章节在各产品里含义相同。
 
-## 约定
+| 类型                    | 回答的问题   | 固定章节                                                                                                             |
+| ----------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------- |
+| `<app>/product.md`      | 做什么、给谁 | 1 定位与用户 / 2 产品逻辑 / 3 边界 / 4 术语 / 5 分期                                                                 |
+| `<app>/architecture.md` | 怎么做       | 1 目标与约束 / 2 上下文与主机名 / 3 原则 / 4 构件与目录 / 5 运行时与契约 / 6 部署 / 7 横切 / 8 风险 / 附录：参考资料 |
+| `decisions.md`          | 为什么       | 倒序；每条是日期、结论、理由，取代了哪条                                                                             |
+| `reference/<主题>.md`   | 外部事实     | 每条标核对日期                                                                                                       |
 
-- `.wip.md` 是草稿：用它的词，别从它推 schema 或计划。
-- 事实进 `reference/`，决定进 `decisions.md`，范围与验收进 issue。一件事只在一处。
+每个应用目录最多两份；定位一段话讲得完的只留 architecture.md。共享的视觉规范在 `shared/design-system.md`。AGENTS.md 是给 agent 的操作手册，不在这个体系里。
+
+## 地图
+
+| 文件                      | 状态                                                       |
+| ------------------------- | ---------------------------------------------------------- |
+| `decisions.md`            | 定稿                                                       |
+| `relay/product.md`        | 定稿                                                       |
+| `relay/architecture.md`   | 定稿；§5.5 Messaging 领域是草稿，A2 产出                   |
+| `account/architecture.md` | 定稿，已实现                                               |
+| `studio/product.md`       | 草稿                                                       |
+| `studio/architecture.md`  | 草稿                                                       |
+| `shared/design-system.md` | 草稿                                                       |
+| `reference/channels.md`   | 事实：广告到聊天的链路、Zernio 能做什么、App Review 看什么 |
+| `reference/research.md`   | 事实：访谈结论                                             |
+
+## 规则
+
+1. 文件头是 frontmatter：`status: draft | final`、`reviewed: <日期>`。草稿的意思是：用它的词，别从它推 schema 或计划。草稿章节在文内标"（草稿）"，不单开文件。
+2. 范围、验收、顺序只在 issue 里。文档不带任务清单。
+3. 改行为的 PR 同时改文档。改了"为什么"就追加 decisions.md 一条。`reference/` 里超过核对日期的内容，用之前重新核对。
+4. 单文件到 500 行为止，超了按它自己的章节号拆成同名目录，章节号不变。
+5. 引用只用路径、章节号、issue 号。

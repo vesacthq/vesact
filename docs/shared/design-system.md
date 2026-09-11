@@ -1,3 +1,8 @@
+---
+status: draft
+reviewed: 2026-09-11
+---
+
 # 设计规范
 
 适用于 Studio、Relay 的产品界面和共享 UI。组件层用 ReUI，底座是仓库现有的 shadcn（base-vega）+ Base UI，主题变量在 `tooling/tailwind/theme.css`；本文定义用途和目标值，数值以主题文件为准。

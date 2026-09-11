@@ -1,8 +1,15 @@
+---
+status: final
+reviewed: 2026-09-11
+---
+
 # 账号中心
 
-一条规则：凡是脱离任何一个产品仍然存在的东西，放账号中心；需要产品数据才有意义的东西，放产品里。没有主产品，Studio 和 Relay 对称。进度在 #45 和它的子 issue。
+本文回答账号中心放什么、怎么做。定位只有一条规则，写在 §1，没有单独的 product.md。实现进度在 #45 和它的子 issue，已全部完成。
 
-## 1. 归属
+## 1. 目标与约束
+
+一条规则：凡是脱离任何一个产品仍然存在的东西，放账号中心；需要产品数据才有意义的东西，放产品里。没有主产品，Studio 和 Relay 对称。
 
 | 在账号中心                                               | 在产品里                                                           |
 | -------------------------------------------------------- | ------------------------------------------------------------------ |
@@ -15,7 +22,7 @@
 
 产品从共享库读组织和成员，只读。同一件事只在一处可改。
 
-## 2. 应用与主机名
+## 2. 上下文与主机名
 
 `apps/account`，worker `vesact-account`。prod `account.vesact.com`，preview `account.preview.vesact.com`，dev 端口 3004。它同时提供 Better Auth 端点，`VITE_ACCOUNT_URL` 是它的地址。`auth.vesact.com` 和 `auth.preview.vesact.com` 继续挂在账号 worker 上，301 到 account，保留一个季度。
 
@@ -33,19 +40,22 @@
 | `/admin/users`、`/admin/organizations`、`/admin/organizations/new`、`/admin/organizations/$id` | 平台管理，仅 `user.role = admin`                               |
 | `/api/auth/*`、`/api/rpc/*`、`/api/webhooks/payments`                                          | Better Auth、oRPC、支付回调                                    |
 
-## 3. 从 Studio 搬走的东西
+## 3. 原则
 
-| Studio 现在                                                      | 账号中心                                       |
-| ---------------------------------------------------------------- | ---------------------------------------------- |
-| `settings/general`、`settings/notifications`、`settings/billing` | `/account`、`/account/notifications`、组织计费 |
-| `$organizationSlug/settings/{general,members,billing}`           | `/orgs/$slug/*`                                |
-| `new-organization`、`organization-invitation/$id`、`onboarding`  | `/orgs`、`/invitations/$id`、`/onboarding`     |
-| `choose-plan`、`checkout-return`                                 | `/orgs/$slug/billing`、`/checkout-return`      |
-| `admin/users`、`admin/organizations`                             | `/admin/users`、`/admin/organizations`         |
+1. 同一件事只在一处可改。
+2. 从产品指向账号中心的链接带 `from=<绝对地址>`；账号中心每页右上角"返回"回 `from`，按钮上写出产品名，没有 `from` 回默认产品（Studio）。账号中心内部的链接把 `from` 一路带下去。身份流程（登录、注册、onboarding）用 `redirectTo`：那是流程结束后要去的地方，不是返回。只认自家产品的地址，其他一律回 Studio。
+3. 账号中心和产品同一套设计 token、同一个 Logo 和头部；标题 `<页面> – Vesact`。
+4. 产品的"设置"菜单把账号中心条目列进去，视觉和站内条目一致；用户感知到的是设置的某一页。
 
-账号 worker 挂 `@repo/api` 的 Hono app，头像上传的 oRPC 和存储绑定随之；`billingAttachedTo` 改为 organization。
+## 4. 构件与目录
 
-## 4. 成员与权限的三层
+`apps/account/modules/`：`auth`（会话、跳转规则）、`account`（个人资料、安全、通知）、`organizations`（组织、成员、邀请、产品角色）、`onboarding`、`payments`、`admin`（平台管理）、`i18n`、`shared`（头部、导航、oRPC 客户端）。别名见 AGENTS.md。
+
+账号 worker 挂 `@repo/api` 的 Hono app，头像上传的 oRPC 和存储绑定随之；`billingAttachedTo` 为 organization。
+
+## 5. 运行时与契约
+
+### 5.1 成员与权限的三层
 
 | 层                 | 内容                                                              | 存在哪                                                         | 在哪管                       |
 | ------------------ | ----------------------------------------------------------------- | -------------------------------------------------------------- | ---------------------------- |
@@ -57,13 +67,7 @@
 
 `member.role` 存一个组织角色加每个产品至多一个角色，逗号分隔，例如 `member,studio:member,relay:developer`。组织的 owner 和 admin 天然拥有所有产品的全部权限，成员页对他们显示"全部权限"而不是下拉框；只有 member 需要逐个产品开通。`@repo/permissions` 解析同一个值（`parseMemberRoles`），产品用 `studio.access`、`relay.manage` 这样的规则判断；Studio 在进入组织前检查 `studio.access`，没有的成员看到指向账号中心成员页的提示。
 
-## 5. 导航与回跳
-
-1. 从产品指向账号中心的链接带 `from=<绝对地址>`；账号中心每页右上角"返回"回 `from`，按钮上写出产品名，没有 `from` 回默认产品（Studio）。账号中心内部的链接把 `from` 一路带下去。身份流程（登录、注册、onboarding）用 `redirectTo`：那是流程结束后要去的地方，不是返回。只认自家产品的地址，其他一律回 Studio。
-2. 账号中心和产品同一套设计 token、同一个 Logo 和头部；标题 `<页面> – Vesact`。
-3. 产品的"设置"菜单把账号中心条目列进去，视觉和站内条目一致；用户感知到的是设置的某一页。
-
-验收：从 Studio 任意设置页进账号中心再点"返回"回到出发页；并排截图头部一致；下表每项只有一个位置。
+### 5.2 每个操作在哪
 
 | 操作                                    | 位置                                            |
 | --------------------------------------- | ----------------------------------------------- |
@@ -81,6 +85,23 @@
 | 产品内资源权限（收件箱、渠道、API key） | 产品自己的设置                                  |
 | 平台管理员管用户和组织                  | 账号中心 `/admin/users`、`/admin/organizations` |
 
-## 6. 顺序
+## 6. 部署
 
-#46 改名与主机名 → #47 个人资料与通知、#48 组织与成员、#49 计费 → #50 导航与回跳 → #51 文档与清理。全部完成于 2026-09-11。Relay 的 #38 依赖 #48。
+| 环境    | worker                      | 主机                         | cookie                                          |
+| ------- | --------------------------- | ---------------------------- | ----------------------------------------------- |
+| prod    | `vesact-account`            | `account.vesact.com`         | 域 `.vesact.com`                                |
+| preview | `vesact-account-preview`    | `account.preview.vesact.com` | 域 `.preview.vesact.com`，前缀 `vesact-preview` |
+| dev     | `pnpm --filter account dev` | `localhost:3004`             | 无域，localhost 不分端口                        |
+
+cookie 域从 `VITE_ACCOUNT_URL` 推导。secrets 在 `secrets/account.{prod,preview,dev}.env`。环境矩阵和部署流程见 AGENTS.md。
+
+## 7. 横切
+
+- 认证：Better Auth 只在这个 worker 上挂 handler，其他产品共用同一个 `packages/auth` 实例读会话。Google OAuth 的回调是 `<VITE_ACCOUNT_URL>/api/auth/callback/google`。
+- 权限：§5.1；平台管理路由要求 `user.role = admin`，组织的读改删走 `adminProcedure`。
+- i18n scope `account`；`settings.menu` 等跨产品文案在 `shared`。
+- 测试：`apps/account/e2e`（Playwright），`pnpm --filter account e2e`。
+
+## 8. 风险
+
+- `auth.vesact.com` 的 301 保留到 2026-12，之后从 wrangler 路由里移除。
