@@ -301,7 +301,12 @@ export function UserList() {
 							<DropdownMenu>
 								<DropdownMenuTrigger
 									render={(props) => (
-										<Button {...props} size="icon" variant="ghost">
+										<Button
+											{...props}
+											size="icon"
+											variant="ghost"
+											aria-label={t("common.aria.openMenu")}
+										>
 											<MoreVerticalIcon className="size-4" />
 										</Button>
 									)}

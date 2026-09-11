@@ -80,7 +80,8 @@
 			"specialCharacter": "Caractère spécial"
 		},
 		"aria": {
-			"language": "Langue"
+			"language": "Langue",
+			"openMenu": "Ouvrir le menu"
 		}
 	},
 	"settings": {

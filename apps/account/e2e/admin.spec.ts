@@ -1,4 +1,4 @@
-import { expect, type Page, test } from "@playwright/test";
+import { expect, type Locator, type Page, test } from "@playwright/test";
 
 import { e2eUsers } from "./fixtures/users";
 
@@ -63,20 +63,17 @@ test.describe("as the platform admin", () => {
 		await page.getByRole("button", { name: "Save" }).click();
 
 		await page.waitForURL(/\/admin\/organizations\/(?!new)[^/?]+/);
-		await expect(page.getByText("Organization has been saved.")).toBeVisible();
-		// The members button only exists once the edit form has replaced the create form.
-		await expect(page.getByRole("button", { name: "Open members" })).toBeVisible();
+		const savedToast = page.getByText("Organization has been saved.");
+		await expect(savedToast).toBeVisible();
+		await expect(page.getByText("Edit organization")).toBeVisible();
 		await expect(page.getByLabel("Organization name")).toHaveValue(name);
+		// Let the first toast go so the next one can only mean the rename was saved.
+		await expect(savedToast).toBeHidden({ timeout: 15_000 });
 
 		await page.getByLabel("Organization name").fill(renamed);
 		await expect(page.getByLabel("Organization name")).toHaveValue(renamed);
-		await Promise.all([
-			page.waitForResponse(
-				(response) =>
-					response.url().includes("/api/rpc/admin/organizations/update") && response.ok(),
-			),
-			page.getByRole("button", { name: "Save" }).click(),
-		]);
+		await page.getByRole("button", { name: "Save" }).click();
+		await expect(savedToast).toBeVisible();
 		await page.reload();
 		await waitForHydration(page);
 		await expect(page.getByLabel("Organization name")).toHaveValue(renamed);
@@ -93,8 +90,8 @@ test.describe("as the platform admin", () => {
 	});
 });
 
-async function deleteOrganizationRow(page: Page, row: ReturnType<Page["getByRole"]>) {
-	await row.getByRole("button").click();
+async function deleteOrganizationRow(page: Page, row: Locator) {
+	await row.getByRole("button", { name: "Open menu" }).click();
 	await page.getByRole("menuitem", { name: "Delete" }).click();
 
 	const dialog = page.getByRole("alertdialog");
