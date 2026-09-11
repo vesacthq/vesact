@@ -7,13 +7,18 @@ Explicit user instructions win; if a documented command fails, report it rather 
 ## Product context
 
 Studio (`apps/studio`) is the first product; Relay, an API platform, is planned
-as the second. `docs/studio/` holds Studio's vocabulary, architecture and site map,
-`docs/account/` the account center (identity, profile, organizations, members, billing), `docs/relay/` Relay's overview, engineering design, milestone specs and messaging domain, `docs/reference/` platform facts and research
-conclusions, `docs/decisions.md` the decision log. A `.wip.md` suffix means a
-draft: use its terms, but do not derive schemas or plans from it without asking.
+as the second; the account center (`apps/account`) serves both. Design docs live
+under `docs/`, one file per question: `docs/<app>/product.md` (what, for whom),
+`docs/<app>/architecture.md` (how), `docs/decisions.md` (why), `docs/reference/`
+(external facts with a checked date). `docs/README.md` is the map and the rules.
+A file's frontmatter carries `status: draft | final`; a draft means use its
+terms, but do not derive schemas or plans from it without asking.
 
-Work is tracked in GitHub issues. The `deferred` label means "no start date; do
-it when the trigger in the first line of the issue is met".
+Work is tracked in GitHub issues: track → stage → deliverable, linked as
+sub-issues and viewed in the org project "Vesact" (Status: Backlog / Next / Now /
+Done, exactly one Now). Scope, acceptance and order live only in the issue;
+`pnpm status` prints the current state. The `deferred` label means "no start
+date; do it when the trigger in the first line of the issue is met".
 
 ## Stack
 
@@ -108,6 +113,7 @@ a stray server holds the port; reuse one only with `PW_REUSE_SERVER=1`.
 | `pnpm verify`                       | Generate marketing content, then run Oxlint and Oxfmt checks |
 | `pnpm check`                        | Apply Oxlint and Oxfmt fixes                                 |
 | `pnpm clean`                        | Clear Turbo outputs                                          |
+| `pnpm status`                       | Tracks, stages, the Now issue and what is next, from GitHub  |
 
 Required gates:
 
@@ -273,7 +279,7 @@ keys before showing success UI. Do not rely on a full page reload.
 
 One rule decides where a page goes: what exists independently of any product
 belongs to the account center (`apps/account`, `account.vesact.com`); what only
-makes sense with product data belongs to the product. `docs/account/overview.md`
+makes sense with product data belongs to the product. `docs/account/architecture.md`
 has the ownership table, the route table and the "operation → location" list.
 
 - The account center serves the Better Auth endpoints and every identity flow
@@ -348,7 +354,7 @@ Canonical auth example:
 
 - Use components from `@repo/ui/components`; compose with Base UI primitives.
   ReUI is the component layer. Visual rules, token targets and the chat
-  components live in `docs/design.wip.md`.
+  components live in `docs/shared/design-system.md`.
 - Use `@tanstack/react-form` with Zod. Follow
   `apps/marketing/modules/home/components/ContactForm.tsx`.
 - Use `useTranslations`, `useFormatter`, and `IntlProvider` from `use-intl`.
