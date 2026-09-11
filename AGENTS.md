@@ -452,6 +452,12 @@ bucket. The `avatars` bucket's CORS rule allows `PUT` from
 `account.vesact.com` and `account.preview.vesact.com`, the only hostnames that
 upload from the browser; a new uploading hostname has to be added there or the
 presigned PUT fails with a CORS error.
+The `S3_*` credentials in the studio and account secrets are an account-owned
+API token named "vesact avatars bucket (account and studio workers)", scoped to
+that bucket: the access key id is the token id, the secret is the SHA-256 hex
+of the token value. Rotate by creating a new token the same way
+(`POST /accounts/{id}/tokens`), editing the four `<app>.<target>.env` files
+with `sops set`, and deploying.
 
 ### Accounts and resources
 
