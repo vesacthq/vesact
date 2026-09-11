@@ -235,6 +235,8 @@ Stripe 的错误文档将某些服务端错误明确视为不确定结果；借�
     → 更新领域数据并可靠记录待发送事件
 ```
 
+Meta 的入口是 `GET`/`POST /webhooks/meta`，代码在 `integrations/meta/webhook.ts`。GET 是订阅握手：`hub.mode=subscribe` 且 `hub.verify_token` 等于 `META_WEBHOOK_VERIFY_TOKEN` 才回 `hub.challenge`，否则 403。POST 读原始 body（上限 5 MB），`X-Hub-Signature-256` 与 `HMAC-SHA256(body, META_APP_SECRET)` 在 Web Crypto 里做常量时间比较；不匹配 401 且不落库，匹配则整个 body 作为一行写入 `relay_inbound_event`（`platform=meta`，`bodySha256` 唯一，重复投递静默忽略），写入成功后才回 200，失败 500 让 Meta 重试。这一步不解析事件，`processedAt` 留给 A3 的处理链；Meta 一批最多 1000 条更新，拆分与按事件身份去重都在那一步。
+
 出站：
 
 ```text

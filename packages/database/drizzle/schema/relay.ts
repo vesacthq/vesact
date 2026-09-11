@@ -93,7 +93,6 @@ export const relayInboundEvent = pgTable(
 			.primaryKey(),
 		platform: text("platform").notNull(),
 		bodySha256: text("bodySha256").notNull(),
-		signatureValid: boolean("signatureValid").notNull(),
 		payload: jsonb("payload").notNull(),
 		receivedAt: timestamp("receivedAt").defaultNow().notNull(),
 		processedAt: timestamp("processedAt"),

@@ -9,6 +9,8 @@ import {
 } from "@repo/database";
 import { logger } from "@repo/logs";
 
+import { accessHeaders, createChecks } from "./lib/acceptance";
+
 /**
  * Runs the acceptance list of issue #35 against a deployed Relay API. Needs
  * DATABASE_URL for the same environment (keys are created server-side) and,
@@ -32,33 +34,7 @@ if (!values.url || !values.org || !values.user) {
 }
 
 const baseUrl = values.url.replace(/\/$/, "");
-const accessHeaders: Record<string, string> = process.env.CF_ACCESS_CLIENT_ID
-	? {
-			"CF-Access-Client-Id": process.env.CF_ACCESS_CLIENT_ID,
-			"CF-Access-Client-Secret": process.env.CF_ACCESS_CLIENT_SECRET ?? "",
-		}
-	: {};
-
-interface Outcome {
-	name: string;
-	ok: boolean;
-	detail?: string;
-}
-
-const outcomes: Outcome[] = [];
-
-async function check(name: string, run: () => Promise<true | string>) {
-	try {
-		const result = await run();
-		outcomes.push({ name, ok: result === true, detail: result === true ? undefined : result });
-	} catch (error) {
-		outcomes.push({
-			name,
-			ok: false,
-			detail: error instanceof Error ? error.message : String(error),
-		});
-	}
-}
+const { check, report } = createChecks();
 
 interface ErrorBody {
 	code?: string;
@@ -68,7 +44,7 @@ interface ErrorBody {
 
 async function me(key?: string) {
 	const response = await fetch(`${baseUrl}/v1/me`, {
-		headers: { ...accessHeaders, ...(key ? { Authorization: `Bearer ${key}` } : {}) },
+		headers: { ...accessHeaders(), ...(key ? { Authorization: `Bearer ${key}` } : {}) },
 	});
 	const body = (await response.json()) as ErrorBody & Record<string, unknown>;
 	return { response, body };
@@ -221,15 +197,7 @@ async function main() {
 		await deleteApiKeysByIds(created);
 	}
 
-	for (const outcome of outcomes) {
-		logger.log(
-			`${outcome.ok ? "✓" : "✗"} ${outcome.name}${outcome.detail ? ` — ${outcome.detail}` : ""}`,
-		);
-	}
-
-	const failed = outcomes.filter((outcome) => !outcome.ok).length;
-	logger.log(`${outcomes.length - failed}/${outcomes.length} passed`);
-	process.exit(failed === 0 ? 0 : 1);
+	report();
 }
 
 main().catch((error) => {

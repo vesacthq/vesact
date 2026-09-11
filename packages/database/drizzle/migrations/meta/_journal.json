@@ -29,6 +29,13 @@
 			"when": 1789123620949,
 			"tag": "0003_relay_api_keys",
 			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "7",
+			"when": 1789144257671,
+			"tag": "0004_relay_inbound_event_signature",
+			"breakpoints": true
 		}
 	]
 }
