@@ -1,8 +1,4 @@
-import {
-	adminOrganizationQueryKey,
-	useAdminOrganizationQuery,
-	useUpdateOrganizationMutation,
-} from "@admin/lib/api";
+import { useAdminOrganizationQuery, useUpdateOrganizationMutation } from "@admin/lib/api";
 import { useTranslations } from "@i18n/intl";
 import { organizationListQueryKey, useCreateOrganizationMutation } from "@organizations/lib/api";
 import { Button } from "@repo/ui/components/button";
@@ -60,9 +56,10 @@ export function OrganizationForm({ organizationId }: { organizationId: string })
 					throw new Error("Could not save organization");
 				}
 
-				queryClient.setQueryData(adminOrganizationQueryKey(organizationId), newOrganization);
-
 				await Promise.all([
+					queryClient.invalidateQueries({
+						queryKey: orpc.admin.organizations.find.key({ input: { id: organizationId } }),
+					}),
 					queryClient.invalidateQueries({
 						queryKey: orpc.admin.organizations.list.key(),
 					}),

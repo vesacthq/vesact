@@ -40,7 +40,7 @@ import {
 	SquareUserRoundIcon,
 	TrashIcon,
 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 import type { z } from "zod";
 
@@ -152,11 +152,14 @@ export function UserList() {
 		}),
 	);
 
+	const previousSearchTermRef = useRef(debouncedSearchTerm);
+
 	useEffect(() => {
-		if (currentPage > 1) {
+		if (previousSearchTermRef.current !== debouncedSearchTerm) {
 			void setCurrentPage(1);
 		}
-	}, [debouncedSearchTerm]); // oxlint-disable-line eslint-plugin-react-hooks/exhaustive-deps
+		previousSearchTermRef.current = debouncedSearchTerm;
+	}, [debouncedSearchTerm, setCurrentPage]);
 
 	const impersonateUser = async (userId: string, { name }: { name: string }) => {
 		const toastId = toast.add({

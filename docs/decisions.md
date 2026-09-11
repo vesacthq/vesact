@@ -5,7 +5,7 @@
 ## 2026-09-11 平台管理搬入账号中心
 
 - Studio 的 admin 模块（全部用户与组织：封禁、模拟登录、全局管理员角色，组织的增删改）搬到账号中心 `/admin/*`。Studio 侧栏保留 Admin 入口，是带 `from` 的外链。
-- 理由：用户表和组织表脱离任何产品存在，按账号中心的归属规则本就该在那里；留在 Studio 时组织的增删改有两处入口，违反"同一件事只在一处可改"。搬完后归属表没有例外。只读的 `admin.*` oRPC procedure 留在 `@repo/api`，两个 worker 都挂同一个 Hono app。
+- 理由：用户表和组织表脱离任何产品存在，按账号中心的归属规则本就该在那里；留在 Studio 时组织的增删改有两处入口，违反"同一件事只在一处可改"。搬完后归属表没有例外。组织的读、改、删走 `adminProcedure`（`admin.organizations.find / update / delete`），Better Auth 的组织端点要求调用者是成员，全局管理员通常不是；删除前照 auth hook 的做法取消该组织的订阅，保留 slug 的检查也在 procedure 里重做一遍。
 
 ## 2026-09-11 账号中心
 

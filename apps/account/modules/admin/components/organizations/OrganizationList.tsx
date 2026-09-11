@@ -1,7 +1,6 @@
 import { useTranslations } from "@i18n/intl";
 import { OrganizationLogo } from "@organizations/components/OrganizationLogo";
 import { organizationListQueryKey } from "@organizations/lib/api";
-import { authClient } from "@repo/auth/client";
 import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import { Card } from "@repo/ui/components/card";
@@ -17,6 +16,7 @@ import { Table, TableBody, TableCell, TableRow } from "@repo/ui/components/table
 import { toast } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { Pagination } from "@shared/components/Pagination";
+import { orpcClient } from "@shared/lib/orpc-client";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { manualPaginationTableFeatures } from "@shared/lib/table-features";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -82,13 +82,7 @@ export function OrganizationList() {
 
 	const deleteOrganization = async (id: string) => {
 		const removeOrganization = async () => {
-			const { error } = await authClient.organization.delete({
-				organizationId: id,
-			});
-
-			if (error) {
-				throw error;
-			}
+			await orpcClient.admin.organizations.delete({ id });
 
 			await Promise.all([
 				queryClient.invalidateQueries({
