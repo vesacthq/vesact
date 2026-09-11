@@ -23,6 +23,15 @@ export const e2eUsers = {
 		role: "user",
 		statePath: path.join(authDir, "member.json"),
 	},
+	/** Signs in inside its own spec, which registers a passkey and signs out. */
+	passkey: {
+		id: "e2e-passkey",
+		email: "e2e-passkey@example.com",
+		name: "E2E Passkey",
+		password: "e2e-passkey-password-1234",
+		role: "user",
+		statePath: path.join(authDir, "passkey.json"),
+	},
 	/** Signs in inside its own spec; two-factor gets enabled and disabled there. */
 	totp: {
 		id: "e2e-totp",

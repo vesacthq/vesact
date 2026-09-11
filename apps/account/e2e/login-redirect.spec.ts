@@ -129,14 +129,11 @@ test.describe("signing in returns to the requested page in this app", () => {
 	});
 });
 
-test.describe("as a member", () => {
-	test.use({ storageState: e2eUsers.member.statePath });
-
-	test("signing in with a passkey returns to the requested page in this app", async ({
-		page,
-		baseURL,
-	}) => {
+// Signing out ends the session the setup stored, so this spec signs in on its own.
+test.describe("signing in with a passkey", () => {
+	test("returns to the requested page in this app", async ({ page, baseURL }) => {
 		const origin = baseURL ?? "http://localhost:3004";
+		const user = e2eUsers.passkey;
 		const cdp = await page.context().newCDPSession(page);
 		await cdp.send("WebAuthn.enable");
 		await cdp.send("WebAuthn.addVirtualAuthenticator", {
@@ -150,8 +147,10 @@ test.describe("as a member", () => {
 			},
 		});
 
-		await page.goto("/account/security");
+		await page.goto("/login?redirectTo=%2Faccount%2Fsecurity");
 		await waitForHydration(page);
+		await signInWithPassword(page, user);
+		await expectSecurityPage(page);
 		await page.getByRole("button", { name: "Add passkey" }).click();
 		await expect(page.getByText("Passkey added")).toBeVisible();
 		await signOut(page, origin);
