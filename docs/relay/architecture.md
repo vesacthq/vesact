@@ -358,9 +358,9 @@ Content-Type: application/json
 
 每个环境一个 worker，两个 custom domain（§2 的表）。`wrangler.jsonc` 是 prod 加 `env.preview`；`server.ts` 照 Studio 做 Hyperdrive 延迟加载加路径分发。
 
-- vars：`VITE_RELAY_URL`、`VITE_RELAY_API_URL`、`VITE_ACCOUNT_URL`、`META_APP_ID`；preview 加 `AUTH_COOKIE_PREFIX=vesact-preview`。cookie 域从 `VITE_ACCOUNT_URL` 推导。
-- secrets：`secrets/relay.{prod,preview,dev}.env`，内容是对应 `account.*.env` 的认证项（`BETTER_AUTH_SECRET` 必须同值）加 `META_APP_SECRET`、`META_WEBHOOK_VERIFY_TOKEN`。`pnpm secrets:pull` 同时产出 `apps/relay/.dev.vars`。
-- CI：`deploy.yml` 的 `relay` job，`needs: studio`，表由 studio job 的 migrate 建；`select-target.sh` 给出 relay 的 URL；smoke 打 `/v1/health` 和 `/login`。
+- vars：`VITE_RELAY_URL`、`VITE_RELAY_API_URL`、`VITE_ACCOUNT_URL`、`VITE_STUDIO_URL`、`VITE_MARKETING_URL`、`META_APP_ID`；preview 段重新声明全部并加 `AUTH_COOKIE_PREFIX=vesact-preview`。cookie 域从 `VITE_ACCOUNT_URL` 推导，`getTrustedOrigins()` 读 Studio 和 marketing 的 URL。
+- secrets：`secrets/relay.{prod,preview,dev}.env`，内容是同环境 `studio.*.env` 去掉 `S3_*` 的键（`BETTER_AUTH_SECRET` 必须同值）加 `META_APP_SECRET`、`META_WEBHOOK_VERIFY_TOKEN`。`pnpm secrets:pull` 同时产出 `apps/relay/.dev.vars`。
+- CI：`deploy.yml` 的 `relay` job，`needs: account`，表由 account job 的 migrate 建；`select-target.sh` 给出 relay 的 URL；smoke 打 API 主机的 `/v1/health` 和控制台的 `/`，后者跟随重定向到账号中心登录页。
 - Cloudflare：preview 的 Access 由 `*.preview.vesact.com` 通配应用覆盖，另有一个路径为 `api.preview.vesact.com/webhooks` 的 Access 应用，策略 Bypass Everyone，Meta 才打得到。Meta 一个 App 只能一个回调 URL，指向 prod；preview 只靠 curl 验证。
 - `GET /v1/health` 无鉴权，返回 `{ "status": "ok" }`。
 
@@ -368,7 +368,7 @@ Content-Type: application/json
 
 ### 7.1 认证与归属
 
-`/v1` 用 API key：`Authorization: Bearer <key>`，key 属于组织，由 `@better-auth/api-key`（`references: "organization"`、`defaultPrefix: "relay_"`）签发和校验。创建、吊销、列出走 Better Auth 的端点，需要会话且用户在该组织有 Relay 访问（`relay.access`，见 ../account/architecture.md §5）。控制台用账号中心的会话；未登录时照 Studio 的 `loginUrl()` 跳账号中心。成员和 Relay 访问在账号中心的成员页管，Relay 只读。
+`/v1` 用 API key：`Authorization: Bearer <key>`，key 属于组织，由 `@better-auth/api-key`（`references: "organization"`、`defaultPrefix: "relay_"`）签发和校验。创建、吊销、列出走 Better Auth 的端点，需要会话且用户在该组织有 Relay 访问（`relay.access`，见 ../account/architecture.md §5）。端点在账号中心的 worker 上，控制台跨域调用；插件按组织 access control 的 `apiKey` statement 检查每个操作，`packages/auth/lib/access.ts` 把它授予 admin 和 `relay:*` 角色。控制台用账号中心的会话；未登录时照 Studio 的 `loginUrl()` 跳账号中心。成员和 Relay 访问在账号中心的成员页管，Relay 只读。
 
 `/v1` 入口中间件链，顺序固定：request ID（`X-Request-Id: req_<ULID>`）→ 取 key → `verifyApiKey` 与错误码映射（`KEY_NOT_FOUND`、`KEY_EXPIRED`、`KEY_DISABLED` → 401 `UNAUTHORIZED` 且 `data.reason` 保留原码；`RATE_LIMITED` → 429 `TOO_MANY_REQUESTS`；`USAGE_EXCEEDED` → 429 `QUOTA_EXCEEDED`）→ 上下文 `{ organizationId, apiKeyId, permissions, requestId }` 与 `relayKeyProcedure` → 限流头 → `waitUntil` 写用量（写失败只记日志）。`/v1` 不设 CORS 头。
 
