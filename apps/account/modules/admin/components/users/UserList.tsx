@@ -1,4 +1,5 @@
 import { useSession } from "@auth/hooks/use-session";
+import { getSafeRedirectUrl } from "@auth/lib/redirects";
 import { useFormatter, useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import type { UserSchema } from "@repo/database";
@@ -27,6 +28,7 @@ import { UserAvatar } from "@shared/components/UserAvatar";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { manualPaginationTableFeatures } from "@shared/lib/table-features";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getRouteApi } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
 import { flexRender, useTable } from "@tanstack/react-table";
 import {
@@ -38,8 +40,7 @@ import {
 	SquareUserRoundIcon,
 	TrashIcon,
 } from "lucide-react";
-import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 import type { z } from "zod";
 
@@ -47,6 +48,7 @@ import { EmailVerified } from "../EmailVerified";
 import { BanUserDialog } from "./BanUserDialog";
 
 const ITEMS_PER_PAGE = 10;
+const route = getRouteApi("/_authenticated/_settings/admin/users/");
 const BAN_STATUS_REFRESH_INTERVAL = 30_000;
 
 type AdminUser = z.infer<typeof UserSchema>;
@@ -108,8 +110,21 @@ export function UserList() {
 	const { confirm } = useConfirmationAlert();
 	const [userToBan, setUserToBan] = useState<AdminUser | null>(null);
 	const [banStatusTime, setBanStatusTime] = useState(Date.now);
-	const [currentPage, setCurrentPage] = useQueryState("currentPage", parseAsInteger.withDefault(1));
-	const [searchTerm, setSearchTerm] = useQueryState("query", parseAsString.withDefault(""));
+	const { page: currentPage = 1, query: searchTerm = "" } = route.useSearch();
+	const navigate = route.useNavigate();
+	const setCurrentPage = useCallback(
+		(page: number) =>
+			navigate({
+				search: (prev) => ({ ...prev, page: page > 1 ? page : undefined }),
+				replace: true,
+			}),
+		[navigate],
+	);
+	const setSearchTerm = useCallback(
+		(query: string) =>
+			navigate({ search: (prev) => ({ ...prev, query: query || undefined }), replace: true }),
+		[navigate],
+	);
 	const [debouncedSearchTerm, setDebouncedSearchTerm] = useDebounceValue(searchTerm, 300, {
 		leading: true,
 		trailing: false,
@@ -137,11 +152,14 @@ export function UserList() {
 		}),
 	);
 
+	const previousSearchTermRef = useRef(debouncedSearchTerm);
+
 	useEffect(() => {
-		if (currentPage > 1) {
+		if (previousSearchTermRef.current !== debouncedSearchTerm) {
 			void setCurrentPage(1);
 		}
-	}, [debouncedSearchTerm]); // oxlint-disable-line eslint-plugin-react-hooks/exhaustive-deps
+		previousSearchTermRef.current = debouncedSearchTerm;
+	}, [debouncedSearchTerm, setCurrentPage]);
 
 	const impersonateUser = async (userId: string, { name }: { name: string }) => {
 		const toastId = toast.add({
@@ -157,7 +175,7 @@ export function UserList() {
 		});
 		await refetch();
 		toast.close(toastId);
-		window.location.href = new URL("/", window.location.origin).toString();
+		window.location.assign(getSafeRedirectUrl(null));
 	};
 
 	const deleteUser = async (id: string) => {

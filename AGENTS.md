@@ -163,7 +163,6 @@ Only app-local aliases are configured in the app `tsconfig.json` files.
 | `@organizations/*` | `./modules/organizations/*` |
 | `@payments/*`      | `./modules/payments/*`      |
 | `@i18n/*`          | `./modules/i18n/*`          |
-| `@admin/*`         | `./modules/admin/*`         |
 | `@ai/*`            | `./modules/ai/*`            |
 | `@shared/*`        | `./modules/shared/*`        |
 
@@ -174,6 +173,7 @@ Only app-local aliases are configured in the app `tsconfig.json` files.
 | `@config`          | `./config`                  |
 | `@auth/*`          | `./modules/auth/*`          |
 | `@account/*`       | `./modules/account/*`       |
+| `@admin/*`         | `./modules/admin/*`         |
 | `@organizations/*` | `./modules/organizations/*` |
 | `@onboarding/*`    | `./modules/onboarding/*`    |
 | `@payments/*`      | `./modules/payments/*`      |
@@ -211,8 +211,8 @@ pnpm --filter @repo/database studio
 ```
 
 Do not hand-edit generated Drizzle migration files or route trees:
-`apps/marketing/routeTree.gen.ts`, `apps/studio/routeTree.gen.ts`, and
-`apps/docs/src/routeTree.gen.ts` are generated. Marketing content collections under
+`apps/marketing/routeTree.gen.ts`, `apps/studio/routeTree.gen.ts`,
+`apps/account/routeTree.gen.ts`, and `apps/docs/src/routeTree.gen.ts` are generated. Marketing content collections under
 `apps/marketing/.content-collections/` are also generated.
 
 ### Notifications
@@ -239,7 +239,7 @@ keys before showing success UI. Do not rely on a full page reload.
   (admin org CRUD also refreshes `organizationListQueryKey`; member leave
   refreshes both the members query and the org switcher list).
 - Canonical examples: admin user delete in
-  `apps/studio/modules/admin/components/users/UserList.tsx`, invitation revoke in
+  `apps/account/modules/admin/components/users/UserList.tsx`, invitation revoke in
   `OrganizationInvitationsList.tsx`, and passkey CRUD in `PasskeysBlock.tsx`.
 
 ## Framework patterns
@@ -262,7 +262,9 @@ has the ownership table, the route table and the "operation → location" list.
   notification settings, organizations, members, invitations, onboarding and
   billing. Products keep the organization switcher, product settings and
   product-internal permissions; they read organizations and members, never
-  edit them. Studio's platform-admin module stays in Studio for now.
+  edit them. The platform-admin module (every user and organization, gated by
+  `admin.access`) is the account center's `/admin`; Studio's sidebar links to it
+  like any other account center entry.
 - Two link conventions, both built in `apps/studio/modules/auth/lib/account-urls.ts`:
   identity flows take `redirectTo=<absolute URL>`, the place the flow ends
   (`loginUrl()`, `onboardingUrl()`); settings pages take `from=<absolute URL>`,

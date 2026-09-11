@@ -4,13 +4,14 @@
 
 ## 1. 归属
 
-| 在账号中心                                           | 在产品里                                                           |
-| ---------------------------------------------------- | ------------------------------------------------------------------ |
-| 身份：登录、注册、密码、passkey、两步验证、登录设备  | 产品数据                                                           |
-| 个人：姓名、头像、邮箱、语言、通知偏好、删除账号     | 产品设置：Studio 的自动回复、收件箱配置；Relay 的 API key 与 scope |
-| 组织：创建、名称与 logo、删除；onboarding            | 组织切换器                                                         |
-| 成员：邀请、移除、组织角色、每个产品的访问和产品角色 | 产品内的资源权限：谁负责哪个收件箱、哪些渠道                       |
-| 计费：套餐、发票、付款方式，按组织                   | 平台管理员的 admin 模块暂留 Studio                                 |
+| 在账号中心                                               | 在产品里                                                           |
+| -------------------------------------------------------- | ------------------------------------------------------------------ |
+| 身份：登录、注册、密码、passkey、两步验证、登录设备      | 产品数据                                                           |
+| 个人：姓名、头像、邮箱、语言、通知偏好、删除账号         | 产品设置：Studio 的自动回复、收件箱配置；Relay 的 API key 与 scope |
+| 组织：创建、名称与 logo、删除；onboarding                | 组织切换器                                                         |
+| 成员：邀请、移除、组织角色、每个产品的访问和产品角色     | 产品内的资源权限：谁负责哪个收件箱、哪些渠道                       |
+| 计费：套餐、发票、付款方式，按组织                       |                                                                    |
+| 平台管理：全部用户与组织，封禁、模拟登录、全局管理员角色 |                                                                    |
 
 产品从共享库读组织和成员，只读。同一件事只在一处可改。
 
@@ -20,16 +21,17 @@
 
 路由：
 
-| 路径                                                              | 内容                                                           |
-| ----------------------------------------------------------------- | -------------------------------------------------------------- |
-| `/login` `/signup` `/forgot-password` `/reset-password` `/verify` | 身份                                                           |
-| `/onboarding`                                                     | 新用户第一步                                                   |
-| `/account`                                                        | 资料；`/account/security`、`/account/notifications`            |
-| `/orgs`                                                           | 组织列表；`/orgs/new` 创建                                     |
-| `/orgs/$slug`                                                     | 名称、logo、删除；`/orgs/$slug/members`、`/orgs/$slug/billing` |
-| `/invitations/$id`                                                | 接受邀请                                                       |
-| `/checkout-return`                                                | 支付回跳                                                       |
-| `/api/auth/*`、`/api/rpc/*`、`/api/webhooks/payments`             | Better Auth、oRPC、支付回调                                    |
+| 路径                                                                                           | 内容                                                           |
+| ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `/login` `/signup` `/forgot-password` `/reset-password` `/verify`                              | 身份                                                           |
+| `/onboarding`                                                                                  | 新用户第一步                                                   |
+| `/account`                                                                                     | 资料；`/account/security`、`/account/notifications`            |
+| `/orgs`                                                                                        | 组织列表；`/orgs/new` 创建                                     |
+| `/orgs/$slug`                                                                                  | 名称、logo、删除；`/orgs/$slug/members`、`/orgs/$slug/billing` |
+| `/invitations/$id`                                                                             | 接受邀请                                                       |
+| `/checkout-return`                                                                             | 支付回跳                                                       |
+| `/admin/users`、`/admin/organizations`、`/admin/organizations/new`、`/admin/organizations/$id` | 平台管理，仅 `user.role = admin`                               |
+| `/api/auth/*`、`/api/rpc/*`、`/api/webhooks/payments`                                          | Better Auth、oRPC、支付回调                                    |
 
 ## 3. 从 Studio 搬走的东西
 
@@ -39,6 +41,7 @@
 | `$organizationSlug/settings/{general,members,billing}`           | `/orgs/$slug/*`                                |
 | `new-organization`、`organization-invitation/$id`、`onboarding`  | `/orgs`、`/invitations/$id`、`/onboarding`     |
 | `choose-plan`、`checkout-return`                                 | `/orgs/$slug/billing`、`/checkout-return`      |
+| `admin/users`、`admin/organizations`                             | `/admin/users`、`/admin/organizations`         |
 
 账号 worker 挂 `@repo/api` 的 Hono app，头像上传的 oRPC 和存储绑定随之；`billingAttachedTo` 改为 organization。
 
@@ -62,21 +65,21 @@
 
 验收：从 Studio 任意设置页进账号中心再点"返回"回到出发页；并排截图头部一致；下表每项只有一个位置。
 
-| 操作                                    | 位置                              |
-| --------------------------------------- | --------------------------------- |
-| 登录、注册、找回密码、邮箱验证          | 账号中心 `/login` 等              |
-| 改姓名、头像、邮箱、语言，删除账号      | 账号中心 `/account`               |
-| 密码、passkey、两步验证、登录设备       | 账号中心 `/account/security`      |
-| 通知偏好                                | 账号中心 `/account/notifications` |
-| 新用户 onboarding                       | 账号中心 `/onboarding`            |
-| 创建组织                                | 账号中心 `/orgs/new`              |
-| 组织名称、logo、删除                    | 账号中心 `/orgs/$slug`            |
-| 邀请、移除成员，组织角色，产品访问      | 账号中心 `/orgs/$slug/members`    |
-| 接受邀请                                | 账号中心 `/invitations/$id`       |
-| 套餐、付款方式、发票                    | 账号中心 `/orgs/$slug/billing`    |
-| 切换当前组织                            | 产品的组织切换器                  |
-| 产品内资源权限（收件箱、渠道、API key） | 产品自己的设置                    |
-| 平台管理员管用户和组织                  | Studio 的 admin 模块（暂留）      |
+| 操作                                    | 位置                                            |
+| --------------------------------------- | ----------------------------------------------- |
+| 登录、注册、找回密码、邮箱验证          | 账号中心 `/login` 等                            |
+| 改姓名、头像、邮箱、语言，删除账号      | 账号中心 `/account`                             |
+| 密码、passkey、两步验证、登录设备       | 账号中心 `/account/security`                    |
+| 通知偏好                                | 账号中心 `/account/notifications`               |
+| 新用户 onboarding                       | 账号中心 `/onboarding`                          |
+| 创建组织                                | 账号中心 `/orgs/new`                            |
+| 组织名称、logo、删除                    | 账号中心 `/orgs/$slug`                          |
+| 邀请、移除成员，组织角色，产品访问      | 账号中心 `/orgs/$slug/members`                  |
+| 接受邀请                                | 账号中心 `/invitations/$id`                     |
+| 套餐、付款方式、发票                    | 账号中心 `/orgs/$slug/billing`                  |
+| 切换当前组织                            | 产品的组织切换器                                |
+| 产品内资源权限（收件箱、渠道、API key） | 产品自己的设置                                  |
+| 平台管理员管用户和组织                  | 账号中心 `/admin/users`、`/admin/organizations` |
 
 ## 6. 顺序
 

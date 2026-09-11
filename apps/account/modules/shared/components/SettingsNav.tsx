@@ -1,10 +1,19 @@
+import { useSession } from "@auth/hooks/use-session";
 import { useTranslations } from "@i18n/intl";
 import { useLocalePathname } from "@i18n/routing";
 import { OrganizationLogo } from "@organizations/components/OrganizationLogo";
 import { useOrganizationListQuery } from "@organizations/lib/api";
+import { checkPermission } from "@repo/permissions";
 import { cn } from "@repo/ui";
 import { Link } from "@tanstack/react-router";
-import { BellIcon, PlusIcon, ShieldCheckIcon, UserIcon } from "lucide-react";
+import {
+	BellIcon,
+	Building2Icon,
+	PlusIcon,
+	ShieldCheckIcon,
+	UserIcon,
+	UsersIcon,
+} from "lucide-react";
 import type { ReactNode } from "react";
 
 function isActive(pathname: string, href: string, exact = false) {
@@ -26,7 +35,7 @@ function NavLink({
 		<Link
 			to={to}
 			params={params}
-			search={true}
+			search={(prev) => ({ from: prev.from })}
 			className={cn(
 				"gap-2 px-3 py-2 text-sm flex items-center rounded-md transition-colors hover:bg-muted",
 				active ? "font-medium bg-muted text-foreground" : "text-foreground/70",
@@ -53,6 +62,8 @@ export function SettingsNav() {
 	const t = useTranslations();
 	const pathname = useLocalePathname();
 	const { data: organizations } = useOrganizationListQuery();
+	const { user } = useSession();
+	const canAccessAdmin = checkPermission({ user }, "admin.access");
 
 	return (
 		<nav className="gap-6 flex flex-col">
@@ -92,6 +103,19 @@ export function SettingsNav() {
 					{t("settings.menu.organizations.new")}
 				</NavLink>
 			</NavGroup>
+
+			{canAccessAdmin && (
+				<NavGroup title={t("settings.menu.admin.title")}>
+					<NavLink to="/admin/users" active={isActive(pathname, "/admin/users")}>
+						<UsersIcon className="size-4" aria-hidden="true" />
+						{t("settings.menu.admin.users")}
+					</NavLink>
+					<NavLink to="/admin/organizations" active={isActive(pathname, "/admin/organizations")}>
+						<Building2Icon className="size-4" aria-hidden="true" />
+						{t("settings.menu.admin.organizations")}
+					</NavLink>
+				</NavGroup>
+			)}
 		</nav>
 	);
 }

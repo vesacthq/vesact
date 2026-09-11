@@ -2,7 +2,7 @@ import { and, eq, ilike, or, sql } from "drizzle-orm";
 import type { z } from "zod";
 
 import { db } from "../client";
-import { organization } from "../schema/postgres";
+import { organization, session, user } from "../schema/postgres";
 import type { OrganizationUpdateSchema } from "../zod";
 
 export async function getOrganizations({
@@ -117,4 +117,22 @@ export async function updateOrganization(
 		.update(organization)
 		.set(updatedOrganization)
 		.where(eq(organization.id, updatedOrganization.id));
+}
+
+/**
+ * Members, invitations and purchases cascade; sessions and users that point at
+ * the organization as their active one are reset so they fall back to another.
+ */
+export async function deleteOrganization(id: string) {
+	await db.transaction(async (tx) => {
+		await tx
+			.update(session)
+			.set({ activeOrganizationId: null })
+			.where(eq(session.activeOrganizationId, id));
+		await tx
+			.update(user)
+			.set({ lastActiveOrganizationId: null })
+			.where(eq(user.lastActiveOrganizationId, id));
+		await tx.delete(organization).where(eq(organization.id, id));
+	});
 }

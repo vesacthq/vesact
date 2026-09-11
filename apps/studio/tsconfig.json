@@ -12,7 +12,6 @@
 			"@auth/*": ["./modules/auth/*"],
 			"@payments/*": ["./modules/payments/*"],
 			"@i18n/*": ["./modules/i18n/*"],
-			"@admin/*": ["./modules/admin/*"],
 			"@ai/*": ["./modules/ai/*"],
 			"@shared/*": ["./modules/shared/*"]
 		}
