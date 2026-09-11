@@ -1,5 +1,5 @@
 import { useAuthErrorMessages } from "@auth/hooks/errors-messages";
-import { refreshSession } from "@auth/lib/api";
+import { completeSignIn } from "@auth/lib/api";
 import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import { config as authConfig } from "@repo/auth/config";
@@ -27,7 +27,7 @@ import { z } from "zod";
 
 import type { OAuthProvider } from "../constants/oauth-providers";
 import { lastUsedLoginMethodIds } from "../lib/last-used-login-method";
-import { getSafeRedirectUrl, invitationUrl, navigateTo } from "../lib/redirects";
+import { getSafeRedirectUrl, invitationUrl } from "../lib/redirects";
 import { InvitationAlert } from "./InvitationAlert";
 import { LastUsedBadge } from "./LastUsedBadge";
 import { LoginModeSwitch } from "./LoginModeSwitch";
@@ -103,8 +103,7 @@ export function LoginForm({ oAuthProviders }: { oAuthProviders: OAuthProvider[] 
 						return;
 					}
 
-					await refreshSession(queryClient);
-					navigateTo(router, redirectUrl);
+					await completeSignIn(queryClient, router, redirectUrl);
 				} else {
 					const { error } = await authClient.signIn.magicLink({
 						email: values.email,
@@ -143,8 +142,7 @@ export function LoginForm({ oAuthProviders }: { oAuthProviders: OAuthProvider[] 
 				throw error;
 			}
 
-			await refreshSession(queryClient);
-			navigateTo(router, redirectUrl);
+			await completeSignIn(queryClient, router, redirectUrl);
 		} catch (e) {
 			form.setErrorMap({
 				onSubmit: {

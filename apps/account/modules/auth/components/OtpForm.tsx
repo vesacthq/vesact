@@ -1,5 +1,5 @@
 import { useAuthErrorMessages } from "@auth/hooks/errors-messages";
-import { refreshSession } from "@auth/lib/api";
+import { completeSignIn } from "@auth/lib/api";
 import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import { Alert, AlertTitle } from "@repo/ui/components/alert";
@@ -26,7 +26,7 @@ import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { AlertTriangleIcon, ArrowLeftIcon } from "lucide-react";
 import * as z from "zod";
 
-import { getSafeRedirectUrl, invitationUrl, navigateTo } from "../lib/redirects";
+import { getSafeRedirectUrl, invitationUrl } from "../lib/redirects";
 
 const formSchema = z.object({
 	code: z.string().min(6).max(6),
@@ -63,8 +63,7 @@ export function OtpForm() {
 					throw error;
 				}
 
-				await refreshSession(queryClient);
-				navigateTo(router, redirectUrl);
+				await completeSignIn(queryClient, router, redirectUrl);
 			} catch (e) {
 				formApi.setErrorMap({
 					onSubmit: {

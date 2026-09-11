@@ -1,6 +1,6 @@
 import { useAuthErrorMessages } from "@auth/hooks/errors-messages";
 import { useSession } from "@auth/hooks/use-session";
-import { refreshSession } from "@auth/lib/api";
+import { completeSignIn } from "@auth/lib/api";
 import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import { config as authConfig } from "@repo/auth/config";
@@ -103,8 +103,7 @@ export function SignupForm({
 						throw acceptError;
 					}
 
-					await refreshSession(queryClient);
-					navigateTo(router, redirectUrl);
+					await completeSignIn(queryClient, router, redirectUrl);
 				}
 			} catch (e) {
 				formApi.setErrorMap({

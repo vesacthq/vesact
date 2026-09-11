@@ -1,9 +1,20 @@
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vitest/config";
 
-const alias = (target: string) => fileURLToPath(new URL(target, import.meta.url));
+const tsconfig = JSON.parse(readFileSync(new URL("./tsconfig.json", import.meta.url), "utf8")) as {
+	compilerOptions: { paths: Record<string, string[]> };
+};
+
+// The app's aliases, as tsconfig.json declares them: `@auth/*` → `./modules/auth/*`.
+const alias = Object.fromEntries(
+	Object.entries(tsconfig.compilerOptions.paths).map(([name, [target]]) => [
+		name.replace(/\/\*$/, ""),
+		fileURLToPath(new URL(target.replace(/\/\*$/, ""), import.meta.url)),
+	]),
+);
 
 /**
  * Vitest picks up files matching `**\/*.{test,spec}.ts(x)` by default and
@@ -13,19 +24,7 @@ const alias = (target: string) => fileURLToPath(new URL(target, import.meta.url)
  */
 export default defineConfig({
 	plugins: [react()],
-	resolve: {
-		alias: {
-			"@config": alias("./config"),
-			"@auth": alias("./modules/auth"),
-			"@account": alias("./modules/account"),
-			"@admin": alias("./modules/admin"),
-			"@organizations": alias("./modules/organizations"),
-			"@onboarding": alias("./modules/onboarding"),
-			"@payments": alias("./modules/payments"),
-			"@i18n": alias("./modules/i18n"),
-			"@shared": alias("./modules/shared"),
-		},
-	},
+	resolve: { alias },
 	test: {
 		clearMocks: false,
 		exclude: ["**/node_modules/**", "**/.output/**", "**/dist/**", "e2e/**"],

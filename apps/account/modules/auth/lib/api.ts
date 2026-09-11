@@ -4,6 +4,7 @@ import { type QueryClient, queryOptions, useQuery } from "@tanstack/react-query"
 import { createServerFn } from "@tanstack/react-start";
 
 import { getSession } from "./auth-server.server";
+import { navigateTo } from "./redirects";
 
 export const sessionQueryKey = ["user", "session"] as const;
 
@@ -39,6 +40,16 @@ export const useSessionQuery = (initialData?: Session | null) => {
  */
 export function refreshSession(queryClient: QueryClient) {
 	return queryClient.fetchQuery({ ...sessionQueryOptions(), staleTime: 0 });
+}
+
+/** Every sign-in ends here, so no path can navigate before the guards see the new session. */
+export async function completeSignIn(
+	queryClient: QueryClient,
+	router: Parameters<typeof navigateTo>[0],
+	redirectUrl: string,
+) {
+	await refreshSession(queryClient);
+	navigateTo(router, redirectUrl);
 }
 
 export const userAccountQueryKey = ["user", "accounts"] as const;
