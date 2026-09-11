@@ -1,10 +1,14 @@
 import { ORPCError } from "@orpc/client";
+import type { Context } from "hono";
 
 export interface RelayHttpError {
-	status: 401 | 404 | 429 | 500;
+	status: 400 | 401 | 404 | 409 | 422 | 429 | 500;
 	code:
+		| "BAD_REQUEST"
 		| "UNAUTHORIZED"
 		| "NOT_FOUND"
+		| "IDEMPOTENCY_IN_FLIGHT"
+		| "IDEMPOTENCY_CONFLICT"
 		| "TOO_MANY_REQUESTS"
 		| "QUOTA_EXCEEDED"
 		| "INTERNAL_SERVER_ERROR";
@@ -41,6 +45,12 @@ export function errorPayload(error: RelayHttpError): ErrorPayload {
 	}).toJSON();
 
 	return { status: error.status, headers, body: JSON.stringify(body) };
+}
+
+/** Through `c.newResponse` so headers set earlier in the chain (`X-Request-Id`) survive. */
+export function reply(c: Context, error: RelayHttpError): Response {
+	const { status, headers, body } = errorPayload(error);
+	return c.newResponse(body, status, headers);
 }
 
 export function notFoundError(method: string, pathname: string): RelayHttpError {

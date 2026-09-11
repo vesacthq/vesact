@@ -1,7 +1,7 @@
-import { inArray } from "drizzle-orm";
+import { and, eq, inArray, lte } from "drizzle-orm";
 
 import { db } from "../client";
-import { apikey, relayApiUsage, relayInboundEvent } from "../schema/relay";
+import { apikey, relayApiUsage, relayIdempotencyKey, relayInboundEvent } from "../schema/relay";
 
 export type RelayApiUsageInsert = typeof relayApiUsage.$inferInsert;
 export type RelayInboundEventInsert = typeof relayInboundEvent.$inferInsert;
@@ -46,4 +46,76 @@ export async function deleteRelayInboundEventsByIds(ids: string[]) {
 	}
 
 	await db.delete(relayInboundEvent).where(inArray(relayInboundEvent.id, ids));
+}
+
+export interface IdempotencyScope {
+	apiKeyId: string;
+	routeKey: string;
+	key: string;
+}
+
+function inScope(scope: IdempotencyScope) {
+	return and(
+		eq(relayIdempotencyKey.apiKeyId, scope.apiKeyId),
+		eq(relayIdempotencyKey.routeKey, scope.routeKey),
+		eq(relayIdempotencyKey.key, scope.key),
+	);
+}
+
+/**
+ * Takes the key for one request: inserts the in-flight row, or replaces one
+ * whose lock or stored response has expired. False when another request
+ * holds it, which the caller resolves by reading the row.
+ */
+export async function claimIdempotencyKey(
+	scope: IdempotencyScope,
+	requestHash: string,
+	lockUntil: Date,
+): Promise<boolean> {
+	const now = new Date();
+	const claimed = await db
+		.insert(relayIdempotencyKey)
+		.values({ ...scope, requestHash, state: "in_flight", expiresAt: lockUntil })
+		.onConflictDoUpdate({
+			target: [relayIdempotencyKey.apiKeyId, relayIdempotencyKey.routeKey, relayIdempotencyKey.key],
+			set: {
+				requestHash,
+				state: "in_flight",
+				responseStatus: null,
+				responseBody: null,
+				expiresAt: lockUntil,
+				createdAt: now,
+			},
+			setWhere: lte(relayIdempotencyKey.expiresAt, now),
+		})
+		.returning({ key: relayIdempotencyKey.key });
+
+	return claimed.length > 0;
+}
+
+export async function findIdempotencyKey(scope: IdempotencyScope) {
+	const row = await db.query.relayIdempotencyKey.findFirst({ where: inScope(scope) });
+
+	if (!row) {
+		return null;
+	}
+
+	return row.state === "completed" && row.responseStatus !== null && row.responseBody !== null
+		? {
+				state: "completed" as const,
+				requestHash: row.requestHash,
+				responseStatus: row.responseStatus,
+				responseBody: row.responseBody,
+			}
+		: { state: "in_flight" as const, requestHash: row.requestHash };
+}
+
+export async function completeIdempotencyKey(
+	scope: IdempotencyScope,
+	response: { responseStatus: number; responseBody: string; expiresAt: Date },
+) {
+	await db
+		.update(relayIdempotencyKey)
+		.set({ state: "completed", ...response })
+		.where(inScope(scope));
 }
