@@ -37,6 +37,7 @@
 		"apps/docs/src/routeTree.gen.ts",
 		"apps/marketing/.content-collections/**",
 		"tooling/tailwind/tailwind-animate.css",
-		"secrets/**"
+		"secrets/**",
+		"brand/**"
 	]
 }

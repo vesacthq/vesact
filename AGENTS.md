@@ -178,7 +178,12 @@ tooling/
 ├── scripts/
 ├── tailwind/
 └── typescript/
+brand/             # Brand kit: logos, app icons, per-site favicon sets; `brand/README.md` explains the files
 ```
+
+`brand/` is the source of every logo and icon. Apps keep their own copies of
+what they serve (`apps/<app>/public/`, the `Logo` component in `@repo/ui`);
+update those from `brand/` rather than editing them in place.
 
 ## Imports & path aliases
 
