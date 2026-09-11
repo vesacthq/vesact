@@ -1,16 +1,11 @@
 import { SessionProvider } from "@auth/components/SessionProvider";
-import { getSession } from "@auth/lib/auth-server.server";
+import { sessionQueryOptions } from "@auth/lib/api";
 import { ConfirmationAlertProvider } from "@shared/components/ConfirmationAlertProvider";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-
-const loadSessionForAuthenticatedRouteFn = createServerFn({ method: "GET", strict: false }).handler(
-	async () => ({ result: await getSession() }),
-);
 
 export const Route = createFileRoute("/_authenticated")({
-	loader: async ({ location }) => {
-		const session = (await loadSessionForAuthenticatedRouteFn()).result;
+	beforeLoad: async ({ context: { queryClient }, location }) => {
+		const session = await queryClient.ensureQueryData(sessionQueryOptions());
 
 		if (!session) {
 			throw redirect({ to: "/login", search: { redirectTo: location.href } });
@@ -22,7 +17,7 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 function AuthenticatedLayout() {
-	const { session } = Route.useLoaderData();
+	const { session } = Route.useRouteContext();
 
 	return (
 		<SessionProvider initialSession={session}>

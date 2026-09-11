@@ -1,33 +1,33 @@
 import type { Session } from "@repo/auth";
 import { authClient } from "@repo/auth/client";
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
+import { createServerFn } from "@tanstack/react-start";
+
+import { getSession } from "./auth-server.server";
 
 export const sessionQueryKey = ["user", "session"] as const;
 
+const loadSessionFn = createServerFn({ method: "GET", strict: false }).handler(async () => ({
+	result: await getSession(),
+}));
+
 /**
- * Client-side session query.
- *
- * We DON'T pass `disableCookieCache: true` here so Better Auth's built-in
- * short-lived session cookie cache can short-circuit repeat reads that happen
- * on every navigation. Callers that just performed a write (update user,
- * change email, accept invitation, etc.) should call `reloadSession()` from
- * the session context, which bypasses the cache explicitly.
+ * One session read per page load: route guards go through
+ * `queryClient.ensureQueryData`, so client-side navigation reuses it. Writes
+ * that change the session call `reloadSession()` from the session context.
  */
-export const useSessionQuery = (initialData?: Session | null) => {
-	return useQuery({
+export const sessionQueryOptions = () =>
+	queryOptions({
 		queryKey: sessionQueryKey,
-		queryFn: async () => {
-			const { data, error } = await authClient.getSession();
-
-			if (error) {
-				throw new Error(error.message || "Failed to fetch session");
-			}
-
-			return data;
-		},
+		queryFn: async () => (await loadSessionFn()).result,
 		staleTime: Number.POSITIVE_INFINITY,
 		refetchOnWindowFocus: false,
 		retry: false,
+	});
+
+export const useSessionQuery = (initialData?: Session | null) => {
+	return useQuery({
+		...sessionQueryOptions(),
 		...(initialData ? { initialData } : {}),
 	});
 };

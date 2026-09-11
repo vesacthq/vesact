@@ -1,46 +1,43 @@
 import { accountCenterUrl } from "@auth/lib/account-urls";
-import { getActiveOrganization, getSession } from "@auth/lib/auth-server.server";
 import { useTranslations } from "@i18n/intl";
+import { activeOrganizationQueryOptions } from "@organizations/lib/api";
 import { config as authConfig } from "@repo/auth/config";
 import { checkPermission } from "@repo/permissions";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { createFileRoute, notFound, Outlet, redirect } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
 import { ExternalLinkIcon } from "lucide-react";
 
 /**
  * Membership alone does not open Studio: the organization's admins grant a
  * Studio role per member in the account center. Owners and admins always pass.
  */
-const checkStudioAccessFn = createServerFn({ method: "GET", strict: false })
-	.validator((organizationSlug: string) => organizationSlug)
-	.handler(async ({ data: organizationSlug }) => {
-		const [session, organization] = await Promise.all([
-			getSession(),
-			getActiveOrganization(organizationSlug),
-		]);
-
-		if (!organization) {
-			throw notFound();
-		}
-
-		const membership = organization.members.find((member) => member.userId === session?.user.id);
-		const allowed = checkPermission(
-			{ user: session?.user, membershipRole: membership?.role },
-			"studio.access",
-		);
-
-		return { allowed, organizationName: organization.name };
-	});
-
 export const Route = createFileRoute("/_authenticated/_main/$organizationSlug")({
 	beforeLoad: () => {
 		if (!authConfig.organizations.enable) {
 			throw redirect({ to: "/" });
 		}
 	},
-	loader: async ({ params }) => checkStudioAccessFn({ data: params.organizationSlug }),
+	loader: async ({ params, context: { queryClient, session, activeOrganization } }) => {
+		const organization =
+			activeOrganization?.slug === params.organizationSlug
+				? activeOrganization
+				: await queryClient.ensureQueryData(
+						activeOrganizationQueryOptions({ slug: params.organizationSlug }),
+					);
+
+		if (!organization) {
+			throw notFound();
+		}
+
+		const membership = organization.members.find((member) => member.userId === session.user.id);
+		const allowed = checkPermission(
+			{ user: session.user, membershipRole: membership?.role },
+			"studio.access",
+		);
+
+		return { allowed, organizationName: organization.name };
+	},
 	component: OrganizationLayout,
 });
 

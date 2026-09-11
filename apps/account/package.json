@@ -17,6 +17,7 @@
 		"format": "oxfmt"
 	},
 	"dependencies": {
+		"@bprogress/react": "catalog:",
 		"@orpc/client": "catalog:",
 		"@orpc/tanstack-query": "catalog:",
 		"@repo/api": "workspace:*",
@@ -34,6 +35,7 @@
 		"@tanstack/react-form": "catalog:",
 		"@tanstack/react-query": "catalog:",
 		"@tanstack/react-router": "catalog:",
+		"@tanstack/react-router-ssr-query": "catalog:",
 		"@tanstack/react-start": "catalog:",
 		"@tanstack/react-table": "catalog:",
 		"@vitejs/plugin-react": "catalog:",

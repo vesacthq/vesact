@@ -1,29 +1,24 @@
-import { getOrganizationBySlug } from "@auth/lib/auth-server.server";
 import { useTranslations } from "@i18n/intl";
 import { OrganizationLogo } from "@organizations/components/OrganizationLogo";
 import { OrganizationProvider } from "@organizations/components/OrganizationProvider";
 import { useOrganization } from "@organizations/hooks/use-organization";
+import { organizationQueryOptions } from "@organizations/lib/api";
 import { checkPermission, serializeMemberRoles } from "@repo/permissions";
 import { cn } from "@repo/ui";
 import { createFileRoute, Link, notFound, Outlet } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
 
-const loadOrganizationForRouteFn = createServerFn({ method: "GET", strict: false })
-	.validator((organizationSlug: string) => organizationSlug)
-	.handler(async ({ data: organizationSlug }) => {
-		const organization = await getOrganizationBySlug(organizationSlug);
+export const Route = createFileRoute("/_authenticated/_settings/orgs/$organizationSlug")({
+	loader: async ({ params, context: { queryClient } }) => {
+		const organization = await queryClient.ensureQueryData(
+			organizationQueryOptions(params.organizationSlug),
+		);
 
 		if (!organization) {
 			throw notFound();
 		}
 
-		return { result: organization };
-	});
-
-export const Route = createFileRoute("/_authenticated/_settings/orgs/$organizationSlug")({
-	loader: async ({ params }) => ({
-		organization: (await loadOrganizationForRouteFn({ data: params.organizationSlug })).result,
-	}),
+		return { organization };
+	},
 	component: OrganizationLayout,
 });
 

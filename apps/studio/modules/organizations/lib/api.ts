@@ -1,23 +1,28 @@
-import type { OrganizationMetadata } from "@repo/auth";
-import type { ActiveOrganization } from "@repo/auth";
+import {
+	getActiveOrganization,
+	getActiveOrganizationById,
+	getOrganizationList,
+} from "@auth/lib/auth-server.server";
+import type { ActiveOrganization, OrganizationMetadata } from "@repo/auth";
 import { authClient } from "@repo/auth/client";
 import { orpcClient } from "@shared/lib/orpc-client";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { queryOptions, useMutation, useQuery } from "@tanstack/react-query";
+import { createServerFn } from "@tanstack/react-start";
+
+const loadOrganizationListFn = createServerFn({ method: "GET", strict: false }).handler(
+	async () => ({ result: await getOrganizationList() }),
+);
 
 export const organizationListQueryKey = ["user", "organizations"] as const;
-export const useOrganizationListQuery = () => {
-	return useQuery({
+
+export const organizationListQueryOptions = () =>
+	queryOptions({
 		queryKey: organizationListQueryKey,
-		queryFn: async () => {
-			const { data, error } = await authClient.organization.list();
-
-			if (error) {
-				throw new Error(error.message || "Failed to fetch organizations");
-			}
-
-			return data;
-		},
+		queryFn: async () => (await loadOrganizationListFn()).result,
 	});
+
+export const useOrganizationListQuery = () => {
+	return useQuery(organizationListQueryOptions());
 };
 
 export interface ActiveOrganizationIdentifier {
@@ -25,8 +30,24 @@ export interface ActiveOrganizationIdentifier {
 	id?: string;
 }
 
+const loadActiveOrganizationFn = createServerFn({ method: "GET", strict: false })
+	.validator((identifier: ActiveOrganizationIdentifier) => identifier)
+	.handler(async ({ data: { slug, id } }) => ({
+		result: slug
+			? await getActiveOrganization(slug)
+			: id
+				? await getActiveOrganizationById(id)
+				: null,
+	}));
+
 export const activeOrganizationQueryKey = (identifier: ActiveOrganizationIdentifier) =>
 	["user", "activeOrganization", identifier.slug ?? identifier.id ?? ""] as const;
+
+export const activeOrganizationQueryOptions = (identifier: ActiveOrganizationIdentifier) =>
+	queryOptions({
+		queryKey: activeOrganizationQueryKey(identifier),
+		queryFn: async () => (await loadActiveOrganizationFn({ data: identifier })).result,
+	});
 
 export const useActiveOrganizationQuery = (
 	identifier: ActiveOrganizationIdentifier,
@@ -35,25 +56,10 @@ export const useActiveOrganizationQuery = (
 		initialData?: ActiveOrganization | null;
 	},
 ) => {
-	const { slug, id } = identifier;
-	const cacheKey = slug ?? id ?? "";
+	const cacheKey = identifier.slug ?? identifier.id ?? "";
 
 	return useQuery({
-		queryKey: activeOrganizationQueryKey(identifier),
-		queryFn: async () => {
-			if (!slug && !id) {
-				throw new Error("Either slug or id must be provided to fetch organization");
-			}
-			const { data, error } = await authClient.organization.getFullOrganization({
-				query: slug ? { organizationSlug: slug } : { organizationId: id as string },
-			});
-
-			if (error) {
-				throw new Error(error.message || "Failed to fetch active organization");
-			}
-
-			return data;
-		},
+		...activeOrganizationQueryOptions(identifier),
 		enabled: options?.enabled && !!cacheKey,
 		...(options?.initialData ? { initialData: options.initialData } : {}),
 	});
