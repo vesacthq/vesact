@@ -8,696 +8,680 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
-import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/_settings/route'
-import { Route as ApiSplatRouteImport } from './routes/api/$'
-import { Route as ForgotPasswordIndexRouteImport } from './routes/forgot-password/index'
-import { Route as ImageProxySplatRouteImport } from './routes/image-proxy/$'
-import { Route as LoginIndexRouteImport } from './routes/login/index'
-import { Route as ResetPasswordIndexRouteImport } from './routes/reset-password/index'
-import { Route as SignupIndexRouteImport } from './routes/signup/index'
-import { Route as VerifyIndexRouteImport } from './routes/verify/index'
-import { Route as AuthenticatedSettingsAdminRouteRouteImport } from './routes/_authenticated/_settings/admin/route'
-import { Route as AuthenticatedCheckoutReturnIndexRouteImport } from './routes/_authenticated/checkout-return/index'
-import { Route as AuthenticatedOnboardingIndexRouteImport } from './routes/_authenticated/onboarding/index'
-import { Route as AuthenticatedSettingsAccountIndexRouteImport } from './routes/_authenticated/_settings/account/index'
-import { Route as AuthenticatedSettingsAdminIndexRouteImport } from './routes/_authenticated/_settings/admin/index'
-import { Route as AuthenticatedSettingsOrgsIndexRouteImport } from './routes/_authenticated/_settings/orgs/index'
-import { Route as AuthenticatedSettingsOrgsOrganizationSlugRouteRouteImport } from './routes/_authenticated/_settings/orgs/$organizationSlug/route'
-import { Route as AuthenticatedInvitationsInvitationIdIndexRouteImport } from './routes/_authenticated/invitations/$invitationId/index'
-import { Route as AuthenticatedSettingsAccountNotificationsIndexRouteImport } from './routes/_authenticated/_settings/account/notifications/index'
-import { Route as AuthenticatedSettingsAccountSecurityIndexRouteImport } from './routes/_authenticated/_settings/account/security/index'
-import { Route as AuthenticatedSettingsAdminOrganizationsIndexRouteImport } from './routes/_authenticated/_settings/admin/organizations/index'
-import { Route as AuthenticatedSettingsAdminUsersIndexRouteImport } from './routes/_authenticated/_settings/admin/users/index'
-import { Route as AuthenticatedSettingsOrgsOrganizationSlugIndexRouteImport } from './routes/_authenticated/_settings/orgs/$organizationSlug/index'
-import { Route as AuthenticatedSettingsOrgsNewIndexRouteImport } from './routes/_authenticated/_settings/orgs/new/index'
-import { Route as AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRouteImport } from './routes/_authenticated/_settings/admin/organizations/$organizationId/index'
-import { Route as AuthenticatedSettingsAdminOrganizationsNewIndexRouteImport } from './routes/_authenticated/_settings/admin/organizations/new/index'
-import { Route as AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRouteImport } from './routes/_authenticated/_settings/orgs/$organizationSlug/billing/index'
-import { Route as AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRouteImport } from './routes/_authenticated/_settings/orgs/$organizationSlug/members/index'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as AuthenticatedSettingsAccountIndexRouteImport } from "./routes/_authenticated/_settings/account/index";
+import { Route as AuthenticatedSettingsAccountNotificationsIndexRouteImport } from "./routes/_authenticated/_settings/account/notifications/index";
+import { Route as AuthenticatedSettingsAccountSecurityIndexRouteImport } from "./routes/_authenticated/_settings/account/security/index";
+import { Route as AuthenticatedSettingsAdminIndexRouteImport } from "./routes/_authenticated/_settings/admin/index";
+import { Route as AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRouteImport } from "./routes/_authenticated/_settings/admin/organizations/$organizationId/index";
+import { Route as AuthenticatedSettingsAdminOrganizationsIndexRouteImport } from "./routes/_authenticated/_settings/admin/organizations/index";
+import { Route as AuthenticatedSettingsAdminOrganizationsNewIndexRouteImport } from "./routes/_authenticated/_settings/admin/organizations/new/index";
+import { Route as AuthenticatedSettingsAdminRouteRouteImport } from "./routes/_authenticated/_settings/admin/route";
+import { Route as AuthenticatedSettingsAdminUsersIndexRouteImport } from "./routes/_authenticated/_settings/admin/users/index";
+import { Route as AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRouteImport } from "./routes/_authenticated/_settings/orgs/$organizationSlug/billing/index";
+import { Route as AuthenticatedSettingsOrgsOrganizationSlugIndexRouteImport } from "./routes/_authenticated/_settings/orgs/$organizationSlug/index";
+import { Route as AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRouteImport } from "./routes/_authenticated/_settings/orgs/$organizationSlug/members/index";
+import { Route as AuthenticatedSettingsOrgsOrganizationSlugRouteRouteImport } from "./routes/_authenticated/_settings/orgs/$organizationSlug/route";
+import { Route as AuthenticatedSettingsOrgsIndexRouteImport } from "./routes/_authenticated/_settings/orgs/index";
+import { Route as AuthenticatedSettingsOrgsNewIndexRouteImport } from "./routes/_authenticated/_settings/orgs/new/index";
+import { Route as AuthenticatedSettingsRouteRouteImport } from "./routes/_authenticated/_settings/route";
+import { Route as AuthenticatedCheckoutReturnIndexRouteImport } from "./routes/_authenticated/checkout-return/index";
+import { Route as AuthenticatedInvitationsInvitationIdIndexRouteImport } from "./routes/_authenticated/invitations/$invitationId/index";
+import { Route as AuthenticatedOnboardingIndexRouteImport } from "./routes/_authenticated/onboarding/index";
+import { Route as AuthenticatedRouteRouteImport } from "./routes/_authenticated/route";
+import { Route as ApiSplatRouteImport } from "./routes/api/$";
+import { Route as ForgotPasswordIndexRouteImport } from "./routes/forgot-password/index";
+import { Route as ImageProxySplatRouteImport } from "./routes/image-proxy/$";
+import { Route as IndexRouteImport } from "./routes/index";
+import { Route as LoginIndexRouteImport } from "./routes/login/index";
+import { Route as ResetPasswordIndexRouteImport } from "./routes/reset-password/index";
+import { Route as SignupIndexRouteImport } from "./routes/signup/index";
+import { Route as VerifyIndexRouteImport } from "./routes/verify/index";
 
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/",
+	path: "/",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedSettingsRouteRoute =
-  AuthenticatedSettingsRouteRouteImport.update({
-    id: '/_settings',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
+	id: "/_authenticated",
+	getParentRoute: () => rootRouteImport,
+} as any);
+const AuthenticatedSettingsRouteRoute = AuthenticatedSettingsRouteRouteImport.update({
+	id: "/_settings",
+	getParentRoute: () => AuthenticatedRouteRoute,
+} as any);
 const ApiSplatRoute = ApiSplatRouteImport.update({
-  id: '/api/$',
-  path: '/api/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/api/$",
+	path: "/api/$",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const ForgotPasswordIndexRoute = ForgotPasswordIndexRouteImport.update({
-  id: '/forgot-password/',
-  path: '/forgot-password/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/forgot-password/",
+	path: "/forgot-password/",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const ImageProxySplatRoute = ImageProxySplatRouteImport.update({
-  id: '/image-proxy/$',
-  path: '/image-proxy/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/image-proxy/$",
+	path: "/image-proxy/$",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const LoginIndexRoute = LoginIndexRouteImport.update({
-  id: '/login/',
-  path: '/login/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/login/",
+	path: "/login/",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const ResetPasswordIndexRoute = ResetPasswordIndexRouteImport.update({
-  id: '/reset-password/',
-  path: '/reset-password/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/reset-password/",
+	path: "/reset-password/",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const SignupIndexRoute = SignupIndexRouteImport.update({
-  id: '/signup/',
-  path: '/signup/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/signup/",
+	path: "/signup/",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const VerifyIndexRoute = VerifyIndexRouteImport.update({
-  id: '/verify/',
-  path: '/verify/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedSettingsAdminRouteRoute =
-  AuthenticatedSettingsAdminRouteRouteImport.update({
-    id: '/admin',
-    path: '/admin',
-    getParentRoute: () => AuthenticatedSettingsRouteRoute,
-  } as any)
-const AuthenticatedCheckoutReturnIndexRoute =
-  AuthenticatedCheckoutReturnIndexRouteImport.update({
-    id: '/checkout-return/',
-    path: '/checkout-return/',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedOnboardingIndexRoute =
-  AuthenticatedOnboardingIndexRouteImport.update({
-    id: '/onboarding/',
-    path: '/onboarding/',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedSettingsAccountIndexRoute =
-  AuthenticatedSettingsAccountIndexRouteImport.update({
-    id: '/account/',
-    path: '/account/',
-    getParentRoute: () => AuthenticatedSettingsRouteRoute,
-  } as any)
-const AuthenticatedSettingsAdminIndexRoute =
-  AuthenticatedSettingsAdminIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthenticatedSettingsAdminRouteRoute,
-  } as any)
-const AuthenticatedSettingsOrgsIndexRoute =
-  AuthenticatedSettingsOrgsIndexRouteImport.update({
-    id: '/orgs/',
-    path: '/orgs/',
-    getParentRoute: () => AuthenticatedSettingsRouteRoute,
-  } as any)
+	id: "/verify/",
+	path: "/verify/",
+	getParentRoute: () => rootRouteImport,
+} as any);
+const AuthenticatedSettingsAdminRouteRoute = AuthenticatedSettingsAdminRouteRouteImport.update({
+	id: "/admin",
+	path: "/admin",
+	getParentRoute: () => AuthenticatedSettingsRouteRoute,
+} as any);
+const AuthenticatedCheckoutReturnIndexRoute = AuthenticatedCheckoutReturnIndexRouteImport.update({
+	id: "/checkout-return/",
+	path: "/checkout-return/",
+	getParentRoute: () => AuthenticatedRouteRoute,
+} as any);
+const AuthenticatedOnboardingIndexRoute = AuthenticatedOnboardingIndexRouteImport.update({
+	id: "/onboarding/",
+	path: "/onboarding/",
+	getParentRoute: () => AuthenticatedRouteRoute,
+} as any);
+const AuthenticatedSettingsAccountIndexRoute = AuthenticatedSettingsAccountIndexRouteImport.update({
+	id: "/account/",
+	path: "/account/",
+	getParentRoute: () => AuthenticatedSettingsRouteRoute,
+} as any);
+const AuthenticatedSettingsAdminIndexRoute = AuthenticatedSettingsAdminIndexRouteImport.update({
+	id: "/",
+	path: "/",
+	getParentRoute: () => AuthenticatedSettingsAdminRouteRoute,
+} as any);
+const AuthenticatedSettingsOrgsIndexRoute = AuthenticatedSettingsOrgsIndexRouteImport.update({
+	id: "/orgs/",
+	path: "/orgs/",
+	getParentRoute: () => AuthenticatedSettingsRouteRoute,
+} as any);
 const AuthenticatedSettingsOrgsOrganizationSlugRouteRoute =
-  AuthenticatedSettingsOrgsOrganizationSlugRouteRouteImport.update({
-    id: '/orgs/$organizationSlug',
-    path: '/orgs/$organizationSlug',
-    getParentRoute: () => AuthenticatedSettingsRouteRoute,
-  } as any)
+	AuthenticatedSettingsOrgsOrganizationSlugRouteRouteImport.update({
+		id: "/orgs/$organizationSlug",
+		path: "/orgs/$organizationSlug",
+		getParentRoute: () => AuthenticatedSettingsRouteRoute,
+	} as any);
 const AuthenticatedInvitationsInvitationIdIndexRoute =
-  AuthenticatedInvitationsInvitationIdIndexRouteImport.update({
-    id: '/invitations/$invitationId/',
-    path: '/invitations/$invitationId/',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
+	AuthenticatedInvitationsInvitationIdIndexRouteImport.update({
+		id: "/invitations/$invitationId/",
+		path: "/invitations/$invitationId/",
+		getParentRoute: () => AuthenticatedRouteRoute,
+	} as any);
 const AuthenticatedSettingsAccountNotificationsIndexRoute =
-  AuthenticatedSettingsAccountNotificationsIndexRouteImport.update({
-    id: '/account/notifications/',
-    path: '/account/notifications/',
-    getParentRoute: () => AuthenticatedSettingsRouteRoute,
-  } as any)
+	AuthenticatedSettingsAccountNotificationsIndexRouteImport.update({
+		id: "/account/notifications/",
+		path: "/account/notifications/",
+		getParentRoute: () => AuthenticatedSettingsRouteRoute,
+	} as any);
 const AuthenticatedSettingsAccountSecurityIndexRoute =
-  AuthenticatedSettingsAccountSecurityIndexRouteImport.update({
-    id: '/account/security/',
-    path: '/account/security/',
-    getParentRoute: () => AuthenticatedSettingsRouteRoute,
-  } as any)
+	AuthenticatedSettingsAccountSecurityIndexRouteImport.update({
+		id: "/account/security/",
+		path: "/account/security/",
+		getParentRoute: () => AuthenticatedSettingsRouteRoute,
+	} as any);
 const AuthenticatedSettingsAdminOrganizationsIndexRoute =
-  AuthenticatedSettingsAdminOrganizationsIndexRouteImport.update({
-    id: '/organizations/',
-    path: '/organizations/',
-    getParentRoute: () => AuthenticatedSettingsAdminRouteRoute,
-  } as any)
+	AuthenticatedSettingsAdminOrganizationsIndexRouteImport.update({
+		id: "/organizations/",
+		path: "/organizations/",
+		getParentRoute: () => AuthenticatedSettingsAdminRouteRoute,
+	} as any);
 const AuthenticatedSettingsAdminUsersIndexRoute =
-  AuthenticatedSettingsAdminUsersIndexRouteImport.update({
-    id: '/users/',
-    path: '/users/',
-    getParentRoute: () => AuthenticatedSettingsAdminRouteRoute,
-  } as any)
+	AuthenticatedSettingsAdminUsersIndexRouteImport.update({
+		id: "/users/",
+		path: "/users/",
+		getParentRoute: () => AuthenticatedSettingsAdminRouteRoute,
+	} as any);
 const AuthenticatedSettingsOrgsOrganizationSlugIndexRoute =
-  AuthenticatedSettingsOrgsOrganizationSlugIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthenticatedSettingsOrgsOrganizationSlugRouteRoute,
-  } as any)
-const AuthenticatedSettingsOrgsNewIndexRoute =
-  AuthenticatedSettingsOrgsNewIndexRouteImport.update({
-    id: '/orgs/new/',
-    path: '/orgs/new/',
-    getParentRoute: () => AuthenticatedSettingsRouteRoute,
-  } as any)
+	AuthenticatedSettingsOrgsOrganizationSlugIndexRouteImport.update({
+		id: "/",
+		path: "/",
+		getParentRoute: () => AuthenticatedSettingsOrgsOrganizationSlugRouteRoute,
+	} as any);
+const AuthenticatedSettingsOrgsNewIndexRoute = AuthenticatedSettingsOrgsNewIndexRouteImport.update({
+	id: "/orgs/new/",
+	path: "/orgs/new/",
+	getParentRoute: () => AuthenticatedSettingsRouteRoute,
+} as any);
 const AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRoute =
-  AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRouteImport.update({
-    id: '/organizations/$organizationId/',
-    path: '/organizations/$organizationId/',
-    getParentRoute: () => AuthenticatedSettingsAdminRouteRoute,
-  } as any)
+	AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRouteImport.update({
+		id: "/organizations/$organizationId/",
+		path: "/organizations/$organizationId/",
+		getParentRoute: () => AuthenticatedSettingsAdminRouteRoute,
+	} as any);
 const AuthenticatedSettingsAdminOrganizationsNewIndexRoute =
-  AuthenticatedSettingsAdminOrganizationsNewIndexRouteImport.update({
-    id: '/organizations/new/',
-    path: '/organizations/new/',
-    getParentRoute: () => AuthenticatedSettingsAdminRouteRoute,
-  } as any)
+	AuthenticatedSettingsAdminOrganizationsNewIndexRouteImport.update({
+		id: "/organizations/new/",
+		path: "/organizations/new/",
+		getParentRoute: () => AuthenticatedSettingsAdminRouteRoute,
+	} as any);
 const AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRoute =
-  AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRouteImport.update({
-    id: '/billing/',
-    path: '/billing/',
-    getParentRoute: () => AuthenticatedSettingsOrgsOrganizationSlugRouteRoute,
-  } as any)
+	AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRouteImport.update({
+		id: "/billing/",
+		path: "/billing/",
+		getParentRoute: () => AuthenticatedSettingsOrgsOrganizationSlugRouteRoute,
+	} as any);
 const AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRoute =
-  AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRouteImport.update({
-    id: '/members/',
-    path: '/members/',
-    getParentRoute: () => AuthenticatedSettingsOrgsOrganizationSlugRouteRoute,
-  } as any)
+	AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRouteImport.update({
+		id: "/members/",
+		path: "/members/",
+		getParentRoute: () => AuthenticatedSettingsOrgsOrganizationSlugRouteRoute,
+	} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/api/$': typeof ApiSplatRoute
-  '/image-proxy/$': typeof ImageProxySplatRoute
-  '/forgot-password/': typeof ForgotPasswordIndexRoute
-  '/login/': typeof LoginIndexRoute
-  '/reset-password/': typeof ResetPasswordIndexRoute
-  '/signup/': typeof SignupIndexRoute
-  '/verify/': typeof VerifyIndexRoute
-  '/admin': typeof AuthenticatedSettingsAdminRouteRouteWithChildren
-  '/checkout-return/': typeof AuthenticatedCheckoutReturnIndexRoute
-  '/onboarding/': typeof AuthenticatedOnboardingIndexRoute
-  '/orgs/$organizationSlug': typeof AuthenticatedSettingsOrgsOrganizationSlugRouteRouteWithChildren
-  '/account/': typeof AuthenticatedSettingsAccountIndexRoute
-  '/admin/': typeof AuthenticatedSettingsAdminIndexRoute
-  '/orgs/': typeof AuthenticatedSettingsOrgsIndexRoute
-  '/invitations/$invitationId/': typeof AuthenticatedInvitationsInvitationIdIndexRoute
-  '/account/notifications/': typeof AuthenticatedSettingsAccountNotificationsIndexRoute
-  '/account/security/': typeof AuthenticatedSettingsAccountSecurityIndexRoute
-  '/admin/organizations/': typeof AuthenticatedSettingsAdminOrganizationsIndexRoute
-  '/admin/users/': typeof AuthenticatedSettingsAdminUsersIndexRoute
-  '/orgs/$organizationSlug/': typeof AuthenticatedSettingsOrgsOrganizationSlugIndexRoute
-  '/orgs/new/': typeof AuthenticatedSettingsOrgsNewIndexRoute
-  '/admin/organizations/$organizationId/': typeof AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRoute
-  '/admin/organizations/new/': typeof AuthenticatedSettingsAdminOrganizationsNewIndexRoute
-  '/orgs/$organizationSlug/billing/': typeof AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRoute
-  '/orgs/$organizationSlug/members/': typeof AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRoute
+	"/": typeof IndexRoute;
+	"/api/$": typeof ApiSplatRoute;
+	"/image-proxy/$": typeof ImageProxySplatRoute;
+	"/forgot-password/": typeof ForgotPasswordIndexRoute;
+	"/login/": typeof LoginIndexRoute;
+	"/reset-password/": typeof ResetPasswordIndexRoute;
+	"/signup/": typeof SignupIndexRoute;
+	"/verify/": typeof VerifyIndexRoute;
+	"/admin": typeof AuthenticatedSettingsAdminRouteRouteWithChildren;
+	"/checkout-return/": typeof AuthenticatedCheckoutReturnIndexRoute;
+	"/onboarding/": typeof AuthenticatedOnboardingIndexRoute;
+	"/orgs/$organizationSlug": typeof AuthenticatedSettingsOrgsOrganizationSlugRouteRouteWithChildren;
+	"/account/": typeof AuthenticatedSettingsAccountIndexRoute;
+	"/admin/": typeof AuthenticatedSettingsAdminIndexRoute;
+	"/orgs/": typeof AuthenticatedSettingsOrgsIndexRoute;
+	"/invitations/$invitationId/": typeof AuthenticatedInvitationsInvitationIdIndexRoute;
+	"/account/notifications/": typeof AuthenticatedSettingsAccountNotificationsIndexRoute;
+	"/account/security/": typeof AuthenticatedSettingsAccountSecurityIndexRoute;
+	"/admin/organizations/": typeof AuthenticatedSettingsAdminOrganizationsIndexRoute;
+	"/admin/users/": typeof AuthenticatedSettingsAdminUsersIndexRoute;
+	"/orgs/$organizationSlug/": typeof AuthenticatedSettingsOrgsOrganizationSlugIndexRoute;
+	"/orgs/new/": typeof AuthenticatedSettingsOrgsNewIndexRoute;
+	"/admin/organizations/$organizationId/": typeof AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRoute;
+	"/admin/organizations/new/": typeof AuthenticatedSettingsAdminOrganizationsNewIndexRoute;
+	"/orgs/$organizationSlug/billing/": typeof AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRoute;
+	"/orgs/$organizationSlug/members/": typeof AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/api/$': typeof ApiSplatRoute
-  '/image-proxy/$': typeof ImageProxySplatRoute
-  '/forgot-password': typeof ForgotPasswordIndexRoute
-  '/login': typeof LoginIndexRoute
-  '/reset-password': typeof ResetPasswordIndexRoute
-  '/signup': typeof SignupIndexRoute
-  '/verify': typeof VerifyIndexRoute
-  '/checkout-return': typeof AuthenticatedCheckoutReturnIndexRoute
-  '/onboarding': typeof AuthenticatedOnboardingIndexRoute
-  '/account': typeof AuthenticatedSettingsAccountIndexRoute
-  '/admin': typeof AuthenticatedSettingsAdminIndexRoute
-  '/orgs': typeof AuthenticatedSettingsOrgsIndexRoute
-  '/invitations/$invitationId': typeof AuthenticatedInvitationsInvitationIdIndexRoute
-  '/account/notifications': typeof AuthenticatedSettingsAccountNotificationsIndexRoute
-  '/account/security': typeof AuthenticatedSettingsAccountSecurityIndexRoute
-  '/admin/organizations': typeof AuthenticatedSettingsAdminOrganizationsIndexRoute
-  '/admin/users': typeof AuthenticatedSettingsAdminUsersIndexRoute
-  '/orgs/$organizationSlug': typeof AuthenticatedSettingsOrgsOrganizationSlugIndexRoute
-  '/orgs/new': typeof AuthenticatedSettingsOrgsNewIndexRoute
-  '/admin/organizations/$organizationId': typeof AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRoute
-  '/admin/organizations/new': typeof AuthenticatedSettingsAdminOrganizationsNewIndexRoute
-  '/orgs/$organizationSlug/billing': typeof AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRoute
-  '/orgs/$organizationSlug/members': typeof AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRoute
+	"/": typeof IndexRoute;
+	"/api/$": typeof ApiSplatRoute;
+	"/image-proxy/$": typeof ImageProxySplatRoute;
+	"/forgot-password": typeof ForgotPasswordIndexRoute;
+	"/login": typeof LoginIndexRoute;
+	"/reset-password": typeof ResetPasswordIndexRoute;
+	"/signup": typeof SignupIndexRoute;
+	"/verify": typeof VerifyIndexRoute;
+	"/checkout-return": typeof AuthenticatedCheckoutReturnIndexRoute;
+	"/onboarding": typeof AuthenticatedOnboardingIndexRoute;
+	"/account": typeof AuthenticatedSettingsAccountIndexRoute;
+	"/admin": typeof AuthenticatedSettingsAdminIndexRoute;
+	"/orgs": typeof AuthenticatedSettingsOrgsIndexRoute;
+	"/invitations/$invitationId": typeof AuthenticatedInvitationsInvitationIdIndexRoute;
+	"/account/notifications": typeof AuthenticatedSettingsAccountNotificationsIndexRoute;
+	"/account/security": typeof AuthenticatedSettingsAccountSecurityIndexRoute;
+	"/admin/organizations": typeof AuthenticatedSettingsAdminOrganizationsIndexRoute;
+	"/admin/users": typeof AuthenticatedSettingsAdminUsersIndexRoute;
+	"/orgs/$organizationSlug": typeof AuthenticatedSettingsOrgsOrganizationSlugIndexRoute;
+	"/orgs/new": typeof AuthenticatedSettingsOrgsNewIndexRoute;
+	"/admin/organizations/$organizationId": typeof AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRoute;
+	"/admin/organizations/new": typeof AuthenticatedSettingsAdminOrganizationsNewIndexRoute;
+	"/orgs/$organizationSlug/billing": typeof AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRoute;
+	"/orgs/$organizationSlug/members": typeof AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/_authenticated/_settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/api/$': typeof ApiSplatRoute
-  '/image-proxy/$': typeof ImageProxySplatRoute
-  '/forgot-password/': typeof ForgotPasswordIndexRoute
-  '/login/': typeof LoginIndexRoute
-  '/reset-password/': typeof ResetPasswordIndexRoute
-  '/signup/': typeof SignupIndexRoute
-  '/verify/': typeof VerifyIndexRoute
-  '/_authenticated/_settings/admin': typeof AuthenticatedSettingsAdminRouteRouteWithChildren
-  '/_authenticated/checkout-return/': typeof AuthenticatedCheckoutReturnIndexRoute
-  '/_authenticated/onboarding/': typeof AuthenticatedOnboardingIndexRoute
-  '/_authenticated/_settings/orgs/$organizationSlug': typeof AuthenticatedSettingsOrgsOrganizationSlugRouteRouteWithChildren
-  '/_authenticated/_settings/account/': typeof AuthenticatedSettingsAccountIndexRoute
-  '/_authenticated/_settings/admin/': typeof AuthenticatedSettingsAdminIndexRoute
-  '/_authenticated/_settings/orgs/': typeof AuthenticatedSettingsOrgsIndexRoute
-  '/_authenticated/invitations/$invitationId/': typeof AuthenticatedInvitationsInvitationIdIndexRoute
-  '/_authenticated/_settings/account/notifications/': typeof AuthenticatedSettingsAccountNotificationsIndexRoute
-  '/_authenticated/_settings/account/security/': typeof AuthenticatedSettingsAccountSecurityIndexRoute
-  '/_authenticated/_settings/admin/organizations/': typeof AuthenticatedSettingsAdminOrganizationsIndexRoute
-  '/_authenticated/_settings/admin/users/': typeof AuthenticatedSettingsAdminUsersIndexRoute
-  '/_authenticated/_settings/orgs/$organizationSlug/': typeof AuthenticatedSettingsOrgsOrganizationSlugIndexRoute
-  '/_authenticated/_settings/orgs/new/': typeof AuthenticatedSettingsOrgsNewIndexRoute
-  '/_authenticated/_settings/admin/organizations/$organizationId/': typeof AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRoute
-  '/_authenticated/_settings/admin/organizations/new/': typeof AuthenticatedSettingsAdminOrganizationsNewIndexRoute
-  '/_authenticated/_settings/orgs/$organizationSlug/billing/': typeof AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRoute
-  '/_authenticated/_settings/orgs/$organizationSlug/members/': typeof AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRoute
+	__root__: typeof rootRouteImport;
+	"/": typeof IndexRoute;
+	"/_authenticated": typeof AuthenticatedRouteRouteWithChildren;
+	"/_authenticated/_settings": typeof AuthenticatedSettingsRouteRouteWithChildren;
+	"/api/$": typeof ApiSplatRoute;
+	"/image-proxy/$": typeof ImageProxySplatRoute;
+	"/forgot-password/": typeof ForgotPasswordIndexRoute;
+	"/login/": typeof LoginIndexRoute;
+	"/reset-password/": typeof ResetPasswordIndexRoute;
+	"/signup/": typeof SignupIndexRoute;
+	"/verify/": typeof VerifyIndexRoute;
+	"/_authenticated/_settings/admin": typeof AuthenticatedSettingsAdminRouteRouteWithChildren;
+	"/_authenticated/checkout-return/": typeof AuthenticatedCheckoutReturnIndexRoute;
+	"/_authenticated/onboarding/": typeof AuthenticatedOnboardingIndexRoute;
+	"/_authenticated/_settings/orgs/$organizationSlug": typeof AuthenticatedSettingsOrgsOrganizationSlugRouteRouteWithChildren;
+	"/_authenticated/_settings/account/": typeof AuthenticatedSettingsAccountIndexRoute;
+	"/_authenticated/_settings/admin/": typeof AuthenticatedSettingsAdminIndexRoute;
+	"/_authenticated/_settings/orgs/": typeof AuthenticatedSettingsOrgsIndexRoute;
+	"/_authenticated/invitations/$invitationId/": typeof AuthenticatedInvitationsInvitationIdIndexRoute;
+	"/_authenticated/_settings/account/notifications/": typeof AuthenticatedSettingsAccountNotificationsIndexRoute;
+	"/_authenticated/_settings/account/security/": typeof AuthenticatedSettingsAccountSecurityIndexRoute;
+	"/_authenticated/_settings/admin/organizations/": typeof AuthenticatedSettingsAdminOrganizationsIndexRoute;
+	"/_authenticated/_settings/admin/users/": typeof AuthenticatedSettingsAdminUsersIndexRoute;
+	"/_authenticated/_settings/orgs/$organizationSlug/": typeof AuthenticatedSettingsOrgsOrganizationSlugIndexRoute;
+	"/_authenticated/_settings/orgs/new/": typeof AuthenticatedSettingsOrgsNewIndexRoute;
+	"/_authenticated/_settings/admin/organizations/$organizationId/": typeof AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRoute;
+	"/_authenticated/_settings/admin/organizations/new/": typeof AuthenticatedSettingsAdminOrganizationsNewIndexRoute;
+	"/_authenticated/_settings/orgs/$organizationSlug/billing/": typeof AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRoute;
+	"/_authenticated/_settings/orgs/$organizationSlug/members/": typeof AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/api/$'
-    | '/image-proxy/$'
-    | '/forgot-password/'
-    | '/login/'
-    | '/reset-password/'
-    | '/signup/'
-    | '/verify/'
-    | '/admin'
-    | '/checkout-return/'
-    | '/onboarding/'
-    | '/orgs/$organizationSlug'
-    | '/account/'
-    | '/admin/'
-    | '/orgs/'
-    | '/invitations/$invitationId/'
-    | '/account/notifications/'
-    | '/account/security/'
-    | '/admin/organizations/'
-    | '/admin/users/'
-    | '/orgs/$organizationSlug/'
-    | '/orgs/new/'
-    | '/admin/organizations/$organizationId/'
-    | '/admin/organizations/new/'
-    | '/orgs/$organizationSlug/billing/'
-    | '/orgs/$organizationSlug/members/'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/api/$'
-    | '/image-proxy/$'
-    | '/forgot-password'
-    | '/login'
-    | '/reset-password'
-    | '/signup'
-    | '/verify'
-    | '/checkout-return'
-    | '/onboarding'
-    | '/account'
-    | '/admin'
-    | '/orgs'
-    | '/invitations/$invitationId'
-    | '/account/notifications'
-    | '/account/security'
-    | '/admin/organizations'
-    | '/admin/users'
-    | '/orgs/$organizationSlug'
-    | '/orgs/new'
-    | '/admin/organizations/$organizationId'
-    | '/admin/organizations/new'
-    | '/orgs/$organizationSlug/billing'
-    | '/orgs/$organizationSlug/members'
-  id:
-    | '__root__'
-    | '/'
-    | '/_authenticated'
-    | '/_authenticated/_settings'
-    | '/api/$'
-    | '/image-proxy/$'
-    | '/forgot-password/'
-    | '/login/'
-    | '/reset-password/'
-    | '/signup/'
-    | '/verify/'
-    | '/_authenticated/_settings/admin'
-    | '/_authenticated/checkout-return/'
-    | '/_authenticated/onboarding/'
-    | '/_authenticated/_settings/orgs/$organizationSlug'
-    | '/_authenticated/_settings/account/'
-    | '/_authenticated/_settings/admin/'
-    | '/_authenticated/_settings/orgs/'
-    | '/_authenticated/invitations/$invitationId/'
-    | '/_authenticated/_settings/account/notifications/'
-    | '/_authenticated/_settings/account/security/'
-    | '/_authenticated/_settings/admin/organizations/'
-    | '/_authenticated/_settings/admin/users/'
-    | '/_authenticated/_settings/orgs/$organizationSlug/'
-    | '/_authenticated/_settings/orgs/new/'
-    | '/_authenticated/_settings/admin/organizations/$organizationId/'
-    | '/_authenticated/_settings/admin/organizations/new/'
-    | '/_authenticated/_settings/orgs/$organizationSlug/billing/'
-    | '/_authenticated/_settings/orgs/$organizationSlug/members/'
-  fileRoutesById: FileRoutesById
+	fileRoutesByFullPath: FileRoutesByFullPath;
+	fullPaths:
+		| "/"
+		| "/api/$"
+		| "/image-proxy/$"
+		| "/forgot-password/"
+		| "/login/"
+		| "/reset-password/"
+		| "/signup/"
+		| "/verify/"
+		| "/admin"
+		| "/checkout-return/"
+		| "/onboarding/"
+		| "/orgs/$organizationSlug"
+		| "/account/"
+		| "/admin/"
+		| "/orgs/"
+		| "/invitations/$invitationId/"
+		| "/account/notifications/"
+		| "/account/security/"
+		| "/admin/organizations/"
+		| "/admin/users/"
+		| "/orgs/$organizationSlug/"
+		| "/orgs/new/"
+		| "/admin/organizations/$organizationId/"
+		| "/admin/organizations/new/"
+		| "/orgs/$organizationSlug/billing/"
+		| "/orgs/$organizationSlug/members/";
+	fileRoutesByTo: FileRoutesByTo;
+	to:
+		| "/"
+		| "/api/$"
+		| "/image-proxy/$"
+		| "/forgot-password"
+		| "/login"
+		| "/reset-password"
+		| "/signup"
+		| "/verify"
+		| "/checkout-return"
+		| "/onboarding"
+		| "/account"
+		| "/admin"
+		| "/orgs"
+		| "/invitations/$invitationId"
+		| "/account/notifications"
+		| "/account/security"
+		| "/admin/organizations"
+		| "/admin/users"
+		| "/orgs/$organizationSlug"
+		| "/orgs/new"
+		| "/admin/organizations/$organizationId"
+		| "/admin/organizations/new"
+		| "/orgs/$organizationSlug/billing"
+		| "/orgs/$organizationSlug/members";
+	id:
+		| "__root__"
+		| "/"
+		| "/_authenticated"
+		| "/_authenticated/_settings"
+		| "/api/$"
+		| "/image-proxy/$"
+		| "/forgot-password/"
+		| "/login/"
+		| "/reset-password/"
+		| "/signup/"
+		| "/verify/"
+		| "/_authenticated/_settings/admin"
+		| "/_authenticated/checkout-return/"
+		| "/_authenticated/onboarding/"
+		| "/_authenticated/_settings/orgs/$organizationSlug"
+		| "/_authenticated/_settings/account/"
+		| "/_authenticated/_settings/admin/"
+		| "/_authenticated/_settings/orgs/"
+		| "/_authenticated/invitations/$invitationId/"
+		| "/_authenticated/_settings/account/notifications/"
+		| "/_authenticated/_settings/account/security/"
+		| "/_authenticated/_settings/admin/organizations/"
+		| "/_authenticated/_settings/admin/users/"
+		| "/_authenticated/_settings/orgs/$organizationSlug/"
+		| "/_authenticated/_settings/orgs/new/"
+		| "/_authenticated/_settings/admin/organizations/$organizationId/"
+		| "/_authenticated/_settings/admin/organizations/new/"
+		| "/_authenticated/_settings/orgs/$organizationSlug/billing/"
+		| "/_authenticated/_settings/orgs/$organizationSlug/members/";
+	fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  ApiSplatRoute: typeof ApiSplatRoute
-  ImageProxySplatRoute: typeof ImageProxySplatRoute
-  ForgotPasswordIndexRoute: typeof ForgotPasswordIndexRoute
-  LoginIndexRoute: typeof LoginIndexRoute
-  ResetPasswordIndexRoute: typeof ResetPasswordIndexRoute
-  SignupIndexRoute: typeof SignupIndexRoute
-  VerifyIndexRoute: typeof VerifyIndexRoute
+	IndexRoute: typeof IndexRoute;
+	AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren;
+	ApiSplatRoute: typeof ApiSplatRoute;
+	ImageProxySplatRoute: typeof ImageProxySplatRoute;
+	ForgotPasswordIndexRoute: typeof ForgotPasswordIndexRoute;
+	LoginIndexRoute: typeof LoginIndexRoute;
+	ResetPasswordIndexRoute: typeof ResetPasswordIndexRoute;
+	SignupIndexRoute: typeof SignupIndexRoute;
+	VerifyIndexRoute: typeof VerifyIndexRoute;
 }
 
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/_settings': {
-      id: '/_authenticated/_settings'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedSettingsRouteRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/api/$': {
-      id: '/api/$'
-      path: '/api/$'
-      fullPath: '/api/$'
-      preLoaderRoute: typeof ApiSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/forgot-password/': {
-      id: '/forgot-password/'
-      path: '/forgot-password'
-      fullPath: '/forgot-password/'
-      preLoaderRoute: typeof ForgotPasswordIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/image-proxy/$': {
-      id: '/image-proxy/$'
-      path: '/image-proxy/$'
-      fullPath: '/image-proxy/$'
-      preLoaderRoute: typeof ImageProxySplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login/': {
-      id: '/login/'
-      path: '/login'
-      fullPath: '/login/'
-      preLoaderRoute: typeof LoginIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password/': {
-      id: '/reset-password/'
-      path: '/reset-password'
-      fullPath: '/reset-password/'
-      preLoaderRoute: typeof ResetPasswordIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/signup/': {
-      id: '/signup/'
-      path: '/signup'
-      fullPath: '/signup/'
-      preLoaderRoute: typeof SignupIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/verify/': {
-      id: '/verify/'
-      path: '/verify'
-      fullPath: '/verify/'
-      preLoaderRoute: typeof VerifyIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/_settings/admin': {
-      id: '/_authenticated/_settings/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AuthenticatedSettingsAdminRouteRouteImport
-      parentRoute: typeof AuthenticatedSettingsRouteRoute
-    }
-    '/_authenticated/checkout-return/': {
-      id: '/_authenticated/checkout-return/'
-      path: '/checkout-return'
-      fullPath: '/checkout-return/'
-      preLoaderRoute: typeof AuthenticatedCheckoutReturnIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/onboarding/': {
-      id: '/_authenticated/onboarding/'
-      path: '/onboarding'
-      fullPath: '/onboarding/'
-      preLoaderRoute: typeof AuthenticatedOnboardingIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/_settings/account/': {
-      id: '/_authenticated/_settings/account/'
-      path: '/account'
-      fullPath: '/account/'
-      preLoaderRoute: typeof AuthenticatedSettingsAccountIndexRouteImport
-      parentRoute: typeof AuthenticatedSettingsRouteRoute
-    }
-    '/_authenticated/_settings/admin/': {
-      id: '/_authenticated/_settings/admin/'
-      path: '/'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AuthenticatedSettingsAdminIndexRouteImport
-      parentRoute: typeof AuthenticatedSettingsAdminRouteRoute
-    }
-    '/_authenticated/_settings/orgs/': {
-      id: '/_authenticated/_settings/orgs/'
-      path: '/orgs'
-      fullPath: '/orgs/'
-      preLoaderRoute: typeof AuthenticatedSettingsOrgsIndexRouteImport
-      parentRoute: typeof AuthenticatedSettingsRouteRoute
-    }
-    '/_authenticated/_settings/orgs/$organizationSlug': {
-      id: '/_authenticated/_settings/orgs/$organizationSlug'
-      path: '/orgs/$organizationSlug'
-      fullPath: '/orgs/$organizationSlug'
-      preLoaderRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugRouteRouteImport
-      parentRoute: typeof AuthenticatedSettingsRouteRoute
-    }
-    '/_authenticated/invitations/$invitationId/': {
-      id: '/_authenticated/invitations/$invitationId/'
-      path: '/invitations/$invitationId'
-      fullPath: '/invitations/$invitationId/'
-      preLoaderRoute: typeof AuthenticatedInvitationsInvitationIdIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/_settings/account/notifications/': {
-      id: '/_authenticated/_settings/account/notifications/'
-      path: '/account/notifications'
-      fullPath: '/account/notifications/'
-      preLoaderRoute: typeof AuthenticatedSettingsAccountNotificationsIndexRouteImport
-      parentRoute: typeof AuthenticatedSettingsRouteRoute
-    }
-    '/_authenticated/_settings/account/security/': {
-      id: '/_authenticated/_settings/account/security/'
-      path: '/account/security'
-      fullPath: '/account/security/'
-      preLoaderRoute: typeof AuthenticatedSettingsAccountSecurityIndexRouteImport
-      parentRoute: typeof AuthenticatedSettingsRouteRoute
-    }
-    '/_authenticated/_settings/admin/organizations/': {
-      id: '/_authenticated/_settings/admin/organizations/'
-      path: '/organizations'
-      fullPath: '/admin/organizations/'
-      preLoaderRoute: typeof AuthenticatedSettingsAdminOrganizationsIndexRouteImport
-      parentRoute: typeof AuthenticatedSettingsAdminRouteRoute
-    }
-    '/_authenticated/_settings/admin/users/': {
-      id: '/_authenticated/_settings/admin/users/'
-      path: '/users'
-      fullPath: '/admin/users/'
-      preLoaderRoute: typeof AuthenticatedSettingsAdminUsersIndexRouteImport
-      parentRoute: typeof AuthenticatedSettingsAdminRouteRoute
-    }
-    '/_authenticated/_settings/orgs/$organizationSlug/': {
-      id: '/_authenticated/_settings/orgs/$organizationSlug/'
-      path: '/'
-      fullPath: '/orgs/$organizationSlug/'
-      preLoaderRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugIndexRouteImport
-      parentRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugRouteRoute
-    }
-    '/_authenticated/_settings/orgs/new/': {
-      id: '/_authenticated/_settings/orgs/new/'
-      path: '/orgs/new'
-      fullPath: '/orgs/new/'
-      preLoaderRoute: typeof AuthenticatedSettingsOrgsNewIndexRouteImport
-      parentRoute: typeof AuthenticatedSettingsRouteRoute
-    }
-    '/_authenticated/_settings/admin/organizations/$organizationId/': {
-      id: '/_authenticated/_settings/admin/organizations/$organizationId/'
-      path: '/organizations/$organizationId'
-      fullPath: '/admin/organizations/$organizationId/'
-      preLoaderRoute: typeof AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRouteImport
-      parentRoute: typeof AuthenticatedSettingsAdminRouteRoute
-    }
-    '/_authenticated/_settings/admin/organizations/new/': {
-      id: '/_authenticated/_settings/admin/organizations/new/'
-      path: '/organizations/new'
-      fullPath: '/admin/organizations/new/'
-      preLoaderRoute: typeof AuthenticatedSettingsAdminOrganizationsNewIndexRouteImport
-      parentRoute: typeof AuthenticatedSettingsAdminRouteRoute
-    }
-    '/_authenticated/_settings/orgs/$organizationSlug/billing/': {
-      id: '/_authenticated/_settings/orgs/$organizationSlug/billing/'
-      path: '/billing'
-      fullPath: '/orgs/$organizationSlug/billing/'
-      preLoaderRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRouteImport
-      parentRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugRouteRoute
-    }
-    '/_authenticated/_settings/orgs/$organizationSlug/members/': {
-      id: '/_authenticated/_settings/orgs/$organizationSlug/members/'
-      path: '/members'
-      fullPath: '/orgs/$organizationSlug/members/'
-      preLoaderRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRouteImport
-      parentRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugRouteRoute
-    }
-  }
+declare module "@tanstack/react-router" {
+	interface FileRoutesByPath {
+		"/": {
+			id: "/";
+			path: "/";
+			fullPath: "/";
+			preLoaderRoute: typeof IndexRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/_authenticated": {
+			id: "/_authenticated";
+			path: "";
+			fullPath: "/";
+			preLoaderRoute: typeof AuthenticatedRouteRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/_authenticated/_settings": {
+			id: "/_authenticated/_settings";
+			path: "";
+			fullPath: "/";
+			preLoaderRoute: typeof AuthenticatedSettingsRouteRouteImport;
+			parentRoute: typeof AuthenticatedRouteRoute;
+		};
+		"/api/$": {
+			id: "/api/$";
+			path: "/api/$";
+			fullPath: "/api/$";
+			preLoaderRoute: typeof ApiSplatRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/forgot-password/": {
+			id: "/forgot-password/";
+			path: "/forgot-password";
+			fullPath: "/forgot-password/";
+			preLoaderRoute: typeof ForgotPasswordIndexRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/image-proxy/$": {
+			id: "/image-proxy/$";
+			path: "/image-proxy/$";
+			fullPath: "/image-proxy/$";
+			preLoaderRoute: typeof ImageProxySplatRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/login/": {
+			id: "/login/";
+			path: "/login";
+			fullPath: "/login/";
+			preLoaderRoute: typeof LoginIndexRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/reset-password/": {
+			id: "/reset-password/";
+			path: "/reset-password";
+			fullPath: "/reset-password/";
+			preLoaderRoute: typeof ResetPasswordIndexRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/signup/": {
+			id: "/signup/";
+			path: "/signup";
+			fullPath: "/signup/";
+			preLoaderRoute: typeof SignupIndexRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/verify/": {
+			id: "/verify/";
+			path: "/verify";
+			fullPath: "/verify/";
+			preLoaderRoute: typeof VerifyIndexRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/_authenticated/_settings/admin": {
+			id: "/_authenticated/_settings/admin";
+			path: "/admin";
+			fullPath: "/admin";
+			preLoaderRoute: typeof AuthenticatedSettingsAdminRouteRouteImport;
+			parentRoute: typeof AuthenticatedSettingsRouteRoute;
+		};
+		"/_authenticated/checkout-return/": {
+			id: "/_authenticated/checkout-return/";
+			path: "/checkout-return";
+			fullPath: "/checkout-return/";
+			preLoaderRoute: typeof AuthenticatedCheckoutReturnIndexRouteImport;
+			parentRoute: typeof AuthenticatedRouteRoute;
+		};
+		"/_authenticated/onboarding/": {
+			id: "/_authenticated/onboarding/";
+			path: "/onboarding";
+			fullPath: "/onboarding/";
+			preLoaderRoute: typeof AuthenticatedOnboardingIndexRouteImport;
+			parentRoute: typeof AuthenticatedRouteRoute;
+		};
+		"/_authenticated/_settings/account/": {
+			id: "/_authenticated/_settings/account/";
+			path: "/account";
+			fullPath: "/account/";
+			preLoaderRoute: typeof AuthenticatedSettingsAccountIndexRouteImport;
+			parentRoute: typeof AuthenticatedSettingsRouteRoute;
+		};
+		"/_authenticated/_settings/admin/": {
+			id: "/_authenticated/_settings/admin/";
+			path: "/";
+			fullPath: "/admin/";
+			preLoaderRoute: typeof AuthenticatedSettingsAdminIndexRouteImport;
+			parentRoute: typeof AuthenticatedSettingsAdminRouteRoute;
+		};
+		"/_authenticated/_settings/orgs/": {
+			id: "/_authenticated/_settings/orgs/";
+			path: "/orgs";
+			fullPath: "/orgs/";
+			preLoaderRoute: typeof AuthenticatedSettingsOrgsIndexRouteImport;
+			parentRoute: typeof AuthenticatedSettingsRouteRoute;
+		};
+		"/_authenticated/_settings/orgs/$organizationSlug": {
+			id: "/_authenticated/_settings/orgs/$organizationSlug";
+			path: "/orgs/$organizationSlug";
+			fullPath: "/orgs/$organizationSlug";
+			preLoaderRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugRouteRouteImport;
+			parentRoute: typeof AuthenticatedSettingsRouteRoute;
+		};
+		"/_authenticated/invitations/$invitationId/": {
+			id: "/_authenticated/invitations/$invitationId/";
+			path: "/invitations/$invitationId";
+			fullPath: "/invitations/$invitationId/";
+			preLoaderRoute: typeof AuthenticatedInvitationsInvitationIdIndexRouteImport;
+			parentRoute: typeof AuthenticatedRouteRoute;
+		};
+		"/_authenticated/_settings/account/notifications/": {
+			id: "/_authenticated/_settings/account/notifications/";
+			path: "/account/notifications";
+			fullPath: "/account/notifications/";
+			preLoaderRoute: typeof AuthenticatedSettingsAccountNotificationsIndexRouteImport;
+			parentRoute: typeof AuthenticatedSettingsRouteRoute;
+		};
+		"/_authenticated/_settings/account/security/": {
+			id: "/_authenticated/_settings/account/security/";
+			path: "/account/security";
+			fullPath: "/account/security/";
+			preLoaderRoute: typeof AuthenticatedSettingsAccountSecurityIndexRouteImport;
+			parentRoute: typeof AuthenticatedSettingsRouteRoute;
+		};
+		"/_authenticated/_settings/admin/organizations/": {
+			id: "/_authenticated/_settings/admin/organizations/";
+			path: "/organizations";
+			fullPath: "/admin/organizations/";
+			preLoaderRoute: typeof AuthenticatedSettingsAdminOrganizationsIndexRouteImport;
+			parentRoute: typeof AuthenticatedSettingsAdminRouteRoute;
+		};
+		"/_authenticated/_settings/admin/users/": {
+			id: "/_authenticated/_settings/admin/users/";
+			path: "/users";
+			fullPath: "/admin/users/";
+			preLoaderRoute: typeof AuthenticatedSettingsAdminUsersIndexRouteImport;
+			parentRoute: typeof AuthenticatedSettingsAdminRouteRoute;
+		};
+		"/_authenticated/_settings/orgs/$organizationSlug/": {
+			id: "/_authenticated/_settings/orgs/$organizationSlug/";
+			path: "/";
+			fullPath: "/orgs/$organizationSlug/";
+			preLoaderRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugIndexRouteImport;
+			parentRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugRouteRoute;
+		};
+		"/_authenticated/_settings/orgs/new/": {
+			id: "/_authenticated/_settings/orgs/new/";
+			path: "/orgs/new";
+			fullPath: "/orgs/new/";
+			preLoaderRoute: typeof AuthenticatedSettingsOrgsNewIndexRouteImport;
+			parentRoute: typeof AuthenticatedSettingsRouteRoute;
+		};
+		"/_authenticated/_settings/admin/organizations/$organizationId/": {
+			id: "/_authenticated/_settings/admin/organizations/$organizationId/";
+			path: "/organizations/$organizationId";
+			fullPath: "/admin/organizations/$organizationId/";
+			preLoaderRoute: typeof AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRouteImport;
+			parentRoute: typeof AuthenticatedSettingsAdminRouteRoute;
+		};
+		"/_authenticated/_settings/admin/organizations/new/": {
+			id: "/_authenticated/_settings/admin/organizations/new/";
+			path: "/organizations/new";
+			fullPath: "/admin/organizations/new/";
+			preLoaderRoute: typeof AuthenticatedSettingsAdminOrganizationsNewIndexRouteImport;
+			parentRoute: typeof AuthenticatedSettingsAdminRouteRoute;
+		};
+		"/_authenticated/_settings/orgs/$organizationSlug/billing/": {
+			id: "/_authenticated/_settings/orgs/$organizationSlug/billing/";
+			path: "/billing";
+			fullPath: "/orgs/$organizationSlug/billing/";
+			preLoaderRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRouteImport;
+			parentRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugRouteRoute;
+		};
+		"/_authenticated/_settings/orgs/$organizationSlug/members/": {
+			id: "/_authenticated/_settings/orgs/$organizationSlug/members/";
+			path: "/members";
+			fullPath: "/orgs/$organizationSlug/members/";
+			preLoaderRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRouteImport;
+			parentRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugRouteRoute;
+		};
+	}
 }
 
 interface AuthenticatedSettingsAdminRouteRouteChildren {
-  AuthenticatedSettingsAdminIndexRoute: typeof AuthenticatedSettingsAdminIndexRoute
-  AuthenticatedSettingsAdminOrganizationsIndexRoute: typeof AuthenticatedSettingsAdminOrganizationsIndexRoute
-  AuthenticatedSettingsAdminUsersIndexRoute: typeof AuthenticatedSettingsAdminUsersIndexRoute
-  AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRoute: typeof AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRoute
-  AuthenticatedSettingsAdminOrganizationsNewIndexRoute: typeof AuthenticatedSettingsAdminOrganizationsNewIndexRoute
+	AuthenticatedSettingsAdminIndexRoute: typeof AuthenticatedSettingsAdminIndexRoute;
+	AuthenticatedSettingsAdminOrganizationsIndexRoute: typeof AuthenticatedSettingsAdminOrganizationsIndexRoute;
+	AuthenticatedSettingsAdminUsersIndexRoute: typeof AuthenticatedSettingsAdminUsersIndexRoute;
+	AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRoute: typeof AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRoute;
+	AuthenticatedSettingsAdminOrganizationsNewIndexRoute: typeof AuthenticatedSettingsAdminOrganizationsNewIndexRoute;
 }
 
-const AuthenticatedSettingsAdminRouteRouteChildren: AuthenticatedSettingsAdminRouteRouteChildren =
-  {
-    AuthenticatedSettingsAdminIndexRoute: AuthenticatedSettingsAdminIndexRoute,
-    AuthenticatedSettingsAdminOrganizationsIndexRoute:
-      AuthenticatedSettingsAdminOrganizationsIndexRoute,
-    AuthenticatedSettingsAdminUsersIndexRoute:
-      AuthenticatedSettingsAdminUsersIndexRoute,
-    AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRoute:
-      AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRoute,
-    AuthenticatedSettingsAdminOrganizationsNewIndexRoute:
-      AuthenticatedSettingsAdminOrganizationsNewIndexRoute,
-  }
+const AuthenticatedSettingsAdminRouteRouteChildren: AuthenticatedSettingsAdminRouteRouteChildren = {
+	AuthenticatedSettingsAdminIndexRoute: AuthenticatedSettingsAdminIndexRoute,
+	AuthenticatedSettingsAdminOrganizationsIndexRoute:
+		AuthenticatedSettingsAdminOrganizationsIndexRoute,
+	AuthenticatedSettingsAdminUsersIndexRoute: AuthenticatedSettingsAdminUsersIndexRoute,
+	AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRoute:
+		AuthenticatedSettingsAdminOrganizationsOrganizationIdIndexRoute,
+	AuthenticatedSettingsAdminOrganizationsNewIndexRoute:
+		AuthenticatedSettingsAdminOrganizationsNewIndexRoute,
+};
 
 const AuthenticatedSettingsAdminRouteRouteWithChildren =
-  AuthenticatedSettingsAdminRouteRoute._addFileChildren(
-    AuthenticatedSettingsAdminRouteRouteChildren,
-  )
+	AuthenticatedSettingsAdminRouteRoute._addFileChildren(
+		AuthenticatedSettingsAdminRouteRouteChildren,
+	);
 
 interface AuthenticatedSettingsOrgsOrganizationSlugRouteRouteChildren {
-  AuthenticatedSettingsOrgsOrganizationSlugIndexRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugIndexRoute
-  AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRoute
-  AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRoute
+	AuthenticatedSettingsOrgsOrganizationSlugIndexRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugIndexRoute;
+	AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRoute;
+	AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRoute;
 }
 
 const AuthenticatedSettingsOrgsOrganizationSlugRouteRouteChildren: AuthenticatedSettingsOrgsOrganizationSlugRouteRouteChildren =
-  {
-    AuthenticatedSettingsOrgsOrganizationSlugIndexRoute:
-      AuthenticatedSettingsOrgsOrganizationSlugIndexRoute,
-    AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRoute:
-      AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRoute,
-    AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRoute:
-      AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRoute,
-  }
+	{
+		AuthenticatedSettingsOrgsOrganizationSlugIndexRoute:
+			AuthenticatedSettingsOrgsOrganizationSlugIndexRoute,
+		AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRoute:
+			AuthenticatedSettingsOrgsOrganizationSlugBillingIndexRoute,
+		AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRoute:
+			AuthenticatedSettingsOrgsOrganizationSlugMembersIndexRoute,
+	};
 
 const AuthenticatedSettingsOrgsOrganizationSlugRouteRouteWithChildren =
-  AuthenticatedSettingsOrgsOrganizationSlugRouteRoute._addFileChildren(
-    AuthenticatedSettingsOrgsOrganizationSlugRouteRouteChildren,
-  )
+	AuthenticatedSettingsOrgsOrganizationSlugRouteRoute._addFileChildren(
+		AuthenticatedSettingsOrgsOrganizationSlugRouteRouteChildren,
+	);
 
 interface AuthenticatedSettingsRouteRouteChildren {
-  AuthenticatedSettingsAdminRouteRoute: typeof AuthenticatedSettingsAdminRouteRouteWithChildren
-  AuthenticatedSettingsOrgsOrganizationSlugRouteRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugRouteRouteWithChildren
-  AuthenticatedSettingsAccountIndexRoute: typeof AuthenticatedSettingsAccountIndexRoute
-  AuthenticatedSettingsOrgsIndexRoute: typeof AuthenticatedSettingsOrgsIndexRoute
-  AuthenticatedSettingsAccountNotificationsIndexRoute: typeof AuthenticatedSettingsAccountNotificationsIndexRoute
-  AuthenticatedSettingsAccountSecurityIndexRoute: typeof AuthenticatedSettingsAccountSecurityIndexRoute
-  AuthenticatedSettingsOrgsNewIndexRoute: typeof AuthenticatedSettingsOrgsNewIndexRoute
+	AuthenticatedSettingsAdminRouteRoute: typeof AuthenticatedSettingsAdminRouteRouteWithChildren;
+	AuthenticatedSettingsOrgsOrganizationSlugRouteRoute: typeof AuthenticatedSettingsOrgsOrganizationSlugRouteRouteWithChildren;
+	AuthenticatedSettingsAccountIndexRoute: typeof AuthenticatedSettingsAccountIndexRoute;
+	AuthenticatedSettingsOrgsIndexRoute: typeof AuthenticatedSettingsOrgsIndexRoute;
+	AuthenticatedSettingsAccountNotificationsIndexRoute: typeof AuthenticatedSettingsAccountNotificationsIndexRoute;
+	AuthenticatedSettingsAccountSecurityIndexRoute: typeof AuthenticatedSettingsAccountSecurityIndexRoute;
+	AuthenticatedSettingsOrgsNewIndexRoute: typeof AuthenticatedSettingsOrgsNewIndexRoute;
 }
 
-const AuthenticatedSettingsRouteRouteChildren: AuthenticatedSettingsRouteRouteChildren =
-  {
-    AuthenticatedSettingsAdminRouteRoute:
-      AuthenticatedSettingsAdminRouteRouteWithChildren,
-    AuthenticatedSettingsOrgsOrganizationSlugRouteRoute:
-      AuthenticatedSettingsOrgsOrganizationSlugRouteRouteWithChildren,
-    AuthenticatedSettingsAccountIndexRoute:
-      AuthenticatedSettingsAccountIndexRoute,
-    AuthenticatedSettingsOrgsIndexRoute: AuthenticatedSettingsOrgsIndexRoute,
-    AuthenticatedSettingsAccountNotificationsIndexRoute:
-      AuthenticatedSettingsAccountNotificationsIndexRoute,
-    AuthenticatedSettingsAccountSecurityIndexRoute:
-      AuthenticatedSettingsAccountSecurityIndexRoute,
-    AuthenticatedSettingsOrgsNewIndexRoute:
-      AuthenticatedSettingsOrgsNewIndexRoute,
-  }
+const AuthenticatedSettingsRouteRouteChildren: AuthenticatedSettingsRouteRouteChildren = {
+	AuthenticatedSettingsAdminRouteRoute: AuthenticatedSettingsAdminRouteRouteWithChildren,
+	AuthenticatedSettingsOrgsOrganizationSlugRouteRoute:
+		AuthenticatedSettingsOrgsOrganizationSlugRouteRouteWithChildren,
+	AuthenticatedSettingsAccountIndexRoute: AuthenticatedSettingsAccountIndexRoute,
+	AuthenticatedSettingsOrgsIndexRoute: AuthenticatedSettingsOrgsIndexRoute,
+	AuthenticatedSettingsAccountNotificationsIndexRoute:
+		AuthenticatedSettingsAccountNotificationsIndexRoute,
+	AuthenticatedSettingsAccountSecurityIndexRoute: AuthenticatedSettingsAccountSecurityIndexRoute,
+	AuthenticatedSettingsOrgsNewIndexRoute: AuthenticatedSettingsOrgsNewIndexRoute,
+};
 
 const AuthenticatedSettingsRouteRouteWithChildren =
-  AuthenticatedSettingsRouteRoute._addFileChildren(
-    AuthenticatedSettingsRouteRouteChildren,
-  )
+	AuthenticatedSettingsRouteRoute._addFileChildren(AuthenticatedSettingsRouteRouteChildren);
 
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
-  AuthenticatedCheckoutReturnIndexRoute: typeof AuthenticatedCheckoutReturnIndexRoute
-  AuthenticatedOnboardingIndexRoute: typeof AuthenticatedOnboardingIndexRoute
-  AuthenticatedInvitationsInvitationIdIndexRoute: typeof AuthenticatedInvitationsInvitationIdIndexRoute
+	AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren;
+	AuthenticatedCheckoutReturnIndexRoute: typeof AuthenticatedCheckoutReturnIndexRoute;
+	AuthenticatedOnboardingIndexRoute: typeof AuthenticatedOnboardingIndexRoute;
+	AuthenticatedInvitationsInvitationIdIndexRoute: typeof AuthenticatedInvitationsInvitationIdIndexRoute;
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
-  AuthenticatedCheckoutReturnIndexRoute: AuthenticatedCheckoutReturnIndexRoute,
-  AuthenticatedOnboardingIndexRoute: AuthenticatedOnboardingIndexRoute,
-  AuthenticatedInvitationsInvitationIdIndexRoute:
-    AuthenticatedInvitationsInvitationIdIndexRoute,
-}
+	AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
+	AuthenticatedCheckoutReturnIndexRoute: AuthenticatedCheckoutReturnIndexRoute,
+	AuthenticatedOnboardingIndexRoute: AuthenticatedOnboardingIndexRoute,
+	AuthenticatedInvitationsInvitationIdIndexRoute: AuthenticatedInvitationsInvitationIdIndexRoute,
+};
 
-const AuthenticatedRouteRouteWithChildren =
-  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+const AuthenticatedRouteRouteWithChildren = AuthenticatedRouteRoute._addFileChildren(
+	AuthenticatedRouteRouteChildren,
+);
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  ApiSplatRoute: ApiSplatRoute,
-  ImageProxySplatRoute: ImageProxySplatRoute,
-  ForgotPasswordIndexRoute: ForgotPasswordIndexRoute,
-  LoginIndexRoute: LoginIndexRoute,
-  ResetPasswordIndexRoute: ResetPasswordIndexRoute,
-  SignupIndexRoute: SignupIndexRoute,
-  VerifyIndexRoute: VerifyIndexRoute,
-}
+	IndexRoute: IndexRoute,
+	AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+	ApiSplatRoute: ApiSplatRoute,
+	ImageProxySplatRoute: ImageProxySplatRoute,
+	ForgotPasswordIndexRoute: ForgotPasswordIndexRoute,
+	LoginIndexRoute: LoginIndexRoute,
+	ResetPasswordIndexRoute: ResetPasswordIndexRoute,
+	SignupIndexRoute: SignupIndexRoute,
+	VerifyIndexRoute: VerifyIndexRoute,
+};
 export const routeTree = rootRouteImport
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+	._addFileChildren(rootRouteChildren)
+	._addFileTypes<FileRouteTypes>();
 
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
+import type { createStart } from "@tanstack/react-start";
+
+import type { getRouter } from "./router.tsx";
+declare module "@tanstack/react-start" {
+	interface Register {
+		ssr: true;
+		router: Awaited<ReturnType<typeof getRouter>>;
+	}
 }
