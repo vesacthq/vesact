@@ -305,7 +305,6 @@ export const auth = betterAuth({
 		apiKey({
 			references: "organization",
 			defaultPrefix: "relay_",
-			keyExpiration: { defaultExpiresIn: null },
 			rateLimit: { enabled: true, timeWindow: 60_000, maxRequests: 300 },
 		}),
 		openAPI(),
