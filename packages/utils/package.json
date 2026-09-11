@@ -5,13 +5,15 @@
 	"types": "./**/.tsx",
 	"scripts": {
 		"clean": "git clean -xdf .cache .turbo dist node_modules",
-		"type-check": "tsc --noEmit"
+		"type-check": "tsc --noEmit",
+		"test": "vitest run"
 	},
 	"dependencies": {
 		"zod": "catalog:"
 	},
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",
-		"@types/node": "catalog:"
+		"@types/node": "catalog:",
+		"vitest": "catalog:"
 	}
 }
