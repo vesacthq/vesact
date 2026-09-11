@@ -22,13 +22,13 @@ export const me = relayKeyProcedure
 		}),
 	)
 	.handler(({ context }) => {
-		const { key } = context;
+		const { key, permissions } = context.auth;
 
 		return {
 			id: key.id,
 			name: key.name ?? null,
 			organizationId: key.referenceId,
-			permissions: context.permissions,
+			permissions,
 			rateLimit:
 				key.rateLimitEnabled && key.rateLimitMax !== null && key.rateLimitTimeWindow !== null
 					? { max: key.rateLimitMax, windowMs: key.rateLimitTimeWindow }

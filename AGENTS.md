@@ -281,10 +281,13 @@ auth instance (prefix `relay_`, 300 requests per minute per key by default);
 they are created, listed and revoked through the account center's
 `/api/auth/api-key/*` endpoints, guarded by the `apiKey` statement in
 `packages/auth/lib/access.ts`. `app.ts` verifies the key before oRPC runs and
-puts `{ requestId, organizationId, apiKeyId, permissions, key }` in the
-context; business endpoints build on `relayKeyProcedure`. Every `/v1` response
+puts `{ requestId, auth: { organizationId, apiKeyId, permissions, key } }` in
+the context; business endpoints build on `relayKeyProcedure`. Every `/v1` response
 carries `X-Request-Id`, authenticated ones the `X-RateLimit-*` headers, and
 each authenticated call writes a `relay_api_usage` row after the response.
+`/v1/health`, `/v1/openapi.json` and `/v1/docs` need no key: the OpenAPI
+document is generated from the router on request (contracts change only in
+zod, there is no hand-written spec) and Scalar renders it at `/v1/docs`.
 Errors, even those raised before a procedure, use oRPC's body shape. Relay's
 tables live in `packages/database/drizzle/schema/relay.ts`. The acceptance run
 for the chain is `pnpm --filter @repo/scripts relay:acceptance` (see the

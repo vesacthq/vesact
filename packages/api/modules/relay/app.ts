@@ -2,6 +2,7 @@ import { auth } from "@repo/auth";
 import { recordRelayApiUsage } from "@repo/database";
 import { logger } from "@repo/logs";
 import { type Context, Hono } from "hono";
+import { except } from "hono/combine";
 import { createMiddleware } from "hono/factory";
 
 import type { RelayContext } from "./context";
@@ -11,7 +12,7 @@ import { errorPayload, notFoundError, type RelayHttpError } from "./lib/errors";
 import { newId } from "./lib/ids";
 import { mapVerifyError, missingKey, rateLimitHeaders } from "./lib/verify";
 
-type Env = { Variables: { requestId: string; relay: RelayContext } };
+type Env = { Variables: { requestId: string; relay?: RelayContext } };
 
 const requestId = createMiddleware<Env>(async (c, next) => {
 	const id = newId("req");
@@ -54,10 +55,12 @@ const relayKey = createMiddleware<Env>(async (c, next) => {
 	const key = result.key;
 	const relay: RelayContext = {
 		requestId: c.get("requestId"),
-		organizationId: key.referenceId,
-		apiKeyId: key.id,
-		permissions: key.permissions ?? {},
-		key,
+		auth: {
+			organizationId: key.referenceId,
+			apiKeyId: key.id,
+			permissions: key.permissions ?? {},
+			key,
+		},
 		trace: {},
 	};
 	c.set("relay", relay);
@@ -84,15 +87,16 @@ const relayKey = createMiddleware<Env>(async (c, next) => {
 	);
 });
 
+const publicPaths = ["/v1/health", "/v1/openapi.json", "/v1/docs"];
+
 export const relayApp = new Hono<Env>()
 	.use(requestId)
 	.route("/webhooks/meta", metaWebhook)
-	.get("/v1/health", (c) => c.json({ status: "ok" }))
-	.use("/v1/*", relayKey)
+	.use("/v1/*", except(publicPaths, relayKey))
 	.all("/v1/*", async (c) => {
 		const { matched, response } = await relayHandler.handle(c.req.raw, {
 			prefix: "/v1",
-			context: c.get("relay"),
+			context: c.get("relay") ?? { requestId: c.get("requestId"), trace: {} },
 		});
 
 		return matched
