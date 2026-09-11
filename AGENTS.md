@@ -290,6 +290,13 @@ tables live in `packages/database/drizzle/schema/relay.ts`. The acceptance run
 for the chain is `pnpm --filter @repo/scripts relay:acceptance` (see the
 script's header for the arguments).
 
+Meta's webhook is `GET`/`POST /webhooks/meta` in
+`packages/api/modules/relay/integrations/meta/webhook.ts`: the handshake checks
+`META_WEBHOOK_VERIFY_TOKEN`, the POST verifies `X-Hub-Signature-256` against
+`META_APP_SECRET` and stores the raw body in `relay_inbound_event`, deduplicated
+by its SHA-256; nothing is parsed yet. Its acceptance run is
+`pnpm --filter @repo/scripts relay:webhook-acceptance`.
+
 ### Client cache invalidation
 
 After every successful mutation that affects a list or detail query—whether

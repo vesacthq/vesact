@@ -6,6 +6,7 @@ import { createMiddleware } from "hono/factory";
 
 import type { RelayContext } from "./context";
 import { relayHandler } from "./handler";
+import { metaWebhook } from "./integrations/meta/webhook";
 import { errorPayload, notFoundError, type RelayHttpError } from "./lib/errors";
 import { newId } from "./lib/ids";
 import { mapVerifyError, missingKey, rateLimitHeaders } from "./lib/verify";
@@ -84,7 +85,8 @@ const relayKey = createMiddleware<Env>(async (c, next) => {
 });
 
 export const relayApp = new Hono<Env>()
-	.use("/v1/*", requestId)
+	.use(requestId)
+	.route("/webhooks/meta", metaWebhook)
 	.get("/v1/health", (c) => c.json({ status: "ok" }))
 	.use("/v1/*", relayKey)
 	.all("/v1/*", async (c) => {

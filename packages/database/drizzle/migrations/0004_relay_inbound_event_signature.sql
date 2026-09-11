@@ -1,0 +1,1 @@
+ALTER TABLE "relay_inbound_event" DROP COLUMN "signatureValid";
