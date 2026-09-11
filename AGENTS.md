@@ -127,7 +127,9 @@ into the database (`e2e/fixtures/users.ts`), so it needs Postgres with the
 schema pushed; run it locally as `PW_PORT=3004 pnpm --filter account e2e`, on
 the port the app's `.dev.vars` and `.env.local` already name, otherwise Better
 Auth rejects the sign-in as a foreign origin. CI's e2e job starts Postgres and
-MinIO, pushes the schema and runs all three suites with generated `.dev.vars`.
+MinIO, pushes the schema and runs all three suites with generated `.dev.vars`
+and job-level `VITE_*` URLs for the same ports; the workflow-level ones name
+the regular dev ports and would send the browser to a server that is not there.
 
 ## Monorepo map
 
