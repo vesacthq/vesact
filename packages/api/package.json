@@ -33,6 +33,7 @@
 		"openai": "catalog:",
 		"permix": "catalog:",
 		"slugify": "catalog:",
+		"ulid": "catalog:",
 		"zod": "catalog:"
 	},
 	"devDependencies": {

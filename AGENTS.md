@@ -264,6 +264,24 @@ Create server-side notifications with `createNotification` from
 For client data fetching, use the oRPC helpers in
 `apps/studio/modules/shared/lib/orpc-query-utils.ts` with TanStack Query.
 
+### Relay API
+
+Relay's public API lives in `packages/api/modules/relay` with its own router,
+context and handler (prefix `/v1`), mounted by `apps/relay/src/api.ts`. Keys
+belong to an organization and come from `@better-auth/api-key` on the shared
+auth instance (prefix `relay_`, 300 requests per minute per key by default);
+they are created, listed and revoked through the account center's
+`/api/auth/api-key/*` endpoints, guarded by the `apiKey` statement in
+`packages/auth/lib/access.ts`. `app.ts` verifies the key before oRPC runs and
+puts `{ requestId, organizationId, apiKeyId, permissions, key }` in the
+context; business endpoints build on `relayKeyProcedure`. Every `/v1` response
+carries `X-Request-Id`, authenticated ones the `X-RateLimit-*` headers, and
+each authenticated call writes a `relay_api_usage` row after the response.
+Errors, even those raised before a procedure, use oRPC's body shape. Relay's
+tables live in `packages/database/drizzle/schema/relay.ts`. The acceptance run
+for the chain is `pnpm --filter @repo/scripts relay:acceptance` (see the
+script's header for the arguments).
+
 ### Client cache invalidation
 
 After every successful mutation that affects a list or detail query—whether
@@ -326,7 +344,8 @@ has the ownership table, the route table and the "operation → location" list.
   them on its own endpoints through `packages/auth/lib/access.ts`;
   `@repo/permissions` parses the same value (`parseMemberRoles`) into Permix
   rules, including `studio.access` / `relay.manage`. Owners and admins hold
-  every product. Studio checks `studio.access` in
+  every product. Admins and the `relay:*` roles also hold the organization's
+  `apiKey` actions, which the api-key plugin checks on its endpoints. Studio checks `studio.access` in
   `routes/_authenticated/_main/$organizationSlug/route.tsx` and renders a
   denial that links to the account center's members page.
 - Server sessions use `getSession` from `@auth/lib/auth-server.server`; client
@@ -439,8 +458,12 @@ bucket.
 - Neon project `ancient-morning-26822519` (Singapore), branches `production`
   (default) and `preview`. Manage it with `neonctl` and `NEON_API_KEY` from
   `secrets/ci.env`.
-- Hyperdrive `vesact-db` and `vesact-preview`; ids are in
-  `apps/studio/wrangler.jsonc`.
+- Hyperdrive `vesact-db` and `vesact-preview` for studio and account; ids are in
+  `apps/studio/wrangler.jsonc`. Relay has its own pair, `vesact-relay-db` and
+  `vesact-relay-preview`, with query caching disabled: the api-key plugin
+  reads a key row and then updates it under a condition, and Hyperdrive's
+  60-second cache of the read makes that loop until the cache expires and
+  keeps a revoked key alive. Ids are in `apps/relay/wrangler.jsonc`.
 - One Cloudflare Access application covers `*.preview.vesact.com` with two
   policies: Allow for the owner's email, and Service Auth for the service token
   whose credentials are `CF_ACCESS_CLIENT_ID` / `CF_ACCESS_CLIENT_SECRET` in

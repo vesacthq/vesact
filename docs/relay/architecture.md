@@ -79,7 +79,7 @@ Relay 公共契约：REST API + Webhook
 | 控制台 | `relay.vesact.com`                                              | `relay.preview.vesact.com`                                                           | `localhost:3005`                               |
 | API    | `api.vesact.com`                                                | `api.preview.vesact.com`                                                             | `localhost:3005`                               |
 | 认证   | `account.vesact.com`（`apps/account`），cookie 域 `.vesact.com` | `account.preview.vesact.com`，cookie 域 `.preview.vesact.com`，前缀 `vesact-preview` | `localhost:3004`，localhost 的 cookie 不分端口 |
-| 数据库 | Hyperdrive `vesact-db` → Neon `production`                      | Hyperdrive `vesact-preview` → Neon `preview`                                         | docker postgres 5433                           |
+| 数据库 | Hyperdrive `vesact-relay-db` → Neon `production`，查询缓存关闭  | Hyperdrive `vesact-relay-preview` → Neon `preview`，查询缓存关闭                     | docker postgres 5433                           |
 
 一个 worker 每个环境挂两个 custom domain，按路径前缀分发：`/v1/*`、`/webhooks/*`、`/oauth/*` 进 Hono，其余进 TanStack Start 控制台。API 主机名上的非 API 路径返回 404 JSON，其他情况不看主机名。开发者文档 `developers.vesact.com` 启用前挂在 `api.vesact.com/v1/docs`。
 
@@ -370,7 +370,7 @@ Content-Type: application/json
 
 `/v1` 用 API key：`Authorization: Bearer <key>`，key 属于组织，由 `@better-auth/api-key`（`references: "organization"`、`defaultPrefix: "relay_"`）签发和校验。创建、吊销、列出走 Better Auth 的端点，需要会话且用户在该组织有 Relay 访问（`relay.access`，见 ../account/architecture.md §5）。端点在账号中心的 worker 上，控制台跨域调用；插件按组织 access control 的 `apiKey` statement 检查每个操作，`packages/auth/lib/access.ts` 把它授予 admin 和 `relay:*` 角色。控制台用账号中心的会话；未登录时照 Studio 的 `loginUrl()` 跳账号中心。成员和 Relay 访问在账号中心的成员页管，Relay 只读。
 
-`/v1` 入口中间件链，顺序固定：request ID（`X-Request-Id: req_<ULID>`）→ 取 key → `verifyApiKey` 与错误码映射（`KEY_NOT_FOUND`、`KEY_EXPIRED`、`KEY_DISABLED` → 401 `UNAUTHORIZED` 且 `data.reason` 保留原码；`RATE_LIMITED` → 429 `TOO_MANY_REQUESTS`；`USAGE_EXCEEDED` → 429 `QUOTA_EXCEEDED`）→ 上下文 `{ organizationId, apiKeyId, permissions, requestId }` 与 `relayKeyProcedure` → 限流头 → `waitUntil` 写用量（写失败只记日志）。`/v1` 不设 CORS 头。
+`/v1` 入口中间件链，顺序固定：request ID（`X-Request-Id: req_<ULID>`）→ 取 key → `verifyApiKey` 与错误码映射（`INVALID_API_KEY`、`KEY_NOT_FOUND`、`KEY_EXPIRED`、`KEY_DISABLED` → 401 `UNAUTHORIZED` 且 `data.reason` 保留原码；`RATE_LIMITED` → 429 `TOO_MANY_REQUESTS`；`USAGE_EXCEEDED` → 429 `QUOTA_EXCEEDED`）→ 上下文 `{ organizationId, apiKeyId, permissions, requestId }` 与 `relayKeyProcedure` → 限流头 → `waitUntil` 写用量（写失败只记日志）。`/v1` 不设 CORS 头。
 
 ### 7.2 安全与诊断
 
@@ -416,6 +416,7 @@ Content-Type: application/json
 
 - `BETTER_AUTH_SECRET` 两个 worker 必须同值，否则会话互不认。写进 secrets 的检查项。
 - 插件限流每次校验写一次 key 行。单库扛不住时在前面加 Workers Rate Limiting binding，契约不变。
+- Relay 的 Hyperdrive 必须关闭查询缓存。插件先读 key 行再带条件更新，读到 60 秒内的缓存就会一直更新失败、重读缓存，直到缓存过期；吊销的 key 也会在缓存期内继续有效。Studio 和账号中心的配置保留缓存，两边不共用。
 - Meta 一个 App 只能一个回调 URL，指向 prod；preview 只靠 curl 验证。
 - `client.ts` 改导入是模板的六个缝之一，同步上游时留意。
 

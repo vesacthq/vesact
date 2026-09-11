@@ -22,6 +22,13 @@
 			"when": 1789071428763,
 			"tag": "0002_backfill_member_product_roles",
 			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "7",
+			"when": 1789123620949,
+			"tag": "0003_relay_api_keys",
+			"breakpoints": true
 		}
 	]
 }

@@ -5,6 +5,7 @@
 	"scripts": {
 		"clean": "git clean -xdf .cache .turbo dist node_modules",
 		"create:user": "dotenv -c -e ../../.env -- tsx ./src/create-user.ts",
+		"relay:acceptance": "tsx ./src/relay-acceptance.ts",
 		"type-check": "tsc --noEmit",
 		"status": "tsx ./src/status.ts"
 	},

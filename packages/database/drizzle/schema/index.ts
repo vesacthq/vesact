@@ -4,3 +4,4 @@
 // postgres tables by default. If you adopt a different dialect, swap the
 // re-export and update `drizzle.config.ts` and `client.ts` accordingly.
 export * from "./postgres";
+export * from "./relay";
