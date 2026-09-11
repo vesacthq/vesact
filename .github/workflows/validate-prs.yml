@@ -81,6 +81,8 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     needs: [lint, type-check, build, unit]
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5433/vesact
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -90,8 +92,12 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Start object storage
-        run: docker compose up -d minio minio-setup
+      - name: Start the database and object storage
+        run: |
+          docker compose up -d --wait postgres
+          docker compose up -d minio minio-setup
+      - name: Apply the schema
+        run: pnpm --filter @repo/database push
       - name: Write the local Worker vars
         run: |
           cat > apps/account/.dev.vars <<'VARS'

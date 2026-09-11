@@ -121,8 +121,13 @@ The root test task runs Vitest in `apps/account`, `apps/marketing`, `apps/studio
 `packages/api` and `packages/permissions`. Playwright tests are in
 `apps/marketing/tests`, `apps/account/e2e` and `apps/studio/e2e`; run them per
 app with `pnpm --filter <app> e2e` (UI) or `e2e:ci`. Each config starts its own
-dev server (marketing 3001, studio 3100, account 3200) and needs the database;
-CI's e2e job runs all three with MinIO and generated `.dev.vars`.
+dev server (marketing 3001, studio 3100, account 3200). The account suite signs
+in through the login page as two users that `e2e/auth.setup.ts` seeds straight
+into the database (`e2e/fixtures/users.ts`), so it needs Postgres with the
+schema pushed; run it locally as `PW_PORT=3004 pnpm --filter account e2e`, on
+the port the app's `.dev.vars` and `.env.local` already name, otherwise Better
+Auth rejects the sign-in as a foreign origin. CI's e2e job starts Postgres and
+MinIO, pushes the schema and runs all three suites with generated `.dev.vars`.
 
 ## Monorepo map
 
