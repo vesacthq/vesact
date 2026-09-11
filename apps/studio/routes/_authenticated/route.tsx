@@ -1,66 +1,58 @@
 import { SessionProvider } from "@auth/components/SessionProvider";
 import { loginUrl } from "@auth/lib/account-urls";
-import { getActiveOrganizationById, getSession } from "@auth/lib/auth-server.server";
+import { sessionQueryOptions } from "@auth/lib/api";
 import { ActiveOrganizationProvider } from "@organizations/components/ActiveOrganizationProvider";
+import {
+	activeOrganizationQueryOptions,
+	organizationListQueryOptions,
+} from "@organizations/lib/api";
+import { createPermissionRules } from "@repo/permissions";
 import { ConfirmationAlertProvider } from "@shared/components/ConfirmationAlertProvider";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
+import { PermixHydrate } from "permix/react";
 
-const loadSessionForAuthenticatedRouteFn = createServerFn({ method: "GET", strict: false }).handler(
-	async () => {
-		return { result: await getSession() };
-	},
-);
-
-const loadActiveOrganizationForAuthenticatedRouteFn = createServerFn({
-	method: "GET",
-	strict: false,
-})
-	.validator((organizationId: string) => organizationId)
-	.handler(async ({ data: organizationId }) => ({
-		result: await getActiveOrganizationById(organizationId),
-	}));
-
-type AuthenticatedRouteSession = Awaited<ReturnType<typeof getSession>>;
-type AuthenticatedRouteActiveOrganization = Awaited<ReturnType<typeof getActiveOrganizationById>>;
-
+/**
+ * One read per page load: the session, the active organization and the list
+ * land in the query cache, so client-side navigation reuses them and the
+ * child guards run on the route context alone.
+ */
 export const Route = createFileRoute("/_authenticated")({
-	loader: async ({ location }) => {
-		const session = unwrapServerFnResult<AuthenticatedRouteSession>(
-			await loadSessionForAuthenticatedRouteFn(),
-		);
+	beforeLoad: async ({ context: { queryClient, permix }, location }) => {
+		const session = await queryClient.ensureQueryData(sessionQueryOptions());
+
 		if (!session) {
 			throw redirect({ href: loginUrl(location.href) });
 		}
-		const activeOrganization = session.session.activeOrganizationId
-			? unwrapServerFnResult<AuthenticatedRouteActiveOrganization>(
-					await loadActiveOrganizationForAuthenticatedRouteFn({
-						data: session.session.activeOrganizationId,
-					}),
-				)
-			: null;
 
-		return { activeOrganization, session };
+		const activeOrganizationId = session.session.activeOrganizationId;
+		const [activeOrganization, organizations] = await Promise.all([
+			activeOrganizationId
+				? queryClient.ensureQueryData(activeOrganizationQueryOptions({ id: activeOrganizationId }))
+				: null,
+			queryClient.ensureQueryData(organizationListQueryOptions()),
+		]);
+
+		const membershipRole =
+			activeOrganization?.members.find((member) => member.userId === session.user.id)?.role ?? null;
+		permix.setup(createPermissionRules({ user: session.user, membershipRole }));
+
+		return { session, activeOrganization, organizations, permixState: permix.dehydrate() };
 	},
 	component: AuthenticatedLayout,
 });
 
 function AuthenticatedLayout() {
-	const { activeOrganization, session } = Route.useLoaderData();
+	const { activeOrganization, session, permixState } = Route.useRouteContext();
 
 	return (
-		<SessionProvider initialSession={session}>
-			<ActiveOrganizationProvider initialActiveOrganization={activeOrganization}>
-				<ConfirmationAlertProvider>
-					<Outlet />
-				</ConfirmationAlertProvider>
-			</ActiveOrganizationProvider>
-		</SessionProvider>
+		<PermixHydrate state={permixState}>
+			<SessionProvider initialSession={session}>
+				<ActiveOrganizationProvider initialActiveOrganization={activeOrganization}>
+					<ConfirmationAlertProvider>
+						<Outlet />
+					</ConfirmationAlertProvider>
+				</ActiveOrganizationProvider>
+			</SessionProvider>
+		</PermixHydrate>
 	);
-}
-
-function unwrapServerFnResult<T>(value: T | { result: T }): T {
-	return value && typeof value === "object" && "result" in value && Object.keys(value).length === 1
-		? value.result
-		: (value as T);
 }

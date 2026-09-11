@@ -5,11 +5,10 @@ import { getCurrentLocale } from "@repo/i18n/runtime";
 import type { PermissionsDefinition } from "@repo/permissions";
 import { Button, cn, ThemeProvider, Toaster } from "@repo/ui";
 import { Analytics } from "@shared/components/Analytics";
-import { ApiClientProvider } from "@shared/components/ApiClientProvider";
 import { ClientProviders } from "@shared/components/ClientProviders";
 import { PermixProvider } from "@shared/components/PermixProvider";
 import { documentTitle } from "@shared/lib/document-title";
-import { getPermixState } from "@shared/lib/get-permix-state";
+import type { QueryClient } from "@tanstack/react-query";
 import {
 	createRootRouteWithContext,
 	ErrorComponent,
@@ -27,14 +26,10 @@ import appCss from "./globals.css?url";
 
 export interface RouterContext {
 	permix: Permix<PermissionsDefinition>;
+	queryClient: QueryClient;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-	beforeLoad: async ({ context }) => {
-		const state = await getPermixState();
-		context.permix.hydrate(state);
-		return { permixState: state };
-	},
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -58,10 +53,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 				rel: "stylesheet",
 				href: appCss,
 			},
-			{
-				rel: "stylesheet",
-				href: "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap",
-			},
 		],
 	}),
 	component: RootLayout,
@@ -72,7 +63,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 function RootLayout() {
 	useRouterState({ select: (routerState) => routerState.location.pathname });
 	const locale = getCurrentLocale();
-	const { permix, permixState } = Route.useRouteContext();
+	const { permix } = Route.useRouteContext();
 
 	return (
 		<html lang={locale} suppressHydrationWarning>
@@ -82,19 +73,17 @@ function RootLayout() {
 			<body className={cn("font-sans min-h-screen bg-background text-foreground antialiased")}>
 				<NuqsAdapter>
 					<ThemeProvider defaultTheme={config.defaultTheme}>
-						<ApiClientProvider>
-							<SessionProvider>
-								<PermixProvider permix={permix} state={permixState}>
-									<ClientProviders>
-										<I18nProvider>
-											<Analytics />
-											<Outlet />
-											<Toaster />
-										</I18nProvider>
-									</ClientProviders>
-								</PermixProvider>
-							</SessionProvider>
-						</ApiClientProvider>
+						<SessionProvider>
+							<PermixProvider permix={permix}>
+								<ClientProviders>
+									<I18nProvider>
+										<Analytics />
+										<Outlet />
+										<Toaster />
+									</I18nProvider>
+								</ClientProviders>
+							</PermixProvider>
+						</SessionProvider>
 					</ThemeProvider>
 				</NuqsAdapter>
 				<Scripts />

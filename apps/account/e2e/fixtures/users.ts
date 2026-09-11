@@ -23,13 +23,33 @@ export const e2eUsers = {
 		role: "user",
 		statePath: path.join(authDir, "member.json"),
 	},
+	/** Signs in inside its own spec, which registers a passkey and signs out. */
+	passkey: {
+		id: "e2e-passkey",
+		email: "e2e-passkey@example.com",
+		name: "E2E Passkey",
+		password: "e2e-passkey-password-1234",
+		role: "user",
+		statePath: path.join(authDir, "passkey.json"),
+	},
+	/** Signs in inside its own spec; two-factor gets enabled and disabled there. */
+	totp: {
+		id: "e2e-totp",
+		email: "e2e-totp@example.com",
+		name: "E2E Totp",
+		password: "e2e-totp-password-1234",
+		role: "user",
+		statePath: path.join(authDir, "totp.json"),
+	},
 } as const;
 
 /**
- * Creates the two accounts the authenticated specs sign in with, straight in
- * the database: the app under test is the only thing that should run app code.
+ * Creates the accounts the authenticated specs sign in with, straight in the
+ * database: the app under test is the only thing that should run app code.
  * Re-running keeps the rows; the password never changes, so the stored hash
- * stays valid, and only the role is re-asserted.
+ * stays valid, and only the role is re-asserted. Passkeys and two-factor
+ * secrets from an earlier run are dropped, so every run starts from a
+ * password-only account.
  */
 export async function seedE2EUsers() {
 	const client = new Client({
@@ -55,6 +75,19 @@ export async function seedE2EUsers() {
 				[`${id}-credential`, await hashPassword(password), email],
 			);
 		}
+
+		const emails = Object.values(e2eUsers).map((user) => user.email);
+		await client.query(
+			`delete from passkey where "userId" in (select id from "user" where email = any($1))`,
+			[emails],
+		);
+		await client.query(
+			`delete from "twoFactor" where "userId" in (select id from "user" where email = any($1))`,
+			[emails],
+		);
+		await client.query(`update "user" set "twoFactorEnabled" = false where email = any($1)`, [
+			emails,
+		]);
 	} finally {
 		await client.end();
 	}

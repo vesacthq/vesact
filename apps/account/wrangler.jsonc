@@ -6,6 +6,7 @@
 	"compatibility_flags": ["nodejs_compat"],
 	"main": "./server.ts",
 	"observability": { "enabled": true },
+	"placement": { "mode": "smart" },
 	"workers_dev": false,
 	"routes": [
 		{ "pattern": "account.vesact.com", "custom_domain": true },
@@ -29,6 +30,7 @@
 		"preview": {
 			"workers_dev": false,
 			"observability": { "enabled": true },
+			"placement": { "mode": "smart" },
 			"routes": [
 				{ "pattern": "account.preview.vesact.com", "custom_domain": true },
 				{ "pattern": "auth.preview.vesact.com", "custom_domain": true },

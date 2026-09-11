@@ -1,4 +1,5 @@
 import { auth } from "@repo/auth";
+import { isOrganizationUnavailable } from "@repo/auth/lib/organization-errors";
 import { getInvitationById } from "@repo/database";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 
@@ -15,45 +16,28 @@ export async function getSession() {
 }
 
 export async function getActiveOrganization(slug: string) {
-	try {
-		const activeOrganization = await auth.api.getFullOrganization({
-			query: {
-				organizationSlug: slug,
-			},
-			headers: getRequestHeaders(),
-		});
-
-		return toJsonSafe(activeOrganization);
-	} catch {
-		return null;
-	}
+	return getFullOrganization({ organizationSlug: slug });
 }
 
 export async function getActiveOrganizationById(organizationId: string) {
-	try {
-		const activeOrganization = await auth.api.getFullOrganization({
-			query: {
-				organizationId,
-			},
-			headers: getRequestHeaders(),
-		});
+	return getFullOrganization({ organizationId });
+}
 
-		return toJsonSafe(activeOrganization);
-	} catch {
-		return null;
+async function getFullOrganization(
+	query: { organizationSlug: string } | { organizationId: string },
+) {
+	try {
+		return toJsonSafe(await auth.api.getFullOrganization({ query, headers: getRequestHeaders() }));
+	} catch (error) {
+		if (isOrganizationUnavailable(error)) {
+			return null;
+		}
+		throw error;
 	}
 }
 
 export async function getOrganizationList() {
-	try {
-		const organizationList = await auth.api.listOrganizations({
-			headers: getRequestHeaders(),
-		});
-
-		return toJsonSafe(organizationList);
-	} catch {
-		return [];
-	}
+	return toJsonSafe(await auth.api.listOrganizations({ headers: getRequestHeaders() }));
 }
 
 export async function getUserAccounts() {

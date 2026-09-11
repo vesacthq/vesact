@@ -360,7 +360,7 @@ Content-Type: application/json
 
 - vars：`VITE_RELAY_URL`、`VITE_RELAY_API_URL`、`VITE_ACCOUNT_URL`、`VITE_STUDIO_URL`、`VITE_MARKETING_URL`、`META_APP_ID`；preview 段重新声明全部并加 `AUTH_COOKIE_PREFIX=vesact-preview`。cookie 域从 `VITE_ACCOUNT_URL` 推导，`getTrustedOrigins()` 读 Studio 和 marketing 的 URL。
 - secrets：`secrets/relay.{prod,preview,dev}.env`，内容是同环境 `studio.*.env` 去掉 `S3_*` 的键（`BETTER_AUTH_SECRET` 必须同值）加 `META_APP_SECRET`、`META_WEBHOOK_VERIFY_TOKEN`。`pnpm secrets:pull` 同时产出 `apps/relay/.dev.vars`。
-- CI：`deploy.yml` 的 `relay` job，`needs: account`，表由 account job 的 migrate 建；`select-target.sh` 给出 relay 的 URL；smoke 打 API 主机的 `/v1/health` 和控制台的 `/`，后者跟随重定向到账号中心登录页。
+- CI：`deploy.yml` 的 `relay` job，`needs: account`，表由 account job 的 migrate 建；`select-target.sh` 给出 relay 的 URL。部署后没有 HTTP 探测：zone 的 Bot Fight Mode 会挑战 runner 的 curl。
 - Cloudflare：preview 的 Access 由 `*.preview.vesact.com` 通配应用覆盖，另有一个路径为 `api.preview.vesact.com/webhooks` 的 Access 应用，策略 Bypass Everyone，Meta 才打得到。Meta 一个 App 只能一个回调 URL，指向 prod；preview 只靠 curl 验证。
 - `GET /v1/health` 无鉴权，返回 `{ "status": "ok" }`。
 

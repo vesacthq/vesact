@@ -1,4 +1,5 @@
 import { useAuthErrorMessages } from "@auth/hooks/errors-messages";
+import { completeSignIn } from "@auth/lib/api";
 import { useTranslations } from "@i18n/intl";
 import { authClient } from "@repo/auth/client";
 import { Alert, AlertTitle } from "@repo/ui/components/alert";
@@ -20,11 +21,12 @@ import {
 } from "@repo/ui/components/input-otp";
 import { Spinner } from "@repo/ui/components/spinner";
 import { useForm, useStore } from "@tanstack/react-form";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { AlertTriangleIcon, ArrowLeftIcon } from "lucide-react";
 import * as z from "zod";
 
-import { getSafeRedirectUrl, invitationUrl, navigateTo } from "../lib/redirects";
+import { getSafeRedirectUrl, invitationUrl } from "../lib/redirects";
 
 const formSchema = z.object({
 	code: z.string().min(6).max(6),
@@ -38,6 +40,7 @@ interface VerifySearch {
 export function OtpForm() {
 	const t = useTranslations();
 	const router = useRouter();
+	const queryClient = useQueryClient();
 	const { getAuthErrorMessage } = useAuthErrorMessages();
 	const search = useSearch({ strict: false }) as VerifySearch;
 
@@ -59,7 +62,8 @@ export function OtpForm() {
 				if (error) {
 					throw error;
 				}
-				navigateTo(router, redirectUrl);
+
+				await completeSignIn(queryClient, router, redirectUrl);
 			} catch (e) {
 				formApi.setErrorMap({
 					onSubmit: {

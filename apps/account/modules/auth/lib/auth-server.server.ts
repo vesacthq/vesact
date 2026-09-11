@@ -1,4 +1,5 @@
 import { auth } from "@repo/auth";
+import { isOrganizationUnavailable } from "@repo/auth/lib/organization-errors";
 import { getInvitationById } from "@repo/database";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 
@@ -14,11 +15,7 @@ export async function getSession() {
 }
 
 export async function getOrganizationList() {
-	try {
-		return toJsonSafe(await auth.api.listOrganizations({ headers: getRequestHeaders() }));
-	} catch {
-		return [];
-	}
+	return toJsonSafe(await auth.api.listOrganizations({ headers: getRequestHeaders() }));
 }
 
 export async function getOrganizationBySlug(organizationSlug: string) {
@@ -29,8 +26,11 @@ export async function getOrganizationBySlug(organizationSlug: string) {
 				headers: getRequestHeaders(),
 			}),
 		);
-	} catch {
-		return null;
+	} catch (error) {
+		if (isOrganizationUnavailable(error)) {
+			return null;
+		}
+		throw error;
 	}
 }
 

@@ -3,10 +3,11 @@ import { config } from "@config";
 import { I18nProvider } from "@i18n/provider";
 import { getCurrentLocale } from "@repo/i18n/runtime";
 import { Button, cn, ThemeProvider, Toaster } from "@repo/ui";
-import { ApiClientProvider } from "@shared/components/ApiClientProvider";
+import { ClientProviders } from "@shared/components/ClientProviders";
 import { documentTitle } from "@shared/lib/document-title";
+import type { QueryClient } from "@tanstack/react-query";
 import {
-	createRootRoute,
+	createRootRouteWithContext,
 	ErrorComponent,
 	HeadContent,
 	Link,
@@ -18,7 +19,7 @@ import {
 
 import appCss from "./globals.css?url";
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -29,10 +30,6 @@ export const Route = createRootRoute({
 		links: [
 			{ rel: "icon", type: "image/png", href: "/icon.png" },
 			{ rel: "stylesheet", href: appCss },
-			{
-				rel: "stylesheet",
-				href: "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap",
-			},
 		],
 	}),
 	component: RootLayout,
@@ -51,14 +48,14 @@ function RootLayout() {
 			</head>
 			<body className={cn("font-sans min-h-screen bg-background text-foreground antialiased")}>
 				<ThemeProvider defaultTheme={config.defaultTheme}>
-					<ApiClientProvider>
+					<ClientProviders>
 						<SessionProvider>
 							<I18nProvider>
 								<Outlet />
 								<Toaster />
 							</I18nProvider>
 						</SessionProvider>
-					</ApiClientProvider>
+					</ClientProviders>
 				</ThemeProvider>
 				<Scripts />
 			</body>

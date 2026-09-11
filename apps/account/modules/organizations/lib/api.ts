@@ -1,42 +1,46 @@
+import { getOrganizationBySlug, getOrganizationList } from "@auth/lib/auth-server.server";
 import type { ActiveOrganization, Organization } from "@repo/auth";
 import { authClient } from "@repo/auth/client";
 import { orpcClient } from "@shared/lib/orpc-client";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { queryOptions, useMutation, useQuery } from "@tanstack/react-query";
+import { createServerFn } from "@tanstack/react-start";
+
+const loadOrganizationListFn = createServerFn({ method: "GET", strict: false }).handler(
+	async () => ({ result: await getOrganizationList() }),
+);
 
 export const organizationListQueryKey = ["user", "organizations"] as const;
 
+export const organizationListQueryOptions = () =>
+	queryOptions({
+		queryKey: organizationListQueryKey,
+		queryFn: async () => (await loadOrganizationListFn()).result,
+	});
+
 export const useOrganizationListQuery = (initialData?: Organization[]) => {
 	return useQuery({
-		queryKey: organizationListQueryKey,
-		queryFn: async () => {
-			const { data, error } = await authClient.organization.list();
-
-			if (error) {
-				throw new Error(error.message || "Failed to fetch organizations");
-			}
-
-			return data;
-		},
+		...organizationListQueryOptions(),
 		...(initialData ? { initialData } : {}),
 	});
 };
 
+const loadOrganizationFn = createServerFn({ method: "GET", strict: false })
+	.validator((organizationSlug: string) => organizationSlug)
+	.handler(async ({ data: organizationSlug }) => ({
+		result: await getOrganizationBySlug(organizationSlug),
+	}));
+
 export const organizationQueryKey = (slug: string) => ["organization", slug] as const;
+
+export const organizationQueryOptions = (slug: string) =>
+	queryOptions({
+		queryKey: organizationQueryKey(slug),
+		queryFn: async () => (await loadOrganizationFn({ data: slug })).result,
+	});
 
 export const useOrganizationQuery = (slug: string, initialData?: ActiveOrganization) => {
 	return useQuery({
-		queryKey: organizationQueryKey(slug),
-		queryFn: async () => {
-			const { data, error } = await authClient.organization.getFullOrganization({
-				query: { organizationSlug: slug },
-			});
-
-			if (error) {
-				throw new Error(error.message || "Failed to fetch organization");
-			}
-
-			return data;
-		},
+		...organizationQueryOptions(slug),
 		...(initialData ? { initialData } : {}),
 	});
 };

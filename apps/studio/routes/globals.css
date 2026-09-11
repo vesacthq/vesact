@@ -9,8 +9,9 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-	--font-noto-sans: "Noto Sans";
-	--font-sans: var(--font-noto-sans), ui-sans-serif, system-ui, sans-serif;
+	--font-sans:
+		-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+		"Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
 }
 
 @utility container {

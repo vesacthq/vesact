@@ -161,7 +161,7 @@ Studio 以中文工作界面为主，承载多渠道沟通及相关工作。Rela
 
 ### 5.1 字体
 
-现状：`apps/studio/routes/__root.tsx` 从 fonts.googleapis.com 加载 Noto Sans，只有拉丁字形，中文回落系统字体，且国内访问不稳。改为系统字体栈，去掉外部字体加载：
+两个 app 的 `globals.css` 用系统字体栈，不加载外部字体（Google Fonts 只有拉丁字形，国内访问不稳）：
 
 ```css
 --font-sans:

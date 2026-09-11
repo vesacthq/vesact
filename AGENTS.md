@@ -264,6 +264,14 @@ Create server-side notifications with `createNotification` from
 For client data fetching, use the oRPC helpers in
 `apps/studio/modules/shared/lib/orpc-query-utils.ts` with TanStack Query.
 
+Route guards read the session and organizations through
+`queryClient.ensureQueryData(...)` with the query options in
+`modules/auth/lib/api.ts` and `modules/organizations/lib/api.ts` (both apps):
+`router.tsx` puts the `QueryClient` in the router context and
+`setupRouterSsrQueryIntegration` hydrates the client cache, so a client-side
+navigation makes no server round trip. `defaultPreload: "intent"` preloads on
+hover; the progress bar in `ClientProviders` follows the router's status.
+
 ### Relay API
 
 Relay's public API lives in `packages/api/modules/relay` with its own router,
@@ -365,13 +373,12 @@ Canonical auth example:
   `checkPermission`, `PermissionsDefinition`).
 - oRPC: `packages/api/orpc/permix.ts` + permissions attached in
   `packages/api/orpc/procedures.ts`.
-- Studio server: `apps/studio/start.ts` (app-root `start.ts` because
-  `srcDirectory: "."`) registers Permix via `createMiddleware().server(...)`
-  so server-only auth/DB imports are stripped from the client graph. Shared
-  helpers live in `apps/studio/modules/shared/lib/permix.ts`.
-- Router context + hydrate in `apps/studio/routes/__root.tsx` via
-  `get-permix-state.ts` (`createServerFn`, not a `*.server.*` module);
-  client `PermixProvider` / `usePermissions()`.
+- Studio: the router context carries a Permix instance. The `_authenticated`
+  layout's `beforeLoad` builds the rules from the session and the active
+  organization's membership (`createPermissionRules`), calls `permix.setup`
+  and returns `permixState`, which `PermixHydrate` in that layout applies on
+  the client. Nothing runs per request on the server. Client
+  `PermixProvider` / `usePermissions()`.
 - Prefer `checkPermission(...)` / `usePermissions().check(...)` over
   `isOrganizationAdmin` and inline `role === "..."` comparisons. Keep
   `@repo/auth/lib/helper` wrappers only for backwards compatibility.
@@ -436,12 +443,9 @@ Each app is a Cloudflare Worker. Three environments, the same shape for every ap
 
 `deploy.yml` runs one job per app: `select-target.sh` picks the target from the
 event, `load-env.sh` decrypts what the job needs into masked environment
-variables, then build → `wrangler deploy` → `wrangler secret bulk` → smoke
-check. The account job runs the database migration first; the studio and relay jobs
+variables, then build → `wrangler deploy` → `wrangler secret bulk`. The account job runs the database migration first; the studio and relay jobs
 wait for it. The relay Worker answers on two custom domains and dispatches by
-path (`docs/relay/architecture.md` §2); its smoke check hits `/v1/health` on
-the API host and `/` on the console host, following the redirect to the
-account center's login page. The Cloudflare Vite plugin flattens the selected environment into
+path (`docs/relay/architecture.md` §2). The Cloudflare Vite plugin flattens the selected environment into
 `.output/server/wrangler.json` at build time, so `CLOUDFLARE_ENV` is set for the
 build and `wrangler deploy` takes no `--env`. Preview builds leave
 `VITE_POSTHOG_KEY` unset so their events stay out of production analytics.
@@ -475,6 +479,9 @@ with `sops set`, and deploying.
   from its list after creation, a revoked key still verifying). Add a cached
   configuration only for a specific hot read that can be stale, and route
   just that query through it.
+  The studio, account and relay Workers run with Smart Placement
+  (`placement.mode: "smart"`), so a request's queries run next to the
+  database instead of at the visitor's edge location.
 - One Cloudflare Access application covers `*.preview.vesact.com` with two
   policies: Allow for the owner's email, and Service Auth for the service token
   whose credentials are `CF_ACCESS_CLIENT_ID` / `CF_ACCESS_CLIENT_SECRET` in
@@ -486,6 +493,11 @@ with `sops set`, and deploying.
   public on preview exactly as they are in production. The account pages
   themselves stay behind Access. `api.preview.vesact.com/webhooks` is the
   other one, so Meta can reach the preview webhook.
+  The zone's Bot Fight Mode stays on and cannot be skipped by a WAF rule on
+  the Free plan; it challenges curl from the GitHub runner, which is why the
+  deploy makes no HTTP check after `wrangler deploy` (the earlier smoke check
+  failed with 403 and `cf-mitigated: challenge`). Verify a deploy by hand or
+  through Workers versions instead.
 - `auth.vesact.com` and `auth.preview.vesact.com` stay attached to the account
   Workers and answer with a 301 to the `account.` hostname until 2026-12.
 - Preview hostnames live under `preview.vesact.com` rather than `workers.dev`
