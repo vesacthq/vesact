@@ -14,7 +14,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 # Inlined into the client bundle; a missing URL makes the app link to localhost.
 ARG VITE_STUDIO_URL VITE_ACCOUNT_URL VITE_MARKETING_URL VITE_RELAY_URL VITE_RELAY_API_URL VITE_DOCS_URL
 ARG VITE_POSTHOG_KEY VITE_POSTHOG_HOST
-RUN test -n "$VITE_STUDIO_URL" && test -n "$VITE_ACCOUNT_URL" && test -n "$VITE_MARKETING_URL"
+RUN test -n "$APP" && test -n "$VITE_STUDIO_URL" && test -n "$VITE_ACCOUNT_URL" && test -n "$VITE_MARKETING_URL"
 RUN pnpm --filter "$APP" build:node
 # --legacy: the workspace links packages instead of injecting them (pnpm 10 default).
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm --filter "$APP" deploy --prod --legacy /app

@@ -9,8 +9,9 @@
 **/test-results
 **/e2e/.auth
 **/*.tsbuildinfo
-.env
-.env.*
+**/.env
+**/.env.*
+env
 **/.dev.vars*
 secrets
 brand
