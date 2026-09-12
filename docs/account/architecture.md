@@ -49,7 +49,7 @@ reviewed: 2026-09-11
 
 ## 4. 构件与目录
 
-`apps/account/modules/`：`auth`（会话、跳转规则）、`account`（个人资料、安全、通知）、`organizations`（组织、成员、邀请、产品角色）、`onboarding`、`payments`、`admin`（平台管理）、`i18n`、`shared`（头部、导航、oRPC 客户端）。别名见 AGENTS.md。
+`apps/account/modules/`：`auth`（会话、跳转规则）、`account`（个人资料、安全、通知）、`organizations`（组织、成员、邀请、产品角色）、`onboarding`、`payments`、`admin`（平台管理）、`i18n`、`shared`（头部、导航、oRPC 客户端）。别名见 `apps/account/tsconfig.json`。
 
 账号 worker 挂 `@repo/api` 的 Hono app，头像上传的 oRPC 和存储绑定随之；`billingAttachedTo` 为 organization。
 
@@ -93,7 +93,7 @@ reviewed: 2026-09-11
 | preview | `vesact-account-preview`    | `account.preview.vesact.com` | 域 `.preview.vesact.com`，前缀 `vesact-preview` |
 | dev     | `pnpm --filter account dev` | `localhost:3004`             | 无域，localhost 不分端口                        |
 
-cookie 域从 `VITE_ACCOUNT_URL` 推导。secrets 在 `secrets/account.{prod,preview,dev}.env`。环境矩阵和部署流程见 AGENTS.md。
+cookie 域从 `VITE_ACCOUNT_URL` 推导。secrets 在 `secrets/account.{prod,preview,dev}.env`。环境矩阵见 AGENTS.md，部署流程见 `.agents/skills/vesact-deploy-and-infra/SKILL.md`。
 
 ## 7. 横切
 
