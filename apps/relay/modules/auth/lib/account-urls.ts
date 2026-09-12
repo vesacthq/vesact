@@ -16,6 +16,10 @@ export function loginUrl(href: string): string {
 	return withQuery(new URL("/login", accountUrl).toString(), { redirectTo: absolute(href) });
 }
 
+export function onboardingUrl(href: string): string {
+	return withQuery(new URL("/onboarding", accountUrl).toString(), { redirectTo: absolute(href) });
+}
+
 /**
  * Settings pages of the account center. `from` is the Relay page the link
  * sits on; the account center's back button returns there.

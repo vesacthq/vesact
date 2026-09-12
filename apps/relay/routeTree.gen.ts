@@ -11,6 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedOrganizationSlugRouteRouteImport } from './routes/_authenticated/$organizationSlug/route'
+import { Route as AuthenticatedOrganizationSlugIndexRouteImport } from './routes/_authenticated/$organizationSlug/index'
+import { Route as AuthenticatedOrganizationSlugSettingsApiKeysIndexRouteImport } from './routes/_authenticated/$organizationSlug/settings/api-keys/index'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
@@ -21,24 +24,60 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedOrganizationSlugRouteRoute =
+  AuthenticatedOrganizationSlugRouteRouteImport.update({
+    id: '/$organizationSlug',
+    path: '/$organizationSlug',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedOrganizationSlugIndexRoute =
+  AuthenticatedOrganizationSlugIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedOrganizationSlugRouteRoute,
+  } as any)
+const AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute =
+  AuthenticatedOrganizationSlugSettingsApiKeysIndexRouteImport.update({
+    id: '/settings/api-keys/',
+    path: '/settings/api-keys/',
+    getParentRoute: () => AuthenticatedOrganizationSlugRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
+  '/$organizationSlug': typeof AuthenticatedOrganizationSlugRouteRouteWithChildren
+  '/$organizationSlug/': typeof AuthenticatedOrganizationSlugIndexRoute
+  '/$organizationSlug/settings/api-keys/': typeof AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
+  '/$organizationSlug': typeof AuthenticatedOrganizationSlugIndexRoute
+  '/$organizationSlug/settings/api-keys': typeof AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/_authenticated/$organizationSlug': typeof AuthenticatedOrganizationSlugRouteRouteWithChildren
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/$organizationSlug/': typeof AuthenticatedOrganizationSlugIndexRoute
+  '/_authenticated/$organizationSlug/settings/api-keys/': typeof AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/$organizationSlug'
+    | '/$organizationSlug/'
+    | '/$organizationSlug/settings/api-keys/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/_authenticated' | '/_authenticated/'
+  to: '/' | '/$organizationSlug' | '/$organizationSlug/settings/api-keys'
+  id:
+    | '__root__'
+    | '/_authenticated'
+    | '/_authenticated/$organizationSlug'
+    | '/_authenticated/'
+    | '/_authenticated/$organizationSlug/'
+    | '/_authenticated/$organizationSlug/settings/api-keys/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -61,14 +100,56 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/$organizationSlug': {
+      id: '/_authenticated/$organizationSlug'
+      path: '/$organizationSlug'
+      fullPath: '/$organizationSlug'
+      preLoaderRoute: typeof AuthenticatedOrganizationSlugRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/$organizationSlug/': {
+      id: '/_authenticated/$organizationSlug/'
+      path: '/'
+      fullPath: '/$organizationSlug/'
+      preLoaderRoute: typeof AuthenticatedOrganizationSlugIndexRouteImport
+      parentRoute: typeof AuthenticatedOrganizationSlugRouteRoute
+    }
+    '/_authenticated/$organizationSlug/settings/api-keys/': {
+      id: '/_authenticated/$organizationSlug/settings/api-keys/'
+      path: '/settings/api-keys'
+      fullPath: '/$organizationSlug/settings/api-keys/'
+      preLoaderRoute: typeof AuthenticatedOrganizationSlugSettingsApiKeysIndexRouteImport
+      parentRoute: typeof AuthenticatedOrganizationSlugRouteRoute
+    }
   }
 }
 
+interface AuthenticatedOrganizationSlugRouteRouteChildren {
+  AuthenticatedOrganizationSlugIndexRoute: typeof AuthenticatedOrganizationSlugIndexRoute
+  AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute: typeof AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute
+}
+
+const AuthenticatedOrganizationSlugRouteRouteChildren: AuthenticatedOrganizationSlugRouteRouteChildren =
+  {
+    AuthenticatedOrganizationSlugIndexRoute:
+      AuthenticatedOrganizationSlugIndexRoute,
+    AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute:
+      AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute,
+  }
+
+const AuthenticatedOrganizationSlugRouteRouteWithChildren =
+  AuthenticatedOrganizationSlugRouteRoute._addFileChildren(
+    AuthenticatedOrganizationSlugRouteRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedOrganizationSlugRouteRoute: typeof AuthenticatedOrganizationSlugRouteRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedOrganizationSlugRouteRoute:
+    AuthenticatedOrganizationSlugRouteRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
 }
 

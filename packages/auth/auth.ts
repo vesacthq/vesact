@@ -305,6 +305,9 @@ export const auth = betterAuth({
 		apiKey({
 			references: "organization",
 			defaultPrefix: "relay_",
+			// The console identifies a key by its first characters; the default
+			// keeps only the prefix.
+			startingCharactersConfig: { shouldStore: true, charactersLength: 12 },
 			rateLimit: { enabled: true, timeWindow: 60_000, maxRequests: 300 },
 		}),
 		openAPI(),

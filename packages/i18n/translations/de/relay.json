@@ -1,7 +1,80 @@
 {
-	"home": {
-		"signedInAs": "Angemeldet als {email}",
-		"accountCenter": "Kontocenter"
+	"app": {
+		"menu": {
+			"navigationTitle": "Navigation",
+			"overview": "Übersicht",
+			"apiKeys": "API-Schlüssel",
+			"apiReference": "API-Referenz",
+			"organizationSettings": "Organisationseinstellungen",
+			"accountSettings": "Kontoeinstellungen",
+			"admin": "Admin"
+		},
+		"userMenu": {
+			"accountSettings": "Kontoeinstellungen",
+			"colorMode": "Farbmodus",
+			"logout": "Abmelden"
+		}
+	},
+	"organizations": {
+		"organizationSelect": {
+			"organizations": "Organisationen",
+			"createNewOrganization": "Neue Organisation erstellen"
+		},
+		"noAccess": {
+			"title": "Kein Zugriff auf Relay",
+			"description": "Du bist Mitglied von {organization}, aber Relay ist für dich nicht freigeschaltet. Ein Organisations-Admin kann den Zugriff im Kontocenter erteilen.",
+			"members": "Mitglieder öffnen"
+		}
+	},
+	"overview": {
+		"subtitle": "Anfragen an die Relay-API tragen einen Schlüssel dieser Organisation.",
+		"quickStart": {
+			"title": "Schnellstart",
+			"description": "Erstelle einen Schlüssel und sende ihn als Bearer-Token.",
+			"apiKeys": "API-Schlüssel",
+			"apiReference": "API-Referenz"
+		}
+	},
+	"apiKeys": {
+		"title": "API-Schlüssel",
+		"subtitle": "Schlüssel gehören dieser Organisation. Das Geheimnis wird einmal angezeigt, beim Erstellen.",
+		"list": {
+			"title": "Schlüssel",
+			"description": "Ein widerrufener Schlüssel lehnt seine Anfragen sofort ab.",
+			"empty": "Noch keine Schlüssel.",
+			"error": "Die Schlüssel konnten nicht geladen werden.",
+			"created": "Erstellt am {date}",
+			"lastUsed": "Zuletzt verwendet am {date}",
+			"neverUsed": "Nie verwendet",
+			"disabled": "Deaktiviert",
+			"revoke": "Widerrufen"
+		},
+		"create": {
+			"button": "Schlüssel erstellen",
+			"title": "API-Schlüssel erstellen",
+			"description": "Benenne den Schlüssel nach dem Dienst, der ihn verwendet.",
+			"name": "Name",
+			"namePlaceholder": "Abrechnungs-Sync",
+			"submit": "Schlüssel erstellen",
+			"error": "Der Schlüssel konnte nicht erstellt werden."
+		},
+		"created": {
+			"title": "Schlüssel erstellt",
+			"description": "Sende ihn als Bearer-Token jeder Anfrage.",
+			"onceTitle": "Jetzt kopieren",
+			"onceDescription": "Das Geheimnis wird nicht erneut angezeigt. Ein verlorener Schlüssel muss widerrufen und ersetzt werden.",
+			"copy": "Kopieren",
+			"copied": "Kopiert",
+			"done": "Fertig"
+		},
+		"revoke": {
+			"title": "Diesen Schlüssel widerrufen?",
+			"message": "Anfragen mit {name} funktionieren sofort nicht mehr.",
+			"confirm": "Widerrufen",
+			"loading": "Schlüssel wird widerrufen…",
+			"success": "Schlüssel widerrufen",
+			"error": "Der Schlüssel konnte nicht widerrufen werden."
+		}
 	},
 	"errors": {
 		"title": "Etwas ist schiefgelaufen",
