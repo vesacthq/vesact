@@ -58,5 +58,56 @@
 		"yearly": "年付",
 		"perSeat": "席位",
 		"badge": "定价"
+	},
+	"common": {
+		"confirmation": {
+			"cancel": "取消",
+			"confirm": "确认"
+		},
+		"actions": {
+			"continue": "继续",
+			"verify": "验证"
+		},
+		"colorMode": {
+			"system": "跟随系统",
+			"light": "浅色",
+			"dark": "深色"
+		},
+		"passwordCriteria": {
+			"minLength": "至少 8 个字符",
+			"upperAndLowercase": "大写和小写",
+			"number": "数字",
+			"specialCharacter": "特殊字符"
+		},
+		"aria": {
+			"language": "语言",
+			"openMenu": "打开菜单"
+		}
+	},
+	"settings": {
+		"menu": {
+			"account": {
+				"billing": "账单",
+				"notifications": "通知",
+				"security": "安全",
+				"title": "账号",
+				"profile": "个人资料"
+			},
+			"organization": {
+				"billing": "账单",
+				"general": "常规",
+				"members": "成员",
+				"title": "组织"
+			},
+			"organizations": {
+				"title": "组织",
+				"new": "新建组织"
+			},
+			"admin": {
+				"title": "平台管理",
+				"users": "用户",
+				"organizations": "组织"
+			}
+		}
 	}
 }

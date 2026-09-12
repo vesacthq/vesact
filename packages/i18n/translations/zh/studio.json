@@ -1,1 +1,62 @@
-{}
+{
+	"app": {
+		"menu": {
+			"accountSettings": "账号设置",
+			"admin": "平台管理",
+			"aiChatbot": "AI 聊天",
+			"navigationTitle": "导航",
+			"organizationSettings": "组织设置",
+			"start": "首页"
+		},
+		"userMenu": {
+			"accountSettings": "账号设置",
+			"colorMode": "外观",
+			"documentation": "文档",
+			"home": "主页",
+			"logout": "退出登录"
+		},
+		"notifications": {
+			"title": "通知",
+			"empty": "没有新通知。",
+			"markAllAsRead": "全部标记为已读",
+			"unreadNone": "无未读",
+			"unreadOne": "1 条未读",
+			"unreadMany": "{count} 条未读",
+			"aria": {
+				"open": "打开通知"
+			}
+		}
+	},
+	"documentation": {
+		"title": "文档"
+	},
+	"notFound": {
+		"code": "404",
+		"title": "页面未找到",
+		"goToDashboard": "返回首页",
+		"goToHomepage": "返回主页"
+	},
+	"organizations": {
+		"organizationSelect": {
+			"createNewOrganization": "创建组织",
+			"organizations": "组织",
+			"personalAccount": "个人账号"
+		},
+		"organizationsGrid": {
+			"createNewOrganization": "创建组织",
+			"title": "你的组织"
+		},
+		"start": {
+			"subtitle": "欢迎来到这个组织的首页！"
+		},
+		"noAccess": {
+			"title": "没有 Studio 访问权限",
+			"description": "你是 {organization} 的成员，但还没有开通 Studio。组织管理员可以在账号中心开通。",
+			"members": "打开成员页"
+		}
+	},
+	"start": {
+		"subtitle": "查看你业务的最新数据。",
+		"welcome": "欢迎，{name}！"
+	}
+}
