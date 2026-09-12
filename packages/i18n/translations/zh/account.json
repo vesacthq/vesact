@@ -1,6 +1,624 @@
 {
+	"auth": {
+		"errors": {
+			"invalidEmailOrPassword": "邮箱或密码不正确。请检查后重试。",
+			"unknown": "出错了。请重试。",
+			"userNotFound": "用户不存在。",
+			"failedToCreateUser": "无法创建用户。请重试。",
+			"failedToCreateSession": "无法创建登录会话。请重试。",
+			"failedToUpdateUser": "无法更新用户信息。请重试。",
+			"failedToGetSession": "无法获取登录会话。",
+			"invalidPassword": "输入的密码不正确。",
+			"invalidEmail": "输入的邮箱无效。",
+			"invalidToken": "输入的令牌无效或已过期。",
+			"credentialAccountNotFound": "账号未找到。",
+			"emailCanNotBeUpdated": "邮箱无法更新。请重试。",
+			"emailNotVerified": "登录前请先验证邮箱。",
+			"failedToGetUserInfo": "无法加载用户信息。",
+			"idTokenNotSupported": "不支持 ID token。",
+			"passwordTooLong": "密码过长。",
+			"passwordTooShort": "密码过短。",
+			"providerNotFound": "不支持此登录方式。",
+			"socialAccountAlreadyLinked": "此账号已关联到另一个用户。",
+			"userEmailNotFound": "邮箱未找到。",
+			"userAlreadyExists": "用户已存在。",
+			"userAlreadyExistsUseAnotherEmail": "用户已存在。请使用其他邮箱。",
+			"invalidInvitation": "邀请无效或已过期。",
+			"sessionExpired": "登录会话已过期。",
+			"failedToUnlinkLastAccount": "无法解除账号关联。",
+			"accountNotFound": "账号未找到。"
+		},
+		"forgotPassword": {
+			"backToSignin": "返回登录",
+			"email": "邮箱",
+			"hints": {
+				"linkNotSent": {
+					"message": "无法发送密码重置链接。请稍后重试。",
+					"title": "链接未发送"
+				},
+				"linkSent": {
+					"message": "已发送链接至你的邮箱。请检查收件箱。",
+					"title": "链接已发送"
+				}
+			},
+			"message": "请输入邮箱地址，我们将发送密码重置链接给你。",
+			"submit": "发送链接",
+			"title": "忘记密码？"
+		},
+		"login": {
+			"continueWith": "或使用以下方式登录",
+			"createAnAccount": "创建账号",
+			"dontHaveAnAccount": "还没有账号？",
+			"forgotPassword": "忘记密码？",
+			"hints": {
+				"invalidCredentials": "邮箱或密码不正确。请重试。",
+				"socialSigninFailed": "无法登录。请重试。",
+				"linkSent": {
+					"message": "已发送链接至你的邮箱。请检查收件箱。",
+					"title": "链接已发送"
+				}
+			},
+			"lastUsed": "上次使用",
+			"loginWithPasskey": "使用通行密钥登录",
+			"modes": {
+				"magicLink": "登录链接",
+				"password": "密码"
+			},
+			"submit": "登录",
+			"subtitle": "请输入邮箱和密码登录。",
+			"title": "欢迎回来",
+			"sendMagicLink": "发送登录链接"
+		},
+		"resetPassword": {
+			"backToSignin": "返回登录",
+			"hints": {
+				"error": "无法重置密码。请重试。",
+				"success": "密码已成功重置。"
+			},
+			"message": "请输入新密码。",
+			"newPassword": "新密码",
+			"submit": "重置密码",
+			"title": "重置密码"
+		},
+		"signup": {
+			"alreadyHaveAccount": "已有账号？",
+			"email": "邮箱",
+			"hints": {
+				"signupFailed": "无法创建账号。请稍后重试。",
+				"verifyEmail": "已发送验证邮件至你的邮箱。请检查收件箱。"
+			},
+			"message": "欢迎加入。请填写下方表单创建账号。",
+			"name": "姓名",
+			"password": "密码",
+			"signIn": "登录",
+			"submit": "创建账号",
+			"title": "创建账号"
+		},
+		"verify": {
+			"title": "验证账号",
+			"code": "一次性验证码",
+			"submit": "验证",
+			"backToSignin": "返回登录",
+			"message": "输入验证器应用中的一次性验证码后继续。"
+		},
+		"invitation": {
+			"description": "登录或创建账号后即可加入组织。",
+			"title": "你收到了一个组织邀请。"
+		}
+	},
 	"account": {
 		"logout": "退出登录",
 		"back": "返回 {product}"
+	},
+	"settings": {
+		"save": "保存",
+		"account": {
+			"avatar": {
+				"delete": "删除头像",
+				"description": "点击头像或把图片拖到这里上传。",
+				"notifications": {
+					"error": "头像更新失败",
+					"success": "头像已更新"
+				},
+				"title": "你的头像"
+			},
+			"changeEmail": {
+				"description": "输入新邮箱后保存。需要验证新邮箱后才能生效。",
+				"notifications": {
+					"error": "邮箱更新失败",
+					"success": "邮箱已更新"
+				},
+				"title": "你的邮箱"
+			},
+			"changeName": {
+				"notifications": {
+					"error": "姓名更新失败",
+					"success": "姓名已更新"
+				},
+				"title": "你的姓名"
+			},
+			"dangerZone": {
+				"title": "危险操作"
+			},
+			"deleteAccount": {
+				"confirmation": "确定要删除账号吗？",
+				"description": "永久删除你的账号。删除后无法恢复。请输入密码确认：",
+				"notifications": {
+					"error": "账号删除失败",
+					"success": "账号已删除"
+				},
+				"submit": "删除账号",
+				"title": "删除账号"
+			},
+			"language": {
+				"description": "选择应用语言后点击保存。",
+				"notifications": {
+					"error": "语言更新失败",
+					"success": "语言已更新"
+				},
+				"title": "你的语言"
+			},
+			"notificationPreferences": {
+				"description": "选择接收哪些邮件。已登录时，应用内通知始终在通知栏显示。",
+				"emailNewsletter": "通讯和提示",
+				"emailProductUpdates": "产品更新和功能",
+				"emailAccountSecurity": "账号安全和登录提醒",
+				"emailAccountSecurityHint": "建议开启：关于你账号和登录活动的重要通知。",
+				"title": "邮件通知",
+				"saved": "通知偏好已更新。"
+			},
+			"subtitle": "管理个人账号设置。",
+			"title": "账号设置",
+			"security": {
+				"activeSessions": {
+					"description": "你账号当前登录的所有设备。点击 X 结束该设备的登录。",
+					"title": "登录设备",
+					"notifications": {
+						"revokeSession": {
+							"success": "已结束该设备的登录"
+						}
+					},
+					"currentSession": "当前设备"
+				},
+				"changePassword": {
+					"currentPassword": "当前密码",
+					"newPassword": "新密码",
+					"notifications": {
+						"error": "密码更新失败",
+						"success": "密码已更新"
+					},
+					"title": "你的密码"
+				},
+				"connectedAccounts": {
+					"connect": "关联",
+					"connected": "已关联",
+					"disconnect": "解除关联",
+					"title": "已关联账号"
+				},
+				"passkeys": {
+					"addPasskey": "添加通行密钥",
+					"description": "通行密钥可以代替密码登录，更安全。",
+					"notifications": {
+						"addPasskey": {
+							"error": {
+								"title": "无法添加通行密钥"
+							},
+							"success": {
+								"title": "通行密钥已添加"
+							}
+						},
+						"deletePasskey": {
+							"error": {
+								"title": "无法删除通行密钥"
+							},
+							"loading": {
+								"title": "正在删除通行密钥…"
+							},
+							"success": {
+								"title": "通行密钥已删除"
+							}
+						}
+					},
+					"title": "通行密钥"
+				},
+				"setPassword": {
+					"description": "你还没有设置密码。点击下方按钮发送密码重置邮件，按照邮件说明完成设置。",
+					"notifications": {
+						"error": "无法发送密码设置链接。请重试。",
+						"success": "密码设置链接已发送到你的邮箱。"
+					},
+					"submit": "设置密码",
+					"title": "你的密码"
+				},
+				"title": "安全",
+				"twoFactor": {
+					"title": "两步验证",
+					"description": "为你的账号增加额外的安全保护。",
+					"dialog": {
+						"password": {
+							"title": "使用密码验证",
+							"description": "请输入密码验证账号：",
+							"label": "你的密码："
+						},
+						"totpUrl": {
+							"description": "用验证器应用扫描二维码，或手动输入下方密钥。",
+							"code": "输入 6 位验证码完成设置：",
+							"title": "启用两步验证"
+						}
+					},
+					"enable": "启用两步验证",
+					"notifications": {
+						"verify": {
+							"success": {
+								"title": "两步验证已启用。"
+							}
+						},
+						"enable": {
+							"error": {
+								"title": "密码验证失败。请重试。"
+							}
+						},
+						"disable": {
+							"success": {
+								"title": "两步验证已禁用。"
+							}
+						}
+					},
+					"disable": "禁用两步验证",
+					"enabled": "你已为账号启用两步验证。"
+				},
+				"subtitle": "密码、通行密钥、两步验证和登录设备。"
+			},
+			"profile": {
+				"title": "个人资料",
+				"subtitle": "你的姓名、头像、邮箱和语言在所有产品中通用。"
+			}
+		},
+		"notificationsPage": {
+			"title": "通知",
+			"description": "选择接收通知的方式。禁用的选项会被保存，默认全部启用。",
+			"groups": {
+				"general": {
+					"title": "通用"
+				}
+			},
+			"types": {
+				"APP_UPDATE": {
+					"label": "应用更新"
+				}
+			},
+			"columns": {
+				"type": "通知",
+				"inApp": "应用内",
+				"email": "邮件"
+			}
+		},
+		"billing": {
+			"createCustomerPortal": {
+				"label": "管理账单",
+				"notifications": {
+					"error": {
+						"title": "无法打开账单管理。请重试。"
+					}
+				}
+			},
+			"activePlan": {
+				"status": {
+					"active": "生效中",
+					"canceled": "已取消",
+					"expired": "已过期",
+					"incomplete": "未完成",
+					"past_due": "逾期",
+					"paused": "已暂停",
+					"trialing": "试用中",
+					"unpaid": "未支付"
+				},
+				"title": "你的套餐"
+			},
+			"changePlan": {
+				"description": "选择要订阅的套餐。",
+				"title": "更改套餐"
+			},
+			"title": "账单",
+			"subtitle": "组织的套餐和支付信息。",
+			"unavailable": {
+				"title": "套餐暂未开放",
+				"description": "尚未接入支付，接入前组织一直是免费套餐。"
+			},
+			"noPermission": "仅组织所有者和管理员可管理账单。"
+		}
+	},
+	"organizations": {
+		"createForm": {
+			"name": "组织名称",
+			"notifications": {
+				"error": "无法创建组织。请稍后重试。",
+				"success": "组织已创建。你现在可以邀请成员。"
+			},
+			"submit": "创建组织",
+			"subtitle": "输入组织名称开始。你可以稍后在组织设置中修改。",
+			"title": "创建组织"
+		},
+		"invitationModal": {
+			"accept": "接受",
+			"decline": "拒绝",
+			"description": "你被邀请加入 {organizationName}。要接受邀请并加入吗？",
+			"title": "加入组织"
+		},
+		"roles": {
+			"admin": "管理员",
+			"member": "成员",
+			"owner": "所有者",
+			"info": {
+				"description": "角色按访问权限从少到多排列：",
+				"title": "角色权限"
+			}
+		},
+		"settings": {
+			"changeName": {
+				"title": "组织名称"
+			},
+			"deleteOrganization": {
+				"confirmation": "确定要删除组织吗？",
+				"description": "永久删除你的组织。删除后无法恢复。请输入密码确认：",
+				"submit": "删除组织",
+				"title": "删除组织"
+			},
+			"logo": {
+				"delete": "删除 logo",
+				"description": "为组织上传 logo。",
+				"notifications": {
+					"error": "组织 logo 更新失败",
+					"success": "组织 logo 已更新"
+				},
+				"title": "组织 logo"
+			},
+			"members": {
+				"activeMembers": "活跃成员",
+				"description": "查看组织的所有活跃成员和待接受邀请。",
+				"invitations": {
+					"empty": "还没有邀请任何成员。",
+					"expiresAt": "过期时间 {date}",
+					"invitationStatus": {
+						"accepted": "已接受",
+						"canceled": "已取消",
+						"pending": "待接受",
+						"rejected": "已拒绝"
+					},
+					"revoke": "撤回邀请",
+					"resend": "重新发送邀请"
+				},
+				"inviteMember": {
+					"description": "向新成员发送加入邀请。",
+					"email": "邮箱",
+					"notifications": {
+						"error": {
+							"description": "无法邀请成员。请稍后重试。",
+							"title": "邀请失败"
+						},
+						"success": {
+							"description": "对方会收到一封邀请邮件。",
+							"title": "邀请已发送"
+						}
+					},
+					"role": "角色",
+					"submit": "邀请",
+					"title": "邀请成员",
+					"access": "产品访问"
+				},
+				"leaveOrganization": "离开组织",
+				"notifications": {
+					"removeMember": {
+						"error": {
+							"description": "无法移除成员。请重试。"
+						},
+						"loading": {
+							"description": "正在从组织移除成员…"
+						},
+						"success": {
+							"description": "成员已从组织移除。"
+						}
+					},
+					"revokeInvitation": {
+						"error": {
+							"description": "无法撤回邀请。请稍后重试。"
+						},
+						"loading": {
+							"description": "正在撤回邀请…"
+						},
+						"success": {
+							"description": "邀请已撤回。"
+						}
+					},
+					"updateMembership": {
+						"error": {
+							"description": "无法更新成员角色。请重试。"
+						},
+						"loading": {
+							"description": "正在更新成员角色…"
+						},
+						"success": {
+							"description": "成员角色已更新。"
+						}
+					},
+					"resendInvitation": {
+						"loading": {
+							"description": "正在重新发送邀请…"
+						},
+						"success": {
+							"description": "邀请已发送。"
+						},
+						"error": {
+							"description": "无法发送邀请。请重试。"
+						}
+					}
+				},
+				"pendingInvitations": "待接受邀请",
+				"removeMember": "移除成员",
+				"title": "成员",
+				"columns": {
+					"member": "成员",
+					"organization": "组织"
+				},
+				"empty": "还没有成员。"
+			},
+			"notifications": {
+				"organizationDeleted": "组织已删除。",
+				"organizationNameNotUpdated": "无法更新组织名称。请稍后重试。",
+				"organizationNameUpdated": "组织名称已更新。",
+				"organizationNotDeleted": "无法删除组织。请稍后重试。"
+			},
+			"subtitle": "管理组织设置。",
+			"title": "组织",
+			"dangerZone": {
+				"title": "危险操作"
+			}
+		},
+		"list": {
+			"title": "组织",
+			"subtitle": "你所属的组织。成员和产品访问权限在此管理。",
+			"empty": "你还没有加入任何组织。",
+			"create": "创建组织"
+		},
+		"productAccess": {
+			"none": "无访问权限",
+			"full": "完全访问",
+			"fullDescription": "组织所有者和管理员可以使用所有产品。"
+		},
+		"productRoles": {
+			"studio": {
+				"admin": "Studio 管理员",
+				"member": "Studio 成员"
+			},
+			"relay": {
+				"admin": "Relay 管理员",
+				"developer": "Relay 开发者"
+			}
+		}
+	},
+	"onboarding": {
+		"account": {
+			"avatar": "头像",
+			"avatarDescription": "点击圆形区域或拖动图片至此上传你的头像。",
+			"name": "姓名"
+		},
+		"continue": "继续",
+		"message": "几步完成初始设置。",
+		"notifications": {
+			"accountSetupFailed": "无法完成账号设置。请稍后重试。"
+		},
+		"pricing": {
+			"planSelected": "已选择套餐。",
+			"skip": "暂时跳过"
+		},
+		"step": "步骤 {step} / {total}",
+		"title": "完成初始设置"
+	},
+	"checkoutReturn": {
+		"loading": "正在完成购买…",
+		"timeout": "确认购买结果用时较长。你可以重试，或重新选择套餐。",
+		"retry": "重新检查",
+		"backToBilling": "返回账单"
+	},
+	"admin": {
+		"organizations": {
+			"backToList": "返回组织列表",
+			"confirmDelete": {
+				"confirm": "删除",
+				"message": "确定要删除此组织吗？此操作无法撤销。",
+				"title": "删除组织"
+			},
+			"create": "创建",
+			"delete": "删除",
+			"deleteOrganization": {
+				"deleted": "组织已删除。",
+				"deleting": "正在删除组织…",
+				"notDeleted": "组织删除失败。请重试。"
+			},
+			"edit": "编辑",
+			"form": {
+				"createTitle": "创建组织",
+				"name": "组织名称",
+				"notifications": {
+					"error": "无法保存组织。请稍后重试。",
+					"success": "组织已保存。"
+				},
+				"save": "保存",
+				"updateTitle": "编辑组织",
+				"membersNote": "成员和产品访问权限由组织管理员在成员页管理。",
+				"openMembers": "打开成员页"
+			},
+			"loading": "正在加载组织…",
+			"membersCount": "{count} 名成员",
+			"search": "搜索组织…",
+			"title": "管理组织"
+		},
+		"title": "平台管理",
+		"users": {
+			"ban": {
+				"actions": {
+					"ban": "封禁用户",
+					"banning": "正在封禁…",
+					"confirmBan": "封禁",
+					"unban": "解除封禁"
+				},
+				"dialog": {
+					"description": "阻止 {name} 登录，并结束其所有登录会话。",
+					"title": "封禁用户"
+				},
+				"fields": {
+					"expiration": "到期日期（可选）",
+					"reason": "原因"
+				},
+				"notifications": {
+					"banError": "无法封禁用户。请重试。",
+					"banSuccess": "用户已封禁。",
+					"unbanError": "无法解除封禁。请重试。",
+					"unbanSuccess": "用户已解除封禁。",
+					"unbanning": "正在解除封禁…"
+				},
+				"status": {
+					"banned": "已封禁",
+					"expires": "封禁到期：{date}",
+					"permanent": "永久封禁",
+					"reason": "原因：{reason}"
+				},
+				"validation": {
+					"expirationFuture": "选择今天或之后的日期。",
+					"reasonRequired": "请填写封禁原因。"
+				}
+			},
+			"confirmDelete": {
+				"confirm": "删除",
+				"message": "确定要删除此用户吗？此操作无法撤销。",
+				"title": "删除用户"
+			},
+			"delete": "删除",
+			"deleteUser": {
+				"deleted": "用户已删除。",
+				"deleting": "正在删除用户…",
+				"notDeleted": "用户删除失败。请重试。"
+			},
+			"emailVerified": {
+				"verified": "邮箱已验证",
+				"waiting": "邮箱待验证"
+			},
+			"impersonate": "以该用户身份登录",
+			"impersonation": {
+				"impersonating": "正在以 {name} 身份登录…"
+			},
+			"loading": "正在加载用户…",
+			"resendVerificationMail": {
+				"error": "无法重新发送验证邮件。请重试。",
+				"submitting": "正在重新发送验证邮件…",
+				"success": "验证邮件已发送。",
+				"title": "重新发送验证邮件"
+			},
+			"search": "按姓名或邮箱搜索…",
+			"title": "管理用户",
+			"assignAdminRole": "设为平台管理员",
+			"removeAdminRole": "取消平台管理员"
+		},
+		"description": "管理平台上的用户和组织。"
 	}
 }
