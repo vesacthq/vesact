@@ -1,6 +1,6 @@
 ---
 name: add-translations
-description: "Use when adding or changing use-intl message keys across Studio, marketing, mail, shared scopes, locales, and locale-aware routing."
+description: "Use when adding or changing use-intl message keys across the Studio, account, Relay, marketing, mail and shared scopes, locales, and locale-aware routing."
 ---
 
 # Add translations
@@ -11,11 +11,11 @@ Use for user-visible strings or locale behavior. Do not translate logs, stable A
 
 ## Procedure
 
-1. Choose the owning scope: `studio.json`, `marketing.json`, `mail.json`, or cross-surface `shared.json` under `packages/i18n/translations/<locale>/`.
-2. Add the same nested key and compatible placeholders to `en`, `de`, `es`, and `fr`. English is the fallback, not permission to omit other locales.
+1. Choose the owning scope: `studio.json`, `account.json`, `relay.json`, `marketing.json`, `mail.json`, or cross-surface `shared.json` under `packages/i18n/translations/<locale>/`.
+2. Add the same nested key and compatible placeholders to `en` and `zh`, the only locales for now. English is the fallback, not permission to omit `zh`.
 3. In Studio, import `useTranslations`/`useFormatter` through `@i18n/intl` (`apps/studio/modules/i18n/intl.tsx`). Marketing components currently import from `use-intl`.
 4. For route metadata or non-React code, use `createTranslatorForLocale(locale, scope)` from `@repo/i18n`, as in `apps/marketing/routes/contact/index.tsx`.
-5. Keep locale registration, currency, default locale, and cookie name in `packages/i18n/config.ts`. Adding a locale also requires all four JSON files and imports/entries in `packages/i18n/messages.ts`.
+5. Keep locale registration, currency, default locale, and cookie name in `packages/i18n/config.ts`. Adding a locale also requires every scope's JSON file under its folder and imports/entries in `packages/i18n/messages.ts`.
 6. Preserve localized navigation through each app's `modules/i18n/routing.tsx` (`LocaleLink`, `useLocaleRouter`, `localeRedirect`); do not concatenate prefixes by hand.
 7. Exercise every interpolation/plural branch and inspect at least the default locale plus one non-default locale.
 8. Check all scopes for missing keys across non-default locales:
@@ -23,8 +23,8 @@ Use for user-visible strings or locale behavior. Do not translate logs, stable A
    node --input-type=module <<'NODE'
    import { readFile } from "node:fs/promises";
 
-   const locales = ["en", "de", "es", "fr"];
-   const scopes = ["shared", "studio", "marketing", "mail"];
+   const locales = ["en", "zh"];
+   const scopes = ["shared", "studio", "account", "relay", "marketing", "mail"];
    const flattenKeys = (value, prefix = "") =>
      Object.entries(value).flatMap(([key, child]) => {
        const path = prefix ? `${prefix}.${key}` : key;
