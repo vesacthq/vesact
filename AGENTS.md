@@ -234,6 +234,17 @@ Only app-local aliases are configured in the app `tsconfig.json` files.
 | `@shared/*`           | `./modules/shared/*`               |
 | `content-collections` | `./.content-collections/generated` |
 
+### `apps/relay/tsconfig.json`
+
+| Alias              | Target                      |
+| ------------------ | --------------------------- |
+| `@config`          | `./config`                  |
+| `@api-keys/*`      | `./modules/api-keys/*`      |
+| `@auth/*`          | `./modules/auth/*`          |
+| `@i18n/*`          | `./modules/i18n/*`          |
+| `@organizations/*` | `./modules/organizations/*` |
+| `@shared/*`        | `./modules/shared/*`        |
+
 ## API & data layer
 
 oRPC modules live under `packages/api/modules`. Procedures use `publicProcedure`,
@@ -304,6 +315,17 @@ Meta's webhook is `GET`/`POST /webhooks/meta` in
 `META_APP_SECRET` and stores the parsed body in `relay_inbound_event`, deduplicated
 by the raw body's SHA-256; nothing is parsed yet. Its acceptance run is
 `pnpm --filter @repo/scripts relay:webhook-acceptance`.
+
+The console on the `relay.` hostname is `apps/relay/routes/_authenticated`:
+the session and the organization list load once per page into the route
+context (`@auth/lib/api`, `@organizations/lib/api`), `/` opens the active
+organization, `/$organizationSlug` checks `relay.access` and renders a denial
+that links to the account center's members page, and
+`/$organizationSlug/settings/api-keys` lists, creates and revokes keys from the
+browser through the account center's `/api/auth/api-key/*` endpoints
+(`@api-keys/lib/api`); the secret exists only in the create response. Relay is
+one of `getTrustedOrigins()`, which is what lets those cross-origin calls
+through the account center's CORS and Better Auth's origin check.
 
 ### Client cache invalidation
 

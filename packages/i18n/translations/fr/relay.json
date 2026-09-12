@@ -1,7 +1,80 @@
 {
-	"home": {
-		"signedInAs": "Connecté en tant que {email}",
-		"accountCenter": "Centre de compte"
+	"app": {
+		"menu": {
+			"navigationTitle": "Navigation",
+			"overview": "Vue d'ensemble",
+			"apiKeys": "Clés d'API",
+			"apiReference": "Référence de l'API",
+			"organizationSettings": "Paramètres de l'organisation",
+			"accountSettings": "Paramètres du compte",
+			"admin": "Administration"
+		},
+		"userMenu": {
+			"accountSettings": "Paramètres du compte",
+			"colorMode": "Mode de couleur",
+			"logout": "Se déconnecter"
+		}
+	},
+	"organizations": {
+		"organizationSelect": {
+			"organizations": "Organisations",
+			"createNewOrganization": "Créer une organisation"
+		},
+		"noAccess": {
+			"title": "Pas d'accès à Relay",
+			"description": "Vous êtes membre de {organization}, mais Relay n'est pas activé pour vous. Un administrateur de l'organisation peut vous donner l'accès dans le centre de compte.",
+			"members": "Ouvrir les membres"
+		}
+	},
+	"overview": {
+		"subtitle": "Les requêtes vers l'API Relay portent une clé de cette organisation.",
+		"quickStart": {
+			"title": "Démarrage rapide",
+			"description": "Créez une clé, puis envoyez-la comme jeton bearer.",
+			"apiKeys": "Clés d'API",
+			"apiReference": "Référence de l'API"
+		}
+	},
+	"apiKeys": {
+		"title": "Clés d'API",
+		"subtitle": "Les clés appartiennent à cette organisation. Le secret n'est affiché qu'une fois, à la création.",
+		"list": {
+			"title": "Clés",
+			"description": "Révoquer une clé rejette ses requêtes immédiatement.",
+			"empty": "Pas encore de clé.",
+			"error": "Les clés n'ont pas pu être chargées.",
+			"created": "Créée le {date}",
+			"lastUsed": "Dernière utilisation le {date}",
+			"neverUsed": "Jamais utilisée",
+			"disabled": "Désactivée",
+			"revoke": "Révoquer"
+		},
+		"create": {
+			"button": "Créer une clé",
+			"title": "Créer une clé d'API",
+			"description": "Nommez la clé d'après le service qui l'utilisera.",
+			"name": "Nom",
+			"namePlaceholder": "Synchronisation de facturation",
+			"submit": "Créer la clé",
+			"error": "La clé n'a pas pu être créée."
+		},
+		"created": {
+			"title": "Clé créée",
+			"description": "Envoyez-la comme jeton bearer de chaque requête.",
+			"onceTitle": "Copiez-la maintenant",
+			"onceDescription": "Le secret ne sera plus affiché. Une clé perdue doit être révoquée et remplacée.",
+			"copy": "Copier",
+			"copied": "Copiée",
+			"done": "Terminé"
+		},
+		"revoke": {
+			"title": "Révoquer cette clé ?",
+			"message": "Les requêtes avec {name} cessent de fonctionner immédiatement.",
+			"confirm": "Révoquer",
+			"loading": "Révocation de la clé…",
+			"success": "Clé révoquée",
+			"error": "La clé n'a pas pu être révoquée."
+		}
 	},
 	"errors": {
 		"title": "Une erreur est survenue",

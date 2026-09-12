@@ -1,10 +1,11 @@
 import { config } from "@config";
 import { I18nProvider } from "@i18n/provider";
 import { getCurrentLocale } from "@repo/i18n/runtime";
-import { BrandHead, Button, cn, ThemeProvider } from "@repo/ui";
+import { BrandHead, Button, cn, ThemeProvider, Toaster } from "@repo/ui";
 import { documentTitle } from "@shared/lib/document-title";
+import type { QueryClient } from "@tanstack/react-query";
 import {
-	createRootRoute,
+	createRootRouteWithContext,
 	ErrorComponent,
 	HeadContent,
 	Link,
@@ -17,7 +18,11 @@ import { useTranslations } from "use-intl";
 
 import appCss from "./globals.css?url";
 
-export const Route = createRootRoute({
+export interface RouterContext {
+	queryClient: QueryClient;
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -52,6 +57,7 @@ function RootLayout() {
 				<ThemeProvider defaultTheme={config.defaultTheme}>
 					<I18nProvider>
 						<Outlet />
+						<Toaster />
 					</I18nProvider>
 				</ThemeProvider>
 				<Scripts />

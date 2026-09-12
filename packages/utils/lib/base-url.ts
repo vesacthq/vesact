@@ -29,12 +29,15 @@ export function getCookieDomain(url: string): string | undefined {
  * Returns the list of origins the app considers its own. Used as the
  * single source of truth for both the API CORS allow-list and better-auth's
  * `trustedOrigins` (origin/CSRF and callback/redirect URL validation), so the
- * two never drift apart. Always includes the Studio and account center origins
- * and adds the marketing site when configured.
+ * two never drift apart. Always includes the Studio, account center and Relay
+ * origins and adds the marketing site when configured.
  */
 export function getTrustedOrigins(): string[] {
 	const studioUrl = getBaseUrl(process.env.VITE_STUDIO_URL, 3000);
 	const marketingUrl = process.env.VITE_MARKETING_URL;
 	const accountUrl = getBaseUrl(process.env.VITE_ACCOUNT_URL, 3004);
-	return [...new Set([studioUrl, accountUrl, marketingUrl].filter((url) => url !== undefined))];
+	const relayUrl = getBaseUrl(process.env.VITE_RELAY_URL, 3005);
+	return [
+		...new Set([studioUrl, accountUrl, relayUrl, marketingUrl].filter((url) => url !== undefined)),
+	];
 }

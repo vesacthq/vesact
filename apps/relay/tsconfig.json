@@ -8,8 +8,10 @@
 		"types": ["vite/client"],
 		"paths": {
 			"@config": ["./config"],
+			"@api-keys/*": ["./modules/api-keys/*"],
 			"@auth/*": ["./modules/auth/*"],
 			"@i18n/*": ["./modules/i18n/*"],
+			"@organizations/*": ["./modules/organizations/*"],
 			"@shared/*": ["./modules/shared/*"]
 		}
 	},

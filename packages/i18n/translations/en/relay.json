@@ -1,7 +1,80 @@
 {
-	"home": {
-		"signedInAs": "Signed in as {email}",
-		"accountCenter": "Account center"
+	"app": {
+		"menu": {
+			"navigationTitle": "Navigation",
+			"overview": "Overview",
+			"apiKeys": "API keys",
+			"apiReference": "API reference",
+			"organizationSettings": "Organization settings",
+			"accountSettings": "Account settings",
+			"admin": "Admin"
+		},
+		"userMenu": {
+			"accountSettings": "Account settings",
+			"colorMode": "Color mode",
+			"logout": "Log out"
+		}
+	},
+	"organizations": {
+		"organizationSelect": {
+			"organizations": "Organizations",
+			"createNewOrganization": "Create new organization"
+		},
+		"noAccess": {
+			"title": "No access to Relay",
+			"description": "You are a member of {organization}, but Relay is not enabled for you. An organization admin can grant access in the account center.",
+			"members": "Open members"
+		}
+	},
+	"overview": {
+		"subtitle": "Requests to the Relay API carry one of this organization's keys.",
+		"quickStart": {
+			"title": "Quick start",
+			"description": "Create a key, then send it as the bearer token.",
+			"apiKeys": "API keys",
+			"apiReference": "API reference"
+		}
+	},
+	"apiKeys": {
+		"title": "API keys",
+		"subtitle": "Keys belong to this organization. The secret is shown once, when the key is created.",
+		"list": {
+			"title": "Keys",
+			"description": "Revoking a key rejects its requests immediately.",
+			"empty": "No keys yet.",
+			"error": "The keys could not be loaded.",
+			"created": "Created {date}",
+			"lastUsed": "Last used {date}",
+			"neverUsed": "Never used",
+			"disabled": "Disabled",
+			"revoke": "Revoke"
+		},
+		"create": {
+			"button": "Create key",
+			"title": "Create API key",
+			"description": "Name the key after the service that will use it.",
+			"name": "Name",
+			"namePlaceholder": "Billing sync",
+			"submit": "Create key",
+			"error": "The key could not be created."
+		},
+		"created": {
+			"title": "Key created",
+			"description": "Send it as the bearer token of every request.",
+			"onceTitle": "Copy it now",
+			"onceDescription": "The secret is not shown again. A lost key has to be revoked and replaced.",
+			"copy": "Copy",
+			"copied": "Copied",
+			"done": "Done"
+		},
+		"revoke": {
+			"title": "Revoke this key?",
+			"message": "Requests with {name} stop working immediately.",
+			"confirm": "Revoke",
+			"loading": "Revoking key…",
+			"success": "Key revoked",
+			"error": "The key could not be revoked."
+		}
 	},
 	"errors": {
 		"title": "Something went wrong",
