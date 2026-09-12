@@ -442,9 +442,12 @@ Canonical auth example:
 - Use `useTranslations`, `useFormatter`, and `IntlProvider` from `use-intl`.
   Follow `apps/studio/modules/i18n/provider.tsx`.
 - Locale helpers and the `locale` cookie are configured in `packages/i18n/config.ts`.
-  Messages are scoped per app (`studio.json`, `account.json`, `marketing.json`,
-  `mail.json`) plus `shared.json`, which every scope receives; the settings menu
-  labels both apps show live in `shared.json` under `settings.menu`.
+  The locales are `en` and `zh`; others come later, by adding a folder under
+  `packages/i18n/translations/` and entries in `config.ts` and `messages.ts`.
+  Messages are scoped per app (`studio.json`, `account.json`, `relay.json`,
+  `marketing.json`, `mail.json`) plus `shared.json`, which every scope
+  receives; the settings menu labels both apps show live in `shared.json`
+  under `settings.menu`.
 - Document titles use `documentTitle()` from `@shared/lib/document-title`
   (`{page} – ${config.appName}`, en dash). Call it from every Studio route `head()`.
   Routes without a page title (marketing homepage) keep `config.appName` alone.

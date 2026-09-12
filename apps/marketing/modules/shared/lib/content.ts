@@ -13,7 +13,7 @@ export function getActivePathFromUrlParam(path: string | string[]) {
 
 /**
  * Resolves a document for a given path and locale.
- * - Prefers exact locale match (e.g. first-post.de.mdx for locale "de")
+ * - Prefers exact locale match (e.g. first-post.zh.mdx for locale "zh")
  * - Falls back to default locale (e.g. first-post.mdx) when no localized version exists
  * - Base files without locale suffix are always included as default-language content
  */
