@@ -2,6 +2,11 @@
 
 倒序。只写结论和理由，过程在对应的 issue 里。
 
+## 2026-09-13 账号中心挂在 Studio 主机名的 /account 路径下
+
+- 账号中心仍是独立的应用和进程，对外挂在 `studio.<域名>/account/*`：Docker 目标里 Caddy 按路径分发到两个容器，Worker 目标里用 Workers 路由。cookie 只在主机名上，跨子域 cookie 那套（`crossSubDomainCookies`、父域推导、preview 的 cookie 前缀）去掉；`from`、`redirectTo` 成为同源路径。`account.<域名>` 和 `auth.<域名>` 主机名退役，不做 301。取代 2026-09-09「认证拓扑」里会话 cookie 设在 `.vesact.com` 和 2026-09-11「Relay API 约定与骨架」里 preview cookie 域与前缀的安排。
+- 理由：账号中心只服务 Studio 后，两个主机名唯一剩下的效果是用户在登录和设置页之间跳主机名。路径挂载用一条代理规则消掉这个跳转，代码边界和独立进程都不动；将来有第二个产品，同一个应用再挂到它的主机名下即可，登录态要跨产品共享时再回到父域 cookie，那是配置。没有用户，主机名直接退役。
+
 ## 2026-09-13 Relay 独立：自己的包、库和登录
 
 - Relay 的服务端代码、schema、迁移和 Better Auth 实例收进一个包 `packages/relay`（`@repo/relay`，子路径 `api`、`auth`、`db`、`contract`）。`apps/relay` 和这个包只依赖 `@repo/ui`、`@repo/utils`、`@repo/i18n`、`@repo/logs` 四个纯库，lint 规则挡住其他 `@repo/*`。自己的 Neon 项目和 Hyperdrive；Better Auth 的 handler 挂在 relay worker 上（Google、organization、apiKey），cookie 只在控制台主机名上，控制台自带登录、建组织、邀请成员页。账号中心从此只服务 Studio。取代 2026-09-11「Relay API 约定与骨架」里三个环境都用 Studio 的 auth、「Relay 定稿的几项」里服务端先放 `packages/api/modules/relay`、「账号中心」里 Studio 和 Relay 对称、2026-09-09「认证拓扑」里各产品共享同一个 Better Auth 实例和用户库，以及 2026-09-10「Relay 的架构基线」里认证复用现有机制那一行。

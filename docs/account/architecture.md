@@ -24,7 +24,7 @@ reviewed: 2026-09-13
 
 ## 2. 上下文与主机名
 
-`apps/account`。prod `account.vesact.com`，preview `account.preview.vesact.com`，dev 端口 3004。它同时提供 Better Auth 端点，`VITE_ACCOUNT_URL` 是它的地址。（草稿）prod 跑 Docker 目标，和 studio 同一台机器；worker `vesact-account-preview` 只剩 preview，见 §6。`auth.vesact.com` 和 `auth.preview.vesact.com` 继续挂在账号 worker 上，301 到 account，保留一个季度。
+`apps/account`，独立的应用和进程，挂在 Studio 主机名的 `/account` 路径下：prod `studio.vesact.com/account`，preview `studio.preview.vesact.com/account`，dev `localhost:3004/account`。它同时提供 Better Auth 端点（`/account/api/auth/*`），`VITE_ACCOUNT_URL` 是它的地址，应用的 base path 从这个地址来。（草稿：现状是 `account.vesact.com` 独立主机名加父域 cookie，切换在 #120。）
 
 路由：
 
@@ -87,21 +87,23 @@ reviewed: 2026-09-13
 
 ## 6. 部署
 
-| 环境    | worker                      | 主机                         | cookie                                          |
-| ------- | --------------------------- | ---------------------------- | ----------------------------------------------- |
-| prod    | Docker 目标（草稿）         | `account.vesact.com`         | 域 `.vesact.com`                                |
-| preview | `vesact-account-preview`    | `account.preview.vesact.com` | 域 `.preview.vesact.com`，前缀 `vesact-preview` |
-| dev     | `pnpm --filter account dev` | `localhost:3004`             | 无域，localhost 不分端口                        |
+（草稿，#120、#121）
 
-cookie 域从 `VITE_ACCOUNT_URL` 推导。secrets 在 `secrets/account.{prod,preview,dev}.env`。环境矩阵见 AGENTS.md，部署流程见 `.agents/skills/vesact-deploy-and-infra/SKILL.md`。
+| 环境    | 形态                              | 地址                                | 分发                             |
+| ------- | --------------------------------- | ----------------------------------- | -------------------------------- |
+| prod    | Docker 目标，和 studio 同一台机器 | `studio.vesact.com/account`         | Caddy 按路径分到 account 容器    |
+| preview | worker `vesact-account-preview`   | `studio.preview.vesact.com/account` | Workers 路由 `/account/*`        |
+| dev     | `pnpm --filter account dev`       | `localhost:3004/account`            | 无，localhost 的 cookie 不分端口 |
+
+cookie 只在主机名上，不设域。secrets 在 `secrets/account.{prod,preview,dev}.env`。环境矩阵见 AGENTS.md，部署流程见 `.agents/skills/vesact-deploy-and-infra/SKILL.md`。
 
 ## 7. 横切
 
-- 认证：Better Auth 只在这个 app 上挂 handler，Studio 共用同一个 `packages/auth` 实例读会话。Google OAuth 的回调是 `<VITE_ACCOUNT_URL>/api/auth/callback/google`。
+- 认证：Better Auth 只在这个 app 上挂 handler，Studio 共用同一个 `packages/auth` 实例读会话。Google OAuth 的回调是 `<VITE_ACCOUNT_URL>/api/auth/callback/google`。（草稿）`from`、`redirectTo` 是同源路径，只认本主机名下的地址。
 - 权限：§5.1；平台管理路由要求 `user.role = admin`，组织的读改删走 `adminProcedure`。
 - i18n scope `account`；`settings.menu` 等跨产品文案在 `shared`。
 - 测试：`apps/account/e2e`（Playwright），`pnpm --filter account e2e`。
 
 ## 8. 风险
 
-- `auth.vesact.com` 的 301 保留到 2026-12，之后从 wrangler 路由里移除。
+- `auth.vesact.com` 的 301 保留到 2026-12，之后从 wrangler 路由里移除；（草稿）#121 切流时和 `account.vesact.com` 一起退役，不做 301。

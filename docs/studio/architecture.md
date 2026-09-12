@@ -13,7 +13,7 @@ reviewed: 2026-09-13
 
 ## 2. 上下文与主机名
 
-`apps/studio`。prod `studio.vesact.com`，preview `studio.preview.vesact.com`，dev 端口 3000。登录和组织在账号中心（../account/architecture.md）；渠道层是 Relay 的 `/v1` 和 webhook（§5.3），Studio 是 Relay 的一个客户组织。部署形态见 §6。
+`apps/studio`。prod `studio.vesact.com`，preview `studio.preview.vesact.com`，dev 端口 3000。登录和组织在账号中心，它挂在同一个主机名的 `/account` 路径下（../account/architecture.md §2）；渠道层是 Relay 的 `/v1` 和 webhook（§5.3），Studio 是 Relay 的一个客户组织。部署形态见 §6。
 
 导航一级是侧栏，二级是页内导航或子页面，三级是页面区块。角色可见性见 §7.1。
 
@@ -275,11 +275,11 @@ reviewed: 2026-09-13
 
 （草稿，#118）每个 app 两个构建目标：Worker（`@cloudflare/vite-plugin`，preview）和 Docker（Node 入口，正式版）。
 
-| 环境    | 形态                                                           | 主机                                         |
-| ------- | -------------------------------------------------------------- | -------------------------------------------- |
-| prod    | Docker 目标：studio、account 两个容器加 job 进程，compose 管理 | `studio.vesact.com`，Cloudflare 橙云指向机器 |
-| preview | worker `vesact-studio-preview`                                 | `studio.preview.vesact.com`，Access 后面     |
-| dev     | `pnpm dev`                                                     | `localhost:3000`                             |
+| 环境    | 形态                                                                                               | 主机                                         |
+| ------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| prod    | Docker 目标：studio、account 两个容器加 job 进程，compose 管理，Caddy 把 `/account/*` 分给 account | `studio.vesact.com`，Cloudflare 橙云指向机器 |
+| preview | worker `vesact-studio-preview`，`/account/*` 由 Workers 路由分给 account worker                    | `studio.preview.vesact.com`，Access 后面     |
+| dev     | `pnpm dev`                                                                                         | `localhost:3000`                             |
 
 正式版先在海外 VPS，库沿用 Neon production；备案后搬腾讯云，库换成腾讯云 PostgreSQL，域名那时定（../decisions.md 2026-09-13）。部署：CI 构建镜像推 GHCR，经 SSH 在机器上 `docker compose pull && up -d`，迁移在切换前跑。CI 每个 PR 两个目标都构建。环境矩阵见 AGENTS.md。
 
