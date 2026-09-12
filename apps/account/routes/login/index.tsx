@@ -1,7 +1,7 @@
 import { LoginForm } from "@auth/components/LoginForm";
 import { getSession } from "@auth/lib/auth-server.server";
 import { getEnabledOAuthProviders } from "@auth/lib/enabled-oauth-providers";
-import { getSafeRedirectUrl, invitationUrl, onboardingUrl } from "@auth/lib/redirects";
+import { browserHref, getSafeRedirectUrl, invitationUrl, onboardingUrl } from "@auth/lib/redirects";
 import { config as authConfig } from "@repo/auth/config";
 import { AuthWrapper } from "@shared/components/AuthWrapper";
 import { documentTitle } from "@shared/lib/document-title";
@@ -37,7 +37,7 @@ export const Route = createFileRoute("/login/")({
 				: getSafeRedirectUrl(deps.redirectTo);
 			const needsOnboarding = authConfig.users.enableOnboarding && !session.user.onboardingComplete;
 
-			throw redirect({ href: needsOnboarding ? onboardingUrl(target) : target });
+			throw redirect({ href: browserHref(needsOnboarding ? onboardingUrl(target) : target) });
 		}
 
 		return { oAuthProviders: (await getEnabledOAuthProviders()).result };

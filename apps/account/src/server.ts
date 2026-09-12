@@ -27,7 +27,7 @@ export default createServerEntry({
 		const url = new URL(req.url);
 
 		if (isLegacyHost(url)) {
-			return Response.redirect(new URL(`${url.pathname}${url.search}`, accountUrl).toString(), 301);
+			return Response.redirect(`${accountUrl}${url.pathname}${url.search}`, 301);
 		}
 
 		const { redirect, setCookie } = handleLocaleMiddleware(req);

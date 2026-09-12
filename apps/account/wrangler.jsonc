@@ -5,6 +5,8 @@
 	"compatibility_date": "2026-09-03",
 	"compatibility_flags": ["nodejs_compat"],
 	"main": "./server.ts",
+	// server.ts serves the static files under the app's mount path from this binding.
+	"assets": { "binding": "ASSETS" },
 	"observability": { "enabled": true },
 	"placement": { "mode": "smart" },
 	"workers_dev": false,
@@ -32,12 +34,11 @@
 			"workers_dev": false,
 			"observability": { "enabled": true },
 			"placement": { "mode": "smart" },
-			"routes": [
-				{ "pattern": "account.preview.vesact.com", "custom_domain": true },
-				{ "pattern": "auth.preview.vesact.com", "custom_domain": true },
-			],
+			// Mounted under the Studio hostname; the studio Worker's custom domain
+			// answers everything else on it.
+			"routes": [{ "pattern": "studio.preview.vesact.com/account/*", "zone_name": "vesact.com" }],
 			"vars": {
-				"VITE_ACCOUNT_URL": "https://account.preview.vesact.com",
+				"VITE_ACCOUNT_URL": "https://studio.preview.vesact.com/account",
 				"VITE_STUDIO_URL": "https://studio.preview.vesact.com",
 				"VITE_RELAY_URL": "https://relay.preview.vesact.com",
 				"VITE_MARKETING_URL": "https://www.preview.vesact.com",

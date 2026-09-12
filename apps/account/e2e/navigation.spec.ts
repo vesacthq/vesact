@@ -11,7 +11,7 @@ test.describe("as a member", () => {
 	test.use({ storageState: e2eUsers.member.statePath });
 
 	test("switches settings pages without a server round trip", async ({ page }) => {
-		await page.goto("/account");
+		await page.goto("account");
 		await waitForHydration(page);
 
 		const serverCalls: string[] = [];

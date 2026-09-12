@@ -7,6 +7,6 @@ export const config = {
 	enabledThemes: ["light", "dark"],
 	defaultTheme: "light",
 	redirectAfterSignIn: "/",
-	redirectAfterLogout: `${import.meta.env.VITE_ACCOUNT_URL ?? "http://localhost:3004"}/login`,
+	redirectAfterLogout: `${import.meta.env.VITE_ACCOUNT_URL ?? "http://localhost:3004/account"}/login`,
 	enableAiDemo: true,
 } as const satisfies StudioConfig;

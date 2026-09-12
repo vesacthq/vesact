@@ -12,12 +12,12 @@ test.describe("signed out", () => {
 		request,
 		baseURL,
 	}) => {
-		const response = await request.get("/admin/users", { maxRedirects: 0 });
+		const response = await request.get("admin/users", { maxRedirects: 0 });
 
 		expect([302, 307]).toContain(response.status());
 
 		const location = new URL(response.headers().location ?? "", baseURL);
-		expect(location.pathname).toBe("/login");
+		expect(location.pathname).toBe("/account/login");
 		expect(new URL(location.searchParams.get("redirectTo") ?? "", baseURL).pathname).toBe(
 			"/admin/users",
 		);
@@ -28,7 +28,7 @@ test.describe("as a member", () => {
 	test.use({ storageState: e2eUsers.member.statePath });
 
 	test("is sent back to the account page and sees no admin entries", async ({ page }) => {
-		await page.goto("/admin/users");
+		await page.goto("admin/users");
 
 		await page.waitForURL("**/account");
 		await expect(page.getByRole("link", { name: "Users" })).toHaveCount(0);
@@ -39,7 +39,7 @@ test.describe("as the platform admin", () => {
 	test.use({ storageState: e2eUsers.admin.statePath });
 
 	test("lists and searches users", async ({ page }) => {
-		await page.goto("/admin/users");
+		await page.goto("admin/users");
 		await waitForHydration(page);
 
 		const rows = page.getByRole("table").getByRole("row");
@@ -57,7 +57,7 @@ test.describe("as the platform admin", () => {
 		const name = `E2E Org ${Date.now()}`;
 		const renamed = `${name} renamed`;
 
-		await page.goto("/admin/organizations/new");
+		await page.goto("admin/organizations/new");
 		await waitForHydration(page);
 		await page.getByLabel("Organization name").fill(name);
 		await page.getByRole("button", { name: "Save" }).click();
@@ -78,7 +78,7 @@ test.describe("as the platform admin", () => {
 		await waitForHydration(page);
 		await expect(page.getByLabel("Organization name")).toHaveValue(renamed);
 
-		await page.goto(`/admin/organizations?query=${encodeURIComponent(renamed)}`);
+		await page.goto(`admin/organizations?query=${encodeURIComponent(renamed)}`);
 		await waitForHydration(page);
 		const row = page.getByRole("row").filter({ hasText: renamed });
 		await expect(row).toBeVisible();

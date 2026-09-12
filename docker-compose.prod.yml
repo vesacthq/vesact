@@ -1,6 +1,9 @@
-# The Docker target of the Studio unit: studio, account and marketing as
-# containers, one Postgres. Images come from GHCR (deploy.yml) or `--build`.
-# Runtime configuration is read from env/<app>.env, written from sops.
+# The Docker target of the Studio unit: Caddy in front, studio, account and
+# marketing as containers, one Postgres. Caddy sends `/account/*` of the Studio
+# hostname to the account container and everything else to studio (Caddyfile).
+# Images come from GHCR (deploy.yml) or `--build`. Runtime configuration is
+# read from env/<app>.env, written from sops; SITE_ADDRESS, MARKETING_ADDRESS
+# and POSTGRES_PASSWORD come from the compose environment.
 #
 #   docker compose -f docker-compose.prod.yml --env-file .env.local up --build
 
@@ -50,8 +53,6 @@ services:
         VITE_POSTHOG_KEY: ${VITE_POSTHOG_KEY:-}
         VITE_POSTHOG_HOST: ${VITE_POSTHOG_HOST:-}
     env_file: env/studio.env
-    ports:
-      - "3000:3000"
     healthcheck: &health
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
       interval: 15s
@@ -67,8 +68,6 @@ services:
         <<: *build-args
         APP: account
     env_file: env/account.env
-    ports:
-      - "3004:3000"
     healthcheck: *health
 
   marketing:
@@ -80,16 +79,38 @@ services:
         <<: *build-args
         APP: marketing
     env_file: env/marketing.env
-    ports:
-      - "3001:3000"
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/"]
       interval: 15s
       timeout: 5s
       retries: 5
 
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - studio
+      - account
+      - marketing
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-http://localhost}
+      MARKETING_ADDRESS: ${MARKETING_ADDRESS:-http://localhost:3001}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+      # The local marketing address; a public deployment gives it a hostname on 443.
+      - "127.0.0.1:3001:3001"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    logging: *logging
+
   # job: the background worker of docs/studio/architecture.md §5.4 starts here
   # with the studio image and a different command once the job table exists.
 
 volumes:
   postgres_data:
+  caddy_data:
+  caddy_config:

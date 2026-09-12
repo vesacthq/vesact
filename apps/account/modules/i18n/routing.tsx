@@ -1,6 +1,7 @@
 import type { Locale } from "@repo/i18n";
 import { deLocalizeHref, localizeHref, localizeUrl } from "@repo/i18n/routing";
 import { getCurrentLocale } from "@repo/i18n/runtime";
+import { withBasePath } from "@repo/utils";
 import { redirect, useRouterState } from "@tanstack/react-router";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
@@ -61,7 +62,7 @@ export function LocaleLink({ href, children, ...rest }: LocaleLinkProps) {
 		);
 	}
 
-	const appHref = localizedAppHref(href, pathnameForHash);
+	const appHref = withBasePath(localizedAppHref(href, pathnameForHash));
 	return (
 		<a href={appHref} {...rest}>
 			{resolveLocaleLinkChildren(children)}
@@ -87,6 +88,7 @@ export function useLocaleRouter() {
 			const normalized = pathWithQuery.startsWith("/") ? pathWithQuery : `/${pathWithQuery}`;
 			const delocalized = deLocalizeHref(normalized);
 			const target = localizeUrl(new URL(delocalized, base).href, { locale });
+			target.pathname = withBasePath(target.pathname);
 			window.location.assign(target.href);
 		},
 	};

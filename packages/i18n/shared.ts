@@ -1,3 +1,5 @@
+import { stripBasePath } from "@repo/utils";
+
 import { config, type Locale } from "./config";
 
 export const defaultLocale = config.defaultLocale;
@@ -56,10 +58,13 @@ export function createLocaleCookieHeader(locale: Locale): string {
 	return `${localeCookieName}=${encodeURIComponent(locale)}; Path=/; Max-Age=31536000; SameSite=Lax`;
 }
 
+/** `pathname` is the one the browser or request carries, base included. */
 export function resolveLocaleFromPathname(pathname: string, cookieHeader?: string | null): Locale {
-	if (shouldIgnorePath(pathname)) {
+	const appPathname = stripBasePath(pathname);
+
+	if (shouldIgnorePath(appPathname)) {
 		return parseLocaleCookie(cookieHeader) ?? defaultLocale;
 	}
 
-	return extractLocaleFromPath(pathname) ?? defaultLocale;
+	return extractLocaleFromPath(appPathname) ?? defaultLocale;
 }

@@ -1,9 +1,9 @@
 {
-	"id": "/",
+	"id": "./",
 	"name": "Vesact",
 	"short_name": "Vesact",
-	"start_url": "/",
-	"scope": "/",
+	"start_url": "./",
+	"scope": "./",
 	"display": "standalone",
 	"theme_color": "#006AFE",
 	"background_color": "#FFFFFF",

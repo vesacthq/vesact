@@ -10,7 +10,7 @@ test.describe("authentication guard", () => {
 		expect([302, 307]).toContain(response.status());
 
 		const location = new URL(response.headers().location ?? "");
-		expect(location.pathname).toBe("/login");
+		expect(location.pathname).toBe("/account/login");
 		expect(new URL(location.searchParams.get("redirectTo") ?? "").pathname).toBe("/");
 	});
 

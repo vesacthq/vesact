@@ -13,7 +13,7 @@ The environment matrix (dev / preview / prod) is in `AGENTS.md` under
 | App       | prod                                                 | preview                                              |
 | --------- | ---------------------------------------------------- | ---------------------------------------------------- |
 | marketing | `www.vesact.com`                                     | `www.preview.vesact.com`                             |
-| account   | `account.vesact.com`                                 | `account.preview.vesact.com`                         |
+| account   | `account.vesact.com` (until #121)                    | `studio.preview.vesact.com/account` (Workers route)  |
 | studio    | `studio.vesact.com`                                  | `studio.preview.vesact.com`                          |
 | relay     | `relay.vesact.com` (console), `api.vesact.com` (API) | `relay.preview.vesact.com`, `api.preview.vesact.com` |
 
@@ -39,9 +39,10 @@ next visitor as a 103 Early Hints before the Worker runs.
 The preview database is one shared Neon branch; run the "Reset preview database"
 workflow to copy it fresh from production. Preview shares the production R2
 bucket. The `avatars` bucket's CORS rule allows `PUT` from
-`account.vesact.com` and `account.preview.vesact.com`, the only hostnames that
-upload from the browser; a new uploading hostname has to be added there or the
-presigned PUT fails with a CORS error.
+`account.vesact.com`, `account.preview.vesact.com` and `studio.preview.vesact.com`,
+the only origins that upload from the browser; a new uploading origin (the
+account center under another hostname) has to be added there or the presigned
+PUT fails with a CORS error.
 The `S3_*` credentials in the studio and account secrets are an account-owned
 API token named "vesact avatars bucket (account and studio workers)", scoped to
 that bucket: the access key id is the token id, the secret is the SHA-256 hex
@@ -73,24 +74,26 @@ with `sops set`, and deploying.
   whose credentials are `CF_ACCESS_CLIENT_ID` / `CF_ACCESS_CLIENT_SECRET` in
   `secrets/ci.env`. A new preview hostname is covered automatically; a path
   that outside services must reach gets its own, more specific application
-  with a Bypass policy. `account.preview.vesact.com/api/auth` is one such
-  application: the products call it cross-origin, Access answers every CORS
-  preflight with 403 and its cookie is per hostname, so the auth endpoints are
-  public on preview exactly as they are in production. The account pages
-  themselves stay behind Access. `api.preview.vesact.com/webhooks` is the
-  other one, so Meta can reach the preview webhook.
+  with a Bypass policy. `api.preview.vesact.com/webhooks` is one, so Meta can
+  reach the preview webhook. `account.preview.vesact.com/api/auth` was another,
+  from when the products called the auth endpoints cross-origin; the account
+  center now answers under `studio.preview.vesact.com/account`, same origin as
+  Studio, so that application and the `account.preview.vesact.com` hostname are
+  unused and go when #122 cleans up.
   The zone's Bot Fight Mode stays on and cannot be skipped by a WAF rule on
   the Free plan; it challenges curl from the GitHub runner, which is why the
   deploy makes no HTTP check after `wrangler deploy` (the earlier smoke check
   failed with 403 and `cf-mitigated: challenge`). Verify a deploy by hand or
   through Workers versions instead.
-- `auth.vesact.com` and `auth.preview.vesact.com` stay attached to the account
-  Workers and answer with a 301 to the `account.` hostname until 2026-12.
+- `auth.vesact.com` stays attached to the production account Worker and answers
+  with a 301 to the `account.` hostname until #121 retires both.
 - Preview hostnames live under `preview.vesact.com` rather than `workers.dev`
   because `workers.dev` is on the Public Suffix List: no cookie can span two
   Workers there, so products could not share a login.
 - One Google OAuth client serves every environment; each needs its callback
-  `<VITE_ACCOUNT_URL>/api/auth/callback/google` registered in Google Cloud.
+  `<VITE_ACCOUNT_URL>/api/auth/callback/google` registered in Google Cloud
+  (`https://studio.preview.vesact.com/account/api/auth/callback/google`,
+  `http://localhost:3004/account/api/auth/callback/google`).
 - `vesact.com` and `preview.vesact.com` redirect to their `www` hostnames through
   Cloudflare Redirect Rules on a proxied `AAAA 100::` record each.
 

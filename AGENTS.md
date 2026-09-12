@@ -164,7 +164,8 @@ keys before showing success UI. Do not rely on a full page reload.
 ## Account center & multi-tenancy
 
 One rule decides where a page goes: what exists independently of any product
-belongs to the account center (`apps/account`, `account.vesact.com`); what only
+belongs to the account center (`apps/account`, mounted at `/account` under the Studio
+hostname; production still answers on `account.vesact.com` until #121); what only
 makes sense with product data belongs to the product. `docs/account/architecture.md`
 has the ownership and route tables, the "operation → location" list, the link
 conventions (`redirectTo` for identity flows, `from` for settings pages) and the
@@ -175,8 +176,12 @@ the platform-admin module (gated by `admin.access`) is the account center's `/ad
   (`loginUrl()`, `onboardingUrl()`, `accountCenterUrl(path, from)`); it only
   follows its own origins (`getSafeRedirectUrl`, `getReturnUrl`). Sidebar entries
   that lead there are plain links marked `external` in `use-app-nav.ts`.
-- The session cookie sits on the parent domain of `VITE_ACCOUNT_URL` (`getCookieDomain`
-  in `@repo/utils`): one login serves every product; local development keeps host-only cookies.
+- `VITE_ACCOUNT_URL` is the account center's full address, path included
+  (`https://studio.preview.vesact.com/account`, `http://localhost:3004/account`): Vite's
+  `base`, the router basepath, Better Auth's `basePath` and the `@repo/api` mount all derive
+  from it (`basePath` in `@repo/utils`), so Studio and the account center share one hostname
+  and a host-only session cookie. While production still serves the account center from its
+  own hostname, `packages/auth` sets the cookie on the parent domain (`getCookieDomain`).
 - `member.role` holds one organization role plus at most one role per product,
   comma-separated. Better Auth enforces them through `packages/auth/lib/access.ts`;
   `@repo/permissions` parses the same value (`parseMemberRoles`) into Permix

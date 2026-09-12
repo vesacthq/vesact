@@ -11,6 +11,7 @@
 		"@base-ui/react": "catalog:",
 		"@headless-tree/core": "^1.7.0",
 		"@remixicon/react": "catalog:",
+		"@repo/utils": "workspace:*",
 		"@tanstack/react-form": "catalog:",
 		"class-variance-authority": "catalog:",
 		"clsx": "catalog:",

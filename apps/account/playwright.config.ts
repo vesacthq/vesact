@@ -8,13 +8,14 @@ const configDir = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(configDir, "../../.env.local") });
 
 /**
- * The app is served on the port its advertised URL names, so the client bundle,
- * the Worker and the server Playwright starts agree. Override with `PW_PORT`.
+ * The app is served on the port and under the path its advertised URL names,
+ * so the client bundle, the Worker and the server Playwright starts agree.
+ * Override the port with `PW_PORT`. Specs navigate with paths relative to
+ * this base (`login`, not `/login`), which keeps the mount path.
  */
-const e2ePort =
-	process.env.PW_PORT ??
-	(new URL(process.env.VITE_ACCOUNT_URL ?? "http://localhost:3200").port || "3200");
-const baseURL = `http://localhost:${e2ePort}`;
+const accountUrl = new URL(process.env.VITE_ACCOUNT_URL ?? "http://localhost:3200/account");
+const e2ePort = process.env.PW_PORT ?? (accountUrl.port || "3200");
+const baseURL = `http://localhost:${e2ePort}${accountUrl.pathname.replace(/\/?$/, "/")}`;
 
 /**
  * See https://playwright.dev/docs/test-configuration.

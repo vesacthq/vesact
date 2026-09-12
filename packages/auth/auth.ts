@@ -38,12 +38,21 @@ const getLocaleFromRequest = (request?: Request) => {
 };
 
 // The account center owns the auth endpoints, so every product shares one login
-// and one set of OAuth callbacks.
+// and one set of OAuth callbacks. Its URL carries the path it is mounted on
+// (`/account` under the Studio hostname), which becomes part of the auth path.
 const accountUrl = getBaseUrl(process.env.VITE_ACCOUNT_URL, 3004);
-const cookieDomain = getCookieDomain(accountUrl);
+const accountOrigin = new URL(accountUrl).origin;
+const accountPath = new URL(accountUrl).pathname.replace(/\/$/, "");
+
+// Mounted under the Studio hostname the session cookie is host-only. Until
+// production moves there the account center answers on its own hostname, and
+// Studio can only read the cookie from the parent domain.
+const studioOrigin = new URL(getBaseUrl(process.env.VITE_STUDIO_URL, 3000)).origin;
+const cookieDomain = accountOrigin === studioOrigin ? undefined : getCookieDomain(accountUrl);
 
 export const auth = betterAuth({
-	baseURL: accountUrl,
+	baseURL: new URL(accountUrl).origin,
+	basePath: `${accountPath}/api/auth`,
 	// Explicit allow-list of origins better-auth accepts for origin/CSRF and
 	// callback/redirect URL validation. A wildcard ("*") here disables that
 	// protection — e.g. it lets an attacker-controlled `callbackURL` drive an
@@ -57,11 +66,9 @@ export const auth = betterAuth({
 		database: {
 			generateId: false,
 		},
-		// The parent domain in deployed environments, so the session is readable
-		// from every product subdomain.
 		crossSubDomainCookies: cookieDomain ? { enabled: true, domain: cookieDomain } : undefined,
-		// Preview and production share the browser; a distinct prefix keeps their
-		// session cookies from shadowing each other.
+		// Preview and production share the browser; while production's cookie is
+		// still set on the parent domain, a distinct prefix keeps the two apart.
 		cookiePrefix: process.env.AUTH_COOKIE_PREFIX,
 	},
 	session: {
@@ -284,7 +291,7 @@ export const auth = betterAuth({
 				const locale = getLocaleFromRequest(request);
 				const existingUser = await getUserByEmail(email);
 
-				const url = new URL(existingUser ? "/login" : "/signup", accountUrl);
+				const url = new URL(`${accountUrl}${existingUser ? "/login" : "/signup"}`);
 
 				url.searchParams.set("invitationId", id);
 				url.searchParams.set("email", email);
