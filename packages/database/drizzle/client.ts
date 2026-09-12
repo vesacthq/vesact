@@ -1,3 +1,4 @@
+import { logger } from "@repo/logs";
 import { drizzle } from "drizzle-orm/node-postgres";
 
 import * as schema from "./schema";
@@ -11,7 +12,17 @@ const databaseUrl =
 // Workers bind a socket to the request that opened it, so a pooled connection
 // cannot survive into the next request. Retiring a client after one checkout
 // keeps every socket inside one request; Hyperdrive does the real pooling.
+// The Node target has no such limit and keeps an ordinary pool.
+const isWorkerd = globalThis.navigator?.userAgent === "Cloudflare-Workers";
+
 export const db = drizzle({
-	connection: { connectionString: databaseUrl, maxUses: 1 },
+	connection: { connectionString: databaseUrl, maxUses: isWorkerd ? 1 : undefined },
 	schema,
+});
+
+// An idle pooled client whose backend goes away emits "error" on the pool;
+// without a listener Node treats it as an uncaught exception and the process
+// exits. The client is discarded, the next checkout opens a new one.
+db.$client.on("error", (error) => {
+	logger.error(error, { ctx: "database-pool" });
 });

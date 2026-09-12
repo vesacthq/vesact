@@ -86,6 +86,7 @@ catalog:
   shadcn: ^4.19.1
   sharp: ^0.35.4
   slugify: ^1.6.9
+  srvx: ^1.0.4
   start-server-and-test: ^3.0.12
   streamdown: ^2.6.0
   tailwind-merge: ^3.6.0

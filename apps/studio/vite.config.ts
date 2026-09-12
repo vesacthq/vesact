@@ -10,12 +10,16 @@ import { defineConfig, loadEnv } from "vite";
 const studioRoot = path.dirname(fileURLToPath(import.meta.url));
 const monorepoRoot = path.resolve(studioRoot, "../..");
 
+// BUILD_TARGET=node builds the Docker image's entry: no Workers runtime, the
+// Start server entry is the app itself and srvx serves it (see start:node).
+const nodeTarget = process.env.BUILD_TARGET === "node";
+
 export default defineConfig(({ mode }) => {
 	Object.assign(process.env, loadEnv(mode, monorepoRoot, ""));
 
 	return {
 		build: {
-			outDir: ".output",
+			outDir: nodeTarget ? ".output/node" : ".output",
 		},
 		envDir: monorepoRoot,
 		envPrefix: ["VITE_"],
@@ -24,9 +28,10 @@ export default defineConfig(({ mode }) => {
 			fs: { allow: [monorepoRoot] },
 		},
 		plugins: [
-			cloudflare({ viteEnvironment: { name: "ssr" } }),
+			nodeTarget ? [] : cloudflare({ viteEnvironment: { name: "ssr" } }),
 			tanstackStart({
 				srcDirectory: ".",
+				server: nodeTarget ? { entry: "./src/server.ts" } : undefined,
 			}),
 			viteReact(),
 			tailwindcss(),
