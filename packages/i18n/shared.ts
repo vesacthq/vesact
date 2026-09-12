@@ -6,7 +6,7 @@ export const locales = Object.keys(config.locales) as Locale[];
 
 const localePattern = new RegExp(`^/(${locales.join("|")})(?:/|$)`);
 const ignoredPathsRegex =
-	/^\/(?:api|rpc|_build|_serverFn|assets|favicon\.ico|robots\.txt|sitemap\.xml)(?:\/|$)/;
+	/^\/(?:api|rpc|_build|_serverFn|assets|brand)(?:\/|$)|^\/[^/]+\.[a-z0-9]+$/;
 
 export function isValidLocale(locale: string | undefined): locale is Locale {
 	return typeof locale === "string" && locales.includes(locale as Locale);

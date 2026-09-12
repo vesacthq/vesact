@@ -10,7 +10,7 @@
 	"dependencies": {
 		"@repo/i18n": "workspace:*",
 		"@repo/logs": "workspace:*",
-		"@repo/ui": "workspace:*",
+		"@repo/utils": "workspace:*",
 		"nodemailer": "catalog:",
 		"react": "catalog:",
 		"react-dom": "catalog:",

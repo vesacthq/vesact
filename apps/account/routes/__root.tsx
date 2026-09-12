@@ -2,7 +2,7 @@ import { SessionProvider } from "@auth/components/SessionProvider";
 import { config } from "@config";
 import { I18nProvider } from "@i18n/provider";
 import { getCurrentLocale } from "@repo/i18n/runtime";
-import { Button, cn, ThemeProvider, Toaster } from "@repo/ui";
+import { BrandHead, Button, cn, ThemeProvider, Toaster } from "@repo/ui";
 import { ClientProviders } from "@shared/components/ClientProviders";
 import { documentTitle } from "@shared/lib/document-title";
 import type { QueryClient } from "@tanstack/react-query";
@@ -27,10 +27,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 			{ name: "robots", content: "noindex, nofollow" },
 			{ title: documentTitle() },
 		],
-		links: [
-			{ rel: "icon", type: "image/png", href: "/icon.png" },
-			{ rel: "stylesheet", href: appCss },
-		],
+		links: [{ rel: "stylesheet", href: appCss }],
 	}),
 	component: RootLayout,
 	errorComponent: ({ error }) => <RootError error={error} />,
@@ -45,6 +42,7 @@ function RootLayout() {
 		<html lang={locale} suppressHydrationWarning>
 			<head>
 				<HeadContent />
+				<BrandHead />
 			</head>
 			<body className={cn("font-sans min-h-screen bg-background text-foreground antialiased")}>
 				<ThemeProvider defaultTheme={config.defaultTheme}>

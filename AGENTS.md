@@ -182,8 +182,9 @@ brand/             # Brand kit: logos, app icons, per-site favicon sets; `brand/
 ```
 
 `brand/` is the source of every logo and icon. Apps keep their own copies of
-what they serve (`apps/<app>/public/`, the `Logo` component in `@repo/ui`);
-update those from `brand/` rather than editing them in place.
+what they serve (`apps/<app>/public/`, the `Logo` component in `@repo/ui`, the
+email logo PNG under `apps/marketing/public/brand/`); update those from
+`brand/` rather than editing them in place.
 
 ## Imports & path aliases
 

@@ -1272,9 +1272,9 @@ importers:
       '@repo/logs':
         specifier: workspace:*
         version: link:../logs
-      '@repo/ui':
+      '@repo/utils':
         specifier: workspace:*
-        version: link:../ui
+        version: link:../utils
       nodemailer:
         specifier: 'catalog:'
         version: 10.0.0
