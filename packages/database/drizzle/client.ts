@@ -1,3 +1,4 @@
+import { logger } from "@repo/logs";
 import { drizzle } from "drizzle-orm/node-postgres";
 
 import * as schema from "./schema";
@@ -17,4 +18,11 @@ const isWorkerd = globalThis.navigator?.userAgent === "Cloudflare-Workers";
 export const db = drizzle({
 	connection: { connectionString: databaseUrl, maxUses: isWorkerd ? 1 : undefined },
 	schema,
+});
+
+// An idle pooled client whose backend goes away emits "error" on the pool;
+// without a listener Node treats it as an uncaught exception and the process
+// exits. The client is discarded, the next checkout opens a new one.
+db.$client.on("error", (error) => {
+	logger.error(error, { ctx: "database-pool" });
 });

@@ -154,11 +154,16 @@ three answers again. Two changes make the singleton safe.
 
    ```ts
    // packages/database/drizzle/client.ts
+   const isWorkerd = globalThis.navigator?.userAgent === "Cloudflare-Workers";
+
    export const db = drizzle({
-   	connection: { connectionString: databaseUrl, maxUses: 1 },
+   	connection: { connectionString: databaseUrl, maxUses: isWorkerd ? 1 : undefined },
    	schema,
    });
    ```
+
+   The Node target (`BUILD_TARGET=node`, the Docker image) has no such limit
+   and keeps pg's default pool, which is why the retirement is conditional.
 
 2. Bind Hyperdrive and load the app on the first request. The binding hands out
    its connection string only inside a handler — reading it at module scope

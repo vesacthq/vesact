@@ -10,6 +10,10 @@ import { createServerEntry } from "@tanstack/react-start/server-entry";
 
 const handler = createStartHandler(defaultStreamHandler);
 
+// The Node target runs behind Caddy, which terminates TLS; srvx reads this
+// export and takes the protocol and host from the X-Forwarded-* headers.
+export const trustProxy = true;
+
 const accountUrl = getBaseUrl(import.meta.env.VITE_ACCOUNT_URL as string | undefined, 3004);
 
 // These pages moved to the account center; links that predate the move still work.

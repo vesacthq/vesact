@@ -10,6 +10,10 @@ import { createServerEntry } from "@tanstack/react-start/server-entry";
 
 const handler = createStartHandler(defaultStreamHandler);
 
+// The Node target runs behind Caddy, which terminates TLS; srvx reads this
+// export and takes the protocol and host from the X-Forwarded-* headers.
+export const trustProxy = true;
+
 export default createServerEntry({
 	async fetch(req: Request, opts?: RequestOptions<Register>) {
 		const { redirect, setCookie } = handleLocaleMiddleware(req);

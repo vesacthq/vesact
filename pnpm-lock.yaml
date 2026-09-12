@@ -1230,6 +1230,9 @@ importers:
       '@paralleldrive/cuid2':
         specifier: ^3.3.0
         version: 3.3.0
+      '@repo/logs':
+        specifier: workspace:*
+        version: link:../logs
       dotenv:
         specifier: 'catalog:'
         version: 17.4.2
