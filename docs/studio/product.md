@@ -1,6 +1,6 @@
 ---
 status: draft
-reviewed: 2026-09-11
+reviewed: 2026-09-13
 ---
 
 # Studio 产品
@@ -34,7 +34,7 @@ reviewed: 2026-09-11
 
 ## 3. 边界
 
-- 渠道层按 Zernio 的接口定义调用，webhook 也是接口的一部分。以后自己实现同一套接口，换地址。
+- 渠道层是 Relay：Studio 按 Relay 的 `/v1` 和 webhook 接入，是 Relay 的一个客户组织。
 - 接待、分配、接管由 Studio 管理，不依赖渠道层。
 - 不建广告。
 - 第一版不回传。保存 PSID、ad_id、ctwa_clid。

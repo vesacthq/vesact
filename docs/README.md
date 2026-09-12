@@ -6,7 +6,7 @@
 
 - 看板：[github.com/orgs/vesacthq/projects/1](https://github.com/orgs/vesacthq/projects/1)。Board 视图四列 Backlog / Next / Now / Done，Now 全仓库只有一个。
 - 命令行：`pnpm status`，从 issue 生成同一份状态：各轨道各阶段的进度、Now 的验收勾选、接下来的 issue、最近合并的 PR。
-- 轨道 issue：#26 Relay A 轨（阶段 #64–#70），#45 账号中心（已完成）。交付项 issue 正文固定三节：范围、验收、依赖；验收是复选框，合并 PR 时勾。
+- 轨道 issue：#26 Relay A 轨（阶段 #64–#70），#118 架构切分，#45 账号中心（已完成）。交付项 issue 正文固定三节：范围、验收、依赖；验收是复选框，合并 PR 时勾。
 
 ## 四种文档
 
@@ -27,8 +27,8 @@
 | ------------------------- | -------------------------------------------------------------------------------- |
 | `decisions.md`            | 定稿                                                                             |
 | `relay/product.md`        | 定稿                                                                             |
-| `relay/architecture.md`   | 定稿；§5.5 Messaging 领域是草稿，A2 产出                                         |
-| `account/architecture.md` | 定稿，已实现                                                                     |
+| `relay/architecture.md`   | 定稿；§5.5 Messaging 领域是草稿，A2 产出；标（草稿）的段落是 #118 的目标形态     |
+| `account/architecture.md` | 定稿，已实现；标（草稿）的段落是 #118 的目标形态                                 |
 | `studio/product.md`       | 草稿                                                                             |
 | `studio/architecture.md`  | 草稿                                                                             |
 | `shared/design-system.md` | 草稿                                                                             |

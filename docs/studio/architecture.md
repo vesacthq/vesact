@@ -1,6 +1,6 @@
 ---
 status: draft
-reviewed: 2026-09-11
+reviewed: 2026-09-13
 ---
 
 # Studio 架构
@@ -13,7 +13,9 @@ reviewed: 2026-09-11
 
 ## 2. 上下文与主机名
 
-一级是侧栏，二级是页内导航或子页面，三级是页面区块。角色可见性见 §7.1。
+`apps/studio`。prod `studio.vesact.com`，preview `studio.preview.vesact.com`，dev 端口 3000。登录和组织在账号中心（../account/architecture.md）；渠道层是 Relay 的 `/v1` 和 webhook（§5.3），Studio 是 Relay 的一个客户组织。部署形态见 §6。
+
+导航一级是侧栏，二级是页内导航或子页面，三级是页面区块。角色可见性见 §7.1。
 
 - 顶栏：组织切换、全局搜索（联系人、消息）、通知中心、个人菜单（个人资料、语言、通知偏好、退出）。
 - 侧栏：收件箱、发布、联系人、数据、工作流、素材库、连接、团队与设置。
@@ -255,9 +257,31 @@ reviewed: 2026-09-11
 - 平台原始报文全部保存。
 - 平台的媒体链接会过期，Studio 保存媒体副本。
 
+### 5.3 渠道层
+
+- Relay 是唯一的渠道层。Studio 服务端用一把属于自己组织的 key 调 `/v1`，只 import `@repo/relay/contract` 的 schema 和类型，运行时是 oRPC 客户端加 fetch；环境变量 `RELAY_API_URL`、`RELAY_API_KEY`、`RELAY_WEBHOOK_SECRET`。浏览器不持有 key。
+- 渠道表记 Relay 的渠道 id 和所属组织。接入渠道：Studio 建一个 Relay 连接会话，带 `externalId`（本组织 id）和回跳地址，把用户送到 Relay 的连接页；回来后按渠道 id 落表。
+- 入站走 `/webhooks/relay`：按 Standard Webhooks 验签，按渠道 id 找到组织，写会话和消息，再推给在线成员。webhook 负责快，定时拉 `/v1/events?since=` 负责全。
+- 出站（发消息、发帖）先在本地记一行带状态的记录和幂等键，界面按状态渲染，实际调用由 job 完成，结果由 webhook 回来。页面上的读只到自己的库。
+- 媒体：入站从 Relay 给的地址拷到自己的存储；出站给 Relay 自己存储的地址。
+
+### 5.4 后台任务与实时
+
+- 后台任务和定时（发送、发帖、拷媒体、拉指标、工作流）走 Postgres 的 job 表：执行时间、状态、payload、幂等键。Docker 目标里一个 job 进程循环领取（`SKIP LOCKED`），Worker 目标里 Cron Trigger 每分钟领一批；处理函数同一份。
+- 实时用 SSE，轮询兜底，不用 websocket。
+- 只用两个目标都有的东西：Durable Objects、Queues、Workflows、原生模块、常驻进程和 Redis 不进 Studio。
+
 ## 6. 部署
 
-worker `vesact-studio`，`studio.vesact.com`；preview `studio.preview.vesact.com`；环境矩阵见 AGENTS.md。
+（草稿，#118）每个 app 两个构建目标：Worker（`@cloudflare/vite-plugin`，preview）和 Docker（Node 入口，正式版）。
+
+| 环境    | 形态                                                           | 主机                                         |
+| ------- | -------------------------------------------------------------- | -------------------------------------------- |
+| prod    | Docker 目标：studio、account 两个容器加 job 进程，compose 管理 | `studio.vesact.com`，Cloudflare 橙云指向机器 |
+| preview | worker `vesact-studio-preview`                                 | `studio.preview.vesact.com`，Access 后面     |
+| dev     | `pnpm dev`                                                     | `localhost:3000`                             |
+
+正式版先在海外 VPS，库沿用 Neon production；备案后搬腾讯云，库换成腾讯云 PostgreSQL，域名那时定（../decisions.md 2026-09-13）。部署：CI 构建镜像推 GHCR，经 SSH 在机器上 `docker compose pull && up -d`，迁移在切换前跑。CI 每个 PR 两个目标都构建。环境矩阵见 AGENTS.md。
 
 ## 7. 横切
 

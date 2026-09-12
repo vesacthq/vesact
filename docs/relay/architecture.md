@@ -1,11 +1,11 @@
 ---
 status: final
-reviewed: 2026-09-11
+reviewed: 2026-09-13
 ---
 
 # Relay 架构
 
-本文回答 Relay 怎么做。定位、术语和分期见 product.md；每个阶段的范围与验收在 #26 下的 issue 里；为什么这么定见 ../decisions.md。§5.5 的 Messaging 领域是草稿。
+本文回答 Relay 怎么做。定位、术语和分期见 product.md；每个阶段的范围与验收在 #26 下的 issue 里；为什么这么定见 ../decisions.md。§5.5 的 Messaging 领域是草稿；标（草稿）的段落是切分轨 #118 的目标形态，落地前以现状为准。
 
 ## 1. 目标与约束
 
@@ -31,19 +31,19 @@ reviewed: 2026-09-11
 
 ### 1.2 技术栈约束：继承现状，只补缺口
 
-| 能力                | 决策                                                                                                       |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- |
-| **基础工程**        | 保留 Supastarter 改造版、Cloudflare 部署和 Neon，不换模板、不换数据库。                                    |
-| **API 框架**        | 以仓库为准。仍使用 Hono/oRPC 就沿用；已改成其他实现，不为本文件迁回去。                                    |
-| **契约与校验**      | 复用当前 schema 工具，明确导出 Relay 公共契约，生成 OpenAPI。                                              |
-| **数据库与迁移**    | 复用当前 ORM、Neon 连接方式和迁移流程；需要事务的路径必须实际验证驱动能力。                                |
-| **认证、组织、Key** | 复用现有机制，补业务归属校验，不另外部署认证平台。                                                         |
-| **任务执行**        | 优先复用已存在方案；缺失时，CF Queues + Neon 持久化任务 + Cron 补偿是默认增量方案。 Execution 动工时定稿。 |
-| **媒体**            | 复用当前存储；需要新建对象存储能力时优先评估 R2，不能假定已配置。                                          |
-| **长流程**          | 到多步骤发布确实需要时再加入 Workflows，不给每条聊天消息套一个 Workflow。                                  |
-| **协调与实时**      | 不默认为每个账号建 DO。遇到明确跨实例协调或实时连接问题时再设计。                                          |
-| **测试与 SDK**      | 复用当前测试链，补真实 CF 环境验证、契约检查；对外需要时再生成客户端。                                     |
-| **Effect**          | 暂不上全栈 Effect，也不自己仿造一套；将来只在具体执行模块验证收益。                                        |
+| 能力                | 决策                                                                                                                 |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| **基础工程**        | 保留 Supastarter 改造版、Cloudflare 部署和 Neon，不换模板、不换数据库。                                              |
+| **API 框架**        | 以仓库为准。仍使用 Hono/oRPC 就沿用；已改成其他实现，不为本文件迁回去。                                              |
+| **契约与校验**      | 复用当前 schema 工具，明确导出 Relay 公共契约，生成 OpenAPI。                                                        |
+| **数据库与迁移**    | 复用当前 ORM、Neon 连接方式和迁移流程；需要事务的路径必须实际验证驱动能力。                                          |
+| **认证、组织、Key** | （草稿）Relay 自己的 Better Auth 实例（`@repo/relay/auth`），只装 Google、organization、apiKey；不另外部署认证平台。 |
+| **任务执行**        | 优先复用已存在方案；缺失时，CF Queues + Neon 持久化任务 + Cron 补偿是默认增量方案。 Execution 动工时定稿。           |
+| **媒体**            | 复用当前存储；需要新建对象存储能力时优先评估 R2，不能假定已配置。                                                    |
+| **长流程**          | 到多步骤发布确实需要时再加入 Workflows，不给每条聊天消息套一个 Workflow。                                            |
+| **协调与实时**      | 不默认为每个账号建 DO。遇到明确跨实例协调或实时连接问题时再设计。                                                    |
+| **测试与 SDK**      | 复用当前测试链，补真实 CF 环境验证、契约检查；对外需要时再生成客户端。                                               |
+| **Effect**          | 暂不上全栈 Effect，也不自己仿造一套；将来只在具体执行模块验证收益。                                                  |
 
 新依赖要回答：它解决了当前哪个问题，现有工具为什么不够，带来了什么维护成本。不得把“库支持”当成“仓库已经集成”。
 
@@ -73,17 +73,17 @@ Relay 公共契约：REST API + Webhook
         └── 后续 TikTok / Google 实现
 ```
 
-|        | prod                                                            | preview                                                                              | dev                                            |
-| ------ | --------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------- |
-| Worker | `vesact-relay`                                                  | `vesact-relay-preview`                                                               | `pnpm --filter relay dev`，端口 3005           |
-| 控制台 | `relay.vesact.com`                                              | `relay.preview.vesact.com`                                                           | `localhost:3005`                               |
-| API    | `api.vesact.com`                                                | `api.preview.vesact.com`                                                             | `localhost:3005`                               |
-| 认证   | `account.vesact.com`（`apps/account`），cookie 域 `.vesact.com` | `account.preview.vesact.com`，cookie 域 `.preview.vesact.com`，前缀 `vesact-preview` | `localhost:3004`，localhost 的 cookie 不分端口 |
-| 数据库 | Hyperdrive `vesact-relay-db` → Neon `production`，查询缓存关闭  | Hyperdrive `vesact-relay-preview` → Neon `preview`，查询缓存关闭                     | docker postgres 5433                           |
+|        | prod                                                                                          | preview                                                            | dev                                     |
+| ------ | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | --------------------------------------- |
+| Worker | `vesact-relay`                                                                                | `vesact-relay-preview`                                             | `pnpm --filter relay dev`，端口 3005    |
+| 控制台 | `relay.vesact.com`                                                                            | `relay.preview.vesact.com`                                         | `localhost:3005`                        |
+| API    | `api.vesact.com`                                                                              | `api.preview.vesact.com`                                           | `localhost:3005`                        |
+| 认证   | （草稿）`relay.vesact.com/api/auth`，cookie 只在这个主机名上                                  | `relay.preview.vesact.com/api/auth`，cookie 只在这个主机名上       | `localhost:3005`                        |
+| 数据库 | （草稿）Hyperdrive `vesact-relay-db` → Neon 项目 `vesact-relay` 的 `production`，查询缓存关闭 | Hyperdrive `vesact-relay-preview` → 同项目 `preview`，查询缓存关闭 | docker postgres 5433，库 `vesact_relay` |
 
 一个 worker 每个环境挂两个 custom domain，按路径前缀分发：`/v1/*`、`/webhooks/*`、`/oauth/*` 进 Hono，其余进 TanStack Start 控制台。API 主机名上的非 API 路径返回 404 JSON，其他情况不看主机名。开发者文档 `developers.vesact.com` 启用前挂在 `api.vesact.com/v1/docs`。
 
-三个环境的认证都由账号中心 `apps/account` 提供（../account/architecture.md），组织和成员也在那里管理，Relay 只读。Relay 不挂 Better Auth 的 handler，只在进程内用同一个 `packages/auth` 实例校验 key 和读会话；会话 cookie 设在环境的父域上，两个产品共享登录态。preview 能和 prod 同构，是因为 preview 主机名在 `preview.vesact.com` 下；`workers.dev` 在 Public Suffix List 上做不到这一点，preview 已经迁走。
+（草稿）认证是 Relay 自己的：Better Auth 的 handler 挂在 relay worker 的 `/api/auth/*` 上，用户、组织、成员、key 都在 Relay 的库里，控制台自带登录、建组织、邀请成员页；cookie 只在控制台主机名上，不设父域。Studio 对 Relay 是一个客户组织：每个 Studio 部署一个组织、一把 key，所有卖家的渠道挂在这个组织下，渠道带 `externalId`（Studio 侧的组织 id），连接会话带回跳地址；Relay 不知道卖家。
 
 ## 3. 原则
 
@@ -155,19 +155,23 @@ Relay 保存自己承诺提供的数据、执行状态与关联；不依赖查�
 
 ### 4.3 目录
 
+（草稿。现状是 `packages/api/modules/relay` 和 `packages/database/drizzle/schema/relay.ts`。）
+
 ```text
 apps/
-  relay/                              worker：API 入口、OAuth 回调、webhook、控制台页面
-  studio/                             消费 Relay 的应用
+  relay/                              worker：API 入口、OAuth 回调、webhook、Better Auth 端点、控制台页面
+  studio/                             Relay 的客户，只 import @repo/relay/contract
 
 packages/
-  api/modules/relay/                  用例、契约（zod → OpenAPI）、接入实现
-    connections/  messaging/  execution/  events/  integrations/meta/
-  database/drizzle/schema/relay.ts    Relay 的表（含 Better Auth 的 apikey），由 index.ts 再导出
-  ...已有 auth、ui、payments 等
+  relay/                              @repo/relay，Relay 的全部服务端代码
+    api/                              Hono 应用、用例、接入实现
+      connections/  messaging/  execution/  events/  integrations/meta/
+    auth/                             Better Auth 实例：Google、organization、apiKey；access.ts
+    db/                               schema、迁移、client；apikey 表在这里
+    contract/                         zod schema 与类型，无运行时依赖
 ```
 
-Relay 的服务端代码先是 `packages/api` 里的一个模块，和 Studio 共用 auth、database、ui。有第二个消费方（外部 SDK、独立部署）再拆成 `packages/relay-*`。`packages/api/modules/relay/router.ts` 独立于 Studio 的 router。控制台模块从 `apps/studio/modules/{organizations,shared}` 复制需要的部分，第四次重复再抽到 packages。
+`apps/relay` 和 `packages/relay` 只依赖 `@repo/ui`、`@repo/utils`、`@repo/i18n`、`@repo/logs` 四个纯库，lint 规则挡住其他 `@repo/*`。一个包不再分，有独立部署或外部 SDK 的需要再拆。控制台的登录、组织、成员页从 `apps/account` 复制，第三个使用者出现再抽包。
 
 ### 4.4 依赖规则
 
@@ -360,9 +364,9 @@ Content-Type: application/json
 
 每个环境一个 worker，两个 custom domain（§2 的表）。`wrangler.jsonc` 是 prod 加 `env.preview`；`server.ts` 照 Studio 做 Hyperdrive 延迟加载加路径分发。
 
-- vars：`VITE_RELAY_URL`、`VITE_RELAY_API_URL`、`VITE_ACCOUNT_URL`、`VITE_STUDIO_URL`、`VITE_MARKETING_URL`、`META_APP_ID`；preview 段重新声明全部并加 `AUTH_COOKIE_PREFIX=vesact-preview`。cookie 域从 `VITE_ACCOUNT_URL` 推导，`getTrustedOrigins()` 读 Studio 和 marketing 的 URL。
-- secrets：`secrets/relay.{prod,preview,dev}.env`，内容是同环境 `studio.*.env` 去掉 `S3_*` 的键（`BETTER_AUTH_SECRET` 必须同值）加 `META_APP_SECRET`、`META_WEBHOOK_VERIFY_TOKEN`。`pnpm secrets:pull` 同时产出 `apps/relay/.dev.vars`。
-- CI：`deploy.yml` 的 `relay` job，`needs: account`，表由 account job 的 migrate 建；`select-target.sh` 给出 relay 的 URL。部署后没有 HTTP 探测：zone 的 Bot Fight Mode 会挑战 runner 的 curl。
+- vars（草稿）：`VITE_RELAY_URL`、`VITE_RELAY_API_URL`、`VITE_MARKETING_URL`、`META_APP_ID`；preview 段重新声明全部。cookie 只在控制台主机名上，`trustedOrigins` 只有自己。
+- secrets（草稿）：`secrets/relay.{prod,preview,dev}.env` 自足：Relay 自己的 `BETTER_AUTH_SECRET`、Google OAuth 的 client id 和 secret（回调 `<VITE_RELAY_URL>/api/auth/callback/google`）、`META_APP_SECRET`、`META_WEBHOOK_VERIFY_TOKEN`；迁移用的连接串在 `secrets/relay-database.{prod,preview}.env`。`pnpm secrets:pull` 同时产出 `apps/relay/.dev.vars`。
+- CI（草稿）：`deploy.yml` 的 `relay` job 自己跑 `@repo/relay` 的 migrate，不再 `needs: account`；`select-target.sh` 给出 relay 的 URL。部署后没有 HTTP 探测：zone 的 Bot Fight Mode 会挑战 runner 的 curl。
 - Cloudflare：preview 的 Access 由 `*.preview.vesact.com` 通配应用覆盖，另有一个路径为 `api.preview.vesact.com/webhooks` 的 Access 应用，策略 Bypass Everyone，Meta 才打得到。Meta 一个 App 只能一个回调 URL，指向 prod；preview 只靠 curl 验证。
 - `/v1/health`、`/v1/openapi.json`、`/v1/docs` 无鉴权。spec 由 `OpenAPIReferencePlugin` 每次请求从 router 生成，没有手写副本：`info.title` 是 `Relay API`，`servers` 是 `VITE_RELAY_API_URL` + `/v1`，`components.securitySchemes.bearerAuth` 配全局 `security`，`/health` 用 route 的 `spec` 覆盖成无需鉴权。docs 页是 Scalar，spec 内联，脚本从 jsDelivr 加载，页面里填 key 可以直接调接口；要在 `api.` 域打开，`servers` 指向那里而 `/v1` 不设 CORS，从 `relay.` 域打开的页面调不到接口。
 
@@ -370,7 +374,7 @@ Content-Type: application/json
 
 ### 7.1 认证与归属
 
-`/v1` 用 API key：`Authorization: Bearer <key>`，key 属于组织，由 `@better-auth/api-key`（`references: "organization"`、`defaultPrefix: "relay_"`）签发和校验。创建、吊销、列出走 Better Auth 的端点，需要会话且用户在该组织有 Relay 访问（`relay.access`，见 ../account/architecture.md §5）。端点在账号中心的 worker 上，控制台跨域调用；插件按组织 access control 的 `apiKey` statement 检查每个操作，`packages/auth/lib/access.ts` 把它授予 admin 和 `relay:*` 角色。控制台用账号中心的会话；未登录时照 Studio 的 `loginUrl()` 跳账号中心。成员和 Relay 访问在账号中心的成员页管，Relay 只读。
+`/v1` 用 API key：`Authorization: Bearer <key>`，key 属于组织，由 `@better-auth/api-key`（`references: "organization"`、`defaultPrefix: "relay_"`）签发和校验。（草稿）创建、吊销、列出走 relay worker 自己的 Better Auth 端点 `<VITE_RELAY_URL>/api/auth/api-key/*`，同源，不设 CORS；需要会话且用户是该组织成员，插件按组织 access control 的 `apiKey` statement 检查每个操作，`packages/relay/auth/access.ts` 把四个动作授予 owner 和 admin，member 只有 `read`。控制台用自己的会话，未登录跳自己的 `/login`；成员和邀请在控制台 `/orgs/$slug/members` 管。
 
 `/v1` 入口中间件链，顺序固定：request ID（`X-Request-Id: req_<ULID>`）→ 取 key → `verifyApiKey` 与错误码映射（`INVALID_API_KEY`、`KEY_NOT_FOUND`、`KEY_EXPIRED`、`KEY_DISABLED` → 401 `UNAUTHORIZED` 且 `data.reason` 保留原码；`RATE_LIMITED` → 429 `TOO_MANY_REQUESTS`；`USAGE_EXCEEDED` → 429 `QUOTA_EXCEEDED`）→ 上下文 `{ requestId, auth: { organizationId, apiKeyId, permissions, key }, trace }` 与 `relayKeyProcedure`（缺 `auth` 时自己抛 401，procedure 挂到别处也安全）→ 限流头 → `waitUntil` 写用量（写失败只记日志）。`/v1/health`、`/v1/openapi.json`、`/v1/docs` 只走 request ID，其余步骤跳过（`hono/combine` 的 `except`）。`/v1` 不设 CORS 头。
 
@@ -418,11 +422,10 @@ Content-Type: application/json
 
 ## 8. 风险
 
-- `BETTER_AUTH_SECRET` 两个 worker 必须同值，否则会话互不认。写进 secrets 的检查项。
 - 插件限流每次校验写一次 key 行。单库扛不住时在前面加 Workers Rate Limiting binding，契约不变。
 - Hyperdrive 的查询缓存全部关闭（../decisions.md 2026-09-11）。插件先读 key 行再带条件更新，读到缓存就会一直更新失败、重读缓存，直到缓存过期；吊销的 key 也会在缓存期内继续有效。
 - Meta 一个 App 只能一个回调 URL，指向 prod；preview 只靠 curl 验证。
-- `client.ts` 改导入是模板的六个缝之一，同步上游时留意。
+- 切分落地前 `client.ts` 改导入是模板的六个缝之一，同步上游时留意；落地后 `packages/database` 不再含 Relay 的表。
 
 ## 附录：参考资料
 

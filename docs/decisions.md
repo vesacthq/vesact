@@ -2,6 +2,23 @@
 
 倒序。只写结论和理由，过程在对应的 issue 里。
 
+## 2026-09-13 Relay 独立：自己的包、库和登录
+
+- Relay 的服务端代码、schema、迁移和 Better Auth 实例收进一个包 `packages/relay`（`@repo/relay`，子路径 `api`、`auth`、`db`、`contract`）。`apps/relay` 和这个包只依赖 `@repo/ui`、`@repo/utils`、`@repo/i18n`、`@repo/logs` 四个纯库，lint 规则挡住其他 `@repo/*`。自己的 Neon 项目和 Hyperdrive；Better Auth 的 handler 挂在 relay worker 上（Google、organization、apiKey），cookie 只在控制台主机名上，控制台自带登录、建组织、邀请成员页。账号中心从此只服务 Studio。取代 2026-09-11「Relay API 约定与骨架」里三个环境都用 Studio 的 auth、「Relay 定稿的几项」里服务端先放 `packages/api/modules/relay`、「账号中心」里 Studio 和 Relay 对称、2026-09-09「认证拓扑」里各产品共享同一个 Better Auth 实例和用户库，以及 2026-09-10「Relay 的架构基线」里认证复用现有机制那一行。
+- 理由：Relay 是卖给开发者的平台，Studio 是它的第一个客户；客户和平台共用一张用户表，是 Studio 换地方部署时唯一绕不开的耦合。Relay 的身份需求只有开发者登录、组织、key、按账号计费；账号中心里的 onboarding、产品角色、按渠道计费都是卖家的事。分开后 `member.role` 不再需要产品前缀。数据不迁：A1 的库里只有内部的 key，新库重跑 A1 验收。落地在 #118。
+
+## 2026-09-13 Studio 是 Relay 的一个客户组织
+
+- 每个 Studio 部署在 Relay 里是一个组织、一把 key，Zernio 的模型：所有卖家的渠道挂在这个组织下，Relay 按接入账号向 Studio 计费，Studio 按渠道向卖家计费。渠道带 `externalId`（Studio 侧的组织 id），连接会话带回跳地址，webhook 带渠道 id；卖家之间的隔离由 Studio 做，Relay 不知道卖家。
+- 理由：Relay 的限流和配额按套餐给客户配，用量按接入账号记，都不需要按卖家。每个卖家一个 Relay 组织要一套代建端点和影子组织，换来的隔离 Studio 本来就有。一把 key 管所有渠道和 Stripe 的 secret key 是同一类风险，key 只在 Studio 服务端。
+
+## 2026-09-13 Studio 单元两个构建目标
+
+- Studio 单元指 studio 和 account 两个 app；marketing 同样处理，但单独部署。每个 app 两个构建目标：Worker（`@cloudflare/vite-plugin`）和 Docker（Node 入口）。正式版跑 Docker 目标：先在海外 VPS，域名不变，橙云指向它；备案后搬腾讯云。Cloudflare 上的 Worker 部署降为 preview，CI 每个 PR 两个目标都构建。库沿用 Neon production，搬腾讯云时再换。VPS 部署用 compose，GitHub Actions 推镜像后经 SSH 更新，不上 Coolify 一类的平台。
+- Docker 目标只用两个目标都有的东西：后台任务和定时走 Postgres 的 job 表，实时走 SSE，媒体走 S3 接口；Durable Objects、Queues、Workflows 留给 Relay。
+- 理由：面向大陆卖家的 Studio 最终在国内，Docker 目标现在就跑正式流量，搬机器时只换目标机；Worker 目标留在 CI 里，Studio 就不会长出 Workers 跑不了的依赖。Neon 不动是因为过渡期没有真正的数据迁移。
+- 国内入口不再靠优选 CNAME，取代 #96 的方案。备案用哪个域名（新注册 `vesact.cn`，或把 `vesact.com` 从 Cloudflare Registrar 转出）在搬腾讯云前定，倾向前者：不用转出、`.com` 不进备案义务、两个 Studio 部署不争同一个主机名。
+
 ## 2026-09-11 Hyperdrive 不缓存查询
 
 - 四个 Hyperdrive 配置（`vesact-db`、`vesact-preview`、`vesact-relay-db`、`vesact-relay-preview`）都关闭查询缓存。只有出现能忍旧数据的热读时，再加一个带缓存的配置，只让那条查询走它。
