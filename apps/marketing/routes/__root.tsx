@@ -1,7 +1,7 @@
 import { AnalyticsScript } from "@analytics";
 import { I18nProvider } from "@i18n/provider";
 import { getCurrentLocale } from "@repo/i18n/runtime";
-import { ThemeProvider } from "@repo/ui";
+import { BrandHead, ThemeProvider } from "@repo/ui";
 import { Footer } from "@shared/components/Footer";
 import { NavBar } from "@shared/components/NavBar";
 import { NotFoundPage } from "@shared/components/NotFoundPage";
@@ -29,11 +29,6 @@ export const Route = createRootRoute({
 		],
 		links: [
 			{
-				rel: "icon",
-				type: "image/png",
-				href: "/icon.png",
-			},
-			{
 				rel: "stylesheet",
 				href: appCss,
 			},
@@ -54,6 +49,7 @@ function RootLayout() {
 		<html lang={lang} suppressHydrationWarning>
 			<head>
 				<HeadContent />
+				<BrandHead />
 			</head>
 			<body className="font-sans min-h-screen bg-background text-foreground antialiased">
 				<ThemeProvider>

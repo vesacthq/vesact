@@ -1,7 +1,7 @@
 import { config } from "@config";
 import { I18nProvider } from "@i18n/provider";
 import { getCurrentLocale } from "@repo/i18n/runtime";
-import { Button, cn, ThemeProvider } from "@repo/ui";
+import { BrandHead, Button, cn, ThemeProvider } from "@repo/ui";
 import { documentTitle } from "@shared/lib/document-title";
 import {
 	createRootRoute,
@@ -26,7 +26,6 @@ export const Route = createRootRoute({
 			{ title: documentTitle() },
 		],
 		links: [
-			{ rel: "icon", type: "image/png", href: "/icon.png" },
 			{ rel: "stylesheet", href: appCss },
 			{
 				rel: "stylesheet",
@@ -47,6 +46,7 @@ function RootLayout() {
 		<html lang={locale} suppressHydrationWarning>
 			<head>
 				<HeadContent />
+				<BrandHead />
 			</head>
 			<body className={cn("font-sans min-h-screen bg-background text-foreground antialiased")}>
 				<ThemeProvider defaultTheme={config.defaultTheme}>

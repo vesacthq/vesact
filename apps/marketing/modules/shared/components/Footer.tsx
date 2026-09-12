@@ -10,7 +10,7 @@ export function Footer() {
 		<footer className="py-16 lg:py-20 text-sm border-t border-border/60 text-foreground/45">
 			<div className="gap-8 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr] sm:gap-10 container grid grid-cols-1 items-start">
 				<div>
-					<Logo className="font-heading opacity-70" />
+					<Logo className="opacity-70" />
 					<p className="mt-4 max-w-xs text-sm leading-relaxed">
 						© {new Date().getFullYear()} {config.appName}.
 					</p>

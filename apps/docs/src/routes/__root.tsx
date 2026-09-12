@@ -1,3 +1,4 @@
+import { BrandHead } from "@repo/ui";
 import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { RootProvider } from "fumadocs-ui/provider/tanstack";
 import * as React from "react";
@@ -21,7 +22,6 @@ export const Route = createRootRoute({
 			},
 		],
 		links: [
-			{ rel: "icon", type: "image/png", href: "/icon.png" },
 			{ rel: "stylesheet", href: appCss },
 			{
 				rel: "stylesheet",
@@ -37,6 +37,7 @@ function RootComponent() {
 		<html lang="en" suppressHydrationWarning>
 			<head>
 				<HeadContent />
+				<BrandHead />
 			</head>
 			<body className="font-sans flex min-h-screen flex-col antialiased">
 				<RootProvider>

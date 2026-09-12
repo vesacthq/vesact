@@ -3,7 +3,7 @@ import { config } from "@config";
 import { I18nProvider } from "@i18n/provider";
 import { getCurrentLocale } from "@repo/i18n/runtime";
 import type { PermissionsDefinition } from "@repo/permissions";
-import { Button, cn, ThemeProvider, Toaster } from "@repo/ui";
+import { BrandHead, Button, cn, ThemeProvider, Toaster } from "@repo/ui";
 import { Analytics } from "@shared/components/Analytics";
 import { ClientProviders } from "@shared/components/ClientProviders";
 import { PermixProvider } from "@shared/components/PermixProvider";
@@ -45,11 +45,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 		],
 		links: [
 			{
-				rel: "icon",
-				type: "image/png",
-				href: "/icon.png",
-			},
-			{
 				rel: "stylesheet",
 				href: appCss,
 			},
@@ -69,6 +64,7 @@ function RootLayout() {
 		<html lang={locale} suppressHydrationWarning>
 			<head>
 				<HeadContent />
+				<BrandHead />
 			</head>
 			<body className={cn("font-sans min-h-screen bg-background text-foreground antialiased")}>
 				<NuqsAdapter>

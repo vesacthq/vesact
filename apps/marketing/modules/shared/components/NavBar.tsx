@@ -97,7 +97,7 @@ export function NavBar() {
 				<div className="gap-6 h-16 md:h-[4.25rem] flex items-center justify-stretch">
 					<div className="flex flex-1 justify-start">
 						<LocaleLink href="/" className="block hover:no-underline active:no-underline">
-							<Logo className="font-heading" />
+							<Logo />
 						</LocaleLink>
 					</div>
 
