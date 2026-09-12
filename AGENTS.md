@@ -566,9 +566,11 @@ read at build time, so a change needs a rebuild, not just a redeploy.
 
 ### Workflow
 
-Branch from `main` and open a pull request. `validate-prs.yml` runs lint, type
-check, build, unit and e2e; `deploy.yml` puts the branch on preview. Check the
-preview, then merge with a merge commit; the push to `main` deploys production.
+Branch from `main`. Before opening a code pull request, run the
+`vesact-review-pr` skill and fix what survives its verification on the same
+branch. `validate-prs.yml` runs lint, type check, build, unit and e2e;
+`deploy.yml` puts the branch on preview. Check the preview, then merge with a
+merge commit; the push to `main` deploys production.
 
 ## Dependencies & supply chain
 
