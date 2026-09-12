@@ -15,7 +15,7 @@ const mailTailwindTheme = {
 				background: "#fafaf9",
 				foreground: "#0c0a09",
 				primary: {
-					DEFAULT: "#1c1917",
+					DEFAULT: "#006AFE",
 					foreground: "#ffffff",
 				},
 				secondary: {
