@@ -33,6 +33,9 @@ export const config = {
 			"checkout-return",
 			"choose-plan",
 			"api",
+			"v1",
+			"webhooks",
+			"oauth",
 		],
 	},
 } as const satisfies AuthConfig;

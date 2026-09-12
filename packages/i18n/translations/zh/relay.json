@@ -39,7 +39,7 @@
 		"title": "API key",
 		"subtitle": "key 属于这个组织。明文只在创建时显示一次。",
 		"list": {
-			"title": "Key",
+			"title": "全部 key",
 			"description": "吊销后，用这个 key 的请求立即被拒绝。",
 			"empty": "还没有 key。",
 			"error": "加载失败。",

@@ -58,7 +58,13 @@ export function CreateApiKeyDialog({
 	});
 	const isSubmitting = useStore(form.store, (state) => state.isSubmitting);
 
+	// Dismissing mid-request would let the response land in a closed dialog
+	// and show the secret on the next open.
 	const setOpen = (nextOpen: boolean) => {
+		if (!nextOpen && isSubmitting) {
+			return;
+		}
+
 		onOpenChange(nextOpen);
 
 		if (!nextOpen) {
