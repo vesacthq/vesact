@@ -6,7 +6,9 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"build:node": "BUILD_TARGET=node vite build",
 		"start": "wrangler dev",
+		"start:node": "srvx --prod -s ../client .output/node/server/server.js",
 		"clean": "git clean -xdf .cache .turbo dist node_modules .output",
 		"e2e": "pnpm exec playwright test --ui",
 		"e2e:ci": "pnpm exec playwright install && pnpm exec playwright test",
@@ -58,6 +60,7 @@
 		"react-dom": "catalog:",
 		"recharts": "catalog:",
 		"slugify": "catalog:",
+		"srvx": "catalog:",
 		"streamdown": "catalog:",
 		"tslib": "^2.8.1",
 		"ufo": "catalog:",

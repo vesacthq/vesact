@@ -1,24 +1,11 @@
-import { getBaseUrl } from "@repo/utils";
 import type { Register } from "@tanstack/react-router";
 import type { RequestOptions } from "@tanstack/react-start/server";
 import { env } from "cloudflare:workers";
 
 let server: (typeof import("./src/server"))["default"] | undefined;
 
-const accountUrl = getBaseUrl(import.meta.env.VITE_ACCOUNT_URL as string | undefined, 3004);
-
-// These pages moved to the account center; links that predate the move still work.
-const legacyAuthPath =
-	/^(?:\/[a-z]{2})?\/(?:login|signup|forgot-password|reset-password|verify|onboarding|admin)(?:\/|$)/;
-
 export default {
 	async fetch(request: Request, options?: RequestOptions<Register>) {
-		const url = new URL(request.url);
-
-		if (legacyAuthPath.test(url.pathname)) {
-			return Response.redirect(new URL(`${url.pathname}${url.search}`, accountUrl).toString(), 302);
-		}
-
 		// Hyperdrive only hands out its connection string inside a request, and
 		// @repo/database reads DATABASE_URL as its module body runs. Loading the app
 		// on the first request puts that read after the binding is available.

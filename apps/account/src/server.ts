@@ -1,5 +1,5 @@
 import { createLocaleCookieHeader, handleLocaleMiddleware } from "@repo/i18n/server";
-import { withEarlyHints } from "@repo/utils";
+import { getBaseUrl, withEarlyHints } from "@repo/utils";
 import type { Register } from "@tanstack/react-router";
 import {
 	createStartHandler,
@@ -10,8 +10,22 @@ import { createServerEntry } from "@tanstack/react-start/server-entry";
 
 const handler = createStartHandler(defaultStreamHandler);
 
+const accountUrl = getBaseUrl(import.meta.env.VITE_ACCOUNT_URL as string | undefined, 3004);
+
+// The account center used to answer on auth.<domain>; those hostnames stay
+// attached to this Worker until 2026-12 so old links and emails keep working.
+function isLegacyHost(url: URL) {
+	return url.hostname.startsWith("auth.") && url.origin !== new URL(accountUrl).origin;
+}
+
 export default createServerEntry({
 	async fetch(req: Request, opts?: RequestOptions<Register>) {
+		const url = new URL(req.url);
+
+		if (isLegacyHost(url)) {
+			return Response.redirect(new URL(`${url.pathname}${url.search}`, accountUrl).toString(), 301);
+		}
+
 		const { redirect, setCookie } = handleLocaleMiddleware(req);
 
 		if (redirect) {

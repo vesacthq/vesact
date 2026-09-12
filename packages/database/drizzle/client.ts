@@ -11,7 +11,10 @@ const databaseUrl =
 // Workers bind a socket to the request that opened it, so a pooled connection
 // cannot survive into the next request. Retiring a client after one checkout
 // keeps every socket inside one request; Hyperdrive does the real pooling.
+// The Node target has no such limit and keeps an ordinary pool.
+const isWorkerd = globalThis.navigator?.userAgent === "Cloudflare-Workers";
+
 export const db = drizzle({
-	connection: { connectionString: databaseUrl, maxUses: 1 },
+	connection: { connectionString: databaseUrl, maxUses: isWorkerd ? 1 : undefined },
 	schema,
 });

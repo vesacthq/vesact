@@ -7,7 +7,9 @@
 		"dev": "vite dev",
 		"generate": "content-collections build",
 		"build": "pnpm generate && vite build",
+		"build:node": "pnpm generate && BUILD_TARGET=node vite build",
 		"start": "wrangler dev --port 3001",
+		"start:node": "srvx --prod -s ../client .output/node/server/server.js",
 		"clean": "git clean -xdf .cache .turbo dist node_modules .content-collections",
 		"e2e": "pnpm exec playwright test --ui",
 		"e2e:ci": "pnpm exec playwright install && pnpm exec playwright test",
@@ -36,6 +38,7 @@
 		"react": "catalog:",
 		"react-dom": "catalog:",
 		"slugify": "catalog:",
+		"srvx": "catalog:",
 		"use-intl": "catalog:",
 		"vite": "catalog:",
 		"zod": "catalog:"
