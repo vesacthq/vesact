@@ -3,7 +3,6 @@
 # The Node target of the app (BUILD_TARGET=node) served by srvx; see AGENTS.md.
 
 FROM node:22-alpine AS build
-ARG APP
 ENV PNPM_HOME=/pnpm PATH=/pnpm:$PATH CI=true
 RUN corepack enable
 WORKDIR /repo
@@ -11,6 +10,8 @@ WORKDIR /repo
 COPY . .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
+# Declared after the install so the three apps share that layer.
+ARG APP
 # Inlined into the client bundle; a missing URL makes the app link to localhost.
 ARG VITE_STUDIO_URL VITE_ACCOUNT_URL VITE_MARKETING_URL VITE_RELAY_URL VITE_RELAY_API_URL VITE_DOCS_URL
 ARG VITE_POSTHOG_KEY VITE_POSTHOG_HOST

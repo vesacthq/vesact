@@ -75,6 +75,92 @@ jobs:
       - name: Run Vitest
         run: pnpm test
 
+  docker:
+    name: Docker target
+    runs-on: ubuntu-latest
+    env:
+      VITE_STUDIO_URL: http://localhost
+      VITE_ACCOUNT_URL: http://localhost/account
+      VITE_MARKETING_URL: http://localhost:3001
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5433/vesact
+      STUDIO_IMAGE: vesact-studio:ci
+      ACCOUNT_IMAGE: vesact-account:ci
+      MARKETING_IMAGE: vesact-marketing:ci
+      POSTGRES_PASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build the studio image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: vesact-studio:ci
+          build-args: |
+            APP=studio
+            VITE_STUDIO_URL=${{ env.VITE_STUDIO_URL }}
+            VITE_ACCOUNT_URL=${{ env.VITE_ACCOUNT_URL }}
+            VITE_MARKETING_URL=${{ env.VITE_MARKETING_URL }}
+      - name: Build the account image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: vesact-account:ci
+          build-args: |
+            APP=account
+            VITE_STUDIO_URL=${{ env.VITE_STUDIO_URL }}
+            VITE_ACCOUNT_URL=${{ env.VITE_ACCOUNT_URL }}
+            VITE_MARKETING_URL=${{ env.VITE_MARKETING_URL }}
+      - name: Build the marketing image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: vesact-marketing:ci
+          build-args: |
+            APP=marketing
+            VITE_STUDIO_URL=${{ env.VITE_STUDIO_URL }}
+            VITE_ACCOUNT_URL=${{ env.VITE_ACCOUNT_URL }}
+            VITE_MARKETING_URL=${{ env.VITE_MARKETING_URL }}
+      - name: Write the runtime env files
+        run: |
+          mkdir -p env
+          for app in studio account marketing; do
+            cat > "env/$app.env" <<VARS
+          DATABASE_URL=postgresql://postgres:postgres@postgres:5432/vesact
+          BETTER_AUTH_SECRET=better-auth-e2e-secret-1234567890
+          GOOGLE_CLIENT_ID=google-client-id
+          GOOGLE_CLIENT_SECRET=google-client-secret
+          VITE_STUDIO_URL=$VITE_STUDIO_URL
+          VITE_ACCOUNT_URL=$VITE_ACCOUNT_URL
+          VITE_MARKETING_URL=$VITE_MARKETING_URL
+          VARS
+          done
+          # The smoke pushes the schema from the runner; production never publishes the port.
+          cat > ci.override.yml <<'YML'
+          services:
+            postgres:
+              ports:
+                - "127.0.0.1:5433:5432"
+          YML
+      - name: Start the stack
+        run: docker compose -f docker-compose.prod.yml -f ci.override.yml up -d --wait --wait-timeout 180
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Apply the schema
+        run: pnpm --filter @repo/database push
+      - name: Smoke
+        run: .github/scripts/smoke.sh http://localhost http://localhost:3001
+      - name: Container logs
+        if: failure()
+        run: docker compose -f docker-compose.prod.yml -f ci.override.yml logs --no-color --tail 200
+
   e2e:
     name: Playwright e2e
     if: github.event.pull_request.head.repo.full_name == github.repository
