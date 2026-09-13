@@ -28,7 +28,7 @@
 | `decisions.md`            | 定稿                                                                             |
 | `relay/product.md`        | 定稿                                                                             |
 | `relay/architecture.md`   | 定稿；§5.5 Messaging 领域是草稿，A2 产出                                         |
-| `account/architecture.md` | 定稿，已实现；prod 切到 `/account` 路径挂载在 #121                               |
+| `account/architecture.md` | 定稿，已实现                                                                     |
 | `studio/product.md`       | 草稿                                                                             |
 | `studio/architecture.md`  | 草稿                                                                             |
 | `shared/design-system.md` | 草稿                                                                             |

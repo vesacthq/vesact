@@ -20,7 +20,7 @@ the same `updatekeys`.
 | File                               | Reaches                                                                                                                                                                                                                  |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `secrets/ci.env`                   | GitHub Actions: Cloudflare, Turbo, Neon, Access, the Tencent Cloud `cicd` key for the COS hand-over of the images                                                                                                        |
-| `secrets/account.<target>.env`     | The account Worker: Better Auth secret, Google, mail, R2                                                                                                                                                                 |
+| `secrets/account.<target>.env`     | `preview`: the account Worker's secrets (Better Auth secret, Google, mail, R2); `prod`: see `<app>.prod.env`                                                                                                             |
 | `secrets/database.<env>.env`       | `DATABASE_URL` for migrations: `preview` (Neon), `prod` (the machine's Postgres through the `vps` job's SSH tunnel)                                                                                                      |
 | `secrets/<app>.prod.env`           | `env/<app>.env` on the production machine: the server secrets plus every `wrangler.jsonc` var (`VITE_*`, `S3_ENDPOINT`, `S3_REGION`) and `DATABASE_URL`                                                                  |
 | `secrets/prod.env`                 | The machine's compose environment: `SITE_ADDRESS`, `MARKETING_ADDRESS`, `APEX_ADDRESS`, `POSTGRES_PASSWORD`, `SMOKE_INSECURE`                                                                                            |
@@ -53,9 +53,10 @@ for `pnpm --filter @repo/database push | generate | migrate | studio`,
 `vesact_relay`, create it once with `create database vesact_relay`), and the
 `VITE_*` URLs inlined into the client bundle. `apps/studio/.dev.vars` (from
 `pnpm secrets:pull`) is what the Worker reads at runtime; `.env.local` never
-reaches it. Without `.dev.vars` the local server sees `wrangler.jsonc` `vars`,
-which hold production values, and derives Better Auth's `baseURL`, the OAuth
-callbacks, the trusted origins and the links in email from them. The app's own
+reaches it. Without `.dev.vars` the local server has no `VITE_*` URLs at all
+(`wrangler.jsonc` `vars` only carry the R2 endpoint) and falls back to
+`http://localhost:<port>` for Better Auth's `baseURL`, the OAuth callbacks, the
+trusted origins and the links in email. The app's own
 database connection comes from the Hyperdrive binding's `localConnectionString`,
 not from `DATABASE_URL`.
 

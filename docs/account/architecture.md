@@ -5,7 +5,7 @@ reviewed: 2026-09-13
 
 # 账号中心
 
-本文回答账号中心放什么、怎么做。定位只有一条规则，写在 §1，没有单独的 product.md。实现进度在 #45 和它的子 issue，已全部完成；切分轨 #118 的部分除 prod 切流（#121）外也已落地。
+本文回答账号中心放什么、怎么做。定位只有一条规则，写在 §1，没有单独的 product.md。实现进度在 #45 和它的子 issue，已全部完成；切分轨 #118 的部分也已落地，prod 在腾讯云机器上（#151）。
 
 ## 1. 目标与约束
 
@@ -24,7 +24,7 @@ reviewed: 2026-09-13
 
 ## 2. 上下文与主机名
 
-`apps/account`，独立的应用和进程，挂在 Studio 主机名的 `/account` 路径下：prod `studio.allcast.cc/account`，preview `studio.preview.vesact.com/account`，dev `localhost:3004/account`。它同时提供 Better Auth 端点（`/account/api/auth/*`），`VITE_ACCOUNT_URL` 是它的地址，应用的 base path 从这个地址来：Vite 的 `base`、Router 的 `basepath`、Better Auth 的 `basePath`、`@repo/api` 的挂载点都由它推出。prod 在 #121 切换前仍是 `account.vesact.com` 独立主机名加父域 cookie，`packages/auth` 按两个地址是否同源决定 cookie 域。
+`apps/account`，独立的应用和进程，挂在 Studio 主机名的 `/account` 路径下：prod `studio.allcast.cc/account`，preview `studio.preview.vesact.com/account`，dev `localhost:3004/account`。它同时提供 Better Auth 端点（`/account/api/auth/*`），`VITE_ACCOUNT_URL` 是它的地址，应用的 base path 从这个地址来：Vite 的 `base`、Router 的 `basepath`、Better Auth 的 `basePath`、`@repo/api` 的挂载点都由它推出。`packages/auth` 按两个地址是否同源决定 cookie 域，现在三个环境都同源、都是 host-only。
 
 路由：
 
@@ -103,4 +103,4 @@ cookie 只在主机名上，不设域。secrets 在 `secrets/account.{prod,previ
 
 ## 8. 风险
 
-- `auth.vesact.com` 和 `account.vesact.com` 已于 2026-09-13 退役，没有 301；账号中心的 `src/server.ts` 里的旧主机名跳转只对 preview 还有意义。
+- `auth.vesact.com` 和 `account.vesact.com` 已于 2026-09-13 退役，没有 301。

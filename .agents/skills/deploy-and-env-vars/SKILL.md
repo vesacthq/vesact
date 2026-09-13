@@ -1,6 +1,6 @@
 ---
 name: deploy-and-env-vars
-description: "Use when changing environment variables or secrets, adding a deploy target, or inspecting how preview and production get built and deployed on Cloudflare Workers."
+description: "Use when changing environment variables or secrets, adding a deploy target, or inspecting how preview (Cloudflare Workers) and production (the Docker target on the machine, Relay on Workers) get built and deployed."
 triggers: ["user"]
 ---
 
@@ -33,9 +33,10 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
 4. After changing `wrangler.jsonc`, run `pnpm --filter <app> exec wrangler types`
    if bindings changed, then `pnpm type-check`.
 5. Verify locally with the same build the pipeline uses:
-   `CLOUDFLARE_ENV=preview pnpm --filter <app> build` for preview, plain
-   `pnpm --filter <app> build` for production, then
-   `pnpm --filter <app> exec wrangler deploy --dry-run`.
+   `CLOUDFLARE_ENV=preview pnpm --filter <app> build` for preview, then
+   `pnpm --filter <app> exec wrangler deploy --dry-run`; for production
+   `pnpm --filter <app> build:node` (studio, account, marketing) or plain
+   `pnpm --filter relay build`.
 6. Open a pull request; the preview deploy is the check. Production deploys
    only from `main`.
 
@@ -47,7 +48,7 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
    API before the first deploy; the certificate takes a few minutes and the
    smoke check will not wait for it.
 2. Its URLs in `.github/scripts/select-target.sh`, and a job in `deploy.yml`
-   modelled on the studio one.
+   modelled on the relay one.
 3. Secrets files under `secrets/` for the new Worker and, if it has a database,
    a Neon branch, a Hyperdrive config and a `database.<target>.env`.
 4. The Google OAuth callback for the new `VITE_ACCOUNT_URL`, if it signs users in.
@@ -59,10 +60,9 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
 
 - `vars` and bindings are not inherited by `env.preview`; redeclare them.
 - The session cookie is host-only when `VITE_ACCOUNT_URL` and `VITE_STUDIO_URL`
-  share an origin, and on the parent domain otherwise (production until #121);
-  there is no variable for it. Only the preview cookie prefix
-  (`AUTH_COOKIE_PREFIX`) is set by hand: production's parent-domain cookie also
-  reaches the preview hostname and would shadow it.
+  share an origin, which every environment does now; there is no variable for
+  it. The preview cookie prefix (`AUTH_COOKIE_PREFIX`) dates from the days of a
+  parent-domain production cookie and only keeps preview's cookies apart.
 - The account Worker uploads avatars and logos, so `secrets/account.<target>.env`
   carries the same `S3_*` keys as the studio file. `secrets/relay.<target>.env`
   holds Relay's own `BETTER_AUTH_SECRET` (its Better Auth instance shares no

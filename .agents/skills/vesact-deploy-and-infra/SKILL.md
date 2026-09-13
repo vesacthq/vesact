@@ -49,7 +49,8 @@ stylesheet and module scripts, which Cloudflare keeps per URL and sends to the
 next visitor as a 103 Early Hints before the Worker runs.
 
 The preview database is one shared Neon branch; run the "Reset preview database"
-workflow to copy it fresh from production. Preview shares the production R2
+workflow to copy it fresh from its parent, the Neon `production` branch (the
+pre-move data, kept until it is deleted). Preview shares the production R2
 bucket, and so does production on the machine until uploads move to COS after
 the filing. The `avatars` bucket's CORS rule allows `PUT` from
 `studio.allcast.cc` and `studio.preview.vesact.com`, the origins the account
@@ -93,10 +94,11 @@ involved, the images reach the machine through COS (see "The machine"). Postgres
 
 CI: the "Docker target" job of `validate-prs.yml` builds the three images,
 starts the stack with CI env files and a port override for the schema push,
-and runs `.github/scripts/smoke.sh <studio url> <marketing url> [apex url]`
-(signed-out `/` 307, `/account/login` 200, both health endpoints, a 401 from
-`sign-in/email` proving the database is reachable, marketing 200, the apex
-301 to the marketing site). The same script is the post-deploy check: run on
+and runs `.github/scripts/smoke.sh <studio url> <marketing url>` (signed-out
+`/` 307, `/account/login` 200, both health endpoints, a 401 from
+`sign-in/email` proving the database is reachable, marketing 200; with a
+third argument, the machine's deploy also checks that the apex redirects to
+the marketing site). The same script is the post-deploy check: run on
 the machine, it resolves the public hostnames to the local Caddy
 (`--resolve`), so it needs neither DNS nor the domain's 80/443 to be open,
 and accepts Caddy's own CA while `SMOKE_INSECURE=1`.
@@ -207,8 +209,6 @@ Google's token endpoint).
   deploy makes no HTTP check after `wrangler deploy` (the earlier smoke check
   failed with 403 and `cf-mitigated: challenge`). Verify a deploy by hand or
   through Workers versions instead.
-- `auth.vesact.com` stays attached to the production account Worker and answers
-  with a 301 to the `account.` hostname until #121 retires both.
 - Preview hostnames live under `preview.vesact.com` rather than `workers.dev`
   because `workers.dev` is on the Public Suffix List: no cookie can span two
   Workers there, so products could not share a login.
@@ -221,7 +221,9 @@ Google's token endpoint).
   (`https://relay.vesact.com/...`, `https://relay.preview.vesact.com/...`,
   `http://localhost:3005/...`).
 - `vesact.com` and `preview.vesact.com` redirect to their `www` hostnames through
-  Cloudflare Redirect Rules on a proxied `AAAA 100::` record each.
+  Cloudflare Redirect Rules on a proxied `AAAA 100::` record each; since
+  `www.vesact.com` was retired the `vesact.com` rule points at nothing until it
+  is repointed or removed.
 
 ## Public URLs
 

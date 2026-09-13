@@ -275,11 +275,11 @@ reviewed: 2026-09-13
 
 每个 app 两个构建目标：Worker（`@cloudflare/vite-plugin`，preview）和 Docker（Node 入口，正式版）。两个目标同一份 `src/server.ts`，`BUILD_TARGET=node` 去掉 Cloudflare 插件、由 srvx 服务；根目录 `Dockerfile` 和 `docker-compose.prod.yml` 是 Docker 目标的打包和运行形态，每个 PR 的 CI 两个目标都构建。
 
-| 环境    | 形态                                                                                                                                      | 主机                                                              |
-| ------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| prod    | Docker 目标：studio、account、marketing 三个容器加 Caddy 和 postgres，compose 管理，Caddy 把 `/account/*` 分给 account；job 进程等 job 表 | `studio.allcast.cc`、`www.allcast.cc`，腾讯云上海的机器，灰云直连 |
-| preview | worker `vesact-studio-preview`，`/account/*` 由 Workers 路由分给 account worker                                                           | `studio.preview.vesact.com`，Access 后面                          |
-| dev     | `pnpm dev`                                                                                                                                | `localhost:3000`                                                  |
+| 环境    | 形态                                                                                                                                      | 主机                                                                     |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| prod    | Docker 目标：studio、account、marketing 三个容器加 Caddy 和 postgres，compose 管理，Caddy 把 `/account/*` 分给 account；job 进程等 job 表 | `studio.allcast.cc`、`www.allcast.cc`，DNSPod 直接解析到腾讯云上海的机器 |
+| preview | worker `vesact-studio-preview`，`/account/*` 由 Workers 路由分给 account worker                                                           | `studio.preview.vesact.com`，Access 后面                                 |
+| dev     | `pnpm dev`                                                                                                                                | `localhost:3000`                                                         |
 
 正式版在腾讯云上海的一台机器上，域名 `allcast.cc`，库是机器上的 postgres 容器（../decisions.md 2026-09-13「生产落在腾讯云」）。部署：CI 构建镜像后经 COS 桶送到机器（机器够不到镜像仓库，runner 直连太慢），迁移在切换前跑，冒烟在机器本机做（#151）。备案通过前域名的 80/443 被腾讯拦，Caddy 先用自签证书。环境矩阵见 AGENTS.md。
 
