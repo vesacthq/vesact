@@ -46,7 +46,9 @@ Decrypted values never go into docs, issues, commit messages or chat replies.
 
 Local configuration reaches two runtimes. `.env.local` (copy it from
 `.env.local.example`) feeds the Vite build and the Node-side scripts: `DATABASE_URL`
-for `pnpm --filter @repo/database push | generate | migrate | studio`, and the
+for `pnpm --filter @repo/database push | generate | migrate | studio`,
+`RELAY_DATABASE_URL` for `pnpm --filter @repo/relay db:*` (local database
+`vesact_relay`, create it once with `create database vesact_relay`), and the
 `VITE_*` URLs inlined into the client bundle. `apps/studio/.dev.vars` (from
 `pnpm secrets:pull`) is what the Worker reads at runtime; `.env.local` never
 reaches it. Without `.dev.vars` the local server sees `wrangler.jsonc` `vars`,
