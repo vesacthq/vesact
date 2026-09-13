@@ -1,12 +1,12 @@
 import type { ActiveOrganization } from "@repo/auth";
-import type { MemberRole } from "@repo/permissions";
+import type { OrganizationRole } from "@repo/permissions";
 import { createContext } from "react";
 
 export const OrganizationContext = createContext<
 	| {
 			organization: ActiveOrganization;
-			/** Roles of the signed-in user in this organization. */
-			roles: MemberRole[];
+			/** Role of the signed-in user in this organization. */
+			role: OrganizationRole | null;
 			refetch: () => Promise<void>;
 	  }
 	| undefined

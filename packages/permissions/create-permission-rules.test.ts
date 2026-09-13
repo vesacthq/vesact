@@ -91,9 +91,9 @@ describe("createPermissionRules matrix", () => {
 			},
 		},
 		{
-			label: "member with a Studio role in the comma-separated column",
+			label: "member whose row still carries a legacy product role",
 			user: { role: "user" },
-			membershipRole: "member,studio:member",
+			membershipRole: "member,product:member",
 			expected: {
 				adminAccess: false,
 				organizationRead: true,
@@ -132,26 +132,27 @@ describe("createPermissionRules matrix", () => {
 	});
 });
 
-describe("product access", () => {
+describe("Studio access", () => {
 	it.each([
-		["owner", { studio: [true, true], relay: [true, true] }],
-		["admin", { studio: [true, true], relay: [true, true] }],
-		["member", { studio: [false, false], relay: [false, false] }],
-		["member,studio:member", { studio: [true, false], relay: [false, false] }],
-		["member,studio:admin,relay:developer", { studio: [true, true], relay: [true, false] }],
-		["member,relay:admin", { studio: [false, false], relay: [true, true] }],
-		[null, { studio: [false, false], relay: [false, false] }],
+		["owner", [true, true]],
+		["admin", [true, true]],
+		["member", [true, false]],
+		["member,product:member", [true, false]],
+		["product:member", [false, false]],
+		[null, [false, false]],
 	] as const)("%s", (membershipRole, expected) => {
 		const rules = createPermissionRules({ user: { role: "user" }, membershipRole });
 
-		expect([rules.studio.access, rules.studio.manage]).toEqual(expected.studio);
-		expect([rules.relay.access, rules.relay.manage]).toEqual(expected.relay);
+		expect([rules.studio.access, rules.studio.manage]).toEqual(expected);
 		expect(checkPermission({ user: { role: "user" }, membershipRole }, "studio.access")).toBe(
-			expected.studio[0],
+			expected[0],
+		);
+		expect(checkPermission({ user: { role: "user" }, membershipRole }, "studio.manage")).toBe(
+			expected[1],
 		);
 	});
 
-	it("does not let a global admin into a product without membership", () => {
+	it("does not let a global admin into Studio without membership", () => {
 		const rules = createPermissionRules({ user: { role: "admin" }, membershipRole: null });
 
 		expect(rules.studio.access).toBe(false);

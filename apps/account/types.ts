@@ -13,10 +13,6 @@ export interface AccountAppConfig {
 	 */
 	studioUrl?: string;
 	/**
-	 * Absolute URL of the Relay console. Set `VITE_RELAY_URL`.
-	 */
-	relayUrl?: string;
-	/**
 	 * Absolute URL for the public marketing site. Set `VITE_MARKETING_URL`.
 	 */
 	marketingUrl?: string;

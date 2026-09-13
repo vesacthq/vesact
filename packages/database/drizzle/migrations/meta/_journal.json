@@ -43,6 +43,13 @@
 			"when": 1789272203064,
 			"tag": "0005_drop_relay_tables",
 			"breakpoints": true
+		},
+		{
+			"idx": 6,
+			"version": "7",
+			"when": 1789275571413,
+			"tag": "0006_drop_member_product_roles",
+			"breakpoints": true
 		}
 	]
 }

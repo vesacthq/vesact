@@ -3,7 +3,6 @@ import { withQuery } from "ufo";
 
 const accountOrigin = import.meta.env.VITE_ACCOUNT_URL;
 const studioUrl = import.meta.env.VITE_STUDIO_URL;
-const relayUrl = import.meta.env.VITE_RELAY_URL;
 const marketingUrl = import.meta.env.VITE_MARKETING_URL;
 
 export interface ProductUrl {
@@ -13,7 +12,6 @@ export interface ProductUrl {
 
 const products: ProductUrl[] = [
 	{ name: "Studio", url: studioUrl },
-	{ name: "Relay", url: relayUrl },
 	{ name: "Vesact", url: marketingUrl },
 ];
 

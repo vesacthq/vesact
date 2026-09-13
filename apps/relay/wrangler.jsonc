@@ -15,8 +15,6 @@
 	"vars": {
 		"VITE_RELAY_URL": "https://relay.vesact.com",
 		"VITE_RELAY_API_URL": "https://api.vesact.com",
-		"VITE_ACCOUNT_URL": "https://account.vesact.com",
-		"VITE_STUDIO_URL": "https://studio.vesact.com",
 		"VITE_MARKETING_URL": "https://www.vesact.com",
 		"META_APP_ID": "2027645691445350",
 	},
@@ -39,11 +37,8 @@
 			"vars": {
 				"VITE_RELAY_URL": "https://relay.preview.vesact.com",
 				"VITE_RELAY_API_URL": "https://api.preview.vesact.com",
-				"VITE_ACCOUNT_URL": "https://studio.preview.vesact.com/account",
-				"VITE_STUDIO_URL": "https://studio.preview.vesact.com",
 				"VITE_MARKETING_URL": "https://www.preview.vesact.com",
 				"META_APP_ID": "2027645691445350",
-				"AUTH_COOKIE_PREFIX": "vesact-preview",
 			},
 			"hyperdrive": [
 				{

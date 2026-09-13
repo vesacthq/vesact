@@ -3,7 +3,7 @@ import { OrganizationLogo } from "@organizations/components/OrganizationLogo";
 import { OrganizationProvider } from "@organizations/components/OrganizationProvider";
 import { useOrganization } from "@organizations/hooks/use-organization";
 import { organizationQueryOptions } from "@organizations/lib/api";
-import { checkPermission, serializeMemberRoles } from "@repo/permissions";
+import { checkPermission } from "@repo/permissions";
 import { cn } from "@repo/ui";
 import { createFileRoute, Link, notFound, Outlet } from "@tanstack/react-router";
 
@@ -35,11 +35,8 @@ function OrganizationLayout() {
 
 function OrganizationHeader() {
 	const t = useTranslations();
-	const { organization, roles } = useOrganization();
-	const canManageBilling = checkPermission(
-		{ membershipRole: serializeMemberRoles(roles) },
-		"organization.manageBilling",
-	);
+	const { organization, role } = useOrganization();
+	const canManageBilling = checkPermission({ membershipRole: role }, "organization.manageBilling");
 
 	const tabs = [
 		{ to: "/orgs/$organizationSlug", label: t("settings.menu.organization.general"), exact: true },

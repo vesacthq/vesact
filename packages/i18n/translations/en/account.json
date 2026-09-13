@@ -403,8 +403,7 @@
 					},
 					"role": "Role",
 					"submit": "Invite",
-					"title": "Invite member",
-					"access": "Product access"
+					"title": "Invite member"
 				},
 				"leaveOrganization": "Leave organization",
 				"notifications": {
@@ -458,7 +457,7 @@
 				"title": "Members",
 				"columns": {
 					"member": "Member",
-					"organization": "Organization"
+					"role": "Role"
 				},
 				"empty": "No members."
 			},
@@ -476,24 +475,9 @@
 		},
 		"list": {
 			"title": "Organizations",
-			"subtitle": "Organizations you belong to. Members and product access are managed here.",
+			"subtitle": "Organizations you belong to. Members are managed here.",
 			"empty": "You are not a member of any organization yet.",
 			"create": "New organization"
-		},
-		"productAccess": {
-			"none": "No access",
-			"full": "Full access",
-			"fullDescription": "Organization owners and admins can use every product."
-		},
-		"productRoles": {
-			"studio": {
-				"admin": "Admin",
-				"member": "Member"
-			},
-			"relay": {
-				"admin": "Admin",
-				"developer": "Developer"
-			}
 		}
 	},
 	"onboarding": {
@@ -545,7 +529,7 @@
 				},
 				"save": "Save",
 				"updateTitle": "Edit organization",
-				"membersNote": "Members and product access are managed by the organization's admins on its members page.",
+				"membersNote": "Members are managed by the organization's admins on its members page.",
 				"openMembers": "Open members"
 			},
 			"loading": "Loading organizations...",

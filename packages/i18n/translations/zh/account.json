@@ -403,8 +403,7 @@
 					},
 					"role": "角色",
 					"submit": "邀请",
-					"title": "邀请成员",
-					"access": "产品访问"
+					"title": "邀请成员"
 				},
 				"leaveOrganization": "离开组织",
 				"notifications": {
@@ -458,7 +457,7 @@
 				"title": "成员",
 				"columns": {
 					"member": "成员",
-					"organization": "组织"
+					"role": "角色"
 				},
 				"empty": "还没有成员。"
 			},
@@ -476,24 +475,9 @@
 		},
 		"list": {
 			"title": "组织",
-			"subtitle": "你所属的组织。成员和产品访问权限在此管理。",
+			"subtitle": "你所属的组织。成员在此管理。",
 			"empty": "你还没有加入任何组织。",
 			"create": "创建组织"
-		},
-		"productAccess": {
-			"none": "无访问权限",
-			"full": "完全访问",
-			"fullDescription": "组织所有者和管理员可以使用所有产品。"
-		},
-		"productRoles": {
-			"studio": {
-				"admin": "Studio 管理员",
-				"member": "Studio 成员"
-			},
-			"relay": {
-				"admin": "Relay 管理员",
-				"developer": "Relay 开发者"
-			}
 		}
 	},
 	"onboarding": {
@@ -545,7 +529,7 @@
 				},
 				"save": "保存",
 				"updateTitle": "编辑组织",
-				"membersNote": "成员和产品访问权限由组织管理员在成员页管理。",
+				"membersNote": "成员由组织管理员在成员页管理。",
 				"openMembers": "打开成员页"
 			},
 			"loading": "正在加载组织…",

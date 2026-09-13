@@ -1,45 +1,27 @@
 import { describe, expect, it } from "vitest";
 
-import {
-	getOrganizationRole,
-	getProductRole,
-	parseMemberRoles,
-	serializeMemberRoles,
-	withOrganizationRole,
-	withProductRole,
-} from "./member-roles";
+import { isOrganizationRole, parseMemberRole } from "./member-roles";
 
 describe("member roles", () => {
-	it("parses the comma-separated column and drops unknown entries", () => {
-		expect(parseMemberRoles("member, studio:member,relay:admin,bogus")).toEqual([
-			"member",
-			"studio:member",
-			"relay:admin",
-		]);
-		expect(parseMemberRoles(null)).toEqual([]);
+	it("reads the organization role", () => {
+		expect(parseMemberRole("owner")).toBe("owner");
+		expect(parseMemberRole(" admin ")).toBe("admin");
+		expect(parseMemberRole(null)).toBeNull();
+		expect(parseMemberRole("bogus")).toBeNull();
+	});
+
+	it("keeps only the organization role of a legacy comma-separated value", () => {
+		expect(parseMemberRole("member,product:member")).toBe("member");
+		expect(parseMemberRole("product:member,member")).toBe("member");
+		expect(parseMemberRole("product:admin,other:developer")).toBeNull();
 	});
 
 	it("takes the highest organization role when several are present", () => {
-		expect(getOrganizationRole(["member", "admin"])).toBe("admin");
-		expect(getOrganizationRole(["studio:member"])).toBeNull();
+		expect(parseMemberRole("member,admin")).toBe("admin");
 	});
 
-	it("replaces one product's role without touching the others", () => {
-		const roles = parseMemberRoles("member,studio:member,relay:developer");
-
-		expect(withProductRole(roles, "studio", "studio:admin")).toEqual([
-			"member",
-			"relay:developer",
-			"studio:admin",
-		]);
-		expect(withProductRole(roles, "relay", null)).toEqual(["member", "studio:member"]);
-		expect(getProductRole(withProductRole(roles, "relay", null), "relay")).toBeNull();
-	});
-
-	it("puts the organization role first and serializes without duplicates", () => {
-		expect(serializeMemberRoles(withOrganizationRole(["member", "studio:member"], "admin"))).toBe(
-			"admin,studio:member",
-		);
-		expect(serializeMemberRoles(["member", "member"])).toBe("member");
+	it("recognizes organization roles", () => {
+		expect(isOrganizationRole("member")).toBe(true);
+		expect(isOrganizationRole("product:member")).toBe(false);
 	});
 });

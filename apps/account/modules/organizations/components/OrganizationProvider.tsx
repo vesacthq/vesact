@@ -5,7 +5,7 @@ import {
 	useOrganizationQuery,
 } from "@organizations/lib/api";
 import type { ActiveOrganization } from "@repo/auth";
-import { parseMemberRoles } from "@repo/permissions";
+import { parseMemberRole } from "@repo/permissions";
 import { useQueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 
@@ -29,7 +29,7 @@ export function OrganizationProvider({
 		<OrganizationContext.Provider
 			value={{
 				organization,
-				roles: parseMemberRoles(membership?.role),
+				role: parseMemberRole(membership?.role),
 				refetch: async () => {
 					await Promise.all([
 						queryClient.invalidateQueries({ queryKey: organizationQueryKey(organization.slug) }),
