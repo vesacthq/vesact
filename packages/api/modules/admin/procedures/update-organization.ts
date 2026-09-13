@@ -29,7 +29,9 @@ export const updateOrganization = adminProcedure
 		if (slug) {
 			// Better Auth's /organization/update hook rejects these; this path bypasses it.
 			if (
-				(authConfig.organizations.forbiddenOrganizationSlugs as readonly string[]).includes(slug)
+				(authConfig.organizations.forbiddenOrganizationSlugs as readonly string[]).includes(
+					slug.toLowerCase(),
+				)
 			) {
 				throw new ORPCError("BAD_REQUEST", { message: "This organization slug is reserved." });
 			}

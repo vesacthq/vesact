@@ -17,10 +17,12 @@ describe("getSafeRedirectPath", () => {
 			"//evil.example",
 			"/\\evil.example",
 			"/%5Cevil.example/..//evil.example",
+			"/..//evil.example",
+			"/x/../\\evil.example/path?x=1",
 			"javascript:alert(1)",
 		]) {
-			expect(getSafeRedirectPath(value)).toMatch(/^\//);
-			expect(getSafeRedirectPath(value)).not.toContain("evil.example/");
+			expect(getSafeRedirectPath(value)).toMatch(/^\/(?![/\\])/);
+			expect(getSafeRedirectPath(value)).not.toContain("evil.example");
 		}
 	});
 });

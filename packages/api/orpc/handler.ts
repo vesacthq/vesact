@@ -6,6 +6,7 @@ import { RPCHandler } from "@orpc/server/fetch";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { auth } from "@repo/auth";
 import { logger } from "@repo/logs";
+import { basePath } from "@repo/utils";
 
 import { router } from "./router";
 
@@ -39,7 +40,7 @@ export const openApiHandler = new OpenAPIHandler(router, {
 					},
 					servers: [
 						{
-							url: "/api",
+							url: `${basePath}/api`,
 						},
 					],
 				};

@@ -23,6 +23,8 @@ describe("getSafeRedirectUrl", () => {
 		"https://studio.vesact.com.attacker.example/",
 		"//attacker.example",
 		"/\\attacker.example",
+		"/..//attacker.example",
+		"/x/../\\attacker.example/path?x=1",
 		"javascript:alert(1)",
 		"data:text/html,malicious",
 		"inbox",

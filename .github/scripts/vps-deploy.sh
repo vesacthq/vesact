@@ -31,8 +31,9 @@ record() {
 
 # Drops the images of tags other than the running one and its predecessor.
 prune_images() {
+	# `grep -v` exits 1 when nothing is left to prune (first deploy, same tag again).
 	docker image ls --format '{{.Repository}}:{{.Tag}}' 'ghcr.io/vesacthq/vesact-*' |
-		grep -vE ":($1|$2)$" |
+		{ grep -vE ":($1|$2)$" || true; } |
 		xargs -r docker image rm >/dev/null
 	docker image prune -f >/dev/null
 }

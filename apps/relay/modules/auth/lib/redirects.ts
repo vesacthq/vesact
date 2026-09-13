@@ -11,7 +11,11 @@ export function getSafeRedirectPath(redirectTo: string | null | undefined): stri
 	const base = "http://relay.invalid";
 	try {
 		const url = new URL(redirectTo, base);
-		return url.origin === base ? `${url.pathname}${url.search}${url.hash}` : "/";
+		// Dot segments can rebuild a `//host` path: `/..//evil` normalises to `//evil`.
+		if (url.origin !== base || url.pathname.startsWith("//")) {
+			return "/";
+		}
+		return `${url.pathname}${url.search}${url.hash}`;
 	} catch {
 		return "/";
 	}
