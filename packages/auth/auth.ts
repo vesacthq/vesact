@@ -1,4 +1,3 @@
-import { apiKey } from "@better-auth/api-key";
 import { passkey } from "@better-auth/passkey";
 import {
 	db,
@@ -306,17 +305,6 @@ export const auth = betterAuth({
 					},
 				});
 			},
-		}),
-		// Relay's API keys: owned by an organization, verified in-process by the
-		// Relay Worker, issued and revoked through this Worker's endpoints.
-		apiKey({
-			references: "organization",
-			defaultPrefix: "relay_",
-			// The console tells keys apart by their first characters; the plugin's
-			// default of 6 is exactly the `relay_` prefix, so nothing beyond it
-			// would be stored.
-			startingCharactersConfig: { shouldStore: true, charactersLength: 12 },
-			rateLimit: { enabled: true, timeWindow: 60_000, maxRequests: 300 },
 		}),
 		openAPI(),
 		invitationOnlyPlugin(),

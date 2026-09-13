@@ -13,5 +13,31 @@
 	"options": {
 		"typeAware": true,
 		"typeCheck": true
-	}
+	},
+	"overrides": [
+		{
+			"files": ["apps/relay/**", "packages/relay/**"],
+			"rules": {
+				"no-restricted-imports": [
+					"error",
+					{
+						"patterns": [
+							{
+								"group": [
+									"@repo/*",
+									"!@repo/ui",
+									"!@repo/utils",
+									"!@repo/i18n",
+									"!@repo/logs",
+									"!@repo/relay",
+									"**/packages/**"
+								],
+								"message": "Relay depends only on @repo/ui, @repo/utils, @repo/i18n and @repo/logs (docs/relay/architecture.md \u00a74.3)."
+							}
+						]
+					}
+				]
+			}
+		}
+	]
 }

@@ -133,10 +133,13 @@ and `modules/organizations/lib/api.ts` (both apps); the router context carries t
 
 ### Relay API
 
-Relay's public API lives in `packages/api/modules/relay` (prefix `/v1`), mounted by
-`apps/relay/src/api.ts`; keys come from `@better-auth/api-key` on the shared auth instance
-and business endpoints build on `relayKeyProcedure`. Keys, rate limits, request ids, idempotency,
-the Meta webhook and the console routes: `vesact-relay-api` skill; design: `docs/relay/architecture.md`.
+Relay is its own product: `packages/relay` (`@repo/relay`) holds its API (`./api`, prefix `/v1`,
+mounted by `apps/relay/src/api.ts`), Better Auth instance (`./auth`), database (`./db`) and the
+zod contract (`./contract`, what Studio imports). Keys come from `@better-auth/api-key` on that
+instance and business endpoints build on `relayKeyProcedure`. `apps/relay` and `packages/relay`
+depend only on `@repo/ui`, `@repo/utils`, `@repo/i18n` and `@repo/logs` — `.oxlintrc.json`
+rejects other `@repo/*` imports there. Keys, rate limits, request ids, idempotency, the Meta
+webhook and the console routes: `vesact-relay-api` skill; design: `docs/relay/architecture.md`.
 
 ### Client cache invalidation
 

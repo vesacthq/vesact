@@ -7,8 +7,10 @@ description: "Use when adding or changing Relay /v1 endpoints, API keys, rate li
 
 The design is `docs/relay/architecture.md`; this file is the implementation map.
 
-Relay's public API lives in `packages/api/modules/relay` with its own router,
-context and handler (prefix `/v1`), mounted by `apps/relay/src/api.ts`. Keys
+Relay's public API lives in `packages/relay/api` with its own router,
+context and handler (prefix `/v1`), mounted by `apps/relay/src/api.ts` through
+`@repo/relay/api`; the zod shapes of its responses are `@repo/relay/contract`,
+the only subpath Studio may import. Keys
 belong to an organization and come from `@better-auth/api-key` on Relay's own
 Better Auth instance (`packages/relay/auth`: Google sign-in, the organization
 plugin and the api-key plugin on Relay's database, cookie prefix `relay`;
@@ -36,7 +38,7 @@ for the chain is `pnpm --filter @repo/scripts relay:acceptance` (see the
 script's header for the arguments).
 
 Meta's webhook is `GET`/`POST /webhooks/meta` in
-`packages/api/modules/relay/integrations/meta/webhook.ts`: the handshake checks
+`packages/relay/api/integrations/meta/webhook.ts`: the handshake checks
 `META_WEBHOOK_VERIFY_TOKEN`, the POST verifies `X-Hub-Signature-256` against
 `META_APP_SECRET` and stores the parsed body in `relay_inbound_event`, deduplicated
 by the raw body's SHA-256; nothing is parsed yet. Its acceptance run is

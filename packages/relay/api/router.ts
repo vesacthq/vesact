@@ -6,3 +6,5 @@ export const relayRouter = relayProcedure.router({
 	health,
 	me,
 });
+
+export type RelayRouter = typeof relayRouter;

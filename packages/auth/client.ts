@@ -1,4 +1,3 @@
-import { apiKeyClient } from "@better-auth/api-key/client";
 import { passkeyClient } from "@better-auth/passkey/client";
 import {
 	adminClient,
@@ -23,7 +22,6 @@ export const authClient = createAuthClient({
 		inferAdditionalFields<typeof auth>(),
 		magicLinkClient(),
 		organizationClient({ ac, roles }),
-		apiKeyClient(),
 		adminClient(),
 		passkeyClient(),
 		twoFactorClient(),

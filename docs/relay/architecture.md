@@ -5,7 +5,7 @@ reviewed: 2026-09-13
 
 # Relay 架构
 
-本文回答 Relay 怎么做。定位、术语和分期见 product.md；每个阶段的范围与验收在 #26 下的 issue 里；为什么这么定见 ../decisions.md。§5.5 的 Messaging 领域是草稿；标（草稿）的段落是切分轨 #118 的目标形态，落地前以现状为准。
+本文回答 Relay 怎么做。定位、术语和分期见 product.md；每个阶段的范围与验收在 #26 下的 issue 里；为什么这么定见 ../decisions.md。§5.5 的 Messaging 领域是草稿。
 
 ## 1. 目标与约束
 
@@ -31,19 +31,19 @@ reviewed: 2026-09-13
 
 ### 1.2 技术栈约束：继承现状，只补缺口
 
-| 能力                | 决策                                                                                                                 |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| **基础工程**        | 保留 Supastarter 改造版、Cloudflare 部署和 Neon，不换模板、不换数据库。                                              |
-| **API 框架**        | 以仓库为准。仍使用 Hono/oRPC 就沿用；已改成其他实现，不为本文件迁回去。                                              |
-| **契约与校验**      | 复用当前 schema 工具，明确导出 Relay 公共契约，生成 OpenAPI。                                                        |
-| **数据库与迁移**    | 复用当前 ORM、Neon 连接方式和迁移流程；需要事务的路径必须实际验证驱动能力。                                          |
-| **认证、组织、Key** | （草稿）Relay 自己的 Better Auth 实例（`@repo/relay/auth`），只装 Google、organization、apiKey；不另外部署认证平台。 |
-| **任务执行**        | 优先复用已存在方案；缺失时，CF Queues + Neon 持久化任务 + Cron 补偿是默认增量方案。 Execution 动工时定稿。           |
-| **媒体**            | 复用当前存储；需要新建对象存储能力时优先评估 R2，不能假定已配置。                                                    |
-| **长流程**          | 到多步骤发布确实需要时再加入 Workflows，不给每条聊天消息套一个 Workflow。                                            |
-| **协调与实时**      | 不默认为每个账号建 DO。遇到明确跨实例协调或实时连接问题时再设计。                                                    |
-| **测试与 SDK**      | 复用当前测试链，补真实 CF 环境验证、契约检查；对外需要时再生成客户端。                                               |
-| **Effect**          | 暂不上全栈 Effect，也不自己仿造一套；将来只在具体执行模块验证收益。                                                  |
+| 能力                | 决策                                                                                                         |
+| ------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **基础工程**        | 保留 Supastarter 改造版、Cloudflare 部署和 Neon，不换模板、不换数据库。                                      |
+| **API 框架**        | 以仓库为准。仍使用 Hono/oRPC 就沿用；已改成其他实现，不为本文件迁回去。                                      |
+| **契约与校验**      | 复用当前 schema 工具，明确导出 Relay 公共契约，生成 OpenAPI。                                                |
+| **数据库与迁移**    | 复用当前 ORM、Neon 连接方式和迁移流程；需要事务的路径必须实际验证驱动能力。                                  |
+| **认证、组织、Key** | Relay 自己的 Better Auth 实例（`@repo/relay/auth`），只装 Google、organization、apiKey；不另外部署认证平台。 |
+| **任务执行**        | 优先复用已存在方案；缺失时，CF Queues + Neon 持久化任务 + Cron 补偿是默认增量方案。 Execution 动工时定稿。   |
+| **媒体**            | 复用当前存储；需要新建对象存储能力时优先评估 R2，不能假定已配置。                                            |
+| **长流程**          | 到多步骤发布确实需要时再加入 Workflows，不给每条聊天消息套一个 Workflow。                                    |
+| **协调与实时**      | 不默认为每个账号建 DO。遇到明确跨实例协调或实时连接问题时再设计。                                            |
+| **测试与 SDK**      | 复用当前测试链，补真实 CF 环境验证、契约检查；对外需要时再生成客户端。                                       |
+| **Effect**          | 暂不上全栈 Effect，也不自己仿造一套；将来只在具体执行模块验证收益。                                          |
 
 新依赖要回答：它解决了当前哪个问题，现有工具为什么不够，带来了什么维护成本。不得把“库支持”当成“仓库已经集成”。
 
@@ -155,8 +155,6 @@ Relay 保存自己承诺提供的数据、执行状态与关联；不依赖查�
 
 ### 4.3 目录
 
-（草稿。现状是 `packages/api/modules/relay`，`db` 已在 `packages/relay/db`；`packages/database/drizzle/schema/relay.ts` 在搬完前仍在。）
-
 ```text
 apps/
   relay/                              worker：API 入口、OAuth 回调、webhook、Better Auth 端点、控制台页面
@@ -164,7 +162,7 @@ apps/
 
 packages/
   relay/                              @repo/relay，Relay 的全部服务端代码
-    api/                              Hono 应用、用例、接入实现
+    api/                              Hono 应用、用例、接入实现（今天：procedures/、lib/、integrations/meta/）
       connections/  messaging/  execution/  events/  integrations/meta/
     auth/                             Better Auth 实例：Google、organization、apiKey；access.ts
     db/                               schema、迁移、client；apikey 表在这里
@@ -425,7 +423,7 @@ Content-Type: application/json
 - 插件限流每次校验写一次 key 行。单库扛不住时在前面加 Workers Rate Limiting binding，契约不变。
 - Hyperdrive 的查询缓存全部关闭（../decisions.md 2026-09-11）。插件先读 key 行再带条件更新，读到缓存就会一直更新失败、重读缓存，直到缓存过期；吊销的 key 也会在缓存期内继续有效。
 - Meta 一个 App 只能一个回调 URL，指向 prod；preview 只靠 curl 验证。
-- 切分落地前 `client.ts` 改导入是模板的六个缝之一，同步上游时留意；落地后 `packages/database` 不再含 Relay 的表。
+- `packages/database` 不再含 Relay 的表；它的 `client.ts` 仍导入 `./schema`（index 只剩 `postgres`），和模板的 `./schema/postgres` 不同，同步上游时留意。
 
 ## 附录：参考资料
 

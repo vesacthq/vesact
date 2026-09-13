@@ -1,8 +1,8 @@
 import { createHash, createHmac } from "node:crypto";
 import { parseArgs } from "node:util";
 
-import { deleteRelayInboundEventsByIds, findRelayInboundEventBySha256 } from "@repo/database";
 import { logger } from "@repo/logs";
+import { deleteRelayInboundEventsByIds, findRelayInboundEventBySha256 } from "@repo/relay/db";
 import { nanoid } from "nanoid";
 
 import { accessHeaders, createChecks } from "./lib/acceptance";
@@ -10,10 +10,10 @@ import { accessHeaders, createChecks } from "./lib/acceptance";
 /**
  * Runs the acceptance list of issue #37 against a deployed Relay API. Needs
  * META_APP_SECRET and META_WEBHOOK_VERIFY_TOKEN of that environment
- * (`secrets/relay.<target>.env`), DATABASE_URL of the same environment and,
+ * (`secrets/relay.<target>.env`), RELAY_DATABASE_URL of the same environment and,
  * on preview, CF_ACCESS_CLIENT_ID / CF_ACCESS_CLIENT_SECRET.
  *
- *   sops exec-env secrets/relay.preview.env "sops exec-env secrets/database.preview.env \
+ *   sops exec-env secrets/relay.preview.env "sops exec-env secrets/relay-database.preview.env \
  *     'pnpm --filter @repo/scripts relay:webhook-acceptance --url https://api.preview.vesact.com'"
  */
 const { values } = parseArgs({

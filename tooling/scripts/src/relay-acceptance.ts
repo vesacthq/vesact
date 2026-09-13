@@ -1,22 +1,19 @@
 import { parseArgs } from "node:util";
 
-import { auth } from "@repo/auth";
-import {
-	deleteApiKeysByIds,
-	getOrganizationBySlug,
-	getUserByEmail,
-	listRelayApiUsageByKey,
-} from "@repo/database";
 import { logger } from "@repo/logs";
+import { auth } from "@repo/relay/auth";
+import { db, deleteApiKeysByIds, listRelayApiUsageByKey } from "@repo/relay/db";
 
 import { accessHeaders, createChecks } from "./lib/acceptance";
 
 /**
  * Runs the acceptance list of issue #35 against a deployed Relay API. Needs
- * DATABASE_URL for the same environment (keys are created server-side) and,
- * on preview, CF_ACCESS_CLIENT_ID / CF_ACCESS_CLIENT_SECRET.
+ * RELAY_DATABASE_URL for the same environment (keys are created server-side
+ * through Relay's own auth) and, on preview, CF_ACCESS_CLIENT_ID /
+ * CF_ACCESS_CLIENT_SECRET. The user and organization must exist in Relay's
+ * database (`relay:session` creates a user; the console creates organizations).
  *
- *   sops exec-env secrets/database.preview.env \
+ *   sops exec-env secrets/relay-database.preview.env \
  *     'pnpm --filter @repo/scripts relay:acceptance --url https://api.preview.vesact.com --org <slug> --user <email>'
  */
 const { values } = parseArgs({
@@ -70,8 +67,12 @@ function expectStatus(
 }
 
 async function main() {
-	const organization = await getOrganizationBySlug(values.org as string);
-	const user = await getUserByEmail(values.user as string);
+	const organization = await db.query.organization.findFirst({
+		where: (table, { eq }) => eq(table.slug, values.org as string),
+	});
+	const user = await db.query.user.findFirst({
+		where: (table, { eq }) => eq(table.email, values.user as string),
+	});
 
 	if (!organization || !user) {
 		logger.error("Organization or user not found");
