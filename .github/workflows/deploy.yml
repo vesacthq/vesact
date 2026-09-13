@@ -18,8 +18,11 @@ env:
 jobs:
   images:
     name: Image ${{ matrix.app }}
-    # The Docker target of the Studio unit, built here and loaded on the
-    # production machine over SSH (no registry is reachable from it); the
+    # The Docker target of the Studio unit, built here and handed to the
+    # production machine through a COS bucket: the machine reaches no registry,
+    # and a stream straight from the runner crawls across the border, while the
+    # bucket's global-acceleration endpoint takes the upload from here and the
+    # machine reads it over Tencent's network. Objects expire after 7 days. The
     # public URLs are the machine's (docs/studio/architecture.md §6).
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
@@ -28,6 +31,11 @@ jobs:
     env:
       VPS_HOST: 118.89.171.81
       VPS_USER: ubuntu
+      COS_BUCKET: vesact-images-1300248116
+      COS_REGION: ap-shanghai
+      AWS_DEFAULT_REGION: ap-shanghai
+      AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+      AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
     strategy:
       matrix:
         app: [studio, account, marketing]
@@ -48,6 +56,8 @@ jobs:
             VITE_POSTHOG_KEY=phc_uLUk93bEHjHERp7hMxbDRiRPG4PefxhnzTkSGWYscgjR
       - name: Install sops
         run: .github/scripts/install-sops.sh
+      - name: Load CI secrets
+        run: .github/scripts/load-env.sh secrets/ci.env
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
@@ -55,7 +65,17 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           cp .github/vps_known_hosts ~/.ssh/known_hosts
       - name: Load on the machine
-        run: docker save "vesact-${{ matrix.app }}:${{ github.sha }}" | zstd -T0 -3 | ssh "$VPS_USER@$VPS_HOST" 'zstd -d | docker load'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ env.TENCENTCLOUD_SECRET_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.TENCENTCLOUD_SECRET_KEY }}
+          OBJECT: s3://${{ env.COS_BUCKET }}/${{ github.sha }}/${{ matrix.app }}.tar.zst
+        run: |
+          aws configure set default.s3.addressing_style virtual
+          docker save "vesact-${{ matrix.app }}:${{ github.sha }}" | zstd -T0 -3 > image.tar.zst
+          aws s3 cp image.tar.zst "$OBJECT" --endpoint-url https://cos.accelerate.myqcloud.com --only-show-errors
+          # The presigned URL travels on stdin, not in the remote command line.
+          aws s3 presign "$OBJECT" --endpoint-url "https://cos.$COS_REGION.myqcloud.com" --expires-in 3600 |
+            ssh "$VPS_USER@$VPS_HOST" 'read -r url && curl -fsS "$url" | zstd -d | docker load'
 
   vps:
     name: Machine
