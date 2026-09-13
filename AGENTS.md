@@ -77,7 +77,7 @@ apps/
 ├── marketing/     # Public site, blog, and content
 ├── relay/         # Relay: the API platform's Worker, `/v1` + webhooks on api., console on relay.
 └── studio/        # Authenticated product
-packages/          # ai, api, auth, database, i18n, logs, mail, notifications, payments, permissions (Permix definitions + rule builder), storage, ui, utils
+packages/          # ai, api, auth, database, i18n, logs, mail, notifications, payments, permissions (Permix definitions + rule builder), relay (Relay's own db, later api/auth/contract), storage, ui, utils
 tooling/           # scripts, tailwind, typescript
 brand/             # Brand kit: logos, app icons, per-site favicon sets; `brand/README.md` explains the files
 ```
@@ -107,6 +107,9 @@ pnpm --filter @repo/database generate
 pnpm --filter @repo/database migrate
 pnpm --filter @repo/database studio
 ```
+
+Relay has its own database and package: `packages/relay/db` (`RELAY_DATABASE_URL`, local
+database `vesact_relay`) with `pnpm --filter @repo/relay db:push | db:generate | db:migrate | db:studio`.
 
 Do not hand-edit generated Drizzle migration files or route trees:
 `apps/marketing/routeTree.gen.ts`, `apps/studio/routeTree.gen.ts`,
@@ -259,8 +262,8 @@ Each app is a Cloudflare Worker; studio, account and marketing also build a Dock
 | Cookie domain | host-only                                  | host-only (studio and account share the hostname), prefix `vesact-preview`                | `.vesact.com` until #121                          |
 
 `deploy.yml` runs one job per app: build → `wrangler deploy` → `wrangler secret bulk`, the
-account job's migration first, plus an `images` job that pushes the Docker target to GHCR on
-`main`. It makes no HTTP check after the Worker deploy (Bot Fight Mode challenges the runner):
+account job's migration first for the Studio database and the relay job migrating Relay's own,
+plus an `images` job that pushes the Docker target to GHCR on `main`. It makes no HTTP check after the Worker deploy (Bot Fight Mode challenges the runner):
 verify by hand or through Workers versions. `VITE_STUDIO_URL`, `VITE_ACCOUNT_URL` and
 `VITE_MARKETING_URL` are read at build time, so a change needs a rebuild.
 Hostnames, pipeline scripts, preview database, R2, Cloudflare, Neon, Hyperdrive and Access: `vesact-deploy-and-infra` skill.

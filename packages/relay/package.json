@@ -1,0 +1,31 @@
+{
+	"name": "@repo/relay",
+	"version": "0.0.0",
+	"private": true,
+	"exports": {
+		"./db": "./db/index.ts",
+		"./db/schema": "./db/schema.ts"
+	},
+	"scripts": {
+		"clean": "git clean -xdf .cache .turbo dist node_modules",
+		"db:push": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit push",
+		"db:generate": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit generate",
+		"db:migrate": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit migrate",
+		"db:studio": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit studio",
+		"type-check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@paralleldrive/cuid2": "^3.3.0",
+		"@repo/logs": "workspace:*",
+		"drizzle-orm": "catalog:",
+		"pg": "catalog:"
+	},
+	"devDependencies": {
+		"@repo/tsconfig": "workspace:*",
+		"@types/node": "catalog:",
+		"@types/pg": "catalog:",
+		"dotenv-cli": "catalog:",
+		"drizzle-kit": "catalog:",
+		"typescript": "catalog:"
+	}
+}
