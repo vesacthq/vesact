@@ -108,9 +108,6 @@ services:
       - "80:80"
       - "443:443"
       - "443:443/udp"
-      # Until the ICP filing passes the provider blocks the domain on 80/443;
-      # the addresses in `.env` carry :8443 meanwhile (Caddyfile).
-      - "8443:8443"
       # The local marketing address; a public deployment gives it a hostname on 443.
       - "127.0.0.1:3001:3001"
     volumes:

@@ -18,10 +18,9 @@ The environment matrix (dev / preview / prod) is in `AGENTS.md` under
 | relay     | `relay.vesact.com` (console), `api.vesact.com` (API), Worker | `relay.preview.vesact.com`, `api.preview.vesact.com` |
 
 `allcast.cc` is registered at DNSPod (2026-09-13) and its DNS lives there: `@`, `www` and
-`studio` are A records to the machine. Until the ICP filing passes, Tencent Cloud blocks the
-domain's traffic on the machine's 80/443 from the public internet; meanwhile the site is
-served on `:8443` (`https://studio.allcast.cc:8443`, the port is part of every address and
-`VITE_*` URL) with Caddy's own certificate, and the deploy smokes it from the machine itself
+`studio` are A records to the machine. Until the ICP filing passes, Tencent Cloud intercepts
+the domain's traffic to the machine from the public internet (other ports included); the
+stack runs with Caddy's own certificate and the deploy smokes it from the machine itself
 (see "The machine"). `vesact.com` keeps
 Relay, `preview.vesact.com`, `e.vesact.com` (PostHog) and the R2 bucket; the `www.`,
 `studio.`, `account.` and `auth.` Workers and hostnames were retired on 2026-09-13.
@@ -160,13 +159,9 @@ first thing to add once there is data worth keeping). The Neon `production`
 branch still holds the pre-move data; its URL is `NEON_PRODUCTION_DATABASE_URL`
 in `secrets/infra.env`.
 
-After the ICP filing passes: drop `:8443` from the addresses in
-`secrets/prod.env`, the `VITE_*` URLs in `secrets/<app>.prod.env`, the build
-args of the `images` job and the smoke URLs of the `machine` job; remove
-`local_certs` from the `Caddyfile` and `SMOKE_INSECURE` from `secrets/prod.env`
-(Let's Encrypt HTTP-01 then works on 80); take the `8443` port mapping out of
-the compose file and the security group; put the filing number in the
-marketing footer. Deferred with it:
+After the ICP filing passes: remove `local_certs` from the `Caddyfile` and
+`SMOKE_INSECURE` from `secrets/prod.env` (Let's Encrypt HTTP-01 then works on
+80), and put the filing number in the marketing footer. Deferred with it:
 uploads to COS instead of R2, mail and brand on `allcast.cc`, the domestic
 login methods (Google login is off in production: the machine cannot reach
 Google's token endpoint).
