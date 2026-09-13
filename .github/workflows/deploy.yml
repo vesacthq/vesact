@@ -18,54 +18,62 @@ env:
 jobs:
   images:
     name: Image ${{ matrix.app }}
-    # The Docker target of the Studio unit, pushed to GHCR on every merge; the
-    # public URLs are those of the machine that runs it (docs/studio/architecture.md §6).
+    # The Docker target of the Studio unit, built here and loaded on the
+    # production machine over SSH (no registry is reachable from it); the
+    # public URLs are the machine's (docs/studio/architecture.md §6).
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
+    env:
+      VPS_HOST: 118.89.171.81
+      VPS_USER: ubuntu
     strategy:
       matrix:
         app: [studio, account, marketing]
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/vesact-${{ matrix.app }}:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/vesact-${{ matrix.app }}:latest
+          load: true
+          tags: vesact-${{ matrix.app }}:${{ github.sha }}
           build-args: |
             APP=${{ matrix.app }}
-            VITE_STUDIO_URL=https://jp.vesact.com
-            VITE_ACCOUNT_URL=https://jp.vesact.com/account
-            VITE_MARKETING_URL=https://www.vesact.com
-          # No PostHog key: the rehearsal machine's traffic stays out of production analytics
-          # (same as preview); the cut-over adds it with the production hostnames.
+            VITE_STUDIO_URL=https://studio.allcast.cc
+            VITE_ACCOUNT_URL=https://studio.allcast.cc/account
+            VITE_MARKETING_URL=https://www.allcast.cc
+            VITE_POSTHOG_HOST=https://e.vesact.com
+            VITE_POSTHOG_KEY=phc_uLUk93bEHjHERp7hMxbDRiRPG4PefxhnzTkSGWYscgjR
+      - name: Install sops
+        run: .github/scripts/install-sops.sh
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          sops -d --input-type json --output-type binary secrets/files/vps-deploy-ssh-key.json > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          cp .github/vps_known_hosts ~/.ssh/known_hosts
+      - name: Load on the machine
+        run: docker save "vesact-${{ matrix.app }}:${{ github.sha }}" | zstd -T0 -3 | ssh "$VPS_USER@$VPS_HOST" 'zstd -d | docker load'
 
   vps:
-    name: VPS
+    name: Machine
     # The Docker target on the machine (docs/studio/architecture.md §6): migrate
-    # through an SSH tunnel, refresh the compose files and env, then pull the
-    # images just pushed and smoke; vps-deploy.sh rolls back on a failed smoke.
+    # through an SSH tunnel, refresh the compose files and env, then bring the
+    # stack up on the images just loaded and smoke; vps-deploy.sh rolls back on
+    # a failed smoke.
     needs: images
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: read
     env:
-      VPS_HOST: 45.77.10.53
-      SITE_URL: https://jp.vesact.com
-      MARKETING_URL: http://localhost:3001
+      VPS_HOST: 118.89.171.81
+      VPS_USER: ubuntu
+      SITE_URL: https://studio.allcast.cc
+      MARKETING_URL: https://www.allcast.cc
+      APEX_URL: https://allcast.cc
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -82,38 +90,36 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           cp .github/vps_known_hosts ~/.ssh/known_hosts
       - name: Load database URL
-        run: .github/scripts/load-env.sh secrets/database.vps.env
+        run: .github/scripts/load-env.sh secrets/database.prod.env
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Migrate
-        run: |
-          ssh -f -N -o ExitOnForwardFailure=yes -L 55432:127.0.0.1:5432 "root@$VPS_HOST"
-          pnpm --filter @repo/database migrate
       - name: Write the machine's files
         # Decrypt first so a sops failure stops here instead of leaving an empty file on the machine.
         run: |
           umask 077
           mkdir -p "$RUNNER_TEMP/env"
           for app in studio account marketing; do
-            sops -d "secrets/$app.vps.env" > "$RUNNER_TEMP/env/$app.env"
+            sops -d "secrets/$app.prod.env" > "$RUNNER_TEMP/env/$app.env"
           done
-          sops -d secrets/vps.env > "$RUNNER_TEMP/dotenv"
-          ssh "root@$VPS_HOST" 'mkdir -p /srv/vesact/env && chmod 700 /srv/vesact /srv/vesact/env'
-          scp -q docker-compose.prod.yml Caddyfile .github/scripts/vps-deploy.sh .github/scripts/smoke.sh "root@$VPS_HOST:/srv/vesact/"
-          scp -q "$RUNNER_TEMP"/env/*.env "root@$VPS_HOST:/srv/vesact/env/"
-          scp -q "$RUNNER_TEMP/dotenv" "root@$VPS_HOST:/srv/vesact/.env"
+          sops -d secrets/prod.env > "$RUNNER_TEMP/dotenv"
+          ssh "$VPS_USER@$VPS_HOST" 'mkdir -p /srv/vesact/env && chmod 700 /srv/vesact /srv/vesact/env'
+          scp -q docker-compose.prod.yml Caddyfile .github/scripts/vps-deploy.sh .github/scripts/smoke.sh .github/scripts/machine-prune.sh "$VPS_USER@$VPS_HOST:/srv/vesact/"
+          scp -q "$RUNNER_TEMP"/env/*.env "$VPS_USER@$VPS_HOST:/srv/vesact/env/"
+          scp -q "$RUNNER_TEMP/dotenv" "$VPS_USER@$VPS_HOST:/srv/vesact/.env"
           rm -rf "$RUNNER_TEMP/env" "$RUNNER_TEMP/dotenv"
-      - name: Deploy
+          ssh "$VPS_USER@$VPS_HOST" 'sudo install -m 755 /srv/vesact/machine-prune.sh /etc/cron.weekly/vesact-prune'
+      - name: Migrate
+        # The stack's Postgres is on the machine's loopback; the first deploy starts it before migrating.
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | ssh "root@$VPS_HOST" "docker login ghcr.io -u '${{ github.actor }}' --password-stdin >/dev/null"
-          ssh "root@$VPS_HOST" "cd /srv/vesact && ./vps-deploy.sh '${{ github.sha }}' '$SITE_URL' '$MARKETING_URL'"
-      - name: Log out of GHCR on the machine
-        if: always()
-        run: ssh "root@$VPS_HOST" 'docker logout ghcr.io >/dev/null 2>&1 || true'
+          ssh "$VPS_USER@$VPS_HOST" 'cd /srv/vesact && docker compose -f docker-compose.prod.yml up -d --wait postgres'
+          ssh -f -N -o ExitOnForwardFailure=yes -L 55432:127.0.0.1:5432 "$VPS_USER@$VPS_HOST"
+          pnpm --filter @repo/database migrate
+      - name: Deploy
+        run: ssh "$VPS_USER@$VPS_HOST" "cd /srv/vesact && ./vps-deploy.sh '${{ github.sha }}' '$SITE_URL' '$MARKETING_URL' '$APEX_URL'"
 
   marketing:
     name: Marketing
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -138,7 +144,7 @@ jobs:
 
   account:
     name: Account
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -174,7 +180,7 @@ jobs:
   studio:
     name: Studio
     needs: account
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -1,11 +1,12 @@
 # The Docker target of the Studio unit: Caddy in front, studio, account and
 # marketing as containers, one Postgres. Caddy sends `/account/*` of the Studio
 # hostname to the account container and everything else to studio (Caddyfile).
-# Images are `${IMAGE_REPO}-<app>:${IMAGE_TAG}`, GHCR's by default (deploy.yml
-# pushes them and sets IMAGE_TAG to the commit); `--build` builds them here.
-# Runtime configuration is read from env/<app>.env, written from sops;
-# IMAGE_TAG, SITE_ADDRESS, MARKETING_ADDRESS and POSTGRES_PASSWORD come from the
-# compose environment (`.env` next to this file on the machine).
+# Images are `${IMAGE_REPO}-<app>:${IMAGE_TAG}`: deploy.yml builds them in CI,
+# loads them on the machine over SSH and sets IMAGE_TAG to the commit;
+# `--build` builds them here. Runtime configuration is read from
+# env/<app>.env, written from sops; IMAGE_TAG, SITE_ADDRESS, MARKETING_ADDRESS,
+# APEX_ADDRESS and POSTGRES_PASSWORD come from the compose environment (`.env`
+# next to this file on the machine).
 #
 # Locally: write env/<app>.env and export POSTGRES_PASSWORD and the VITE_* URLs
 # the way validate-prs.yml's "Docker target" job does (vesact-secrets-and-local-env
@@ -46,7 +47,7 @@ services:
 
   studio:
     <<: *app
-    image: ${IMAGE_REPO:-ghcr.io/vesacthq/vesact}-studio:${IMAGE_TAG:-latest}
+    image: ${IMAGE_REPO:-vesact}-studio:${IMAGE_TAG:-latest}
     build:
       context: .
       args: &build-args
@@ -66,7 +67,7 @@ services:
 
   account:
     <<: *app
-    image: ${IMAGE_REPO:-ghcr.io/vesacthq/vesact}-account:${IMAGE_TAG:-latest}
+    image: ${IMAGE_REPO:-vesact}-account:${IMAGE_TAG:-latest}
     build:
       context: .
       args:
@@ -79,7 +80,7 @@ services:
 
   marketing:
     <<: *app
-    image: ${IMAGE_REPO:-ghcr.io/vesacthq/vesact}-marketing:${IMAGE_TAG:-latest}
+    image: ${IMAGE_REPO:-vesact}-marketing:${IMAGE_TAG:-latest}
     build:
       context: .
       args:
@@ -102,6 +103,7 @@ services:
     environment:
       SITE_ADDRESS: ${SITE_ADDRESS:-http://localhost}
       MARKETING_ADDRESS: ${MARKETING_ADDRESS:-http://localhost:3001}
+      APEX_ADDRESS: ${APEX_ADDRESS:-http://localhost:3002}
     ports:
       - "80:80"
       - "443:443"

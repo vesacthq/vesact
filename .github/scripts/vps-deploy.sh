@@ -1,16 +1,22 @@
 #!/usr/bin/env bash
 # Runs on the machine, from the directory that holds docker-compose.prod.yml:
-#   vps-deploy.sh <image tag> <smoke studio url> <smoke marketing url>
-# Pulls the tagged images, brings the stack up and smokes it; on failure it
-# puts the previous tag back so the site keeps running. The running tag is
-# kept in ./current-tag and mirrored as IMAGE_TAG in `.env`, so plain
-# `docker compose` commands on the machine act on the running version.
+#   vps-deploy.sh <image tag> <smoke studio url> <smoke marketing url> [smoke apex url]
+# The tagged images were loaded by deploy.yml; this brings the stack up on them
+# and smokes it; on failure it puts the previous tag back so the site keeps
+# running. The running tag is kept in ./current-tag and mirrored as IMAGE_TAG
+# in `.env`, so plain `docker compose` commands on the machine act on the
+# running version.
 set -euo pipefail
 umask 077
 
 tag="${1:?image tag}"
 studio_url="${2:?studio url}"
 marketing_url="${3:?marketing url}"
+apex_url="${4:-}"
+
+# Set in the compose .env while Caddy signs its own certificates (Caddyfile).
+SMOKE_INSECURE=$(sed -n 's/^SMOKE_INSECURE=//p' .env)
+export SMOKE_INSECURE
 
 compose() {
 	docker compose -f docker-compose.prod.yml "$@"
@@ -32,7 +38,7 @@ record() {
 # Drops the images of tags other than the running one and its predecessor.
 prune_images() {
 	# `grep -v` exits 1 when nothing is left to prune (first deploy, same tag again).
-	docker image ls --format '{{.Repository}}:{{.Tag}}' 'ghcr.io/vesacthq/vesact-*' |
+	docker image ls --format '{{.Repository}}:{{.Tag}}' 'vesact-*' |
 		{ grep -vE ":($1|$2)$" || true; } |
 		xargs -r docker image rm >/dev/null
 	docker image prune -f >/dev/null
@@ -42,9 +48,11 @@ previous=$(cat current-tag 2>/dev/null || true)
 [ -z "$previous" ] || record "$previous"
 echo "deploying $tag (running: ${previous:-none})"
 
-IMAGE_TAG="$tag" compose pull --quiet
+for app in studio account marketing; do
+	docker image inspect "vesact-$app:$tag" >/dev/null 2>&1 || { echo "vesact-$app:$tag is not on the machine"; exit 1; }
+done
 up "$tag"
-if ./smoke.sh "$studio_url" "$marketing_url"; then
+if ./smoke.sh "$studio_url" "$marketing_url" "$apex_url"; then
 	record "$tag"
 	prune_images "$tag" "${previous:-$tag}"
 	echo "deployed $tag"
@@ -56,6 +64,6 @@ if [ -n "$previous" ] && [ "$previous" != "$tag" ]; then
 	echo "rolling back to $previous"
 	up "$previous"
 	record "$previous"
-	./smoke.sh "$studio_url" "$marketing_url" && echo "rolled back to $previous"
+	./smoke.sh "$studio_url" "$marketing_url" "$apex_url" && echo "rolled back to $previous"
 fi
 exit 1
