@@ -17,19 +17,21 @@ their age public key to `.sops.yaml` and running `sops updatekeys secrets/*.env`
 rotating CI's key means a new `age-keygen`, `gh secret set SOPS_AGE_KEY`, then
 the same `updatekeys`.
 
-| File                               | Reaches                                                                                                                                                         |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `secrets/ci.env`                   | GitHub Actions: Cloudflare, Turbo, Neon, Access                                                                                                                 |
-| `secrets/account.<target>.env`     | The account Worker: Better Auth secret, Google, mail, R2                                                                                                        |
-| `secrets/database.<env>.env`       | `DATABASE_URL` for migrations, prod and preview                                                                                                                 |
-| `secrets/relay-database.<env>.env` | `RELAY_DATABASE_URL` of Relay's own Neon project for `pnpm --filter @repo/relay db:migrate`, prod and preview                                                   |
-| `secrets/infra.env`                | Operator tokens that create Neon projects and Hyperdrive configs; never loaded by CI                                                                            |
-| `secrets/studio.<env>.env`         | Worker secrets, synced on every deploy                                                                                                                          |
-| `secrets/relay.<env>.env`          | The Relay Worker: its own `BETTER_AUTH_SECRET`, the Google client, `META_APP_SECRET` and `META_WEBHOOK_VERIFY_TOKEN`                                            |
-| `secrets/<app>.dev.env`            | `apps/<app>/.dev.vars` via `pnpm secrets:pull`                                                                                                                  |
-| `secrets/meta.env`                 | The Meta app "Vesact": ids, secrets, test tokens; keys explained in `docs/reference/meta.md`; copied into `relay.<target>.env` when Relay deploys               |
-| `secrets/company.yaml`             | Company facts: legal entity, registration numbers, Meta Business ID (keys visible, values encrypted)                                                            |
-| `secrets/files/*`                  | Documents and archives encrypted whole (`sops --encrypt --input-type binary --output-type json`); decrypt with `sops -d --input-type json --output-type binary` |
+| File                               | Reaches                                                                                                                                                                                                                  |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `secrets/ci.env`                   | GitHub Actions: Cloudflare, Turbo, Neon, Access                                                                                                                                                                          |
+| `secrets/account.<target>.env`     | The account Worker: Better Auth secret, Google, mail, R2                                                                                                                                                                 |
+| `secrets/database.<env>.env`       | `DATABASE_URL` for migrations: prod and preview (Neon), `vps` (the rehearsal machine's Postgres through the `vps` job's SSH tunnel)                                                                                      |
+| `secrets/<app>.vps.env`            | `env/<app>.env` on the rehearsal machine: the Worker secrets plus every `wrangler.jsonc` var (`VITE_*`, `S3_ENDPOINT`, `S3_REGION`) and `DATABASE_URL`                                                                   |
+| `secrets/vps.env`                  | The machine's compose environment: `SITE_ADDRESS`, `MARKETING_ADDRESS`, `POSTGRES_PASSWORD`                                                                                                                              |
+| `secrets/relay-database.<env>.env` | `RELAY_DATABASE_URL` of Relay's own Neon project for `pnpm --filter @repo/relay db:migrate`, prod and preview                                                                                                            |
+| `secrets/infra.env`                | Operator tokens that create Neon projects and Hyperdrive configs; never loaded by CI                                                                                                                                     |
+| `secrets/studio.<env>.env`         | Worker secrets, synced on every deploy                                                                                                                                                                                   |
+| `secrets/relay.<env>.env`          | The Relay Worker: its own `BETTER_AUTH_SECRET`, the Google client, `META_APP_SECRET` and `META_WEBHOOK_VERIFY_TOKEN`                                                                                                     |
+| `secrets/<app>.dev.env`            | `apps/<app>/.dev.vars` via `pnpm secrets:pull`                                                                                                                                                                           |
+| `secrets/meta.env`                 | The Meta app "Vesact": ids, secrets, test tokens; keys explained in `docs/reference/meta.md`; copied into `relay.<target>.env` when Relay deploys                                                                        |
+| `secrets/company.yaml`             | Company facts: legal entity, registration numbers, Meta Business ID (keys visible, values encrypted)                                                                                                                     |
+| `secrets/files/*`                  | Documents and archives encrypted whole (`sops --encrypt --input-type binary --output-type json`); decrypt with `sops -d --input-type json --output-type binary`; `vps-deploy-ssh-key.json` is the `vps` job's deploy key |
 
 Edit with `sops secrets/<file>`; never commit a decrypted file. Anything under `secrets/` is encrypted by `.sops.yaml`.
 
@@ -96,10 +98,23 @@ it). MinIO only matters for uploads: `docker compose up -d minio minio-setup`.
 Playwright starts its own dev server on 3100 and fails with `already used` when
 a stray server holds the port; reuse one only with `PW_REUSE_SERVER=1`.
 
+### Docker target
+
+The compose stack needs port 80 and the same inputs as the "Docker target" job in
+`validate-prs.yml`: `env/<app>.env` for studio, account and marketing (gitignored;
+`DATABASE_URL=postgresql://postgres:<password>@postgres:5432/vesact`,
+`BETTER_AUTH_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `VITE_STUDIO_URL=http://localhost`,
+`VITE_ACCOUNT_URL=http://localhost/account`, `VITE_MARKETING_URL=http://localhost:3001`),
+the same three `VITE_*` URLs and `POSTGRES_PASSWORD=<password>` exported for
+`docker compose -f docker-compose.prod.yml up --build -d --wait`, then
+`DATABASE_URL=postgresql://postgres:<password>@127.0.0.1:5432/vesact pnpm --filter @repo/database push`
+and `.github/scripts/smoke.sh http://localhost http://localhost:3001`. The dev `postgres` on
+5433 and the stack's on 5432 coexist.
+
 ## Tests
 
-The root test task runs Vitest in `apps/account`, `apps/marketing`, `apps/studio`,
-`packages/api`, `packages/permissions` and `packages/utils`. Playwright tests are in
+The root test task runs Vitest in `apps/account`, `apps/marketing`, `apps/relay`,
+`apps/studio`, `packages/api`, `packages/permissions`, `packages/relay` and `packages/utils`. Playwright tests are in
 `apps/marketing/tests`, `apps/account/e2e` and `apps/studio/e2e`; run them per
 app with `pnpm --filter <app> e2e` (UI) or `e2e:ci`. Each config starts its own
 dev server (marketing 3001, studio 3100, account 3200). The account suite signs

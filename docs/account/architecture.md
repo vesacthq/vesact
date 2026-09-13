@@ -92,7 +92,7 @@ reviewed: 2026-09-13
 | preview | worker `vesact-account-preview`   | `studio.preview.vesact.com/account` | Workers 路由 `/account/*`        |
 | dev     | `pnpm --filter account dev`       | `localhost:3004/account`            | 无，localhost 的 cookie 不分端口 |
 
-cookie 只在主机名上，不设域。prod 行在 #121 切流前仍是 `account.vesact.com` 上的 Worker 加父域 cookie。secrets 在 `secrets/account.{prod,preview,dev}.env`。环境矩阵见 AGENTS.md，部署流程见 `.agents/skills/vesact-deploy-and-infra/SKILL.md`。
+cookie 只在主机名上，不设域。prod 行在 #121 切流前仍是 `account.vesact.com` 上的 Worker 加父域 cookie。secrets 在 `secrets/account.{prod,preview,dev}.env`，Docker 目标的运行时变量在 `secrets/account.vps.env`。环境矩阵见 AGENTS.md，部署流程见 `.agents/skills/vesact-deploy-and-infra/SKILL.md`。
 
 ## 7. 横切
 

@@ -162,9 +162,9 @@ accounts only. Production data stays in Neon until the cut-over decides otherwis
   center now answers under `studio.preview.vesact.com/account`, same origin as
   Studio, so that application is unused. `wrangler deploy` adds routes but never
   removes custom domains: `account.preview.vesact.com` and
-  `auth.preview.vesact.com` stay attached to `vesact-account-preview` (answering
-  404 for the app under its base) until they are detached in the dashboard or
-  through the Workers domains API.
+  `auth.preview.vesact.com` were detached from `vesact-account-preview` through
+  the Workers domains API on 2026-09-13; a hostname that comes back after a
+  deploy has to be detached the same way.
   The zone's Bot Fight Mode stays on and cannot be skipped by a WAF rule on
   the Free plan; it challenges curl from the GitHub runner, which is why the
   deploy makes no HTTP check after `wrangler deploy` (the earlier smoke check
@@ -176,9 +176,14 @@ accounts only. Production data stays in Neon until the cut-over decides otherwis
   because `workers.dev` is on the Public Suffix List: no cookie can span two
   Workers there, so products could not share a login.
 - One Google OAuth client serves every environment; each needs its callback
-  `<VITE_ACCOUNT_URL>/api/auth/callback/google` registered in Google Cloud
-  (`https://studio.preview.vesact.com/account/api/auth/callback/google`,
-  `http://localhost:3004/account/api/auth/callback/google`).
+  registered in Google Cloud: `<VITE_ACCOUNT_URL>/api/auth/callback/google` for
+  the account center (`https://account.vesact.com/api/auth/callback/google`,
+  `https://studio.preview.vesact.com/account/api/auth/callback/google`,
+  `https://jp.vesact.com/account/api/auth/callback/google`,
+  `http://localhost:3004/account/api/auth/callback/google`) and
+  `<VITE_RELAY_URL>/api/auth/callback/google` for Relay
+  (`https://relay.vesact.com/...`, `https://relay.preview.vesact.com/...`,
+  `http://localhost:3005/...`).
 - `vesact.com` and `preview.vesact.com` redirect to their `www` hostnames through
   Cloudflare Redirect Rules on a proxied `AAAA 100::` record each.
 

@@ -17,7 +17,7 @@ export const trustProxy = true;
 const accountUrl = getBaseUrl(import.meta.env.VITE_ACCOUNT_URL as string | undefined, 3004);
 
 // The account center used to answer on auth.<domain>; those hostnames stay
-// attached to this Worker until 2026-12 so old links and emails keep working.
+// attached to this Worker until #121 retires them so old links and emails keep working.
 function isLegacyHost(url: URL) {
 	return url.hostname.startsWith("auth.") && url.origin !== new URL(accountUrl).origin;
 }

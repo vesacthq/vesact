@@ -17,7 +17,7 @@ Use for failures in `.github/workflows/validate-prs.yml`. Do not rewrite CI to h
    gh run view <run-id>
    gh run view <run-id> --log-failed
    ```
-2. Map the job to its exact command: `pnpm verify`, `pnpm type-check`, `pnpm build`, `pnpm test`, the sequential marketing/Studio `e2e:ci` commands, or for "Docker target" the image builds plus `docker compose -f docker-compose.prod.yml up --wait` and `.github/scripts/smoke.sh http://localhost http://localhost:3001` (locally: `docker compose -f docker-compose.prod.yml --env-file .env.local up --build` with `env/<app>.env` in place). `pnpm verify` is marketing generation, Oxlint, then `oxfmt --check`; `pnpm lint` is not equivalent.
+2. Map the job to its exact command: `pnpm verify`, `pnpm type-check`, `pnpm build`, `pnpm test`, the sequential marketing/Studio `e2e:ci` commands, or for "Docker target" the image builds plus `docker compose -f docker-compose.prod.yml up --wait` and `.github/scripts/smoke.sh http://localhost http://localhost:3001` (locally: the "Docker target" recipe in the `vesact-secrets-and-local-env` skill). `pnpm verify` is marketing generation, Oxlint, then `oxfmt --check`; `pnpm lint` is not equivalent.
 3. Compare CI inputs: Node comes from `.nvmrc`, pnpm from root `packageManager`, every job starts with `pnpm install --frozen-lockfile`, and workflow environment variables are declared at the top of `validate-prs.yml`.
 4. Reproduce from the repository root with the same command and environment. For E2E, inspect the relevant app's `playwright.config.ts` and the first useful stack/trace, not only the final timeout.
 5. Reduce to a focused command after reproducing, such as:

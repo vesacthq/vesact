@@ -14,13 +14,20 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
 1. Decide where the value belongs. Public build-time values (`VITE_*`) live in
    `.github/scripts/select-target.sh` per target and, for the Worker runtime, in
    the `vars` of `apps/<app>/wrangler.jsonc` (`env.preview.vars` for preview).
-   Anything secret goes in `secrets/<file>.env`, never in `wrangler.jsonc`,
-   workflow files, or GitHub secrets.
+   The Docker target reads them twice: as build args of the `images` job in
+   `deploy.yml` (and of `docker-compose.prod.yml`'s `build`), and at runtime from
+   `secrets/<app>.vps.env`, which the `vps` job writes to `env/<app>.env` on the
+   machine together with every server-side variable, `wrangler.jsonc` vars
+   included. Anything secret goes in `secrets/<file>.env`, never in
+   `wrangler.jsonc`, workflow files, or GitHub secrets.
 2. Edit a secrets file with `sops secrets/<file>.env`. Worker secrets belong in
-   `<app>.<target>.env` (`studio`, `account`, `relay`), migration URLs in
-   `database.<target>.env`, CI-only credentials in `ci.env`, local values in
-   `<app>.dev.env`. Commit the encrypted file; `deploy.yml` syncs Worker
-   secrets on the next deploy.
+   `<app>.<target>.env` (`studio`, `account`, `relay`), the Docker target's
+   runtime variables in `<app>.vps.env` plus `vps.env` (compose environment),
+   migration URLs in `database.<target>.env` and `relay-database.<target>.env`
+   (`vps` for the machine), CI-only credentials in `ci.env`, operator tokens in
+   `infra.env`, local values in `<app>.dev.env`. Commit the encrypted file;
+   `deploy.yml` syncs Worker secrets and the machine's env files on the next
+   deploy.
 3. After changing an `<app>.dev.env`, run `pnpm secrets:pull` so the app's
    `.dev.vars` matches.
 4. After changing `wrangler.jsonc`, run `pnpm --filter <app> exec wrangler types`
@@ -58,9 +65,9 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
   reaches the preview hostname and would shadow it.
 - The account Worker uploads avatars and logos, so `secrets/account.<target>.env`
   carries the same `S3_*` keys as the studio file. `secrets/relay.<target>.env`
-  is the studio file without `S3_*`, plus the Meta app secret and webhook verify
-  token; `BETTER_AUTH_SECRET` must match the other Workers or sessions are not
-  shared.
+  holds Relay's own `BETTER_AUTH_SECRET` (its Better Auth instance shares no
+  session with Studio), the Google client, the Meta app secret and the webhook
+  verify token, no `S3_*`.
 - The relay Worker has two custom domains per environment (`relay.` and `api.`);
   both routes go in the same `routes` array, and both hostnames need attaching
   before the first deploy.
@@ -71,7 +78,7 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
   pipeline runs it right after deploy.
 - Adding a recipient: add the age public key to `.sops.yaml`, then
   `sops updatekeys secrets/*.env`.
-- Anything a browser calls cross-origin on preview (`account.preview`, a future
-  `api.preview` used from another hostname) needs its own Access application
+- Anything a browser calls cross-origin on preview (a future `api.preview`
+  used from another hostname) needs its own Access application
   with a Bypass policy: Access rejects CORS preflights and its cookie does not
   carry over to a second hostname.
