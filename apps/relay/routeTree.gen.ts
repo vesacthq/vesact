@@ -12,11 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedOrganizationSlugRouteRouteImport } from './routes/_authenticated/$organizationSlug/route'
+import { Route as InvitationsInvitationIdRouteImport } from './routes/invitations/$invitationId'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as OrgsNewRouteImport } from './routes/orgs/new'
 import { Route as AuthenticatedOrganizationSlugIndexRouteImport } from './routes/_authenticated/$organizationSlug/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthenticatedOrganizationSlugSettingsApiKeysIndexRouteImport } from './routes/_authenticated/$organizationSlug/settings/api-keys/index'
+import { Route as AuthenticatedOrganizationSlugSettingsMembersIndexRouteImport } from './routes/_authenticated/$organizationSlug/settings/members/index'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
@@ -33,6 +35,11 @@ const AuthenticatedOrganizationSlugRouteRoute =
     path: '/$organizationSlug',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const InvitationsInvitationIdRoute = InvitationsInvitationIdRouteImport.update({
+  id: '/invitations/$invitationId',
+  path: '/invitations/$invitationId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginIndexRoute = LoginIndexRouteImport.update({
   id: '/login/',
   path: '/login/',
@@ -60,67 +67,86 @@ const AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute =
     path: '/settings/api-keys/',
     getParentRoute: () => AuthenticatedOrganizationSlugRouteRoute,
   } as any)
+const AuthenticatedOrganizationSlugSettingsMembersIndexRoute =
+  AuthenticatedOrganizationSlugSettingsMembersIndexRouteImport.update({
+    id: '/settings/members/',
+    path: '/settings/members/',
+    getParentRoute: () => AuthenticatedOrganizationSlugRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/$organizationSlug': typeof AuthenticatedOrganizationSlugRouteRouteWithChildren
+  '/invitations/$invitationId': typeof InvitationsInvitationIdRoute
   '/orgs/new': typeof OrgsNewRoute
   '/login/': typeof LoginIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/$organizationSlug/': typeof AuthenticatedOrganizationSlugIndexRoute
   '/$organizationSlug/settings/api-keys/': typeof AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute
+  '/$organizationSlug/settings/members/': typeof AuthenticatedOrganizationSlugSettingsMembersIndexRoute
 }
 export interface FileRoutesByTo {
+  '/invitations/$invitationId': typeof InvitationsInvitationIdRoute
   '/orgs/new': typeof OrgsNewRoute
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/$organizationSlug': typeof AuthenticatedOrganizationSlugIndexRoute
   '/$organizationSlug/settings/api-keys': typeof AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute
+  '/$organizationSlug/settings/members': typeof AuthenticatedOrganizationSlugSettingsMembersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/_authenticated/$organizationSlug': typeof AuthenticatedOrganizationSlugRouteRouteWithChildren
+  '/invitations/$invitationId': typeof InvitationsInvitationIdRoute
   '/orgs/new': typeof OrgsNewRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/login/': typeof LoginIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_authenticated/$organizationSlug/': typeof AuthenticatedOrganizationSlugIndexRoute
   '/_authenticated/$organizationSlug/settings/api-keys/': typeof AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute
+  '/_authenticated/$organizationSlug/settings/members/': typeof AuthenticatedOrganizationSlugSettingsMembersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/$organizationSlug'
+    | '/invitations/$invitationId'
     | '/orgs/new'
     | '/login/'
     | '/api/auth/$'
     | '/$organizationSlug/'
     | '/$organizationSlug/settings/api-keys/'
+    | '/$organizationSlug/settings/members/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/invitations/$invitationId'
     | '/orgs/new'
     | '/'
     | '/login'
     | '/api/auth/$'
     | '/$organizationSlug'
     | '/$organizationSlug/settings/api-keys'
+    | '/$organizationSlug/settings/members'
   id:
     | '__root__'
     | '/_authenticated'
     | '/_authenticated/$organizationSlug'
+    | '/invitations/$invitationId'
     | '/orgs/new'
     | '/_authenticated/'
     | '/login/'
     | '/api/auth/$'
     | '/_authenticated/$organizationSlug/'
     | '/_authenticated/$organizationSlug/settings/api-keys/'
+    | '/_authenticated/$organizationSlug/settings/members/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  InvitationsInvitationIdRoute: typeof InvitationsInvitationIdRoute
   OrgsNewRoute: typeof OrgsNewRoute
   LoginIndexRoute: typeof LoginIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -148,6 +174,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/$organizationSlug'
       preLoaderRoute: typeof AuthenticatedOrganizationSlugRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/invitations/$invitationId': {
+      id: '/invitations/$invitationId'
+      path: '/invitations/$invitationId'
+      fullPath: '/invitations/$invitationId'
+      preLoaderRoute: typeof InvitationsInvitationIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/login/': {
       id: '/login/'
@@ -184,12 +217,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrganizationSlugSettingsApiKeysIndexRouteImport
       parentRoute: typeof AuthenticatedOrganizationSlugRouteRoute
     }
+    '/_authenticated/$organizationSlug/settings/members/': {
+      id: '/_authenticated/$organizationSlug/settings/members/'
+      path: '/settings/members'
+      fullPath: '/$organizationSlug/settings/members/'
+      preLoaderRoute: typeof AuthenticatedOrganizationSlugSettingsMembersIndexRouteImport
+      parentRoute: typeof AuthenticatedOrganizationSlugRouteRoute
+    }
   }
 }
 
 interface AuthenticatedOrganizationSlugRouteRouteChildren {
   AuthenticatedOrganizationSlugIndexRoute: typeof AuthenticatedOrganizationSlugIndexRoute
   AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute: typeof AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute
+  AuthenticatedOrganizationSlugSettingsMembersIndexRoute: typeof AuthenticatedOrganizationSlugSettingsMembersIndexRoute
 }
 
 const AuthenticatedOrganizationSlugRouteRouteChildren: AuthenticatedOrganizationSlugRouteRouteChildren =
@@ -198,6 +239,8 @@ const AuthenticatedOrganizationSlugRouteRouteChildren: AuthenticatedOrganization
       AuthenticatedOrganizationSlugIndexRoute,
     AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute:
       AuthenticatedOrganizationSlugSettingsApiKeysIndexRoute,
+    AuthenticatedOrganizationSlugSettingsMembersIndexRoute:
+      AuthenticatedOrganizationSlugSettingsMembersIndexRoute,
   }
 
 const AuthenticatedOrganizationSlugRouteRouteWithChildren =
@@ -221,6 +264,7 @@ const AuthenticatedRouteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  InvitationsInvitationIdRoute: InvitationsInvitationIdRoute,
   OrgsNewRoute: OrgsNewRoute,
   LoginIndexRoute: LoginIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,

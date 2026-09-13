@@ -2,7 +2,7 @@ import { config } from "@config";
 import { useTranslations } from "@i18n/intl";
 import { useLocalePathname } from "@i18n/routing";
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
-import { BookOpenIcon, HomeIcon, KeyRoundIcon, type LucideIcon } from "lucide-react";
+import { BookOpenIcon, HomeIcon, KeyRoundIcon, type LucideIcon, UsersIcon } from "lucide-react";
 import { useMemo } from "react";
 
 export interface AppNavChild {
@@ -35,6 +35,7 @@ export function useAppNav() {
 	const items = useMemo<AppNavItem[]>(() => {
 		const basePath = organization ? `/${organization.slug}` : "";
 		const apiKeysPath = `${basePath}/settings/api-keys`;
+		const membersPath = `${basePath}/settings/members`;
 
 		return [
 			{
@@ -48,6 +49,12 @@ export function useAppNav() {
 				href: apiKeysPath,
 				icon: KeyRoundIcon,
 				isActive: pathname.startsWith(apiKeysPath),
+			},
+			{
+				label: t("app.menu.members"),
+				href: membersPath,
+				icon: UsersIcon,
+				isActive: pathname.startsWith(membersPath),
 			},
 			{
 				label: t("app.menu.apiReference"),

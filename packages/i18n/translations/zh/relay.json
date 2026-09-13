@@ -4,6 +4,7 @@
 			"navigationTitle": "导航",
 			"overview": "概览",
 			"apiKeys": "API key",
+			"members": "成员",
 			"apiReference": "API 文档"
 		},
 		"userMenu": {
@@ -30,6 +31,103 @@
 			"name": "组织名称",
 			"submit": "创建组织",
 			"error": "组织创建失败，请重试。"
+		},
+		"roles": {
+			"owner": "所有者",
+			"admin": "管理员",
+			"member": "成员"
+		},
+		"members": {
+			"title": "成员",
+			"subtitle": "所有者和管理员管理 key、成员和邀请；成员使用控制台并查看 key。",
+			"list": {
+				"title": "成员",
+				"description": "在 Relay 中可以访问这个组织的所有人。",
+				"empty": "还没有成员。",
+				"you": "你",
+				"role": "角色"
+			},
+			"updateRole": {
+				"loading": "正在更新角色…",
+				"success": "角色已更新",
+				"error": "角色更新失败。"
+			},
+			"remove": {
+				"action": "移除成员",
+				"title": "移除这位成员？",
+				"message": "{name} 会立即失去这个组织的访问权限。",
+				"confirm": "移除",
+				"loading": "正在移除成员…",
+				"success": "成员已移除",
+				"error": "移除失败。"
+			},
+			"leave": {
+				"action": "离开组织",
+				"title": "离开这个组织？",
+				"message": "你会失去 {name} 的访问权限。其他所有者或管理员可以再次邀请你。",
+				"confirm": "离开",
+				"error": "离开组织失败。"
+			},
+			"errors": {
+				"lastOwner": "组织至少需要一位所有者。请先把另一位成员设为所有者。",
+				"alreadyMember": "这个人已经是组织成员。",
+				"alreadyInvited": "这个邮箱已有待接受的邀请。",
+				"notAllowed": "你的角色没有这个权限。"
+			}
+		},
+		"invitations": {
+			"list": {
+				"title": "待接受邀请",
+				"description": "Relay 不发送邮件：把链接发给被邀请的人。",
+				"empty": "没有待接受的邀请。",
+				"expires": "{date} 过期",
+				"expired": "已于 {date} 过期",
+				"copyLink": "复制链接",
+				"copied": "已复制",
+				"revoke": "撤回"
+			},
+			"create": {
+				"button": "邀请成员",
+				"title": "邀请成员",
+				"description": "你会得到一个可分享的链接；被邀请人用这个邮箱的 Google 账号登录。",
+				"email": "邮箱",
+				"emailPlaceholder": "name@company.com",
+				"role": "角色",
+				"submit": "创建邀请",
+				"error": "邀请创建失败。"
+			},
+			"created": {
+				"title": "邀请已创建",
+				"description": "把这个链接发给 {email}。之后也可以在待接受邀请里再次复制。",
+				"copy": "复制",
+				"copied": "已复制",
+				"done": "完成"
+			},
+			"revoke": {
+				"title": "撤回这个邀请？",
+				"message": "发给 {email} 的链接会失效。",
+				"confirm": "撤回",
+				"loading": "正在撤回邀请…",
+				"success": "邀请已撤回",
+				"error": "撤回失败。"
+			}
+		},
+		"invitation": {
+			"title": "加入组织",
+			"description": "{inviter} 邀请你加入，角色为{role}。",
+			"signedInAs": "当前登录：{email}",
+			"accept": "接受",
+			"decline": "拒绝",
+			"error": "操作失败，请重试。",
+			"switchAccount": "切换账号",
+			"invalid": {
+				"title": "这个邀请已失效",
+				"description": "可能已过期、已被接受或已被撤回。请向组织的所有者或管理员索取新链接。"
+			},
+			"notRecipient": {
+				"title": "这个邀请属于另一个账号",
+				"description": "当前登录的是 {email}。请用收到邀请的邮箱对应的 Google 账号登录。"
+			}
 		}
 	},
 	"overview": {

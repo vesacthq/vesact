@@ -48,10 +48,14 @@ handler at `routes/api/auth/$.ts`) and creates the first organization at
 `/orgs/new`; `apps/relay/routes/_authenticated` loads the session and the
 organization list once per page into the route context (`@auth/lib/api`,
 `@organizations/lib/api`), `/` opens the active organization,
-`/$organizationSlug` is open to every member (a non-member sees 404), and
+`/$organizationSlug` is open to every member (a non-member sees 404),
 `/$organizationSlug/settings/api-keys` lists, creates and revokes keys from the
 browser through the same-origin `/api/auth/api-key/*` endpoints
-(`@api-keys/lib/api`); the secret exists only in the create response. For a
+(`@api-keys/lib/api`); the secret exists only in the create response.
+`/$organizationSlug/settings/members` (`@organizations/lib/members`) manages
+members and invitations through the organization plugin: owners and admins
+invite, change roles and remove, everyone can leave, and an invitation is a
+link (`/invitations/$id`) the inviter copies — Relay sends no email. For a
 console session without Google (local checks, future e2e):
 `BETTER_AUTH_SECRET=… pnpm --filter @repo/scripts relay:session --email <email>`
 writes a user and session into Relay's database and prints the cookie.
