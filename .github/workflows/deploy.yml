@@ -91,13 +91,19 @@ jobs:
           ssh -f -N -o ExitOnForwardFailure=yes -L 55432:127.0.0.1:5432 "root@$VPS_HOST"
           pnpm --filter @repo/database migrate
       - name: Write the machine's files
+        # Decrypt first so a sops failure stops here instead of leaving an empty file on the machine.
         run: |
+          umask 077
+          mkdir -p "$RUNNER_TEMP/env"
+          for app in studio account marketing; do
+            sops -d "secrets/$app.vps.env" > "$RUNNER_TEMP/env/$app.env"
+          done
+          sops -d secrets/vps.env > "$RUNNER_TEMP/dotenv"
           ssh "root@$VPS_HOST" 'mkdir -p /srv/vesact/env && chmod 700 /srv/vesact /srv/vesact/env'
           scp -q docker-compose.prod.yml Caddyfile .github/scripts/vps-deploy.sh .github/scripts/smoke.sh "root@$VPS_HOST:/srv/vesact/"
-          for app in studio account marketing; do
-            sops -d "secrets/$app.vps.env" | ssh "root@$VPS_HOST" "umask 077; cat > /srv/vesact/env/$app.env"
-          done
-          sops -d secrets/vps.env | ssh "root@$VPS_HOST" 'umask 077; cat > /srv/vesact/.env'
+          scp -q "$RUNNER_TEMP"/env/*.env "root@$VPS_HOST:/srv/vesact/env/"
+          scp -q "$RUNNER_TEMP/dotenv" "root@$VPS_HOST:/srv/vesact/.env"
+          rm -rf "$RUNNER_TEMP/env" "$RUNNER_TEMP/dotenv"
       - name: Deploy
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | ssh "root@$VPS_HOST" "docker login ghcr.io -u '${{ github.actor }}' --password-stdin >/dev/null"

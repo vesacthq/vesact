@@ -12,9 +12,14 @@ tag="${1:?image tag}"
 studio_url="${2:?studio url}"
 marketing_url="${3:?marketing url}"
 
+compose() {
+	docker compose -f docker-compose.prod.yml "$@"
+}
+
 up() {
-	IMAGE_TAG="$1" docker compose -f docker-compose.prod.yml pull --quiet
-	IMAGE_TAG="$1" docker compose -f docker-compose.prod.yml up -d --wait --wait-timeout 180 || true
+	IMAGE_TAG="$1" compose up -d --wait --wait-timeout 180 || true
+	# Caddy does not watch its file; a changed Caddyfile needs a reload.
+	compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile
 }
 
 record() {
@@ -24,13 +29,23 @@ record() {
 	mv .env.next .env
 }
 
+# Drops the images of tags other than the running one and its predecessor.
+prune_images() {
+	docker image ls --format '{{.Repository}}:{{.Tag}}' 'ghcr.io/vesacthq/vesact-*' |
+		grep -vE ":($1|$2)$" |
+		xargs -r docker image rm >/dev/null
+	docker image prune -f >/dev/null
+}
+
 previous=$(cat current-tag 2>/dev/null || true)
+[ -z "$previous" ] || record "$previous"
 echo "deploying $tag (running: ${previous:-none})"
 
+IMAGE_TAG="$tag" compose pull --quiet
 up "$tag"
 if ./smoke.sh "$studio_url" "$marketing_url"; then
 	record "$tag"
-	docker image prune -f >/dev/null
+	prune_images "$tag" "${previous:-$tag}"
 	echo "deployed $tag"
 	exit 0
 fi

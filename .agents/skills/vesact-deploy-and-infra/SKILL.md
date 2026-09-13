@@ -83,8 +83,9 @@ and runs `.github/scripts/smoke.sh <studio url> <marketing url>` (signed-out
 `/` 307, `/account/login` 200, both health endpoints, a 401 from
 `sign-in/email` proving the database is reachable, marketing 200). The same
 script is the post-deploy check. GHCR creates the packages private; the
-machine that pulls them needs them switched to public in the org's package
-settings or a `read:packages` token.
+`vps` job logs the machine in with its own `GITHUB_TOKEN` for the pull, so
+only pulling a tag by hand that is not on the machine needs a
+`read:packages` token (or the packages made public).
 
 The images are 1–1.5 GB unpacked (≈250 MB compressed), mostly production
 dependencies that `pnpm deploy` copies for the app, including `next` arriving
@@ -113,10 +114,12 @@ migrates through `ssh -L` (`secrets/database.vps.env` points at the tunnel),
 copies the files, logs the machine into GHCR with the job's `GITHUB_TOKEN` and
 runs `./vps-deploy.sh <sha> https://jp.vesact.com http://localhost:3001`:
 `pull`, `up -d --wait`, `smoke.sh`; a failed smoke brings the previous tag
-back and fails the job. Roll back by hand the same way:
-`cd /srv/vesact && ./vps-deploy.sh <previous sha> https://jp.vesact.com http://localhost:3001`
-(images already pulled need no registry login; `docker image ls` shows what is
-there). Logs: `docker compose -f docker-compose.prod.yml logs -f <service>`
+back and fails the job. The script keeps the images of the running tag and
+its predecessor and removes older ones. Roll back by hand to the predecessor
+with `cd /srv/vesact && IMAGE_TAG=<sha> docker compose -f docker-compose.prod.yml up -d --wait`
+(`docker image ls` shows the two tags on the machine; no registry login is
+needed for them), then `./smoke.sh https://jp.vesact.com http://localhost:3001`
+and write the tag to `current-tag` and `IMAGE_TAG` in `.env`. Logs: `docker compose -f docker-compose.prod.yml logs -f <service>`
 (json-file, 3 × 10 MB per container). The rehearsal database is the `postgres`
 container's volume `vesact_postgres_data`; nothing backs it up, it holds test
 accounts only. Production data stays in Neon until the cut-over decides otherwise.
