@@ -7,7 +7,8 @@
 {
 	# Until the ICP filing passes, the machine's 80/443 are blocked for the
 	# domain and Let's Encrypt cannot validate; certificates come from Caddy's
-	# own CA. Remove this line (and SMOKE_INSECURE in the compose .env) after.
+	# own CA and the addresses carry :8443 so the site is reachable meanwhile.
+	# Remove this line and the port (and SMOKE_INSECURE in the compose .env) after.
 	local_certs
 }
 
