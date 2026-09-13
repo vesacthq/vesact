@@ -1,5 +1,5 @@
 import { getOrganizationBySlug, getOrganizationList } from "@auth/lib/auth-server.server";
-import { authClient } from "@repo/auth/client";
+import { authClient } from "@repo/relay/auth/client";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 
@@ -7,9 +7,11 @@ const loadOrganizationListFn = createServerFn({ method: "GET", strict: false }).
 	async () => ({ result: await getOrganizationList() }),
 );
 
+export const organizationListQueryKey = ["user", "organizations"] as const;
+
 export const organizationListQueryOptions = () =>
 	queryOptions({
-		queryKey: ["user", "organizations"],
+		queryKey: organizationListQueryKey,
 		queryFn: async () => (await loadOrganizationListFn()).result,
 	});
 
@@ -25,20 +27,13 @@ export const organizationQueryOptions = (slug: string) =>
 		queryFn: async () => (await loadOrganizationFn({ data: slug })).result,
 	});
 
-/**
- * The active organization is shared with Studio through the session; `/` in
- * either product opens it, and a new login restores it from the user.
- */
+/** The session remembers the active organization; `/` opens it. */
 export async function setActiveOrganization(organizationSlug: string) {
 	const { data, error } = await authClient.organization.setActive({ organizationSlug });
 
 	if (error) {
 		throw error;
 	}
-
-	await authClient.updateUser({
-		lastActiveOrganizationId: data?.id ?? null,
-	} as Parameters<typeof authClient.updateUser>[0]);
 
 	return data;
 }

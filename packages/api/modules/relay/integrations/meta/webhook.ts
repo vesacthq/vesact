@@ -1,5 +1,5 @@
-import { recordRelayInboundEvent } from "@repo/database";
 import { logger } from "@repo/logs";
+import { recordRelayInboundEvent } from "@repo/relay/db";
 import { Hono } from "hono";
 import { bodyLimit } from "hono/body-limit";
 

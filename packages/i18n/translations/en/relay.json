@@ -4,15 +4,19 @@
 			"navigationTitle": "Navigation",
 			"overview": "Overview",
 			"apiKeys": "API keys",
-			"apiReference": "API reference",
-			"organizationSettings": "Organization settings",
-			"accountSettings": "Account settings",
-			"admin": "Admin"
+			"apiReference": "API reference"
 		},
 		"userMenu": {
-			"accountSettings": "Account settings",
 			"colorMode": "Color mode",
 			"logout": "Log out"
+		}
+	},
+	"auth": {
+		"login": {
+			"title": "Sign in to Relay",
+			"subtitle": "Use the Google account of your organization.",
+			"continueWith": "Continue with {provider}",
+			"failed": "Could not sign in. Please try again."
 		}
 	},
 	"organizations": {
@@ -20,10 +24,12 @@
 			"organizations": "Organizations",
 			"createNewOrganization": "Create new organization"
 		},
-		"noAccess": {
-			"title": "No access to Relay",
-			"description": "You are a member of {organization}, but Relay is not enabled for you. An organization admin can grant access in the account center.",
-			"members": "Open members"
+		"create": {
+			"title": "Create an organization",
+			"subtitle": "API keys belong to an organization. Name yours to get started; members can be invited afterwards.",
+			"name": "Organization name",
+			"submit": "Create organization",
+			"error": "The organization could not be created. Please try again."
 		}
 	},
 	"overview": {

@@ -16,11 +16,11 @@ const hosts = {
 };
 
 // Hyperdrive only hands out its connection string inside a request, and
-// @repo/database reads DATABASE_URL as its module body runs. Loading the app
-// on the first request puts that read after the binding is available.
+// @repo/relay/db reads RELAY_DATABASE_URL as its module body runs. Loading the
+// app on the first request puts that read after the binding is available.
 function connectDatabase() {
 	if (env.HYPERDRIVE) {
-		process.env.DATABASE_URL = env.HYPERDRIVE.connectionString;
+		process.env.RELAY_DATABASE_URL = env.HYPERDRIVE.connectionString;
 	}
 }
 

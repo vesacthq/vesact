@@ -6,19 +6,22 @@
 		"clean": "git clean -xdf .cache .turbo dist node_modules",
 		"create:user": "dotenv -c -e ../../.env -- tsx ./src/create-user.ts",
 		"relay:acceptance": "tsx ./src/relay-acceptance.ts",
+		"relay:session": "dotenv -c -e ../../.env -e ../../.env.local -- tsx ./src/relay-session.ts",
 		"relay:webhook-acceptance": "tsx ./src/relay-webhook-acceptance.ts",
-		"type-check": "tsc --noEmit",
-		"status": "tsx ./src/status.ts"
+		"status": "tsx ./src/status.ts",
+		"type-check": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@repo/auth": "workspace:*",
 		"@repo/database": "workspace:*",
 		"@repo/logs": "workspace:*",
+		"@repo/relay": "workspace:*",
 		"@repo/utils": "workspace:*"
 	},
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",
 		"@types/node": "catalog:",
+		"dotenv-cli": "catalog:",
 		"nanoid": "catalog:",
 		"tsx": "catalog:"
 	}

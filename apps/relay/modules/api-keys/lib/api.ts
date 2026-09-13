@@ -1,4 +1,4 @@
-import { authClient } from "@repo/auth/client";
+import { authClient } from "@repo/relay/auth/client";
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 /**

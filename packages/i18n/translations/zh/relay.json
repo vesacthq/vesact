@@ -4,15 +4,19 @@
 			"navigationTitle": "导航",
 			"overview": "概览",
 			"apiKeys": "API key",
-			"apiReference": "API 文档",
-			"organizationSettings": "组织设置",
-			"accountSettings": "账号设置",
-			"admin": "管理"
+			"apiReference": "API 文档"
 		},
 		"userMenu": {
-			"accountSettings": "账号设置",
 			"colorMode": "外观",
 			"logout": "退出登录"
+		}
+	},
+	"auth": {
+		"login": {
+			"title": "登录 Relay",
+			"subtitle": "使用你所在组织的 Google 账号。",
+			"continueWith": "使用 {provider} 继续",
+			"failed": "登录失败，请重试。"
 		}
 	},
 	"organizations": {
@@ -20,10 +24,12 @@
 			"organizations": "组织",
 			"createNewOrganization": "新建组织"
 		},
-		"noAccess": {
-			"title": "没有 Relay 访问权限",
-			"description": "你是 {organization} 的成员，但还没有开通 Relay。组织管理员可以在账号中心开通。",
-			"members": "打开成员页"
+		"create": {
+			"title": "创建组织",
+			"subtitle": "API key 属于组织。先给组织起个名字，之后可以邀请成员。",
+			"name": "组织名称",
+			"submit": "创建组织",
+			"error": "组织创建失败，请重试。"
 		}
 	},
 	"overview": {

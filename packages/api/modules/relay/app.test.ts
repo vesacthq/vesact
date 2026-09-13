@@ -1,10 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@repo/auth", () => ({
+vi.mock("@repo/relay/auth", () => ({
 	auth: { api: { verifyApiKey: vi.fn() } },
 }));
 
-vi.mock("@repo/database", () => ({
+vi.mock("@repo/relay/db", () => ({
 	recordRelayApiUsage: vi.fn(async () => {}),
 }));
 
@@ -12,9 +12,9 @@ vi.mock("@repo/logs", () => ({
 	logger: { error: vi.fn(), log: vi.fn() },
 }));
 
-import { auth } from "@repo/auth";
-import { recordRelayApiUsage } from "@repo/database";
 import { logger } from "@repo/logs";
+import { auth } from "@repo/relay/auth";
+import { recordRelayApiUsage } from "@repo/relay/db";
 
 import { relayApp } from "./app";
 

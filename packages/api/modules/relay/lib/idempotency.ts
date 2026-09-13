@@ -1,5 +1,5 @@
-import { claimIdempotencyKey, completeIdempotencyKey, findIdempotencyKey } from "@repo/database";
 import { logger } from "@repo/logs";
+import { claimIdempotencyKey, completeIdempotencyKey, findIdempotencyKey } from "@repo/relay/db";
 import { createMiddleware } from "hono/factory";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 

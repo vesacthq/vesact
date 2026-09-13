@@ -1,7 +1,6 @@
 import { useSession } from "@auth/hooks/use-session";
-import { accountCenterUrl, loginUrl } from "@auth/lib/account-urls";
 import { useTranslations } from "@i18n/intl";
-import { authClient } from "@repo/auth/client";
+import { authClient } from "@repo/relay/auth/client";
 import { ColorModeToggle } from "@repo/ui";
 import {
 	DropdownMenu,
@@ -18,8 +17,7 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@repo/ui/components/sidebar";
-import { useRouterState } from "@tanstack/react-router";
-import { ChevronsUpDownIcon, LogOutIcon, SettingsIcon } from "lucide-react";
+import { ChevronsUpDownIcon, LogOutIcon } from "lucide-react";
 
 import { UserAvatar } from "./UserAvatar";
 
@@ -27,13 +25,12 @@ export function UserMenu() {
 	const t = useTranslations();
 	const { user } = useSession();
 	const { isMobile } = useSidebar();
-	const currentHref = useRouterState({ select: (state) => state.location.href });
 
 	const onLogout = async () => {
 		await authClient.signOut({
 			fetchOptions: {
 				onSuccess: () => {
-					window.location.href = loginUrl("/");
+					window.location.href = "/login";
 				},
 			},
 		});
@@ -74,18 +71,6 @@ export function UserMenu() {
 									</div>
 								</div>
 							</DropdownMenuLabel>
-						</DropdownMenuGroup>
-						<DropdownMenuSeparator />
-						<DropdownMenuGroup>
-							<DropdownMenuItem
-								nativeButton={false}
-								render={(props) => (
-									<a {...props} href={accountCenterUrl("/account", currentHref)}>
-										<SettingsIcon aria-hidden="true" />
-										{t("app.userMenu.accountSettings")}
-									</a>
-								)}
-							/>
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
 						<div className="gap-4 px-2 py-1.5 text-sm flex items-center justify-between">

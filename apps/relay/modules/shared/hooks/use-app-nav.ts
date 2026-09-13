@@ -1,20 +1,8 @@
-import { useSession } from "@auth/hooks/use-session";
-import { accountCenterUrl } from "@auth/lib/account-urls";
 import { config } from "@config";
 import { useTranslations } from "@i18n/intl";
 import { useLocalePathname } from "@i18n/routing";
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
-import { checkPermission } from "@repo/permissions";
-import { useRouterState } from "@tanstack/react-router";
-import {
-	BookOpenIcon,
-	HomeIcon,
-	KeyRoundIcon,
-	type LucideIcon,
-	SettingsIcon,
-	ShieldUserIcon,
-	UserCogIcon,
-} from "lucide-react";
+import { BookOpenIcon, HomeIcon, KeyRoundIcon, type LucideIcon } from "lucide-react";
 import { useMemo } from "react";
 
 export interface AppNavChild {
@@ -42,40 +30,11 @@ export interface AppNavCrumb {
 export function useAppNav() {
 	const t = useTranslations();
 	const pathname = useLocalePathname();
-	const currentHref = useRouterState({ select: (state) => state.location.href });
-	const { user } = useSession();
 	const organization = useActiveOrganization();
-	const canAccessAdmin = checkPermission({ user }, "admin.access");
 
 	const items = useMemo<AppNavItem[]>(() => {
-		// Account center pages open with `from` so their back button returns here.
-		const external = (label: string, path: string): AppNavChild => ({
-			label,
-			href: accountCenterUrl(path, currentHref),
-			isActive: false,
-			external: true,
-		});
-
 		const basePath = organization ? `/${organization.slug}` : "";
 		const apiKeysPath = `${basePath}/settings/api-keys`;
-
-		const organizationChildren = organization
-			? [
-					external(t("settings.menu.organization.general"), `/orgs/${organization.slug}`),
-					external(t("settings.menu.organization.members"), `/orgs/${organization.slug}/members`),
-				]
-			: undefined;
-
-		const accountChildren = [
-			external(t("settings.menu.account.profile"), "/account"),
-			external(t("settings.menu.account.security"), "/account/security"),
-			external(t("settings.menu.account.notifications"), "/account/notifications"),
-		];
-
-		const adminChildren = [
-			external(t("settings.menu.admin.users"), "/admin/users"),
-			external(t("settings.menu.admin.organizations"), "/admin/organizations"),
-		];
 
 		return [
 			{
@@ -97,40 +56,8 @@ export function useAppNav() {
 				isActive: false,
 				external: true,
 			},
-			...(organizationChildren
-				? [
-						{
-							label: t("app.menu.organizationSettings"),
-							href: organizationChildren[0].href,
-							icon: SettingsIcon,
-							isActive: false,
-							external: true,
-							children: organizationChildren,
-						},
-					]
-				: []),
-			{
-				label: t("app.menu.accountSettings"),
-				href: accountChildren[0].href,
-				icon: UserCogIcon,
-				isActive: false,
-				external: true,
-				children: accountChildren,
-			},
-			...(canAccessAdmin
-				? [
-						{
-							label: t("app.menu.admin"),
-							href: adminChildren[0].href,
-							icon: ShieldUserIcon,
-							isActive: false,
-							external: true,
-							children: adminChildren,
-						},
-					]
-				: []),
 		];
-	}, [canAccessAdmin, currentHref, organization, pathname, t]);
+	}, [organization, pathname, t]);
 
 	const trail = useMemo<AppNavCrumb[]>(() => {
 		const activeItem = items.find((item) => item.isActive);

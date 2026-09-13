@@ -24,7 +24,7 @@
 		{
 			"binding": "HYPERDRIVE",
 			"id": "e315ab6ab7df4ab994a998b58d386e46",
-			"localConnectionString": "postgresql://postgres:postgres@localhost:5433/vesact",
+			"localConnectionString": "postgresql://postgres:postgres@localhost:5433/vesact_relay",
 		},
 	],
 	"env": {
@@ -49,7 +49,7 @@
 				{
 					"binding": "HYPERDRIVE",
 					"id": "797530bd947f4a5f8ca1b10a9ae2d176",
-					"localConnectionString": "postgresql://postgres:postgres@localhost:5433/vesact",
+					"localConnectionString": "postgresql://postgres:postgres@localhost:5433/vesact_relay",
 				},
 			],
 		},

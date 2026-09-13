@@ -78,12 +78,12 @@ Relay 公共契约：REST API + Webhook
 | Worker | `vesact-relay`                                                                        | `vesact-relay-preview`                                             | `pnpm --filter relay dev`，端口 3005    |
 | 控制台 | `relay.vesact.com`                                                                    | `relay.preview.vesact.com`                                         | `localhost:3005`                        |
 | API    | `api.vesact.com`                                                                      | `api.preview.vesact.com`                                           | `localhost:3005`                        |
-| 认证   | （草稿）`relay.vesact.com/api/auth`，cookie 只在这个主机名上                          | `relay.preview.vesact.com/api/auth`，cookie 只在这个主机名上       | `localhost:3005`                        |
+| 认证   | `relay.vesact.com/api/auth`，cookie 只在这个主机名上                                  | `relay.preview.vesact.com/api/auth`，cookie 只在这个主机名上       | `localhost:3005`                        |
 | 数据库 | Hyperdrive `vesact-relay-db` → Neon 项目 `vesact-relay` 的 `production`，查询缓存关闭 | Hyperdrive `vesact-relay-preview` → 同项目 `preview`，查询缓存关闭 | docker postgres 5433，库 `vesact_relay` |
 
 一个 worker 每个环境挂两个 custom domain，按路径前缀分发：`/v1/*`、`/webhooks/*`、`/oauth/*` 进 Hono，其余进 TanStack Start 控制台。API 主机名上的非 API 路径返回 404 JSON，其他情况不看主机名。开发者文档 `developers.vesact.com` 启用前挂在 `api.vesact.com/v1/docs`。
 
-（草稿）认证是 Relay 自己的：Better Auth 的 handler 挂在 relay worker 的 `/api/auth/*` 上，用户、组织、成员、key 都在 Relay 的库里，控制台自带登录、建组织、邀请成员页；cookie 只在控制台主机名上，不设父域。Studio 对 Relay 是一个客户组织：每个 Studio 部署一个组织、一把 key，所有卖家的渠道挂在这个组织下，渠道带 `externalId`（Studio 侧的组织 id），连接会话带回跳地址；Relay 不知道卖家。
+认证是 Relay 自己的：Better Auth 的 handler 挂在 relay worker 的 `/api/auth/*` 上（`packages/relay/auth`，只装 Google、organization、apiKey），用户、组织、成员、key 都在 Relay 的库里，控制台自带登录和建组织页，邀请成员页在 #119 交付项 3；cookie 只在控制台主机名上，不设父域，前缀 `relay`，和 Studio 设在父域的 cookie 不同名。Studio 对 Relay 是一个客户组织：每个 Studio 部署一个组织、一把 key，所有卖家的渠道挂在这个组织下，渠道带 `externalId`（Studio 侧的组织 id），连接会话带回跳地址；Relay 不知道卖家。
 
 ## 3. 原则
 
@@ -364,9 +364,9 @@ Content-Type: application/json
 
 每个环境一个 worker，两个 custom domain（§2 的表）。`wrangler.jsonc` 是 prod 加 `env.preview`；`server.ts` 照 Studio 做 Hyperdrive 延迟加载加路径分发。
 
-- vars（草稿）：`VITE_RELAY_URL`、`VITE_RELAY_API_URL`、`VITE_MARKETING_URL`、`META_APP_ID`；preview 段重新声明全部。cookie 只在控制台主机名上，`trustedOrigins` 只有自己。
-- secrets（草稿）：`secrets/relay.{prod,preview,dev}.env` 自足：Relay 自己的 `BETTER_AUTH_SECRET`、Google OAuth 的 client id 和 secret（回调 `<VITE_RELAY_URL>/api/auth/callback/google`）、`META_APP_SECRET`、`META_WEBHOOK_VERIFY_TOKEN`；迁移用的连接串在 `secrets/relay-database.{prod,preview}.env`。`pnpm secrets:pull` 同时产出 `apps/relay/.dev.vars`。
-- CI（草稿）：`deploy.yml` 的 `relay` job 自己跑 `@repo/relay` 的 migrate，不再 `needs: account`；`select-target.sh` 给出 relay 的 URL。部署后没有 HTTP 探测：zone 的 Bot Fight Mode 会挑战 runner 的 curl。
+- vars：`VITE_RELAY_URL`、`VITE_RELAY_API_URL`、`VITE_MARKETING_URL`、`META_APP_ID`；preview 段重新声明全部（`VITE_STUDIO_URL`、`VITE_ACCOUNT_URL`、`AUTH_COOKIE_PREFIX` 在 #122 清掉）。cookie 只在控制台主机名上，`trustedOrigins` 只有自己。
+- secrets：`secrets/relay.{prod,preview,dev}.env` 自足：Relay 自己的 `BETTER_AUTH_SECRET`、Google OAuth 的 client id 和 secret（回调 `<VITE_RELAY_URL>/api/auth/callback/google`）、`META_APP_SECRET`、`META_WEBHOOK_VERIFY_TOKEN`；迁移用的连接串在 `secrets/relay-database.{prod,preview}.env`。`pnpm secrets:pull` 同时产出 `apps/relay/.dev.vars`。
+- CI：`deploy.yml` 的 `relay` job 自己跑 `@repo/relay` 的 migrate，不再 `needs: account`；`select-target.sh` 给出 relay 的 URL。部署后没有 HTTP 探测：zone 的 Bot Fight Mode 会挑战 runner 的 curl。
 - Cloudflare：preview 的 Access 由 `*.preview.vesact.com` 通配应用覆盖，另有一个路径为 `api.preview.vesact.com/webhooks` 的 Access 应用，策略 Bypass Everyone，Meta 才打得到。Meta 一个 App 只能一个回调 URL，指向 prod；preview 只靠 curl 验证。
 - `/v1/health`、`/v1/openapi.json`、`/v1/docs` 无鉴权。spec 由 `OpenAPIReferencePlugin` 每次请求从 router 生成，没有手写副本：`info.title` 是 `Relay API`，`servers` 是 `VITE_RELAY_API_URL` + `/v1`，`components.securitySchemes.bearerAuth` 配全局 `security`，`/health` 用 route 的 `spec` 覆盖成无需鉴权。docs 页是 Scalar，spec 内联，脚本从 jsDelivr 加载，页面里填 key 可以直接调接口；要在 `api.` 域打开，`servers` 指向那里而 `/v1` 不设 CORS，从 `relay.` 域打开的页面调不到接口。
 
@@ -374,7 +374,7 @@ Content-Type: application/json
 
 ### 7.1 认证与归属
 
-`/v1` 用 API key：`Authorization: Bearer <key>`，key 属于组织，由 `@better-auth/api-key`（`references: "organization"`、`defaultPrefix: "relay_"`）签发和校验。（草稿）创建、吊销、列出走 relay worker 自己的 Better Auth 端点 `<VITE_RELAY_URL>/api/auth/api-key/*`，同源，不设 CORS；需要会话且用户是该组织成员，插件按组织 access control 的 `apiKey` statement 检查每个操作，`packages/relay/auth/access.ts` 把四个动作授予 owner 和 admin，member 只有 `read`。控制台用自己的会话，未登录跳自己的 `/login`；成员和邀请在控制台 `/orgs/$slug/members` 管。
+`/v1` 用 API key：`Authorization: Bearer <key>`，key 属于组织，由 `@better-auth/api-key`（`references: "organization"`、`defaultPrefix: "relay_"`）签发和校验。创建、吊销、列出走 relay worker 自己的 Better Auth 端点 `<VITE_RELAY_URL>/api/auth/api-key/*`，同源，不设 CORS；需要会话且用户是该组织成员，插件按组织 access control 的 `apiKey` statement 检查每个操作，`packages/relay/auth/access.ts` 把四个动作授予 owner 和 admin，member 只有 `read`。控制台用自己的会话，未登录跳自己的 `/login`；成员和邀请在控制台 `/orgs/$slug/members` 管（#119 交付项 3）。
 
 `/v1` 入口中间件链，顺序固定：request ID（`X-Request-Id: req_<ULID>`）→ 取 key → `verifyApiKey` 与错误码映射（`INVALID_API_KEY`、`KEY_NOT_FOUND`、`KEY_EXPIRED`、`KEY_DISABLED` → 401 `UNAUTHORIZED` 且 `data.reason` 保留原码；`RATE_LIMITED` → 429 `TOO_MANY_REQUESTS`；`USAGE_EXCEEDED` → 429 `QUOTA_EXCEEDED`）→ 上下文 `{ requestId, auth: { organizationId, apiKeyId, permissions, key }, trace }` 与 `relayKeyProcedure`（缺 `auth` 时自己抛 401，procedure 挂到别处也安全）→ 限流头 → `waitUntil` 写用量（写失败只记日志）。`/v1/health`、`/v1/openapi.json`、`/v1/docs` 只走 request ID，其余步骤跳过（`hono/combine` 的 `except`）。`/v1` 不设 CORS 头。
 
