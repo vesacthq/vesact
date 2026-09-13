@@ -52,15 +52,17 @@ export function OrganizationMembersBlock({ organizationSlug }: { organizationSlu
 					<OrganizationMembersList organization={organization} userId={user.id} ownRole={ownRole} />
 				</FramePanel>
 			</Frame>
-			<Frame stacked spacing="sm">
-				<FrameHeader>
-					<FrameTitle>{t("organizations.invitations.list.title")}</FrameTitle>
-					<FrameDescription>{t("organizations.invitations.list.description")}</FrameDescription>
-				</FrameHeader>
-				<FramePanel className="p-0">
-					<OrganizationInvitationsList organization={organization} canManage={canManage} />
-				</FramePanel>
-			</Frame>
+			{canManage && (
+				<Frame stacked spacing="sm">
+					<FrameHeader>
+						<FrameTitle>{t("organizations.invitations.list.title")}</FrameTitle>
+						<FrameDescription>{t("organizations.invitations.list.description")}</FrameDescription>
+					</FrameHeader>
+					<FramePanel className="p-0">
+						<OrganizationInvitationsList organization={organization} canManage={canManage} />
+					</FramePanel>
+				</Frame>
+			)}
 			{canManage && (
 				<InviteMemberDialog
 					organization={organization}
