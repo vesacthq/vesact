@@ -87,19 +87,17 @@ reviewed: 2026-09-13
 
 ## 6. 部署
 
-（草稿，#120、#121）
-
 | 环境    | 形态                              | 地址                                | 分发                             |
 | ------- | --------------------------------- | ----------------------------------- | -------------------------------- |
 | prod    | Docker 目标，和 studio 同一台机器 | `studio.vesact.com/account`         | Caddy 按路径分到 account 容器    |
 | preview | worker `vesact-account-preview`   | `studio.preview.vesact.com/account` | Workers 路由 `/account/*`        |
 | dev     | `pnpm --filter account dev`       | `localhost:3004/account`            | 无，localhost 的 cookie 不分端口 |
 
-cookie 只在主机名上，不设域。secrets 在 `secrets/account.{prod,preview,dev}.env`。环境矩阵见 AGENTS.md，部署流程见 `.agents/skills/vesact-deploy-and-infra/SKILL.md`。
+cookie 只在主机名上，不设域。prod 行在 #121 切流前仍是 `account.vesact.com` 上的 Worker 加父域 cookie。secrets 在 `secrets/account.{prod,preview,dev}.env`。环境矩阵见 AGENTS.md，部署流程见 `.agents/skills/vesact-deploy-and-infra/SKILL.md`。
 
 ## 7. 横切
 
-- 认证：Better Auth 只在这个 app 上挂 handler，Studio 共用同一个 `packages/auth` 实例读会话。Google OAuth 的回调是 `<VITE_ACCOUNT_URL>/api/auth/callback/google`。（草稿）`from`、`redirectTo` 是同源路径，只认本主机名下的地址。
+- 认证：Better Auth 只在这个 app 上挂 handler，Studio 共用同一个 `packages/auth` 实例读会话。Google OAuth 的回调是 `<VITE_ACCOUNT_URL>/api/auth/callback/google`。`from`、`redirectTo` 与 Studio 同源；`getSafeRedirectUrl` 只认自家产品的地址，相对路径按账号中心自己的页面解释。
 - 权限：§5.1；平台管理路由要求 `user.role = admin`，组织的读改删走 `adminProcedure`。
 - i18n scope `account`；`settings.menu` 等跨产品文案在 `shared`。
 - 测试：`apps/account/e2e`（Playwright），`pnpm --filter account e2e`。

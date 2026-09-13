@@ -101,9 +101,10 @@ app with `pnpm --filter <app> e2e` (UI) or `e2e:ci`. Each config starts its own
 dev server (marketing 3001, studio 3100, account 3200). The account suite signs
 in through the login page as two users that `e2e/auth.setup.ts` seeds straight
 into the database (`e2e/fixtures/users.ts`), so it needs Postgres with the
-schema pushed. Its config serves the app on the port `VITE_ACCOUNT_URL` names
-(3004 locally, from `.env.local`), the only port at which the client bundle,
-the Worker and the server agree; stop a running account dev server first or set
-`PW_REUSE_SERVER=1`. CI's e2e job starts Postgres and MinIO, pushes the schema
+schema pushed. Its config serves the app on the port and under the path
+`VITE_ACCOUNT_URL` names (`localhost:3004/account` locally, from `.env.local`),
+the only address at which the client bundle, the Worker and the server agree,
+and its specs navigate with paths relative to that base (`login`, not `/login`);
+stop a running account dev server first or set `PW_REUSE_SERVER=1`. CI's e2e job starts Postgres and MinIO, pushes the schema
 and runs all three suites with generated `.dev.vars` and job-level `VITE_*`
 URLs for the ports it serves.
