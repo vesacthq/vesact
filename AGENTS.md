@@ -79,7 +79,7 @@ apps/
 ├── marketing/     # Public site, blog, and content
 ├── relay/         # Relay: the API platform's Worker, `/v1` + webhooks on api., console on relay.
 └── studio/        # Authenticated product
-packages/          # ai, api, auth, database, i18n, logs, mail, notifications, payments, permissions (Permix definitions + rule builder), relay (Relay's own db, later api/auth/contract), storage, ui, utils
+packages/          # ai, api, auth, database, i18n, logs, mail, notifications, payments, permissions (Permix definitions + rule builder), relay (Relay's own api, auth, db and contract), storage, ui, utils
 tooling/           # scripts, tailwind, typescript
 brand/             # Brand kit: logos, app icons, per-site favicon sets; `brand/README.md` explains the files
 ```

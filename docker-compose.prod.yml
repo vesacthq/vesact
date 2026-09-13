@@ -7,7 +7,9 @@
 # IMAGE_TAG, SITE_ADDRESS, MARKETING_ADDRESS and POSTGRES_PASSWORD come from the
 # compose environment (`.env` next to this file on the machine).
 #
-#   docker compose -f docker-compose.prod.yml --env-file .env.local up --build
+# Locally: write env/<app>.env and export POSTGRES_PASSWORD and the VITE_* URLs
+# the way validate-prs.yml's "Docker target" job does (vesact-secrets-and-local-env
+# skill), then `docker compose -f docker-compose.prod.yml up --build -d --wait`.
 
 x-logging: &logging
   driver: json-file

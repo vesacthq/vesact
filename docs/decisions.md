@@ -9,7 +9,7 @@
 
 ## 2026-09-13 Relay 独立：自己的包、库和登录
 
-- Relay 的服务端代码、schema、迁移和 Better Auth 实例收进一个包 `packages/relay`（`@repo/relay`，子路径 `api`、`auth`、`db`、`contract`）。`apps/relay` 和这个包只依赖 `@repo/ui`、`@repo/utils`、`@repo/i18n`、`@repo/logs` 四个纯库，lint 规则挡住其他 `@repo/*`。自己的 Neon 项目和 Hyperdrive；Better Auth 的 handler 挂在 relay worker 上（Google、organization、apiKey），cookie 只在控制台主机名上，控制台自带登录、建组织、邀请成员页。账号中心从此只服务 Studio。取代 2026-09-11「Relay API 约定与骨架」里三个环境都用 Studio 的 auth、「Relay 定稿的几项」里服务端先放 `packages/api/modules/relay`、「账号中心」里 Studio 和 Relay 对称、2026-09-09「认证拓扑」里各产品共享同一个 Better Auth 实例和用户库，以及 2026-09-10「Relay 的架构基线」里认证复用现有机制那一行。
+- Relay 的服务端代码、schema、迁移和 Better Auth 实例收进一个包 `packages/relay`（`@repo/relay`，子路径 `api`、`auth`、`db`、`contract`）。`apps/relay` 和这个包只依赖 `@repo/ui`、`@repo/utils`、`@repo/i18n`、`@repo/logs` 四个纯库，lint 规则挡住其他 `@repo/*`。自己的 Neon 项目和 Hyperdrive；Better Auth 的 handler 挂在 relay worker 上（Google、organization、apiKey），cookie 只在控制台主机名上，控制台自带登录、建组织、邀请成员页。账号中心从此只服务 Studio。取代 2026-09-11「Relay API 约定与骨架」里三个环境都用 Studio 的 auth、「Relay 定稿的几项」里服务端先放 `packages/api/modules/relay`、「账号中心」里 Studio 和 Relay 对称及"成员与每个产品的访问和角色"、2026-09-11「身份与租户的边界」里角色带产品前缀那一行、2026-09-09「认证拓扑」里各产品共享同一个 Better Auth 实例和用户库，以及 2026-09-10「Relay 的架构基线」里认证复用现有机制那一行。
 - 理由：Relay 是卖给开发者的平台，Studio 是它的第一个客户；客户和平台共用一张用户表，是 Studio 换地方部署时唯一绕不开的耦合。Relay 的身份需求只有开发者登录、组织、key、按账号计费；账号中心里的 onboarding、产品角色、按渠道计费都是卖家的事。分开后 `member.role` 不再需要产品前缀。数据不迁：A1 的库里只有内部的 key，新库重跑 A1 验收。落地在 #118。
 
 ## 2026-09-13 Studio 是 Relay 的一个客户组织
