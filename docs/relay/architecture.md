@@ -73,13 +73,13 @@ Relay 公共契约：REST API + Webhook
         └── 后续 TikTok / Google 实现
 ```
 
-|        | prod                                                                                          | preview                                                            | dev                                     |
-| ------ | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | --------------------------------------- |
-| Worker | `vesact-relay`                                                                                | `vesact-relay-preview`                                             | `pnpm --filter relay dev`，端口 3005    |
-| 控制台 | `relay.vesact.com`                                                                            | `relay.preview.vesact.com`                                         | `localhost:3005`                        |
-| API    | `api.vesact.com`                                                                              | `api.preview.vesact.com`                                           | `localhost:3005`                        |
-| 认证   | （草稿）`relay.vesact.com/api/auth`，cookie 只在这个主机名上                                  | `relay.preview.vesact.com/api/auth`，cookie 只在这个主机名上       | `localhost:3005`                        |
-| 数据库 | （草稿）Hyperdrive `vesact-relay-db` → Neon 项目 `vesact-relay` 的 `production`，查询缓存关闭 | Hyperdrive `vesact-relay-preview` → 同项目 `preview`，查询缓存关闭 | docker postgres 5433，库 `vesact_relay` |
+|        | prod                                                                                  | preview                                                            | dev                                     |
+| ------ | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | --------------------------------------- |
+| Worker | `vesact-relay`                                                                        | `vesact-relay-preview`                                             | `pnpm --filter relay dev`，端口 3005    |
+| 控制台 | `relay.vesact.com`                                                                    | `relay.preview.vesact.com`                                         | `localhost:3005`                        |
+| API    | `api.vesact.com`                                                                      | `api.preview.vesact.com`                                           | `localhost:3005`                        |
+| 认证   | （草稿）`relay.vesact.com/api/auth`，cookie 只在这个主机名上                          | `relay.preview.vesact.com/api/auth`，cookie 只在这个主机名上       | `localhost:3005`                        |
+| 数据库 | Hyperdrive `vesact-relay-db` → Neon 项目 `vesact-relay` 的 `production`，查询缓存关闭 | Hyperdrive `vesact-relay-preview` → 同项目 `preview`，查询缓存关闭 | docker postgres 5433，库 `vesact_relay` |
 
 一个 worker 每个环境挂两个 custom domain，按路径前缀分发：`/v1/*`、`/webhooks/*`、`/oauth/*` 进 Hono，其余进 TanStack Start 控制台。API 主机名上的非 API 路径返回 404 JSON，其他情况不看主机名。开发者文档 `developers.vesact.com` 启用前挂在 `api.vesact.com/v1/docs`。
 
@@ -155,7 +155,7 @@ Relay 保存自己承诺提供的数据、执行状态与关联；不依赖查�
 
 ### 4.3 目录
 
-（草稿。现状是 `packages/api/modules/relay` 和 `packages/database/drizzle/schema/relay.ts`。）
+（草稿。现状是 `packages/api/modules/relay`，`db` 已在 `packages/relay/db`；`packages/database/drizzle/schema/relay.ts` 在搬完前仍在。）
 
 ```text
 apps/

@@ -21,9 +21,11 @@ The environment matrix (dev / preview / prod) is in `AGENTS.md` under
 
 `deploy.yml` runs one job per app: `select-target.sh` picks the target from the
 event, `load-env.sh` decrypts what the job needs into masked environment
-variables, then build → `wrangler deploy` → `wrangler secret bulk`. The account job runs the database migration first; the studio and relay jobs
-wait for it. On `main` the `images` job also builds the Docker target of
-studio, account and marketing and pushes it to GHCR (see "Docker target"). The relay Worker answers on two custom domains and dispatches by
+variables, then build → `wrangler deploy` → `wrangler secret bulk`. The account job runs the Studio database migration first and the studio job
+waits for it; the relay job migrates Relay's own database
+(`pnpm --filter @repo/relay db:migrate`) and runs on its own. On `main` the
+`images` job also builds the Docker target of studio, account and marketing
+and pushes it to GHCR (see "Docker target"). The relay Worker answers on two custom domains and dispatches by
 path (`docs/relay/architecture.md` §2). The Cloudflare Vite plugin flattens the selected environment into
 `.output/server/wrangler.json` at build time, so `CLOUDFLARE_ENV` is set for the
 build and `wrangler deploy` takes no `--env`. Preview builds leave
@@ -129,12 +131,18 @@ accounts only. Production data stays in Neon until the cut-over decides otherwis
 - Cloudflare account `6a8e5373d12070c930f09f1a82541a0b`, workers.dev subdomain
   `vesact`. CI authenticates with the token in `secrets/ci.env`; manual
   operations use `wrangler login`.
-- Neon project `ancient-morning-26822519` (Singapore), branches `production`
-  (default) and `preview`. Manage it with `neonctl` and `NEON_API_KEY` from
-  `secrets/ci.env`.
+- Neon project `ancient-morning-26822519` (`vesact`, Singapore) for Studio and
+  the account center, branches `production` (default) and `preview`; Neon
+  project `purple-breeze-98513221` (`vesact-relay`, Singapore, Postgres 18) for
+  Relay, same two branches, migrated by `@repo/relay` with the URLs in
+  `secrets/relay-database.<env>.env`. Manage them with `neonctl` and
+  `NEON_API_KEY` from `secrets/ci.env`; `secrets/infra.env` holds the Neon
+  and Cloudflare tokens that create projects and Hyperdrive configs — CI never
+  loads it.
 - Hyperdrive `vesact-db` and `vesact-preview` for studio and account (ids in
-  `apps/studio/wrangler.jsonc`), `vesact-relay-db` and `vesact-relay-preview`
-  for relay (ids in `apps/relay/wrangler.jsonc`). All four have query caching
+  `apps/studio/wrangler.jsonc`) point at the `vesact` project; `vesact-relay-db`
+  and `vesact-relay-preview` for relay (ids in `apps/relay/wrangler.jsonc`)
+  point at `vesact-relay`. All four have query caching
   disabled: Hyperdrive would otherwise serve a read for up to 60 seconds
   after a write, and nothing here tolerates that (an organization missing
   from its list after creation, a revoked key still verifying). Add a cached

@@ -206,7 +206,6 @@ jobs:
 
   relay:
     name: Relay
-    needs: account
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
@@ -222,8 +221,12 @@ jobs:
         run: .github/scripts/install-sops.sh
       - name: Load CI secrets
         run: .github/scripts/load-env.sh secrets/ci.env
+      - name: Load database URL
+        run: .github/scripts/load-env.sh "secrets/relay-database.$TARGET.env"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Migrate
+        run: pnpm --filter @repo/relay db:migrate
       - name: Build
         run: pnpm --filter relay build
       - name: Deploy
