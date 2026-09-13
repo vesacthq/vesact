@@ -71,12 +71,11 @@ entries trust `X-Forwarded-*`. Runtime variables come from `env/<app>.env`
 (gitignored; written from sops on the machine) — the Worker secrets plus what
 `wrangler.jsonc` `vars` carried (`VITE_*`, `S3_ENDPOINT`, `S3_REGION`) and
 `DATABASE_URL`; `POSTGRES_PASSWORD`, `SITE_ADDRESS` and `MARKETING_ADDRESS`
-come from the compose environment (`.env` next to the compose file). Image
-names default to `ghcr.io/vesacthq/vesact-<app>:latest`; `STUDIO_IMAGE`,
-`ACCOUNT_IMAGE`, `MARKETING_IMAGE` override them. Postgres has no published
-port; to migrate or seed from outside, run a throwaway
-`alpine/socat` container on the compose network with a port bound to
-`127.0.0.1` and tunnel to it over SSH.
+come from the compose environment (`.env` next to the compose file). Images
+are `${IMAGE_REPO}-<app>:${IMAGE_TAG}`, `ghcr.io/vesacthq/vesact` and `latest`
+by default (CI's smoke uses `vesact` / `ci`, the machine the commit sha).
+Postgres is published on the machine's loopback interface only
+(`127.0.0.1:5432`); migrations reach it through an SSH tunnel.
 
 CI: the "Docker target" job of `validate-prs.yml` builds the three images,
 starts the stack with CI env files and a port override for the schema push,
@@ -84,12 +83,46 @@ and runs `.github/scripts/smoke.sh <studio url> <marketing url>` (signed-out
 `/` 307, `/account/login` 200, both health endpoints, a 401 from
 `sign-in/email` proving the database is reachable, marketing 200). The same
 script is the post-deploy check. GHCR creates the packages private; the
-machine that pulls them needs them switched to public in the org's package
-settings or a `read:packages` token.
+`vps` job logs the machine in with its own `GITHUB_TOKEN` for the pull, so
+only pulling a tag by hand that is not on the machine needs a
+`read:packages` token (or the packages made public).
 
 The images are 1–1.5 GB unpacked (≈250 MB compressed), mostly production
 dependencies that `pnpm deploy` copies for the app, including `next` arriving
 as an optional peer of better-auth; trimming them is a separate task.
+
+## The machine
+
+`jp.vesact.com` is a VPS (45.77.10.53, Ubuntu 24.04, Docker Engine from
+Docker's apt repository) that rehearses the production Docker deployment while
+`studio.vesact.com` stays on Workers. `ssh root@45.77.10.53` with your own key;
+CI uses the ed25519 key in `secrets/files/vps-deploy-ssh-key.json`, whose
+public half is in `/root/.ssh/authorized_keys`, against the host key pinned in
+`.github/vps_known_hosts`. Rotate it by generating a new pair, replacing the
+line in `authorized_keys`, and re-encrypting the private key with
+`sops --encrypt --input-type binary --output-type json`.
+
+Everything lives in `/srv/vesact/`: `docker-compose.prod.yml`, `Caddyfile`,
+`vps-deploy.sh`, `smoke.sh`, `.env` (from `secrets/vps.env`: `SITE_ADDRESS`,
+`MARKETING_ADDRESS`, `POSTGRES_PASSWORD`, plus `IMAGE_TAG` maintained by the
+deploy script), `env/<app>.env` (from `secrets/<app>.vps.env`) and
+`current-tag`. The `vps` job of `deploy.yml` rewrites all of them from the
+repository on every push to `main`, so edit the sops files, not the machine.
+
+Deploy: `images` pushes `ghcr.io/vesacthq/vesact-<app>:<sha>`, then `vps`
+migrates through `ssh -L` (`secrets/database.vps.env` points at the tunnel),
+copies the files, logs the machine into GHCR with the job's `GITHUB_TOKEN` and
+runs `./vps-deploy.sh <sha> https://jp.vesact.com http://localhost:3001`:
+`pull`, `up -d --wait`, `smoke.sh`; a failed smoke brings the previous tag
+back and fails the job. The script keeps the images of the running tag and
+its predecessor and removes older ones. Roll back by hand to the predecessor
+with `cd /srv/vesact && IMAGE_TAG=<sha> docker compose -f docker-compose.prod.yml up -d --wait`
+(`docker image ls` shows the two tags on the machine; no registry login is
+needed for them), then `./smoke.sh https://jp.vesact.com http://localhost:3001`
+and write the tag to `current-tag` and `IMAGE_TAG` in `.env`. Logs: `docker compose -f docker-compose.prod.yml logs -f <service>`
+(json-file, 3 × 10 MB per container). The rehearsal database is the `postgres`
+container's volume `vesact_postgres_data`; nothing backs it up, it holds test
+accounts only. Production data stays in Neon until the cut-over decides otherwise.
 
 ## Accounts and resources
 

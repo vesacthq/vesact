@@ -277,8 +277,9 @@ runtime variables from `env/<app>.env` and `SITE_ADDRESS`, `MARKETING_ADDRESS`,
 `POSTGRES_PASSWORD` from the compose environment. The Docker target only uses what both
 targets have (`docs/studio/architecture.md` §5.4). Every pull request builds the images and
 smokes the stack (`validate-prs.yml` job "Docker target", `.github/scripts/smoke.sh`); pushes to
-`main` publish `ghcr.io/vesacthq/vesact-<app>:<sha>` and `:latest`. Where the images run and
-how they get there: `vesact-deploy-and-infra` skill.
+`main` publish `ghcr.io/vesacthq/vesact-<app>:<sha>` and `:latest`, and the `vps` job puts
+them on the rehearsal machine (`jp.vesact.com`) — migrate, sync, pull, smoke, roll back on
+failure. The machine and the procedure: `vesact-deploy-and-infra` skill.
 
 ### Workflow
 

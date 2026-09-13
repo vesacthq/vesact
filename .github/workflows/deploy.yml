@@ -52,6 +52,66 @@ jobs:
             VITE_POSTHOG_HOST=https://e.vesact.com
             VITE_POSTHOG_KEY=phc_uLUk93bEHjHERp7hMxbDRiRPG4PefxhnzTkSGWYscgjR
 
+  vps:
+    name: VPS
+    # The Docker target on the machine (docs/studio/architecture.md §6): migrate
+    # through an SSH tunnel, refresh the compose files and env, then pull the
+    # images just pushed and smoke; vps-deploy.sh rolls back on a failed smoke.
+    needs: images
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    env:
+      VPS_HOST: 45.77.10.53
+      SITE_URL: https://jp.vesact.com
+      MARKETING_URL: http://localhost:3001
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Install sops
+        run: .github/scripts/install-sops.sh
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          sops -d --input-type json --output-type binary secrets/files/vps-deploy-ssh-key.json > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          cp .github/vps_known_hosts ~/.ssh/known_hosts
+      - name: Load database URL
+        run: .github/scripts/load-env.sh secrets/database.vps.env
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Migrate
+        run: |
+          ssh -f -N -o ExitOnForwardFailure=yes -L 55432:127.0.0.1:5432 "root@$VPS_HOST"
+          pnpm --filter @repo/database migrate
+      - name: Write the machine's files
+        # Decrypt first so a sops failure stops here instead of leaving an empty file on the machine.
+        run: |
+          umask 077
+          mkdir -p "$RUNNER_TEMP/env"
+          for app in studio account marketing; do
+            sops -d "secrets/$app.vps.env" > "$RUNNER_TEMP/env/$app.env"
+          done
+          sops -d secrets/vps.env > "$RUNNER_TEMP/dotenv"
+          ssh "root@$VPS_HOST" 'mkdir -p /srv/vesact/env && chmod 700 /srv/vesact /srv/vesact/env'
+          scp -q docker-compose.prod.yml Caddyfile .github/scripts/vps-deploy.sh .github/scripts/smoke.sh "root@$VPS_HOST:/srv/vesact/"
+          scp -q "$RUNNER_TEMP"/env/*.env "root@$VPS_HOST:/srv/vesact/env/"
+          scp -q "$RUNNER_TEMP/dotenv" "root@$VPS_HOST:/srv/vesact/.env"
+          rm -rf "$RUNNER_TEMP/env" "$RUNNER_TEMP/dotenv"
+      - name: Deploy
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | ssh "root@$VPS_HOST" "docker login ghcr.io -u '${{ github.actor }}' --password-stdin >/dev/null"
+          ssh "root@$VPS_HOST" "cd /srv/vesact && ./vps-deploy.sh '${{ github.sha }}' '$SITE_URL' '$MARKETING_URL'"
+      - name: Log out of GHCR on the machine
+        if: always()
+        run: ssh "root@$VPS_HOST" 'docker logout ghcr.io >/dev/null 2>&1 || true'
+
   marketing:
     name: Marketing
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository

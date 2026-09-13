@@ -83,9 +83,8 @@ jobs:
       VITE_ACCOUNT_URL: http://localhost/account
       VITE_MARKETING_URL: http://localhost:3001
       DATABASE_URL: postgresql://postgres:postgres@localhost:5433/vesact
-      STUDIO_IMAGE: vesact-studio:ci
-      ACCOUNT_IMAGE: vesact-account:ci
-      MARKETING_IMAGE: vesact-marketing:ci
+      IMAGE_REPO: vesact
+      IMAGE_TAG: ci
       POSTGRES_PASSWORD: postgres
     steps:
       - uses: actions/checkout@v4
@@ -137,11 +136,11 @@ jobs:
           VITE_MARKETING_URL=$VITE_MARKETING_URL
           VARS
           done
-          # The smoke pushes the schema from the runner; production never publishes the port.
+          # The runner's own Postgres holds 5432; the schema push uses 5433.
           cat > ci.override.yml <<'YML'
           services:
             postgres:
-              ports:
+              ports: !override
                 - "127.0.0.1:5433:5432"
           YML
       - name: Start the stack
