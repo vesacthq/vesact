@@ -9,11 +9,13 @@ The design is `docs/relay/architecture.md`; this file is the implementation map.
 
 Relay's public API lives in `packages/api/modules/relay` with its own router,
 context and handler (prefix `/v1`), mounted by `apps/relay/src/api.ts`. Keys
-belong to an organization and come from `@better-auth/api-key` on the shared
-auth instance (prefix `relay_`, 300 requests per minute per key by default);
-they are created, listed and revoked through the account center's
+belong to an organization and come from `@better-auth/api-key` on Relay's own
+Better Auth instance (`packages/relay/auth`: Google sign-in, the organization
+plugin and the api-key plugin on Relay's database, cookie prefix `relay`;
+prefix `relay_`, 300 requests per minute per key by default); they are
+created, listed and revoked through the relay Worker's own
 `/api/auth/api-key/*` endpoints, guarded by the `apiKey` statement in
-`packages/auth/lib/access.ts`. `app.ts` verifies the key before oRPC runs and
+`packages/relay/auth/access.ts` (owner and admin manage keys, member reads). `app.ts` verifies the key before oRPC runs and
 puts `{ requestId, auth: { organizationId, apiKeyId, permissions, key } }` in
 the context; business endpoints build on `relayKeyProcedure`. Every `/v1` response
 carries `X-Request-Id`, authenticated ones the `X-RateLimit-*` headers, and
@@ -40,13 +42,16 @@ Meta's webhook is `GET`/`POST /webhooks/meta` in
 by the raw body's SHA-256; nothing is parsed yet. Its acceptance run is
 `pnpm --filter @repo/scripts relay:webhook-acceptance`.
 
-The console on the `relay.` hostname is `apps/relay/routes/_authenticated`:
-the session and the organization list load once per page into the route
-context (`@auth/lib/api`, `@organizations/lib/api`), `/` opens the active
-organization, `/$organizationSlug` checks `relay.access` and renders a denial
-that links to the account center's members page, and
+The console on the `relay.` hostname signs in with Google at `/login`
+(`apps/relay/routes/login`, callback `<VITE_RELAY_URL>/api/auth/callback/google`,
+handler at `routes/api/auth/$.ts`) and creates the first organization at
+`/orgs/new`; `apps/relay/routes/_authenticated` loads the session and the
+organization list once per page into the route context (`@auth/lib/api`,
+`@organizations/lib/api`), `/` opens the active organization,
+`/$organizationSlug` is open to every member (a non-member sees 404), and
 `/$organizationSlug/settings/api-keys` lists, creates and revokes keys from the
-browser through the account center's `/api/auth/api-key/*` endpoints
-(`@api-keys/lib/api`); the secret exists only in the create response. Relay is
-one of `getTrustedOrigins()`, which is what lets those cross-origin calls
-through the account center's CORS and Better Auth's origin check.
+browser through the same-origin `/api/auth/api-key/*` endpoints
+(`@api-keys/lib/api`); the secret exists only in the create response. For a
+console session without Google (local checks, future e2e):
+`BETTER_AUTH_SECRET=… pnpm --filter @repo/scripts relay:session --email <email>`
+writes a user and session into Relay's database and prints the cookie.

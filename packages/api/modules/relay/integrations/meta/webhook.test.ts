@@ -2,11 +2,11 @@ import { createHash, createHmac } from "node:crypto";
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@repo/auth", () => ({
+vi.mock("@repo/relay/auth", () => ({
 	auth: { api: { verifyApiKey: vi.fn() } },
 }));
 
-vi.mock("@repo/database", () => ({
+vi.mock("@repo/relay/db", () => ({
 	recordRelayApiUsage: vi.fn(async () => {}),
 	recordRelayInboundEvent: vi.fn(async () => {}),
 }));
@@ -15,7 +15,7 @@ vi.mock("@repo/logs", () => ({
 	logger: { error: vi.fn(), warn: vi.fn(), log: vi.fn() },
 }));
 
-import { recordRelayInboundEvent } from "@repo/database";
+import { recordRelayInboundEvent } from "@repo/relay/db";
 
 import { relayApp } from "../../app";
 

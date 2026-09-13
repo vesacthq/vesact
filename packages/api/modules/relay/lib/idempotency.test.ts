@@ -17,7 +17,7 @@ vi.mock("@repo/logs", () => ({
 	logger: { error: vi.fn(), warn: vi.fn(), log: vi.fn() },
 }));
 
-vi.mock("@repo/database", () => ({
+vi.mock("@repo/relay/db", () => ({
 	claimIdempotencyKey: vi.fn(async (scope, requestHash: string, lockUntil: Date) => {
 		const existing = rows.get(scopeKey(scope));
 		if (existing && existing.expiresAt > new Date()) {
@@ -54,8 +54,8 @@ vi.mock("@repo/database", () => ({
 	}),
 }));
 
-import { completeIdempotencyKey } from "@repo/database";
 import { logger } from "@repo/logs";
+import { completeIdempotencyKey } from "@repo/relay/db";
 
 import type { RelayContext } from "../context";
 import { idempotent } from "./idempotency";

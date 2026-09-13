@@ -1,4 +1,3 @@
-import { accountCenterUrl } from "@auth/lib/account-urls";
 import { sessionQueryOptions } from "@auth/lib/api";
 import { useTranslations } from "@i18n/intl";
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
@@ -19,7 +18,7 @@ import {
 	useSidebar,
 } from "@repo/ui/components/sidebar";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouteContext, useRouter, useRouterState } from "@tanstack/react-router";
+import { Link, useRouteContext, useRouter } from "@tanstack/react-router";
 import { CheckIcon, ChevronsUpDownIcon, PlusIcon } from "lucide-react";
 
 import { OrganizationLogo } from "./OrganizationLogo";
@@ -29,7 +28,6 @@ export function OrganizationSelect() {
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const { isMobile } = useSidebar();
-	const currentHref = useRouterState({ select: (state) => state.location.href });
 	const organizations = useRouteContext({
 		from: "/_authenticated",
 		select: (context) => context.organizations,
@@ -108,14 +106,14 @@ export function OrganizationSelect() {
 								nativeButton={false}
 								className="gap-2 p-2"
 								render={(props) => (
-									<a {...props} href={accountCenterUrl("/orgs/new", currentHref)}>
+									<Link {...props} to="/orgs/new">
 										<div className="size-6 flex items-center justify-center rounded-md border bg-transparent">
 											<PlusIcon aria-hidden="true" className="size-4" />
 										</div>
 										<div className="font-medium text-muted-foreground">
 											{t("organizations.organizationSelect.createNewOrganization")}
 										</div>
-									</a>
+									</Link>
 								)}
 							/>
 						</DropdownMenuGroup>

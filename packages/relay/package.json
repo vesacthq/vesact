@@ -4,7 +4,10 @@
 	"private": true,
 	"exports": {
 		"./db": "./db/index.ts",
-		"./db/schema": "./db/schema.ts"
+		"./db/schema": "./db/schema.ts",
+		"./auth": "./auth/index.ts",
+		"./auth/client": "./auth/client.ts",
+		"./auth/access": "./auth/access.ts"
 	},
 	"scripts": {
 		"clean": "git clean -xdf .cache .turbo dist node_modules",
@@ -15,17 +18,23 @@
 		"type-check": "tsc --noEmit"
 	},
 	"dependencies": {
+		"@better-auth/api-key": "catalog:",
 		"@paralleldrive/cuid2": "^3.3.0",
 		"@repo/logs": "workspace:*",
+		"@repo/utils": "workspace:*",
+		"better-auth": "catalog:",
 		"drizzle-orm": "catalog:",
-		"pg": "catalog:"
+		"pg": "catalog:",
+		"react": "catalog:"
 	},
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",
 		"@types/node": "catalog:",
 		"@types/pg": "catalog:",
+		"@types/react": "catalog:",
 		"dotenv-cli": "catalog:",
 		"drizzle-kit": "catalog:",
-		"typescript": "catalog:"
+		"typescript": "catalog:",
+		"vite": "catalog:"
 	}
 }

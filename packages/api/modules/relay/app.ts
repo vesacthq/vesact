@@ -1,6 +1,6 @@
-import { auth } from "@repo/auth";
-import { recordRelayApiUsage } from "@repo/database";
 import { logger } from "@repo/logs";
+import { auth } from "@repo/relay/auth";
+import { recordRelayApiUsage } from "@repo/relay/db";
 import { type Context, Hono } from "hono";
 import { except } from "hono/combine";
 import { createMiddleware } from "hono/factory";

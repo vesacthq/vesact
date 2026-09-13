@@ -24,6 +24,7 @@
 		"@repo/notifications": "workspace:*",
 		"@repo/payments": "workspace:*",
 		"@repo/permissions": "workspace:*",
+		"@repo/relay": "workspace:*",
 		"@repo/storage": "workspace:*",
 		"@repo/utils": "workspace:*",
 		"@scalar/hono-api-reference": "catalog:",

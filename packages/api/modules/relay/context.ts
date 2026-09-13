@@ -1,6 +1,6 @@
-import type { auth } from "@repo/auth";
+import type { VerifiedKey } from "@repo/relay/auth";
 
-export type VerifiedKey = NonNullable<Awaited<ReturnType<typeof auth.api.verifyApiKey>>["key"]>;
+export type { VerifiedKey };
 
 export interface RelayAuth {
 	organizationId: string;

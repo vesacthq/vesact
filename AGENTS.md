@@ -7,7 +7,8 @@ Explicit user instructions win; if a documented command fails, report it rather 
 ## Product context
 
 Studio (`apps/studio`) is the first product; Relay, an API platform, is planned
-as the second; the account center (`apps/account`) serves both. Design docs live
+as the second with its own login (`packages/relay/auth`); the account center (`apps/account`)
+serves Studio. Design docs live
 under `docs/`, one file per question (`product.md`, `architecture.md`,
 `decisions.md`, `reference/`); `docs/README.md` is the map and the rules. A
 file's frontmatter carries `status: draft | final`; a draft means use its terms,
