@@ -15,7 +15,10 @@ curl_local() {
 	local url="$1" host port
 	shift
 	host=$(printf '%s' "$url" | sed -E 's#^https?://([^/:]+).*#\1#')
-	case "$url" in https://*) port=443 ;; *) port=80 ;; esac
+	port=$(printf '%s' "$url" | sed -nE 's#^https?://[^/:]+:([0-9]+).*#\1#p')
+	if [ -z "$port" ]; then
+		case "$url" in https://*) port=443 ;; *) port=80 ;; esac
+	fi
 	if [ "$host" = "localhost" ]; then
 		curl -sS "$@" "$url"
 	else

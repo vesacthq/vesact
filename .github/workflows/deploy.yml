@@ -49,9 +49,9 @@ jobs:
           tags: vesact-${{ matrix.app }}:${{ github.sha }}
           build-args: |
             APP=${{ matrix.app }}
-            VITE_STUDIO_URL=https://studio.allcast.cc
-            VITE_ACCOUNT_URL=https://studio.allcast.cc/account
-            VITE_MARKETING_URL=https://www.allcast.cc
+            VITE_STUDIO_URL=https://studio.allcast.cc:8443
+            VITE_ACCOUNT_URL=https://studio.allcast.cc:8443/account
+            VITE_MARKETING_URL=https://www.allcast.cc:8443
             VITE_POSTHOG_HOST=https://e.vesact.com
             VITE_POSTHOG_KEY=phc_uLUk93bEHjHERp7hMxbDRiRPG4PefxhnzTkSGWYscgjR
       - name: Install sops
@@ -91,9 +91,9 @@ jobs:
     env:
       VPS_HOST: 118.89.171.81
       VPS_USER: ubuntu
-      SITE_URL: https://studio.allcast.cc
-      MARKETING_URL: https://www.allcast.cc
-      APEX_URL: https://allcast.cc
+      SITE_URL: https://studio.allcast.cc:8443
+      MARKETING_URL: https://www.allcast.cc:8443
+      APEX_URL: https://allcast.cc:8443
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
