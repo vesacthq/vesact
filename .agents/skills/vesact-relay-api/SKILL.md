@@ -31,9 +31,7 @@ check (none yet): it keeps the first response for 24 hours per key, path and
 body or 409 while the first request runs.
 Errors, even those raised before a procedure, use oRPC's body shape. Relay's
 database is its own (`packages/relay/db`: schema, migrations, client, keyed by
-`RELAY_DATABASE_URL`; local database `vesact_relay`); until #119 moves the
-code, `packages/database/drizzle/schema/relay.ts` still mirrors the tables for
-the Studio-side imports. The acceptance run
+`RELAY_DATABASE_URL`; local database `vesact_relay`). The acceptance run
 for the chain is `pnpm --filter @repo/scripts relay:acceptance` (see the
 script's header for the arguments).
 
