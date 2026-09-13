@@ -2,9 +2,9 @@ import { authClient } from "@repo/relay/auth/client";
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 /**
- * Keys are listed, created and revoked through the account center's api-key
- * endpoints, from the browser with the shared session. The list never
- * contains a secret; the create response is the only place it appears.
+ * Keys are listed, created and revoked through Relay's own api-key endpoints,
+ * from the browser with the console session. The list never contains a
+ * secret; the create response is the only place it appears.
  */
 const apiKeysQueryKey = (organizationId: string) =>
 	["organization", organizationId, "api-keys"] as const;

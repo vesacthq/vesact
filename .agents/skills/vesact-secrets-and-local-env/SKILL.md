@@ -25,7 +25,7 @@ the same `updatekeys`.
 | `secrets/relay-database.<env>.env` | `RELAY_DATABASE_URL` of Relay's own Neon project for `pnpm --filter @repo/relay db:migrate`, prod and preview                                                   |
 | `secrets/infra.env`                | Operator tokens that create Neon projects and Hyperdrive configs; never loaded by CI                                                                            |
 | `secrets/studio.<env>.env`         | Worker secrets, synced on every deploy                                                                                                                          |
-| `secrets/relay.<env>.env`          | The Relay Worker: the studio keys without `S3_*` (same `BETTER_AUTH_SECRET`), plus `META_APP_SECRET` and `META_WEBHOOK_VERIFY_TOKEN`                            |
+| `secrets/relay.<env>.env`          | The Relay Worker: its own `BETTER_AUTH_SECRET`, the Google client, `META_APP_SECRET` and `META_WEBHOOK_VERIFY_TOKEN`                                            |
 | `secrets/<app>.dev.env`            | `apps/<app>/.dev.vars` via `pnpm secrets:pull`                                                                                                                  |
 | `secrets/meta.env`                 | The Meta app "Vesact": ids, secrets, test tokens; keys explained in `docs/reference/meta.md`; copied into `relay.<target>.env` when Relay deploys               |
 | `secrets/company.yaml`             | Company facts: legal entity, registration numbers, Meta Business ID (keys visible, values encrypted)                                                            |

@@ -1,5 +1,6 @@
+import { sessionQueryOptions } from "@auth/lib/api";
 import { useTranslations } from "@i18n/intl";
-import { organizationListQueryKey, setActiveOrganization } from "@organizations/lib/api";
+import { organizationListQueryOptions, setActiveOrganization } from "@organizations/lib/api";
 import { authClient } from "@repo/relay/auth/client";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -48,7 +49,15 @@ export function CreateOrganizationForm() {
 			}
 
 			await setActiveOrganization(organization.slug);
-			await queryClient.invalidateQueries({ queryKey: organizationListQueryKey });
+			// Nothing observes these queries, so a refetch and an explicit update
+			// rather than an invalidation: the layout reads them from its context.
+			await queryClient.fetchQuery({ ...organizationListQueryOptions(), staleTime: 0 });
+			queryClient.setQueryData(sessionQueryOptions().queryKey, (current) =>
+				current
+					? { ...current, session: { ...current.session, activeOrganizationId: organization.id } }
+					: current,
+			);
+			await router.invalidate();
 
 			void router.navigate({
 				to: "/$organizationSlug",
