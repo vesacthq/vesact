@@ -4,14 +4,14 @@ import { getReturnUrl, getSafeRedirectUrl, productNameForUrl } from "./redirects
 
 const options = {
 	fallback: "https://studio.vesact.com/",
-	allowedOrigins: ["https://studio.vesact.com", "https://relay.vesact.com"],
+	allowedOrigins: ["https://studio.vesact.com", "https://second.vesact.com"],
 	base: "https://account.vesact.com",
 };
 
 describe("getSafeRedirectUrl", () => {
 	it.each([
 		["https://studio.vesact.com/inbox?x=1#y", "https://studio.vesact.com/inbox?x=1#y"],
-		["https://relay.vesact.com/settings/api-keys", "https://relay.vesact.com/settings/api-keys"],
+		["https://second.vesact.com/settings/api-keys", "https://second.vesact.com/settings/api-keys"],
 		["/account", "/account"],
 		["/account/../login", "/login"],
 	])("allows %s", (value, expected) => {
@@ -44,8 +44,8 @@ describe("getSafeRedirectUrl", () => {
 
 describe("getReturnUrl", () => {
 	it("returns to the product the user came from, or to Studio", () => {
-		expect(getReturnUrl("https://relay.vesact.com/keys", options)).toBe(
-			"https://relay.vesact.com/keys",
+		expect(getReturnUrl("https://second.vesact.com/keys", options)).toBe(
+			"https://second.vesact.com/keys",
 		);
 		expect(getReturnUrl("https://attacker.example/", options)).toBe("https://studio.vesact.com/");
 		expect(getReturnUrl(undefined, options)).toBe("https://studio.vesact.com/");
