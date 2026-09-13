@@ -4,6 +4,7 @@
 			"navigationTitle": "Navigation",
 			"overview": "Overview",
 			"apiKeys": "API keys",
+			"members": "Members",
 			"apiReference": "API reference"
 		},
 		"userMenu": {
@@ -30,6 +31,103 @@
 			"name": "Organization name",
 			"submit": "Create organization",
 			"error": "The organization could not be created. Please try again."
+		},
+		"roles": {
+			"owner": "Owner",
+			"admin": "Admin",
+			"member": "Member"
+		},
+		"members": {
+			"title": "Members",
+			"subtitle": "Owners and admins manage keys, members and invitations; members use the console and read the keys.",
+			"list": {
+				"title": "Members",
+				"description": "Everyone with access to this organization in Relay.",
+				"empty": "No members.",
+				"you": "You",
+				"role": "Role"
+			},
+			"updateRole": {
+				"loading": "Updating role…",
+				"success": "Role updated",
+				"error": "The role could not be updated."
+			},
+			"remove": {
+				"action": "Remove member",
+				"title": "Remove this member?",
+				"message": "{name} loses access to this organization immediately.",
+				"confirm": "Remove",
+				"loading": "Removing member…",
+				"success": "Member removed",
+				"error": "The member could not be removed."
+			},
+			"leave": {
+				"action": "Leave organization",
+				"title": "Leave this organization?",
+				"message": "You lose access to {name}. Another owner or admin can invite you again.",
+				"confirm": "Leave",
+				"error": "You could not leave the organization."
+			},
+			"errors": {
+				"lastOwner": "The organization needs at least one owner. Make another member an owner first.",
+				"alreadyMember": "This person is already a member of the organization.",
+				"alreadyInvited": "This email already has a pending invitation.",
+				"notAllowed": "Your role does not allow this."
+			}
+		},
+		"invitations": {
+			"list": {
+				"title": "Pending invitations",
+				"description": "Relay sends no email: share the link with the person you invited.",
+				"empty": "No pending invitations.",
+				"expires": "Expires {date}",
+				"expired": "Expired {date}",
+				"copyLink": "Copy link",
+				"copied": "Copied",
+				"revoke": "Revoke"
+			},
+			"create": {
+				"button": "Invite member",
+				"title": "Invite a member",
+				"description": "You will get a link to share; the invitee signs in with the Google account of this email.",
+				"email": "Email",
+				"emailPlaceholder": "name@company.com",
+				"role": "Role",
+				"submit": "Create invitation",
+				"error": "The invitation could not be created."
+			},
+			"created": {
+				"title": "Invitation created",
+				"description": "Send this link to {email}. It can be copied again from the pending invitations.",
+				"copy": "Copy",
+				"copied": "Copied",
+				"done": "Done"
+			},
+			"revoke": {
+				"title": "Revoke this invitation?",
+				"message": "The link sent to {email} stops working.",
+				"confirm": "Revoke",
+				"loading": "Revoking invitation…",
+				"success": "Invitation revoked",
+				"error": "The invitation could not be revoked."
+			}
+		},
+		"invitation": {
+			"title": "Join the organization",
+			"description": "{inviter} invited you to join. Your role will be {role}.",
+			"signedInAs": "Signed in as {email}",
+			"accept": "Accept",
+			"decline": "Decline",
+			"error": "The invitation could not be answered. Please try again.",
+			"switchAccount": "Switch account",
+			"invalid": {
+				"title": "This invitation is no longer valid",
+				"description": "It may have expired, been accepted already, or been revoked. Ask an owner or admin of the organization for a new link."
+			},
+			"notRecipient": {
+				"title": "This invitation is for another account",
+				"description": "You are signed in as {email}. Sign in with the Google account the invitation was sent to."
+			}
 		}
 	},
 	"overview": {

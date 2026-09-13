@@ -21,9 +21,11 @@ const loadOrganizationFn = createServerFn({ method: "GET", strict: false })
 		result: await getOrganizationBySlug(organizationSlug),
 	}));
 
+export const organizationQueryKey = (slug: string) => ["organization", slug] as const;
+
 export const organizationQueryOptions = (slug: string) =>
 	queryOptions({
-		queryKey: ["organization", slug],
+		queryKey: organizationQueryKey(slug),
 		queryFn: async () => (await loadOrganizationFn({ data: slug })).result,
 	});
 
