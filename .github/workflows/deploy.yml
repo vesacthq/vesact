@@ -51,8 +51,6 @@ jobs:
             VITE_RELAY_URL=https://relay.vesact.com
             VITE_POSTHOG_HOST=https://e.vesact.com
             VITE_POSTHOG_KEY=phc_uLUk93bEHjHERp7hMxbDRiRPG4PefxhnzTkSGWYscgjR
-          cache-from: type=gha,scope=${{ matrix.app }}
-          cache-to: type=gha,scope=${{ matrix.app }},mode=max
 
   marketing:
     name: Marketing

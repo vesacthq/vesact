@@ -83,6 +83,10 @@ jobs:
       VITE_ACCOUNT_URL: http://localhost/account
       VITE_MARKETING_URL: http://localhost:3001
       DATABASE_URL: postgresql://postgres:postgres@localhost:5433/vesact
+      STUDIO_IMAGE: vesact-studio:ci
+      ACCOUNT_IMAGE: vesact-account:ci
+      MARKETING_IMAGE: vesact-marketing:ci
+      POSTGRES_PASSWORD: postgres
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3
@@ -97,8 +101,6 @@ jobs:
             VITE_STUDIO_URL=${{ env.VITE_STUDIO_URL }}
             VITE_ACCOUNT_URL=${{ env.VITE_ACCOUNT_URL }}
             VITE_MARKETING_URL=${{ env.VITE_MARKETING_URL }}
-          cache-from: type=gha,scope=studio
-          cache-to: type=gha,scope=studio,mode=max
       - name: Build the account image
         uses: docker/build-push-action@v6
         with:
@@ -110,8 +112,6 @@ jobs:
             VITE_STUDIO_URL=${{ env.VITE_STUDIO_URL }}
             VITE_ACCOUNT_URL=${{ env.VITE_ACCOUNT_URL }}
             VITE_MARKETING_URL=${{ env.VITE_MARKETING_URL }}
-          cache-from: type=gha,scope=account
-          cache-to: type=gha,scope=account,mode=max
       - name: Build the marketing image
         uses: docker/build-push-action@v6
         with:
@@ -123,8 +123,6 @@ jobs:
             VITE_STUDIO_URL=${{ env.VITE_STUDIO_URL }}
             VITE_ACCOUNT_URL=${{ env.VITE_ACCOUNT_URL }}
             VITE_MARKETING_URL=${{ env.VITE_MARKETING_URL }}
-          cache-from: type=gha,scope=marketing
-          cache-to: type=gha,scope=marketing,mode=max
       - name: Write the runtime env files
         run: |
           mkdir -p env
@@ -147,11 +145,6 @@ jobs:
                 - "127.0.0.1:5433:5432"
           YML
       - name: Start the stack
-        env:
-          STUDIO_IMAGE: vesact-studio:ci
-          ACCOUNT_IMAGE: vesact-account:ci
-          MARKETING_IMAGE: vesact-marketing:ci
-          POSTGRES_PASSWORD: postgres
         run: docker compose -f docker-compose.prod.yml -f ci.override.yml up -d --wait --wait-timeout 180
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
