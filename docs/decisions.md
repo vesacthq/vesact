@@ -2,6 +2,11 @@
 
 倒序。只写结论和理由，过程在对应的 issue 里。
 
+## 2026-09-13 生产落在腾讯云，域名 allcast.cc
+
+- Studio 单元的正式版直接跑在腾讯云上海的一台机器上，域名 `allcast.cc`（DNSPod 注册，`studio.` 和 `www.`，裸域 301 到 `www`），与备案并行：备案通过前域名的 80/443 被拦，Caddy 先用自签证书，冒烟在机器本机做。库是机器上的 postgres 容器；Neon production 的数据不迁，URL 留档。镜像不经仓库：CI 构建后经 COS 全球加速桶送到机器（runner 直连上海只有几十到一千 KB/s）。Cloudflare 上 studio、account、marketing 的 prod Worker 和 `www.`、`studio.`、`account.`、`auth.vesact.com` 主机名退役；Relay 不动。生产不配 Google 登录。取代 2026-09-13「Studio 单元两个构建目标」里"先在海外 VPS、库沿用 Neon、备案后搬腾讯云换腾讯云 PostgreSQL、域名备案前定"的安排，以及「账号中心挂在 /account」里 `account.<域名>` 退役等 #121 的说法。
+- 理由：海外演练已经证明了 Docker 目标和流水线，再切一次海外正式流量只是多一次搬家。机器够不到 GHCR、Docker Hub 和 Google：镜像仓库要么收费要么再开一家云，COS 桶一次部署几毛钱且以后备份也用它；Google 的 token 端点不通，登录留给备案后的国内方式。库和对象存储先用最省事的（容器、R2），没有用户就没有备份和迁移的对象；TencentDB、COS、备份、`allcast.cc` 的邮件和品牌都在备案通过后再做。
+
 ## 2026-09-13 账号中心挂在 Studio 主机名的 /account 路径下
 
 - 账号中心仍是独立的应用和进程，对外挂在 `studio.<域名>/account/*`：Docker 目标里 Caddy 按路径分发到两个容器，Worker 目标里用 Workers 路由。cookie 只在主机名上，跨子域 cookie 那套（`crossSubDomainCookies`、父域推导、preview 的 cookie 前缀）去掉；`from`、`redirectTo` 成为同源路径。`account.<域名>` 和 `auth.<域名>` 主机名退役，不做 301。取代 2026-09-09「认证拓扑」里会话 cookie 设在 `.vesact.com` 和 2026-09-11「Relay API 约定与骨架」里 preview cookie 域与前缀的安排。

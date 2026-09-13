@@ -15,7 +15,7 @@
 	"vars": {
 		"VITE_RELAY_URL": "https://relay.vesact.com",
 		"VITE_RELAY_API_URL": "https://api.vesact.com",
-		"VITE_MARKETING_URL": "https://www.vesact.com",
+		"VITE_MARKETING_URL": "https://www.allcast.cc",
 		"META_APP_ID": "2027645691445350",
 	},
 	"hyperdrive": [

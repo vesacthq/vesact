@@ -14,18 +14,18 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
 1. Decide where the value belongs. Public build-time values (`VITE_*`) live in
    `.github/scripts/select-target.sh` per target and, for the Worker runtime, in
    the `vars` of `apps/<app>/wrangler.jsonc` (`env.preview.vars` for preview).
-   The Docker target reads them twice: as build args of the `images` job in
-   `deploy.yml` (and of `docker-compose.prod.yml`'s `build`), and at runtime from
-   `secrets/<app>.vps.env`, which the `vps` job writes to `env/<app>.env` on the
-   machine together with every server-side variable, `wrangler.jsonc` vars
+   The Docker target (production) reads them twice: as build args of the `images`
+   job in `deploy.yml` (and of `docker-compose.prod.yml`'s `build`), and at runtime
+   from `secrets/<app>.prod.env`, which the `vps` job writes to `env/<app>.env` on
+   the machine together with every server-side variable, `wrangler.jsonc` vars
    included. Anything secret goes in `secrets/<file>.env`, never in
    `wrangler.jsonc`, workflow files, or GitHub secrets.
 2. Edit a secrets file with `sops secrets/<file>.env`. Worker secrets belong in
-   `<app>.<target>.env` (`studio`, `account`, `relay`), the Docker target's
-   runtime variables in `<app>.vps.env` plus `vps.env` (compose environment),
-   migration URLs in `database.<target>.env` and `relay-database.<target>.env`
-   (`vps` for the machine), CI-only credentials in `ci.env`, operator tokens in
-   `infra.env`, local values in `<app>.dev.env`. Commit the encrypted file;
+   `<app>.preview.env` and `relay.<target>.env`, the production machine's
+   runtime variables in `<app>.prod.env` plus `prod.env` (compose environment),
+   migration URLs in `database.<target>.env` and `relay-database.<target>.env`,
+   CI-only credentials in `ci.env`, operator tokens in `infra.env`, local values
+   in `<app>.dev.env`. Commit the encrypted file;
    `deploy.yml` syncs Worker secrets and the machine's env files on the next
    deploy.
 3. After changing an `<app>.dev.env`, run `pnpm secrets:pull` so the app's
