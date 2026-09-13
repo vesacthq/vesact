@@ -22,7 +22,8 @@ The environment matrix (dev / preview / prod) is in `AGENTS.md` under
 `deploy.yml` runs one job per app: `select-target.sh` picks the target from the
 event, `load-env.sh` decrypts what the job needs into masked environment
 variables, then build → `wrangler deploy` → `wrangler secret bulk`. The account job runs the database migration first; the studio and relay jobs
-wait for it. The relay Worker answers on two custom domains and dispatches by
+wait for it. On `main` the `images` job also builds the Docker target of
+studio, account and marketing and pushes it to GHCR (see "Docker target"). The relay Worker answers on two custom domains and dispatches by
 path (`docs/relay/architecture.md` §2). The Cloudflare Vite plugin flattens the selected environment into
 `.output/server/wrangler.json` at build time, so `CLOUDFLARE_ENV` is set for the
 build and `wrangler deploy` takes no `--env`. Preview builds leave
@@ -49,6 +50,46 @@ that bucket: the access key id is the token id, the secret is the SHA-256 hex
 of the token value. Rotate by creating a new token the same way
 (`POST /accounts/{id}/tokens`), editing the four `<app>.<target>.env` files
 with `sops set`, and deploying.
+
+## Docker target
+
+The root `Dockerfile` builds one image per app (`--build-arg APP=<app>` and the
+public `VITE_*` URLs, which are inlined into the client bundle): a Node 22
+Alpine build stage runs `pnpm install`, `pnpm --filter <app> build:node` and
+`pnpm --filter <app> deploy --prod --legacy /app`; the runtime stage runs
+`srvx --prod` on port 3000 as the `node` user. `.dockerignore` keeps `.env*`,
+`env/`, `secrets/` and `.dev.vars` out of the context.
+
+`docker-compose.prod.yml` is the whole Studio unit: `postgres`, `studio`,
+`account`, `marketing` and `caddy`. Caddy owns 80/443, obtains the certificate
+for `SITE_ADDRESS`, sends `/account` and `/account/*` to the account container
+and everything else on that hostname to studio, serves `MARKETING_ADDRESS` from
+the marketing container (`http://localhost:3001` by default, bound to the
+loopback interface) and sets `Cache-Control: immutable` on `/assets/*`. The app
+containers publish no ports: Docker's published ports bypass ufw, and the
+entries trust `X-Forwarded-*`. Runtime variables come from `env/<app>.env`
+(gitignored; written from sops on the machine) — the Worker secrets plus what
+`wrangler.jsonc` `vars` carried (`VITE_*`, `S3_ENDPOINT`, `S3_REGION`) and
+`DATABASE_URL`; `POSTGRES_PASSWORD`, `SITE_ADDRESS` and `MARKETING_ADDRESS`
+come from the compose environment (`.env` next to the compose file). Image
+names default to `ghcr.io/vesacthq/vesact-<app>:latest`; `STUDIO_IMAGE`,
+`ACCOUNT_IMAGE`, `MARKETING_IMAGE` override them. Postgres has no published
+port; to migrate or seed from outside, run a throwaway
+`alpine/socat` container on the compose network with a port bound to
+`127.0.0.1` and tunnel to it over SSH.
+
+CI: the "Docker target" job of `validate-prs.yml` builds the three images,
+starts the stack with CI env files and a port override for the schema push,
+and runs `.github/scripts/smoke.sh <studio url> <marketing url>` (signed-out
+`/` 307, `/account/login` 200, both health endpoints, a 401 from
+`sign-in/email` proving the database is reachable, marketing 200). The same
+script is the post-deploy check. GHCR creates the packages private; the
+machine that pulls them needs them switched to public in the org's package
+settings or a `read:packages` token.
+
+The images are 1–1.5 GB unpacked (≈250 MB compressed), mostly production
+dependencies that `pnpm deploy` copies for the app, including `next` arriving
+as an optional peer of better-auth; trimming them is a separate task.
 
 ## Accounts and resources
 

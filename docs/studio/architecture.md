@@ -273,7 +273,7 @@ reviewed: 2026-09-13
 
 ## 6. 部署
 
-（草稿，#118）每个 app 两个构建目标：Worker（`@cloudflare/vite-plugin`，preview）和 Docker（Node 入口，正式版）。
+每个 app 两个构建目标：Worker（`@cloudflare/vite-plugin`，preview）和 Docker（Node 入口，正式版）。两个目标同一份 `src/server.ts`，`BUILD_TARGET=node` 去掉 Cloudflare 插件、由 srvx 服务；根目录 `Dockerfile` 和 `docker-compose.prod.yml` 是 Docker 目标的打包和运行形态，每个 PR 的 CI 两个目标都构建。
 
 | 环境    | 形态                                                                                               | 主机                                         |
 | ------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------- |
@@ -281,7 +281,7 @@ reviewed: 2026-09-13
 | preview | worker `vesact-studio-preview`，`/account/*` 由 Workers 路由分给 account worker                    | `studio.preview.vesact.com`，Access 后面     |
 | dev     | `pnpm dev`                                                                                         | `localhost:3000`                             |
 
-正式版先在海外 VPS，库沿用 Neon production；备案后搬腾讯云，库换成腾讯云 PostgreSQL，域名那时定（../decisions.md 2026-09-13）。部署：CI 构建镜像推 GHCR，经 SSH 在机器上 `docker compose pull && up -d`，迁移在切换前跑。CI 每个 PR 两个目标都构建。环境矩阵见 AGENTS.md。
+正式版先在海外 VPS，库沿用 Neon production；备案后搬腾讯云，库换成腾讯云 PostgreSQL，域名那时定（../decisions.md 2026-09-13）。部署：CI 构建镜像推 GHCR，经 SSH 在机器上 `docker compose pull && up -d`，迁移在切换前跑（#121；切流前 prod 行仍是 Worker，机器上先以 `jp.vesact.com` 演练）。环境矩阵见 AGENTS.md。
 
 ## 7. 横切
 

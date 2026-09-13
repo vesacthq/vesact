@@ -243,7 +243,8 @@ for local values and never commit it; secrets live encrypted under `secrets/`. V
 
 ## Environments & deployment
 
-Each app is a Cloudflare Worker. Three environments, the same shape for every app:
+Each app is a Cloudflare Worker; studio, account and marketing also build a Docker target
+(below). Three environments, the same shape for every app:
 
 |               | dev                                        | preview                                                                                   | prod                                              |
 | ------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------- |
@@ -258,16 +259,32 @@ Each app is a Cloudflare Worker. Three environments, the same shape for every ap
 | Cookie domain | host-only                                  | host-only (studio and account share the hostname), prefix `vesact-preview`                | `.vesact.com` until #121                          |
 
 `deploy.yml` runs one job per app: build → `wrangler deploy` → `wrangler secret bulk`, the
-account job's migration first. It makes no HTTP check after the deploy (Bot Fight Mode
-challenges the runner): verify by hand or through Workers versions. `VITE_STUDIO_URL`,
-`VITE_ACCOUNT_URL` and `VITE_MARKETING_URL` are read at build time, so a change needs a rebuild.
+account job's migration first, plus an `images` job that pushes the Docker target to GHCR on
+`main`. It makes no HTTP check after the Worker deploy (Bot Fight Mode challenges the runner):
+verify by hand or through Workers versions. `VITE_STUDIO_URL`, `VITE_ACCOUNT_URL` and
+`VITE_MARKETING_URL` are read at build time, so a change needs a rebuild.
 Hostnames, pipeline scripts, preview database, R2, Cloudflare, Neon, Hyperdrive and Access: `vesact-deploy-and-infra` skill.
+
+### Docker target
+
+`pnpm --filter <app> build:node` builds studio, account or marketing without the Cloudflare
+plugin (`BUILD_TARGET=node`, output in `.output/node/`, the app's own `src/server.ts` as the
+entry) and `pnpm --filter <app> start:node` serves it with srvx. The root `Dockerfile`
+(`docker build --build-arg APP=<app> --build-arg VITE_STUDIO_URL=… .`) packages that build;
+`docker-compose.prod.yml` runs the three containers behind Caddy (`Caddyfile`: `/account/*` to
+account, the rest of the Studio hostname to studio) with one Postgres, reading each app's
+runtime variables from `env/<app>.env` and `SITE_ADDRESS`, `MARKETING_ADDRESS`,
+`POSTGRES_PASSWORD` from the compose environment. The Docker target only uses what both
+targets have (`docs/studio/architecture.md` §5.4). Every pull request builds the images and
+smokes the stack (`validate-prs.yml` job "Docker target", `.github/scripts/smoke.sh`); pushes to
+`main` publish `ghcr.io/vesacthq/vesact-<app>:<sha>` and `:latest`. Where the images run and
+how they get there: `vesact-deploy-and-infra` skill.
 
 ### Workflow
 
 Branch from `main`. Before opening a code pull request, run the
 `vesact-review-pr` skill and fix what survives its verification on the same
-branch. `validate-prs.yml` runs lint, type check, build, unit and e2e;
+branch. `validate-prs.yml` runs lint, type check, build, unit, the Docker smoke and e2e;
 `deploy.yml` puts the branch on preview. Check the preview, then merge with a
 merge commit; the push to `main` deploys production.
 
