@@ -1,4 +1,7 @@
+import type { RouterClient } from "@orpc/server";
 import { z } from "zod";
+
+import type { RelayRouter } from "../api/router";
 
 // The shapes of /v1, without runtime dependencies: Studio and other clients
 // import these; the procedures in ../api validate against the same objects.
@@ -18,4 +21,5 @@ export const apiKeyOutput = z.object({
 export type HealthOutput = z.infer<typeof healthOutput>;
 export type ApiKeyOutput = z.infer<typeof apiKeyOutput>;
 
-export type { RelayRouter } from "../api/router";
+export type { RelayRouter };
+export type RelayRouterClient = RouterClient<RelayRouter>;

@@ -423,7 +423,7 @@ Content-Type: application/json
 - 插件限流每次校验写一次 key 行。单库扛不住时在前面加 Workers Rate Limiting binding，契约不变。
 - Hyperdrive 的查询缓存全部关闭（../decisions.md 2026-09-11）。插件先读 key 行再带条件更新，读到缓存就会一直更新失败、重读缓存，直到缓存过期；吊销的 key 也会在缓存期内继续有效。
 - Meta 一个 App 只能一个回调 URL，指向 prod；preview 只靠 curl 验证。
-- 切分落地前 `client.ts` 改导入是模板的六个缝之一，同步上游时留意；落地后 `packages/database` 不再含 Relay 的表。
+- `packages/database` 不再含 Relay 的表；它的 `client.ts` 仍导入 `./schema`（index 只剩 `postgres`），和模板的 `./schema/postgres` 不同，同步上游时留意。
 
 ## 附录：参考资料
 

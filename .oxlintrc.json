@@ -29,9 +29,10 @@
 									"!@repo/utils",
 									"!@repo/i18n",
 									"!@repo/logs",
-									"!@repo/relay"
+									"!@repo/relay",
+									"**/packages/**"
 								],
-								"message": "Relay depends only on @repo/ui, @repo/utils, @repo/i18n and @repo/logs (docs/relay/architecture.md §4.3)."
+								"message": "Relay depends only on @repo/ui, @repo/utils, @repo/i18n and @repo/logs (docs/relay/architecture.md \u00a74.3)."
 							}
 						]
 					}

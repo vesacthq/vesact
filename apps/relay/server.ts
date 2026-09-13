@@ -1,4 +1,6 @@
-import { notFoundResponse } from "@repo/relay/api";
+// The leaf module: the api barrel would pull the database client in before
+// connectDatabase() has run.
+import { notFoundResponse } from "@repo/relay/api/errors";
 import { getBaseUrl } from "@repo/utils";
 import type { Register } from "@tanstack/react-router";
 import type { RequestOptions } from "@tanstack/react-start/server";

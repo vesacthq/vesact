@@ -4,6 +4,7 @@
 	"private": true,
 	"exports": {
 		"./api": "./api/index.ts",
+		"./api/errors": "./api/lib/errors.ts",
 		"./auth": "./auth/index.ts",
 		"./auth/access": "./auth/access.ts",
 		"./auth/client": "./auth/client.ts",
