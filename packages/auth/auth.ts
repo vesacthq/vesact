@@ -150,11 +150,11 @@ export const auth = betterAuth({
 			) {
 				const candidateSlug = (
 					ctx.path.startsWith("/organization/update") ? ctx.body?.data?.slug : ctx.body?.slug
-				) as string | undefined;
+				) as unknown;
 				if (
-					candidateSlug &&
+					typeof candidateSlug === "string" &&
 					(config.organizations.forbiddenOrganizationSlugs as readonly string[]).includes(
-						candidateSlug,
+						candidateSlug.toLowerCase(),
 					)
 				) {
 					throw new APIError("BAD_REQUEST", {

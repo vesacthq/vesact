@@ -48,8 +48,8 @@ jobs:
             VITE_STUDIO_URL=https://jp.vesact.com
             VITE_ACCOUNT_URL=https://jp.vesact.com/account
             VITE_MARKETING_URL=https://www.vesact.com
-            VITE_POSTHOG_HOST=https://e.vesact.com
-            VITE_POSTHOG_KEY=phc_uLUk93bEHjHERp7hMxbDRiRPG4PefxhnzTkSGWYscgjR
+          # No PostHog key: the rehearsal machine's traffic stays out of production analytics
+          # (same as preview); the cut-over adds it with the production hostnames.
 
   vps:
     name: VPS

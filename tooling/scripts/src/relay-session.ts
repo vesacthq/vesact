@@ -8,8 +8,9 @@ import { db, session, user } from "@repo/relay/db";
  * Relay signs in with Google only, so a check or a test that needs a console
  * session gets one written straight into Relay's database, plus the cookie
  * better-auth would have set: `<token>.<base64 HMAC-SHA256(token, secret)>`,
- * URL-encoded, under the `relay` cookie prefix. Needs RELAY_DATABASE_URL and
- * the BETTER_AUTH_SECRET of the same environment.
+ * URL-encoded, under the `relay` cookie prefix (`__Secure-` in front when
+ * VITE_RELAY_URL is https). Needs RELAY_DATABASE_URL, VITE_RELAY_URL and the
+ * BETTER_AUTH_SECRET of the same environment.
  *
  *   sops exec-env secrets/relay.dev.env \
  *     'pnpm --filter @repo/scripts relay:session --email you@example.com'
@@ -44,7 +45,11 @@ async function main(email: string, name: string, secret: string) {
 	});
 
 	const signature = createHmac("sha256", secret).update(token).digest("base64");
-	logger.info(`relay.session_token=${encodeURIComponent(`${token}.${signature}`)}`);
+	// better-auth prefixes the cookie with `__Secure-` wherever the console is served over https.
+	const cookieName = process.env.VITE_RELAY_URL?.startsWith("https://")
+		? "__Secure-relay.session_token"
+		: "relay.session_token";
+	logger.info(`${cookieName}=${encodeURIComponent(`${token}.${signature}`)}`);
 	await db.$client.end();
 }
 

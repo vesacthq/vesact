@@ -60,7 +60,11 @@ function normalize(value: string | null | undefined, allowed: string[], base: st
 
 		try {
 			const url = new URL(value, base);
-			return url.origin === new URL(base).origin ? `${url.pathname}${url.search}${url.hash}` : null;
+			// Dot segments can rebuild a `//host` path: `/..//evil` normalises to `//evil`.
+			if (url.origin !== new URL(base).origin || url.pathname.startsWith("//")) {
+				return null;
+			}
+			return `${url.pathname}${url.search}${url.hash}`;
 		} catch {
 			return null;
 		}

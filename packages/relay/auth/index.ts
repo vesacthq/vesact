@@ -55,9 +55,10 @@ export const auth = betterAuth({
 			) {
 				const slug = (
 					ctx.path.startsWith("/organization/update") ? ctx.body?.data?.slug : ctx.body?.slug
-				) as string | undefined;
+				) as unknown;
 
-				if (slug && reservedSlugs.includes(slug)) {
+				// The router matches case-insensitively, so `Login` would shadow `/login` too.
+				if (typeof slug === "string" && reservedSlugs.includes(slug.toLowerCase())) {
 					throw new APIError("BAD_REQUEST", {
 						code: "FORBIDDEN_ORGANIZATION_SLUG",
 						message: "This organization slug is reserved.",
