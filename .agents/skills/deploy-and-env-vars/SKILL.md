@@ -51,9 +51,11 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
 ## Pitfalls
 
 - `vars` and bindings are not inherited by `env.preview`; redeclare them.
-- The session cookie domain is derived from `VITE_ACCOUNT_URL`; there is no
-  variable for it. Only the preview cookie prefix (`AUTH_COOKIE_PREFIX`) is set
-  by hand.
+- The session cookie is host-only when `VITE_ACCOUNT_URL` and `VITE_STUDIO_URL`
+  share an origin, and on the parent domain otherwise (production until #121);
+  there is no variable for it. Only the preview cookie prefix
+  (`AUTH_COOKIE_PREFIX`) is set by hand: production's parent-domain cookie also
+  reaches the preview hostname and would shadow it.
 - The account Worker uploads avatars and logos, so `secrets/account.<target>.env`
   carries the same `S3_*` keys as the studio file. `secrets/relay.<target>.env`
   is the studio file without `S3_*`, plus the Meta app secret and webhook verify

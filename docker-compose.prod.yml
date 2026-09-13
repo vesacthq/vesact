@@ -68,7 +68,9 @@ services:
         <<: *build-args
         APP: account
     env_file: env/account.env
-    healthcheck: *health
+    healthcheck:
+      <<: *health
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/account/api/health"]
 
   marketing:
     <<: *app

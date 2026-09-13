@@ -27,7 +27,7 @@ import { z } from "zod";
 
 import type { OAuthProvider } from "../constants/oauth-providers";
 import { lastUsedLoginMethodIds } from "../lib/last-used-login-method";
-import { getSafeRedirectUrl, invitationUrl } from "../lib/redirects";
+import { browserHref, getSafeRedirectUrl, invitationUrl } from "../lib/redirects";
 import { InvitationAlert } from "./InvitationAlert";
 import { LastUsedBadge } from "./LastUsedBadge";
 import { LoginModeSwitch } from "./LoginModeSwitch";
@@ -107,7 +107,7 @@ export function LoginForm({ oAuthProviders }: { oAuthProviders: OAuthProvider[] 
 				} else {
 					const { error } = await authClient.signIn.magicLink({
 						email: values.email,
-						callbackURL: redirectUrl,
+						callbackURL: browserHref(redirectUrl),
 					});
 
 					if (error) {

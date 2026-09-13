@@ -17,7 +17,7 @@ test.describe("as a member", () => {
 		const serverCalls: string[] = [];
 		page.on("request", (request) => {
 			const { pathname } = new URL(request.url());
-			if (pathname.startsWith("/_serverFn/") || pathname === "/api/auth/get-session") {
+			if (pathname.includes("/_serverFn/") || pathname.endsWith("/api/auth/get-session")) {
 				serverCalls.push(pathname);
 			}
 		});

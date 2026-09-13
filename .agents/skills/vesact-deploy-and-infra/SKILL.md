@@ -39,10 +39,10 @@ next visitor as a 103 Early Hints before the Worker runs.
 The preview database is one shared Neon branch; run the "Reset preview database"
 workflow to copy it fresh from production. Preview shares the production R2
 bucket. The `avatars` bucket's CORS rule allows `PUT` from
-`account.vesact.com`, `account.preview.vesact.com` and `studio.preview.vesact.com`,
-the only origins that upload from the browser; a new uploading origin (the
-account center under another hostname) has to be added there or the presigned
-PUT fails with a CORS error.
+`account.vesact.com` and `account.preview.vesact.com`, the only origins that
+uploaded from the browser so far; the account center now uploads from
+`studio.preview.vesact.com` (and `jp.vesact.com` in the #121 rehearsal), which
+have to be added there or the presigned PUT fails with a CORS error.
 The `S3_*` credentials in the studio and account secrets are an account-owned
 API token named "vesact avatars bucket (account and studio workers)", scoped to
 that bucket: the access key id is the token id, the secret is the SHA-256 hex
@@ -78,8 +78,11 @@ with `sops set`, and deploying.
   reach the preview webhook. `account.preview.vesact.com/api/auth` was another,
   from when the products called the auth endpoints cross-origin; the account
   center now answers under `studio.preview.vesact.com/account`, same origin as
-  Studio, so that application and the `account.preview.vesact.com` hostname are
-  unused and go when #122 cleans up.
+  Studio, so that application is unused. `wrangler deploy` adds routes but never
+  removes custom domains: `account.preview.vesact.com` and
+  `auth.preview.vesact.com` stay attached to `vesact-account-preview` (answering
+  404 for the app under its base) until they are detached in the dashboard or
+  through the Workers domains API.
   The zone's Bot Fight Mode stays on and cannot be skipped by a WAF rule on
   the Free plan; it challenges curl from the GitHub runner, which is why the
   deploy makes no HTTP check after `wrangler deploy` (the earlier smoke check

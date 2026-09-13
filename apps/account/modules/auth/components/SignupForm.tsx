@@ -29,7 +29,7 @@ import { withQuery } from "ufo";
 import { z } from "zod";
 
 import type { OAuthProvider } from "../constants/oauth-providers";
-import { getSafeRedirectUrl, invitationUrl, navigateTo } from "../lib/redirects";
+import { browserHref, getSafeRedirectUrl, invitationUrl, navigateTo } from "../lib/redirects";
 import { InvitationAlert } from "./InvitationAlert";
 import { SocialSigninButton } from "./SocialSigninButton";
 
@@ -82,12 +82,12 @@ export function SignupForm({
 							email: emailValue,
 							password,
 							name,
-							callbackURL: redirectUrl,
+							callbackURL: browserHref(redirectUrl),
 						})
 					: authClient.signIn.magicLink({
 							email: emailValue,
 							name,
-							callbackURL: redirectUrl,
+							callbackURL: browserHref(redirectUrl),
 						}));
 
 				if (error) {

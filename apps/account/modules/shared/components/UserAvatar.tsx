@@ -1,6 +1,7 @@
 import { config as storageConfig } from "@repo/storage/config";
 import { cn } from "@repo/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/avatar";
+import { withBasePath } from "@repo/utils";
 import { useMemo } from "react";
 
 export const UserAvatar = ({
@@ -28,7 +29,7 @@ export const UserAvatar = ({
 			avatarUrl
 				? avatarUrl.startsWith("http")
 					? avatarUrl
-					: `/image-proxy/${storageConfig.bucketNames.avatars}/${avatarUrl}`
+					: withBasePath(`/image-proxy/${storageConfig.bucketNames.avatars}/${avatarUrl}`)
 				: undefined,
 		[avatarUrl],
 	);

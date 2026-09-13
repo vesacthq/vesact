@@ -19,7 +19,7 @@ export function stripBasePath(pathname: string): string {
 	return pathname.startsWith(`${basePath}/`) ? pathname.slice(basePath.length) : pathname;
 }
 
-/** The browser pathname of an app path. */
+/** The browser pathname of an app path; the app root keeps its trailing slash. */
 export function withBasePath(pathname: string): string {
-	return pathname === "/" ? basePath || "/" : `${basePath}${pathname}`;
+	return pathname === "/" ? `${basePath}/` : `${basePath}${pathname}`;
 }

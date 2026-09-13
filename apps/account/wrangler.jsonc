@@ -36,7 +36,10 @@
 			"placement": { "mode": "smart" },
 			// Mounted under the Studio hostname; the studio Worker's custom domain
 			// answers everything else on it.
-			"routes": [{ "pattern": "studio.preview.vesact.com/account/*", "zone_name": "vesact.com" }],
+			"routes": [
+				{ "pattern": "studio.preview.vesact.com/account", "zone_name": "vesact.com" },
+				{ "pattern": "studio.preview.vesact.com/account/*", "zone_name": "vesact.com" },
+			],
 			"vars": {
 				"VITE_ACCOUNT_URL": "https://studio.preview.vesact.com/account",
 				"VITE_STUDIO_URL": "https://studio.preview.vesact.com",

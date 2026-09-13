@@ -245,17 +245,17 @@ for local values and never commit it; secrets live encrypted under `secrets/`. V
 
 Each app is a Cloudflare Worker. Three environments, the same shape for every app:
 
-|               | dev                                         | preview                                             | prod                                              |
-| ------------- | ------------------------------------------- | --------------------------------------------------- | ------------------------------------------------- |
-| Trigger       | `pnpm dev`                                  | pull request from this repository                   | push to `main`                                    |
-| Build         | `vite dev`                                  | `CLOUDFLARE_ENV=preview vite build`                 | `vite build`                                      |
-| Worker        | —                                           | `vesact-<app>-preview`                              | `vesact-<app>`                                    |
-| Host          | `localhost:300x`                            | `<app>.preview.vesact.com`, behind Access           | custom domain                                     |
-| Vars          | `.dev.vars`                                 | `env.preview.vars` in `wrangler.jsonc`              | top-level `vars`                                  |
-| Secrets       | `.dev.vars`                                 | `secrets/<app>.preview.env`                         | `secrets/<app>.prod.env`                          |
-| Database      | local postgres via `localConnectionString`  | Hyperdrive `vesact-preview` → Neon branch `preview` | Hyperdrive `vesact-db` → Neon branch `production` |
-| Migrations    | `push`                                      | `migrate` against the preview branch before deploy  | `migrate` against production before deploy        |
-| Cookie domain | host-only (derived from `VITE_ACCOUNT_URL`) | `.preview.vesact.com`, prefix `vesact-preview`      | `.vesact.com`                                     |
+|               | dev                                        | preview                                                                                   | prod                                              |
+| ------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| Trigger       | `pnpm dev`                                 | pull request from this repository                                                         | push to `main`                                    |
+| Build         | `vite dev`                                 | `CLOUDFLARE_ENV=preview vite build`                                                       | `vite build`                                      |
+| Worker        | —                                          | `vesact-<app>-preview`                                                                    | `vesact-<app>`                                    |
+| Host          | `localhost:300x`                           | `<app>.preview.vesact.com`, behind Access; account at `studio.preview.vesact.com/account` | custom domain                                     |
+| Vars          | `.dev.vars`                                | `env.preview.vars` in `wrangler.jsonc`                                                    | top-level `vars`                                  |
+| Secrets       | `.dev.vars`                                | `secrets/<app>.preview.env`                                                               | `secrets/<app>.prod.env`                          |
+| Database      | local postgres via `localConnectionString` | Hyperdrive `vesact-preview` → Neon branch `preview`                                       | Hyperdrive `vesact-db` → Neon branch `production` |
+| Migrations    | `push`                                     | `migrate` against the preview branch before deploy                                        | `migrate` against production before deploy        |
+| Cookie domain | host-only                                  | host-only (studio and account share the hostname), prefix `vesact-preview`                | `.vesact.com` until #121                          |
 
 `deploy.yml` runs one job per app: build → `wrangler deploy` → `wrangler secret bulk`, the
 account job's migration first. It makes no HTTP check after the deploy (Bot Fight Mode

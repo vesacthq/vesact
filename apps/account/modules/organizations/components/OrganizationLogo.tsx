@@ -1,5 +1,6 @@
 import { config as storageConfig } from "@repo/storage/config";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/avatar";
+import { withBasePath } from "@repo/utils";
 import { Users2Icon } from "lucide-react";
 import { useMemo } from "react";
 
@@ -18,7 +19,7 @@ export const OrganizationLogo = ({
 			logoUrl
 				? logoUrl.startsWith("http")
 					? logoUrl
-					: `/image-proxy/${storageConfig.bucketNames.avatars}/${logoUrl}`
+					: withBasePath(`/image-proxy/${storageConfig.bucketNames.avatars}/${logoUrl}`)
 				: undefined,
 		[logoUrl],
 	);
