@@ -48,11 +48,6 @@
 		},
 		"start": {
 			"subtitle": "Welcome to the start page of this organization!"
-		},
-		"noAccess": {
-			"title": "No access to Studio",
-			"description": "You are a member of {organization}, but Studio is not enabled for you. An organization admin can grant access in the account center.",
-			"members": "Open members"
 		}
 	},
 	"start": {

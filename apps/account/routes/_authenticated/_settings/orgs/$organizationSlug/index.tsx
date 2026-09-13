@@ -2,7 +2,7 @@ import { ChangeOrganizationNameForm } from "@organizations/components/ChangeOrga
 import { DeleteOrganizationForm } from "@organizations/components/DeleteOrganizationForm";
 import { OrganizationLogoForm } from "@organizations/components/OrganizationLogoForm";
 import { useOrganization } from "@organizations/hooks/use-organization";
-import { checkPermission, serializeMemberRoles } from "@repo/permissions";
+import { checkPermission } from "@repo/permissions";
 import { SettingsList } from "@shared/components/SettingsList";
 import { documentTitle } from "@shared/lib/document-title";
 import { createFileRoute } from "@tanstack/react-router";
@@ -13,10 +13,9 @@ export const Route = createFileRoute("/_authenticated/_settings/orgs/$organizati
 });
 
 function OrganizationGeneralPage() {
-	const { roles } = useOrganization();
-	const membershipRole = serializeMemberRoles(roles);
-	const canManage = checkPermission({ membershipRole }, "organization.manage");
-	const canDelete = checkPermission({ membershipRole }, "organization.delete");
+	const { role } = useOrganization();
+	const canManage = checkPermission({ membershipRole: role }, "organization.manage");
+	const canDelete = checkPermission({ membershipRole: role }, "organization.delete");
 
 	return (
 		<SettingsList>

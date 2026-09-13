@@ -3,7 +3,7 @@ import { useOrganization } from "@organizations/hooks/use-organization";
 import { ActivePlan } from "@payments/components/ActivePlan";
 import { ChangePlan } from "@payments/components/ChangePlan";
 import { usePurchases } from "@payments/hooks/purchases";
-import { checkPermission, serializeMemberRoles } from "@repo/permissions";
+import { checkPermission } from "@repo/permissions";
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
 import { PageHeader } from "@shared/components/PageHeader";
 import { SettingsList } from "@shared/components/SettingsList";
@@ -28,12 +28,9 @@ export const Route = createFileRoute("/_authenticated/_settings/orgs/$organizati
 function OrganizationBillingPage() {
 	const t = useTranslations();
 	const { availability } = Route.useLoaderData();
-	const { organization, roles } = useOrganization();
+	const { organization, role } = useOrganization();
 	const { activePlan } = usePurchases(organization.id);
-	const canManageBilling = checkPermission(
-		{ membershipRole: serializeMemberRoles(roles) },
-		"organization.manageBilling",
-	);
+	const canManageBilling = checkPermission({ membershipRole: role }, "organization.manageBilling");
 
 	if (!canManageBilling) {
 		return (

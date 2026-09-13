@@ -1,19 +1,9 @@
 import { useSession } from "@auth/hooks/use-session";
 import { useTranslations } from "@i18n/intl";
-import { productNames } from "@organizations/hooks/member-roles";
 import { useOrganization } from "@organizations/hooks/use-organization";
 import { authClient } from "@repo/auth/client";
-import {
-	checkPermission,
-	getOrganizationRole,
-	getProductRole,
-	type MemberRole,
-	parseMemberRoles,
-	products,
-	serializeMemberRoles,
-	withOrganizationRole,
-	withProductRole,
-} from "@repo/permissions";
+import { checkPermission, type OrganizationRole, parseMemberRole } from "@repo/permissions";
+import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
 	DropdownMenu,
@@ -33,26 +23,21 @@ import { toast } from "@repo/ui/components/toast";
 import { UserAvatar } from "@shared/components/UserAvatar";
 import { LogOutIcon, MoreVerticalIcon, TrashIcon } from "lucide-react";
 
-import { MemberRoleBadges } from "./MemberRoleBadges";
 import { OrganizationRoleSelect } from "./OrganizationRoleSelect";
-import { ProductRoleSelect } from "./ProductRoleSelect";
 
 export function OrganizationMembersList() {
 	const t = useTranslations();
 	const { user } = useSession();
-	const { organization, roles: ownRoles, refetch } = useOrganization();
+	const { organization, role: ownRole, refetch } = useOrganization();
 
-	const canManage = checkPermission(
-		{ user, membershipRole: serializeMemberRoles(ownRoles) },
-		"organization.manage",
-	);
-	const isOwner = getOrganizationRole(ownRoles) === "owner";
+	const canManage = checkPermission({ user, membershipRole: ownRole }, "organization.manage");
+	const isOwner = ownRole === "owner";
 
-	const updateRoles = async (memberId: string, roles: MemberRole[]) => {
+	const updateRole = async (memberId: string, role: OrganizationRole) => {
 		const update = async () => {
 			const { error } = await authClient.organization.updateMemberRole({
 				memberId,
-				role: roles,
+				role,
 				organizationId: organization.id,
 			});
 
@@ -119,26 +104,20 @@ export function OrganizationMembersList() {
 				<TableHeader>
 					<TableRow>
 						<TableHead>{t("organizations.settings.members.columns.member")}</TableHead>
-						<TableHead>{t("organizations.settings.members.columns.organization")}</TableHead>
-						{products.map((product) => (
-							<TableHead key={product}>{productNames[product]}</TableHead>
-						))}
+						<TableHead>{t("organizations.settings.members.columns.role")}</TableHead>
 						<TableHead />
 					</TableRow>
 				</TableHeader>
 				<TableBody>
 					{organization.members.length === 0 ? (
 						<TableRow>
-							<TableCell colSpan={3 + products.length} className="h-24 text-center">
+							<TableCell colSpan={3} className="h-24 text-center">
 								{t("organizations.settings.members.empty")}
 							</TableCell>
 						</TableRow>
 					) : (
 						organization.members.map((member) => {
-							const roles = parseMemberRoles(member.role);
-							const organizationRole = getOrganizationRole(roles) ?? "member";
-							const memberIsOwner = organizationRole === "owner";
-							const isOrganizationAdmin = memberIsOwner || organizationRole === "admin";
+							const role = parseMemberRole(member.role) ?? "member";
 							const isSelf = member.userId === user?.id;
 
 							return (
@@ -157,44 +136,18 @@ export function OrganizationMembersList() {
 											</div>
 										</div>
 									</TableCell>
-									{canManage ? (
-										<>
-											<TableCell>
-												<OrganizationRoleSelect
-													value={organizationRole}
-													disabled={memberIsOwner}
-													allowOwner={isOwner}
-													onSelect={(role) =>
-														updateRoles(member.id, withOrganizationRole(roles, role))
-													}
-												/>
-											</TableCell>
-											{products.map((product) => (
-												<TableCell key={product}>
-													{isOrganizationAdmin ? (
-														<span
-															className="text-sm text-foreground/60"
-															title={t("organizations.productAccess.fullDescription")}
-														>
-															{t("organizations.productAccess.full")}
-														</span>
-													) : (
-														<ProductRoleSelect
-															product={product}
-															value={getProductRole(roles, product)}
-															onSelect={(role) =>
-																updateRoles(member.id, withProductRole(roles, product, role))
-															}
-														/>
-													)}
-												</TableCell>
-											))}
-										</>
-									) : (
-										<TableCell colSpan={1 + products.length}>
-											<MemberRoleBadges roles={roles} />
-										</TableCell>
-									)}
+									<TableCell>
+										{canManage ? (
+											<OrganizationRoleSelect
+												value={role}
+												disabled={role === "owner"}
+												allowOwner={isOwner}
+												onSelect={(next) => updateRole(member.id, next)}
+											/>
+										) : (
+											<Badge variant="secondary">{t(`organizations.roles.${role}`)}</Badge>
+										)}
+									</TableCell>
 									<TableCell className="text-right">
 										{(canManage || isSelf) && (
 											<DropdownMenu>

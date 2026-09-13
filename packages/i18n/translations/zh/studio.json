@@ -48,11 +48,6 @@
 		},
 		"start": {
 			"subtitle": "欢迎来到这个组织的首页！"
-		},
-		"noAccess": {
-			"title": "没有 Studio 访问权限",
-			"description": "你是 {organization} 的成员，但还没有开通 Studio。组织管理员可以在账号中心开通。",
-			"members": "打开成员页"
 		}
 	},
 	"start": {

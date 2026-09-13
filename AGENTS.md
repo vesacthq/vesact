@@ -176,7 +176,7 @@ hostname; production still answers on `account.vesact.com` until #121); what onl
 makes sense with product data belongs to the product. `docs/account/architecture.md`
 has the ownership and route tables, the "operation → location" list, the link
 conventions (`redirectTo` for identity flows, `from` for settings pages) and the
-three layers of roles. Products read organizations and members, never edit them;
+two layers of roles. Products read organizations and members, never edit them;
 the platform-admin module (gated by `admin.access`) is the account center's `/admin`.
 
 - Links into the account center: `apps/studio/modules/auth/lib/account-urls.ts`
@@ -189,10 +189,10 @@ the platform-admin module (gated by `admin.access`) is the account center's `/ad
   from it (`basePath` in `@repo/utils`), so Studio and the account center share one hostname
   and a host-only session cookie. While production still serves the account center from its
   own hostname, `packages/auth` sets the cookie on the parent domain (`getCookieDomain`).
-- `member.role` holds one organization role plus at most one role per product,
-  comma-separated. Better Auth enforces them through `packages/auth/lib/access.ts`;
-  `@repo/permissions` parses the same value (`parseMemberRoles`) into Permix
-  rules such as `studio.access` / `relay.manage`, which Studio checks in
+- `member.role` holds one organization role (`owner` / `admin` / `member`). Better Auth
+  enforces it through `packages/auth/lib/access.ts`; `@repo/permissions` derives the Permix
+  rules from the same value (`parseMemberRole`): `studio.access` for every member,
+  `studio.manage` for owner/admin, checked in Studio's
   `routes/_authenticated/_main/$organizationSlug/route.tsx`.
 - Sessions: `getSession` from `@auth/lib/auth-server.server` on the server,
   `useSession` from `@auth/hooks/use-session` on the client (both apps).
@@ -221,7 +221,7 @@ the platform-admin module (gated by `admin.access`) is the account center's `/ad
   caller to be a member, so pages that act on any organization (the platform
   admin) go through `adminProcedure` instead.
 - The account center has no Permix middleware or provider: routes and components call
-  `checkPermission` with the session user (`admin.access`) or the member's roles
+  `checkPermission` with the session user (`admin.access`) or the member's role
   (`organization.*`). `admin.access` is `user.role === "admin"`; the `admin()` plugin
   has no allow-list, so the first admin comes from `create:user` or the database.
 

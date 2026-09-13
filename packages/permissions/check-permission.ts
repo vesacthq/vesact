@@ -11,9 +11,7 @@ export type PermissionPath =
 	| "organization.manageBilling"
 	| "organization.accessBillingPortal"
 	| "studio.access"
-	| "studio.manage"
-	| "relay.access"
-	| "relay.manage";
+	| "studio.manage";
 
 /**
  * Evaluate a single permission against rules derived from the user + membership role.

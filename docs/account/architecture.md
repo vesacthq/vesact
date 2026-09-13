@@ -16,7 +16,7 @@ reviewed: 2026-09-13
 | 身份：登录、注册、密码、passkey、两步验证、登录设备      | 产品数据                                     |
 | 个人：姓名、头像、邮箱、语言、通知偏好、删除账号         | 产品设置：自动回复、收件箱配置               |
 | 组织：创建、名称与 logo、删除；onboarding                | 组织切换器                                   |
-| 成员：邀请、移除、组织角色、每个产品的访问和产品角色     | 产品内的资源权限：谁负责哪个收件箱、哪些渠道 |
+| 成员：邀请、移除、组织角色                               | 产品内的资源权限：谁负责哪个收件箱、哪些渠道 |
 | 计费：套餐、发票、付款方式，按组织                       |                                              |
 | 平台管理：全部用户与组织，封禁、模拟登录、全局管理员角色 |                                              |
 
@@ -49,23 +49,22 @@ reviewed: 2026-09-13
 
 ## 4. 构件与目录
 
-`apps/account/modules/`：`auth`（会话、跳转规则）、`account`（个人资料、安全、通知）、`organizations`（组织、成员、邀请、产品角色）、`onboarding`、`payments`、`admin`（平台管理）、`i18n`、`shared`（头部、导航、oRPC 客户端）。别名见 `apps/account/tsconfig.json`。
+`apps/account/modules/`：`auth`（会话、跳转规则）、`account`（个人资料、安全、通知）、`organizations`（组织、成员、邀请、角色）、`onboarding`、`payments`、`admin`（平台管理）、`i18n`、`shared`（头部、导航、oRPC 客户端）。别名见 `apps/account/tsconfig.json`。
 
 账号 worker 挂 `@repo/api` 的 Hono app，头像上传的 oRPC 和存储绑定随之；`billingAttachedTo` 为 organization。
 
 ## 5. 运行时与契约
 
-### 5.1 成员与权限的三层
+### 5.1 成员与权限的两层
 
-| 层                 | 内容                                                                                    | 存在哪                               | 在哪管         |
-| ------------------ | --------------------------------------------------------------------------------------- | ------------------------------------ | -------------- |
-| 组织角色           | owner / admin / member                                                                  | Better Auth 的 `member.role`         | 账号中心成员页 |
-| 产品访问与产品角色 | `studio:admin`、`studio:member`（草稿：切分收尾后取消前缀，`member.role` 只存组织角色） | 同一个 `member.role`，多角色逗号分隔 | 账号中心成员页 |
-| 资源权限           | 收件箱归属、渠道分配、API key scope                                                     | 产品自己的表                         | 产品内部       |
+| 层       | 内容                                | 存在哪                       | 在哪管         |
+| -------- | ----------------------------------- | ---------------------------- | -------------- |
+| 组织角色 | owner / admin / member              | Better Auth 的 `member.role` | 账号中心成员页 |
+| 资源权限 | 收件箱归属、渠道分配、API key scope | 产品自己的表                 | 产品内部       |
 
-前两层用 Better Auth organization 的 access control 表达（`packages/auth/lib/access.ts`），第三层是产品的业务数据，由产品的权限规则结合前两层判断。
+第一层用 Better Auth organization 的 access control 表达（`packages/auth/lib/access.ts`），第二层是产品的业务数据，由产品的权限规则结合第一层判断。
 
-`member.role` 存一个组织角色加每个产品至多一个角色，逗号分隔，例如 `member,studio:member`。组织的 owner 和 admin 天然拥有全部权限，成员页对他们显示"全部权限"而不是下拉框；只有 member 需要逐个产品开通。`@repo/permissions` 解析同一个值（`parseMemberRoles`），产品用 `studio.access` 这样的规则判断；Studio 在进入组织前检查 `studio.access`，没有的成员看到指向账号中心成员页的提示。
+`member.role` 只存一个组织角色。`@repo/permissions` 从同一个值推出 `studio.*` 规则（`parseMemberRole`）：每个成员都有 `studio.access`，owner 和 admin 有 `studio.manage`；Studio 在进入组织前检查 `studio.access`。旧数据里带产品前缀的值由迁移 `0006_drop_member_product_roles` 改成组织角色，解析时也只认组织角色。
 
 ### 5.2 每个操作在哪
 
@@ -78,7 +77,7 @@ reviewed: 2026-09-13
 | 新用户 onboarding                       | 账号中心 `/onboarding`                          |
 | 创建组织                                | 账号中心 `/orgs/new`                            |
 | 组织名称、logo、删除                    | 账号中心 `/orgs/$slug`                          |
-| 邀请、移除成员，组织角色，产品访问      | 账号中心 `/orgs/$slug/members`                  |
+| 邀请、移除成员，组织角色                | 账号中心 `/orgs/$slug/members`                  |
 | 接受邀请                                | 账号中心 `/invitations/$id`                     |
 | 套餐、付款方式、发票                    | 账号中心 `/orgs/$slug/billing`                  |
 | 切换当前组织                            | 产品的组织切换器                                |

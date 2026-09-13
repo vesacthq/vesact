@@ -55,13 +55,11 @@ describe("getReturnUrl", () => {
 describe("productNameForUrl", () => {
 	const products = [
 		{ name: "Studio", url: "https://studio.vesact.com" },
-		{ name: "Relay", url: "https://relay.vesact.com" },
 		{ name: "Vesact", url: undefined },
 	];
 
 	it("names the product by origin", () => {
 		expect(productNameForUrl("https://studio.vesact.com/inbox", products)).toBe("Studio");
-		expect(productNameForUrl("https://relay.vesact.com/", products)).toBe("Relay");
 		expect(productNameForUrl("https://www.vesact.com/", products)).toBe("Vesact");
 		expect(productNameForUrl("not a url", products)).toBe("Vesact");
 	});
