@@ -71,12 +71,11 @@ entries trust `X-Forwarded-*`. Runtime variables come from `env/<app>.env`
 (gitignored; written from sops on the machine) — the Worker secrets plus what
 `wrangler.jsonc` `vars` carried (`VITE_*`, `S3_ENDPOINT`, `S3_REGION`) and
 `DATABASE_URL`; `POSTGRES_PASSWORD`, `SITE_ADDRESS` and `MARKETING_ADDRESS`
-come from the compose environment (`.env` next to the compose file). Image
-names default to `ghcr.io/vesacthq/vesact-<app>:latest`; `STUDIO_IMAGE`,
-`ACCOUNT_IMAGE`, `MARKETING_IMAGE` override them. Postgres has no published
-port; to migrate or seed from outside, run a throwaway
-`alpine/socat` container on the compose network with a port bound to
-`127.0.0.1` and tunnel to it over SSH.
+come from the compose environment (`.env` next to the compose file). Images
+are `${IMAGE_REPO}-<app>:${IMAGE_TAG}`, `ghcr.io/vesacthq/vesact` and `latest`
+by default (CI's smoke uses `vesact` / `ci`, the machine the commit sha).
+Postgres is published on the machine's loopback interface only
+(`127.0.0.1:5432`); migrations reach it through an SSH tunnel.
 
 CI: the "Docker target" job of `validate-prs.yml` builds the three images,
 starts the stack with CI env files and a port override for the schema push,
@@ -90,6 +89,37 @@ settings or a `read:packages` token.
 The images are 1–1.5 GB unpacked (≈250 MB compressed), mostly production
 dependencies that `pnpm deploy` copies for the app, including `next` arriving
 as an optional peer of better-auth; trimming them is a separate task.
+
+## The machine
+
+`jp.vesact.com` is a VPS (45.77.10.53, Ubuntu 24.04, Docker Engine from
+Docker's apt repository) that rehearses the production Docker deployment while
+`studio.vesact.com` stays on Workers. `ssh root@45.77.10.53` with your own key;
+CI uses the ed25519 key in `secrets/files/vps-deploy-ssh-key.json`, whose
+public half is in `/root/.ssh/authorized_keys`, against the host key pinned in
+`.github/vps_known_hosts`. Rotate it by generating a new pair, replacing the
+line in `authorized_keys`, and re-encrypting the private key with
+`sops --encrypt --input-type binary --output-type json`.
+
+Everything lives in `/srv/vesact/`: `docker-compose.prod.yml`, `Caddyfile`,
+`vps-deploy.sh`, `smoke.sh`, `.env` (from `secrets/vps.env`: `SITE_ADDRESS`,
+`MARKETING_ADDRESS`, `POSTGRES_PASSWORD`, plus `IMAGE_TAG` maintained by the
+deploy script), `env/<app>.env` (from `secrets/<app>.vps.env`) and
+`current-tag`. The `vps` job of `deploy.yml` rewrites all of them from the
+repository on every push to `main`, so edit the sops files, not the machine.
+
+Deploy: `images` pushes `ghcr.io/vesacthq/vesact-<app>:<sha>`, then `vps`
+migrates through `ssh -L` (`secrets/database.vps.env` points at the tunnel),
+copies the files, logs the machine into GHCR with the job's `GITHUB_TOKEN` and
+runs `./vps-deploy.sh <sha> https://jp.vesact.com http://localhost:3001`:
+`pull`, `up -d --wait`, `smoke.sh`; a failed smoke brings the previous tag
+back and fails the job. Roll back by hand the same way:
+`cd /srv/vesact && ./vps-deploy.sh <previous sha> https://jp.vesact.com http://localhost:3001`
+(images already pulled need no registry login; `docker image ls` shows what is
+there). Logs: `docker compose -f docker-compose.prod.yml logs -f <service>`
+(json-file, 3 × 10 MB per container). The rehearsal database is the `postgres`
+container's volume `vesact_postgres_data`; nothing backs it up, it holds test
+accounts only. Production data stays in Neon until the cut-over decides otherwise.
 
 ## Accounts and resources
 
