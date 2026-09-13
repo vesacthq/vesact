@@ -6,8 +6,8 @@
 	"compatibility_flags": ["nodejs_compat"],
 	"main": "./server.ts",
 	"observability": { "enabled": true },
+	// No production Worker: production is the Docker target (AGENTS.md).
 	"workers_dev": false,
-	"routes": [{ "pattern": "www.vesact.com", "custom_domain": true }],
 	"env": {
 		"preview": {
 			"workers_dev": false,

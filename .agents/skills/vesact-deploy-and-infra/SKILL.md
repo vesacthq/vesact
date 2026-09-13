@@ -10,22 +10,31 @@ The environment matrix (dev / preview / prod) is in `AGENTS.md` under
 
 ## Hostnames
 
-| App       | prod                                                 | preview                                              |
-| --------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| marketing | `www.vesact.com`                                     | `www.preview.vesact.com`                             |
-| account   | `account.vesact.com` (until #121)                    | `studio.preview.vesact.com/account` (Workers route)  |
-| studio    | `studio.vesact.com`                                  | `studio.preview.vesact.com`                          |
-| relay     | `relay.vesact.com` (console), `api.vesact.com` (API) | `relay.preview.vesact.com`, `api.preview.vesact.com` |
+| App       | prod                                                         | preview                                              |
+| --------- | ------------------------------------------------------------ | ---------------------------------------------------- |
+| marketing | `www.allcast.cc` (`allcast.cc` redirects to it), machine     | `www.preview.vesact.com`                             |
+| account   | `studio.allcast.cc/account`, machine (Caddy path split)      | `studio.preview.vesact.com/account` (Workers route)  |
+| studio    | `studio.allcast.cc`, machine                                 | `studio.preview.vesact.com`                          |
+| relay     | `relay.vesact.com` (console), `api.vesact.com` (API), Worker | `relay.preview.vesact.com`, `api.preview.vesact.com` |
+
+`allcast.cc` is registered at DNSPod (2026-09-13) and its DNS lives there: `@`, `www` and
+`studio` are A records to the machine. Until the ICP filing passes, Tencent Cloud blocks the
+domain's traffic on the machine's 80/443 from the public internet; the stack runs and is
+smoked from the machine itself in the meantime (see "The machine"). `vesact.com` keeps
+Relay, `preview.vesact.com`, `e.vesact.com` (PostHog) and the R2 bucket; the `www.`,
+`studio.`, `account.` and `auth.` Workers and hostnames were retired on 2026-09-13.
 
 ## Deploy pipeline
 
-`deploy.yml` runs one job per app: `select-target.sh` picks the target from the
-event, `load-env.sh` decrypts what the job needs into masked environment
-variables, then build → `wrangler deploy` → `wrangler secret bulk`. The account job runs the Studio database migration first and the studio job
-waits for it; the relay job migrates Relay's own database
-(`pnpm --filter @repo/relay db:migrate`) and runs on its own. On `main` the
-`images` job also builds the Docker target of studio, account and marketing
-and pushes it to GHCR (see "Docker target"). The relay Worker answers on two custom domains and dispatches by
+`deploy.yml`: `select-target.sh` picks the target from the event and
+`load-env.sh` decrypts what a job needs into masked environment variables. On a
+pull request the marketing, account, studio and relay jobs each build →
+`wrangler deploy` → `wrangler secret bulk` to preview; the account job runs the
+Studio database migration first and the studio job waits for it; the relay job
+migrates Relay's own database (`pnpm --filter @repo/relay db:migrate`) and runs
+on its own. On `main` only relay deploys a Worker (its production); studio,
+account and marketing go to the machine through the `images` and `vps` jobs
+(see "Docker target" and "The machine"). The relay Worker answers on two custom domains and dispatches by
 path (`docs/relay/architecture.md` §2). The Cloudflare Vite plugin flattens the selected environment into
 `.output/server/wrangler.json` at build time, so `CLOUDFLARE_ENV` is set for the
 build and `wrangler deploy` takes no `--env`. Preview builds leave
@@ -40,12 +49,13 @@ stylesheet and module scripts, which Cloudflare keeps per URL and sends to the
 next visitor as a 103 Early Hints before the Worker runs.
 
 The preview database is one shared Neon branch; run the "Reset preview database"
-workflow to copy it fresh from production. Preview shares the production R2
-bucket. The `avatars` bucket's CORS rule allows `PUT` from
-`account.vesact.com` and `account.preview.vesact.com`, the only origins that
-uploaded from the browser so far; the account center now uploads from
-`studio.preview.vesact.com` (and `jp.vesact.com` in the #121 rehearsal), which
-have to be added there or the presigned PUT fails with a CORS error.
+workflow to copy it fresh from its parent, the Neon `production` branch (the
+pre-move data, kept until it is deleted). Preview shares the production R2
+bucket, and so does production on the machine until uploads move to COS after
+the filing. The `avatars` bucket's CORS rule allows `PUT` from
+`studio.allcast.cc` and `studio.preview.vesact.com`, the origins the account
+center uploads from; a new origin has to be added there or the presigned PUT
+fails with a CORS error.
 The `S3_*` credentials in the studio and account secrets are an account-owned
 API token named "vesact avatars bucket (account and studio workers)", scoped to
 that bucket: the access key id is the token id, the secret is the SHA-256 hex
@@ -63,31 +73,35 @@ Alpine build stage runs `pnpm install`, `pnpm --filter <app> build:node` and
 `env/`, `secrets/` and `.dev.vars` out of the context.
 
 `docker-compose.prod.yml` is the whole Studio unit: `postgres`, `studio`,
-`account`, `marketing` and `caddy`. Caddy owns 80/443, obtains the certificate
-for `SITE_ADDRESS`, sends `/account` and `/account/*` to the account container
-and everything else on that hostname to studio, serves `MARKETING_ADDRESS` from
-the marketing container (`http://localhost:3001` by default, bound to the
-loopback interface) and sets `Cache-Control: immutable` on `/assets/*`. The app
-containers publish no ports: Docker's published ports bypass ufw, and the
-entries trust `X-Forwarded-*`. Runtime variables come from `env/<app>.env`
-(gitignored; written from sops on the machine) — the Worker secrets plus what
-`wrangler.jsonc` `vars` carried (`VITE_*`, `S3_ENDPOINT`, `S3_REGION`) and
-`DATABASE_URL`; `POSTGRES_PASSWORD`, `SITE_ADDRESS` and `MARKETING_ADDRESS`
-come from the compose environment (`.env` next to the compose file). Images
-are `${IMAGE_REPO}-<app>:${IMAGE_TAG}`, `ghcr.io/vesacthq/vesact` and `latest`
-by default (CI's smoke uses `vesact` / `ci`, the machine the commit sha).
-Postgres is published on the machine's loopback interface only
+`account`, `marketing` and `caddy`. Caddy owns 80/443, obtains the certificates
+for the three addresses (scheme included: `https://studio.allcast.cc`,
+`http://localhost` locally), sends `/account` and `/account/*` of
+`SITE_ADDRESS` to the account container and everything else on that hostname
+to studio, serves `MARKETING_ADDRESS` from the marketing container
+(`http://localhost:3001` by default, bound to the loopback interface), answers
+`APEX_ADDRESS` with a 301 to the marketing site and sets `Cache-Control:
+immutable` on `/assets/*`. The app containers publish no ports: Docker's
+published ports bypass ufw, and the entries trust `X-Forwarded-*`. Runtime
+variables come from `env/<app>.env` (gitignored; written from sops on the
+machine) — the Worker secrets plus what `wrangler.jsonc` `vars` carried
+(`VITE_*`, `S3_ENDPOINT`, `S3_REGION`) and `DATABASE_URL`; `POSTGRES_PASSWORD`,
+`SITE_ADDRESS`, `MARKETING_ADDRESS`, `APEX_ADDRESS` and `SMOKE_INSECURE` come
+from the compose environment (`.env` next to the compose file). Images are
+`${IMAGE_REPO}-<app>:${IMAGE_TAG}`, `vesact` and `latest` by default (CI's
+smoke uses `vesact` / `ci`, the machine the commit sha); no registry is
+involved, the images reach the machine through COS (see "The machine"). Postgres is published on the machine's loopback interface only
 (`127.0.0.1:5432`); migrations reach it through an SSH tunnel.
 
 CI: the "Docker target" job of `validate-prs.yml` builds the three images,
 starts the stack with CI env files and a port override for the schema push,
 and runs `.github/scripts/smoke.sh <studio url> <marketing url>` (signed-out
 `/` 307, `/account/login` 200, both health endpoints, a 401 from
-`sign-in/email` proving the database is reachable, marketing 200). The same
-script is the post-deploy check. GHCR creates the packages private; the
-`vps` job logs the machine in with its own `GITHUB_TOKEN` for the pull, so
-only pulling a tag by hand that is not on the machine needs a
-`read:packages` token (or the packages made public).
+`sign-in/email` proving the database is reachable, marketing 200; with a
+third argument, the machine's deploy also checks that the apex redirects to
+the marketing site). The same script is the post-deploy check: run on
+the machine, it resolves the public hostnames to the local Caddy
+(`--resolve`), so it needs neither DNS nor the domain's 80/443 to be open,
+and accepts Caddy's own CA while `SMOKE_INSECURE=1`.
 
 The images are 1–1.5 GB unpacked (≈250 MB compressed), mostly production
 dependencies that `pnpm deploy` copies for the app, including `next` arriving
@@ -95,36 +109,61 @@ as an optional peer of better-auth; trimming them is a separate task.
 
 ## The machine
 
-`jp.vesact.com` is a VPS (45.77.10.53, Ubuntu 24.04, Docker Engine from
-Docker's apt repository) that rehearses the production Docker deployment while
-`studio.vesact.com` stays on Workers. `ssh root@45.77.10.53` with your own key;
-CI uses the ed25519 key in `secrets/files/vps-deploy-ssh-key.json`, whose
-public half is in `/root/.ssh/authorized_keys`, against the host key pinned in
+Production is one Tencent Cloud CVM in Shanghai (`118.89.171.81`, SA3.MEDIUM2:
+2 vCPU, 2 GB, 50 GB, Ubuntu 24.04). `ssh ubuntu@118.89.171.81` with your own
+key (password login and root login are off; `ubuntu` has passwordless sudo and
+is in the docker group); CI uses the ed25519 key in
+`secrets/files/vps-deploy-ssh-key.json`, whose public half is in
+`~ubuntu/.ssh/authorized_keys`, against the host key pinned in
 `.github/vps_known_hosts`. Rotate it by generating a new pair, replacing the
 line in `authorized_keys`, and re-encrypting the private key with
-`sops --encrypt --input-type binary --output-type json`.
+`sops --encrypt --input-type binary --output-type json`. Docker Engine comes
+from `mirrors.cloud.tencent.com/docker-ce`; `/etc/docker/daemon.json` points
+Docker Hub pulls at `mirror.ccs.tencentyun.com` (Docker Hub, github.com and
+Google are unreachable from the machine; ghcr.io is too slow to use). ufw
+allows 22, 80 and 443; the security group mirrors that. 2 GB of RAM is enough
+to run the stack, never to build it — images are built in CI.
 
 Everything lives in `/srv/vesact/`: `docker-compose.prod.yml`, `Caddyfile`,
-`vps-deploy.sh`, `smoke.sh`, `.env` (from `secrets/vps.env`: `SITE_ADDRESS`,
-`MARKETING_ADDRESS`, `POSTGRES_PASSWORD`, plus `IMAGE_TAG` maintained by the
-deploy script), `env/<app>.env` (from `secrets/<app>.vps.env`) and
+`vps-deploy.sh`, `smoke.sh`, `machine-prune.sh`, `.env` (from
+`secrets/prod.env`: `SITE_ADDRESS`, `MARKETING_ADDRESS`, `APEX_ADDRESS`,
+`POSTGRES_PASSWORD`, `SMOKE_INSECURE`, plus `IMAGE_TAG` maintained by the
+deploy script), `env/<app>.env` (from `secrets/<app>.prod.env`) and
 `current-tag`. The `vps` job of `deploy.yml` rewrites all of them from the
-repository on every push to `main`, so edit the sops files, not the machine.
+repository on every push to `main` and installs `machine-prune.sh` as
+`/etc/cron.weekly/vesact-prune`, so edit the sops files, not the machine.
 
-Deploy: `images` pushes `ghcr.io/vesacthq/vesact-<app>:<sha>`, then `vps`
-migrates through `ssh -L` (`secrets/database.vps.env` points at the tunnel),
-copies the files, logs the machine into GHCR with the job's `GITHUB_TOKEN` and
-runs `./vps-deploy.sh <sha> https://jp.vesact.com http://localhost:3001`:
-`pull`, `up -d --wait`, `smoke.sh`; a failed smoke brings the previous tag
-back and fails the job. The script keeps the images of the running tag and
-its predecessor and removes older ones. Roll back by hand to the predecessor
-with `cd /srv/vesact && IMAGE_TAG=<sha> docker compose -f docker-compose.prod.yml up -d --wait`
-(`docker image ls` shows the two tags on the machine; no registry login is
-needed for them), then `./smoke.sh https://jp.vesact.com http://localhost:3001`
-and write the tag to `current-tag` and `IMAGE_TAG` in `.env`. Logs: `docker compose -f docker-compose.prod.yml logs -f <service>`
-(json-file, 3 × 10 MB per container). The rehearsal database is the `postgres`
-container's volume `vesact_postgres_data`; nothing backs it up, it holds test
-accounts only. Production data stays in Neon until the cut-over decides otherwise.
+Deploy: each `images` job builds `vesact-<app>:<sha>`, uploads
+`docker save | zstd` of it to the COS bucket `vesact-images-1300248116`
+(ap-shanghai, global acceleration on — a stream straight from the runner ran
+at 40–1200 KB/s — objects expire after 7 days) and has the machine download it
+with a presigned URL over Tencent's network (100 MB/s) into `docker load`; then
+`vps` starts
+`postgres` if needed, migrates through `ssh -L` (`secrets/database.prod.env`
+points at the tunnel), copies the files and runs
+`./vps-deploy.sh <sha> https://studio.allcast.cc https://www.allcast.cc https://allcast.cc`:
+checks the three images are present, `up -d --wait`, `smoke.sh`; a failed
+smoke brings the previous tag back and fails the job. The script keeps the
+images of the running tag and its predecessor and removes older ones; the
+weekly cron removes untagged layers, stopped containers and journal beyond
+200 MB. Roll back by hand to the predecessor with
+`cd /srv/vesact && IMAGE_TAG=<sha> docker compose -f docker-compose.prod.yml up -d --wait`
+(`docker image ls` shows the two tags), then
+`./smoke.sh https://studio.allcast.cc https://www.allcast.cc https://allcast.cc`
+and write the tag to `current-tag` and `IMAGE_TAG` in `.env`. Logs:
+`docker compose -f docker-compose.prod.yml logs -f <service>` (json-file,
+3 × 10 MB per container). The database is the `postgres` container's volume
+`vesact_postgres_data`; nothing backs it up yet (a nightly dump to COS is the
+first thing to add once there is data worth keeping). The Neon `production`
+branch still holds the pre-move data; its URL is `NEON_PRODUCTION_DATABASE_URL`
+in `secrets/infra.env`.
+
+After the ICP filing passes: remove `local_certs` from the `Caddyfile` and
+`SMOKE_INSECURE` from `secrets/prod.env` (Let's Encrypt HTTP-01 then works on
+80), and put the filing number in the marketing footer. Deferred with it:
+uploads to COS instead of R2, mail and brand on `allcast.cc`, the domestic
+login methods (Google login is off in production: the machine cannot reach
+Google's token endpoint).
 
 ## Accounts and resources
 
@@ -170,22 +209,21 @@ accounts only. Production data stays in Neon until the cut-over decides otherwis
   deploy makes no HTTP check after `wrangler deploy` (the earlier smoke check
   failed with 403 and `cf-mitigated: challenge`). Verify a deploy by hand or
   through Workers versions instead.
-- `auth.vesact.com` stays attached to the production account Worker and answers
-  with a 301 to the `account.` hostname until #121 retires both.
 - Preview hostnames live under `preview.vesact.com` rather than `workers.dev`
   because `workers.dev` is on the Public Suffix List: no cookie can span two
   Workers there, so products could not share a login.
-- One Google OAuth client serves every environment; each needs its callback
-  registered in Google Cloud: `<VITE_ACCOUNT_URL>/api/auth/callback/google` for
-  the account center (`https://account.vesact.com/api/auth/callback/google`,
-  `https://studio.preview.vesact.com/account/api/auth/callback/google`,
-  `https://jp.vesact.com/account/api/auth/callback/google`,
+- One Google OAuth client serves every environment that has Google login
+  (production has none); each needs its callback registered in Google Cloud:
+  `<VITE_ACCOUNT_URL>/api/auth/callback/google` for the account center
+  (`https://studio.preview.vesact.com/account/api/auth/callback/google`,
   `http://localhost:3004/account/api/auth/callback/google`) and
   `<VITE_RELAY_URL>/api/auth/callback/google` for Relay
   (`https://relay.vesact.com/...`, `https://relay.preview.vesact.com/...`,
   `http://localhost:3005/...`).
 - `vesact.com` and `preview.vesact.com` redirect to their `www` hostnames through
-  Cloudflare Redirect Rules on a proxied `AAAA 100::` record each.
+  Cloudflare Redirect Rules on a proxied `AAAA 100::` record each; since
+  `www.vesact.com` was retired the `vesact.com` rule points at nothing until it
+  is repointed or removed.
 
 ## Public URLs
 

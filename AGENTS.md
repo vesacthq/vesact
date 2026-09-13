@@ -173,7 +173,7 @@ keys before showing success UI. Do not rely on a full page reload.
 
 One rule decides where a page goes: what exists independently of any product
 belongs to the account center (`apps/account`, mounted at `/account` under the Studio
-hostname; production still answers on `account.vesact.com` until #121); what only
+hostname); what only
 makes sense with product data belongs to the product. `docs/account/architecture.md`
 has the ownership and route tables, the "operation → location" list, the link
 conventions (`redirectTo` for identity flows, `from` for settings pages) and the
@@ -188,8 +188,8 @@ the platform-admin module (gated by `admin.access`) is the account center's `/ad
   (`https://studio.preview.vesact.com/account`, `http://localhost:3004/account`): Vite's
   `base`, the router basepath, Better Auth's `basePath` and the `@repo/api` mount all derive
   from it (`basePath` in `@repo/utils`), so Studio and the account center share one hostname
-  and a host-only session cookie. While production still serves the account center from its
-  own hostname, `packages/auth` sets the cookie on the parent domain (`getCookieDomain`).
+  and a host-only session cookie in every environment (`packages/auth` would set a parent-domain
+  cookie only if the two ever lived on different hostnames again).
 - `member.role` holds one organization role (`owner` / `admin` / `member`). Better Auth
   enforces it through `packages/auth/lib/access.ts`; `@repo/permissions` derives the Permix
   rules from the same value (`parseMemberRole`): `studio.access` for every member,
@@ -251,27 +251,31 @@ for local values and never commit it; secrets live encrypted under `secrets/`. V
 
 ## Environments & deployment
 
-Each app is a Cloudflare Worker; studio, account and marketing also build a Docker target
-(below). Three environments, the same shape for every app:
+Relay is a Cloudflare Worker in every environment. Studio, account and marketing are Workers
+in dev and preview and run their Docker target (below) in production, on one machine in
+Tencent Cloud Shanghai under `allcast.cc`. Three environments:
 
-|               | dev                                        | preview                                                                                   | prod                                              |
-| ------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| Trigger       | `pnpm dev`                                 | pull request from this repository                                                         | push to `main`                                    |
-| Build         | `vite dev`                                 | `CLOUDFLARE_ENV=preview vite build`                                                       | `vite build`                                      |
-| Worker        | —                                          | `vesact-<app>-preview`                                                                    | `vesact-<app>`                                    |
-| Host          | `localhost:300x`                           | `<app>.preview.vesact.com`, behind Access; account at `studio.preview.vesact.com/account` | custom domain                                     |
-| Vars          | `.dev.vars`                                | `env.preview.vars` in `wrangler.jsonc`                                                    | top-level `vars`                                  |
-| Secrets       | `.dev.vars`                                | `secrets/<app>.preview.env`                                                               | `secrets/<app>.prod.env`                          |
-| Database      | local postgres via `localConnectionString` | Hyperdrive `vesact-preview` → Neon branch `preview`                                       | Hyperdrive `vesact-db` → Neon branch `production` |
-| Migrations    | `push`                                     | `migrate` against the preview branch before deploy                                        | `migrate` against production before deploy        |
-| Cookie domain | host-only                                  | host-only (studio and account share the hostname), prefix `vesact-preview`                | `.vesact.com` until #121                          |
+|               | dev                                        | preview                                                                                   | prod                                                                                             |
+| ------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Trigger       | `pnpm dev`                                 | pull request from this repository                                                         | push to `main`                                                                                   |
+| Build         | `vite dev`                                 | `CLOUDFLARE_ENV=preview vite build`                                                       | `BUILD_TARGET=node vite build` inside the `Dockerfile` (Relay: `vite build`)                     |
+| Worker        | —                                          | `vesact-<app>-preview`                                                                    | Relay only: `vesact-relay`                                                                       |
+| Host          | `localhost:300x`                           | `<app>.preview.vesact.com`, behind Access; account at `studio.preview.vesact.com/account` | `studio.allcast.cc` (account at `/account`), `www.allcast.cc`; Relay `relay.` / `api.vesact.com` |
+| Vars          | `.dev.vars`                                | `env.preview.vars` in `wrangler.jsonc`                                                    | `secrets/<app>.prod.env` → `env/<app>.env` on the machine (Relay: top-level `vars`)              |
+| Secrets       | `.dev.vars`                                | `secrets/<app>.preview.env`                                                               | `secrets/<app>.prod.env`                                                                         |
+| Database      | local postgres via `localConnectionString` | Hyperdrive `vesact-preview` → Neon branch `preview`                                       | the `postgres` container on the machine (Relay: its own Neon project)                            |
+| Migrations    | `push`                                     | `migrate` against the preview branch before deploy                                        | `migrate` through the SSH tunnel before the stack switches                                       |
+| Cookie domain | host-only                                  | host-only (studio and account share the hostname), prefix `vesact-preview`                | host-only                                                                                        |
 
-`deploy.yml` runs one job per app: build → `wrangler deploy` → `wrangler secret bulk`, the
-account job's migration first for the Studio database and the relay job migrating Relay's own,
-plus an `images` job that pushes the Docker target to GHCR on `main`. It makes no HTTP check after the Worker deploy (Bot Fight Mode challenges the runner):
-verify by hand or through Workers versions. `VITE_STUDIO_URL`, `VITE_ACCOUNT_URL` and
-`VITE_MARKETING_URL` are read at build time, so a change needs a rebuild.
-Hostnames, pipeline scripts, preview database, R2, Cloudflare, Neon, Hyperdrive and Access: `vesact-deploy-and-infra` skill.
+`deploy.yml`: on a pull request one job per app deploys preview (build → `wrangler deploy` →
+`wrangler secret bulk`, the account job migrating the preview branch first, relay migrating its
+own); on `main` the relay job deploys Relay's production the same way, and `images` + `vps`
+put the Docker target on the machine (below). It makes no HTTP check after a Worker deploy
+(Bot Fight Mode challenges the runner): verify by hand or through Workers versions.
+`VITE_STUDIO_URL`, `VITE_ACCOUNT_URL` and `VITE_MARKETING_URL` are read at build time, so a
+change needs a rebuild. Google login is not configured in production: the machine cannot
+reach Google's token endpoint, and the domestic login methods come with the ICP filing.
+Hostnames, pipeline scripts, the machine, preview database, R2, Cloudflare, Neon, Hyperdrive and Access: `vesact-deploy-and-infra` skill.
 
 ### Docker target
 
@@ -280,14 +284,15 @@ plugin (`BUILD_TARGET=node`, output in `.output/node/`, the app's own `src/serve
 entry) and `pnpm --filter <app> start:node` serves it with srvx. The root `Dockerfile`
 (`docker build --build-arg APP=<app> --build-arg VITE_STUDIO_URL=… .`) packages that build;
 `docker-compose.prod.yml` runs the three containers behind Caddy (`Caddyfile`: `/account/*` to
-account, the rest of the Studio hostname to studio) with one Postgres, reading each app's
-runtime variables from `env/<app>.env` and `SITE_ADDRESS`, `MARKETING_ADDRESS`,
-`POSTGRES_PASSWORD` from the compose environment. The Docker target only uses what both
-targets have (`docs/studio/architecture.md` §5.4). Every pull request builds the images and
-smokes the stack (`validate-prs.yml` job "Docker target", `.github/scripts/smoke.sh`); pushes to
-`main` publish `ghcr.io/vesacthq/vesact-<app>:<sha>` and `:latest`, and the `vps` job puts
-them on the rehearsal machine (`jp.vesact.com`) — migrate, sync, pull, smoke, roll back on
-failure. The machine and the procedure: `vesact-deploy-and-infra` skill.
+account, the rest of the Studio hostname to studio, the marketing hostname to marketing, the
+bare domain redirected to it) with one Postgres, reading each app's runtime variables from
+`env/<app>.env` and `SITE_ADDRESS`, `MARKETING_ADDRESS`, `APEX_ADDRESS`, `POSTGRES_PASSWORD`
+from the compose environment. The Docker target only uses what both targets have
+(`docs/studio/architecture.md` §5.4). Every pull request builds the images and smokes the
+stack (`validate-prs.yml` job "Docker target", `.github/scripts/smoke.sh`); a push to `main`
+builds `vesact-<app>:<sha>`, hands it to the production machine through a COS bucket (no
+registry is reachable from there), migrates through an SSH tunnel, syncs the files and runs
+`vps-deploy.sh` — up, smoke from the machine itself, roll back on failure. The machine and the procedure: `vesact-deploy-and-infra` skill.
 
 ### Workflow
 
