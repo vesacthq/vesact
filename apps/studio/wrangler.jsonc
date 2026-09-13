@@ -32,7 +32,7 @@
 			"routes": [{ "pattern": "studio.preview.vesact.com", "custom_domain": true }],
 			"vars": {
 				"VITE_STUDIO_URL": "https://studio.preview.vesact.com",
-				"VITE_ACCOUNT_URL": "https://account.preview.vesact.com",
+				"VITE_ACCOUNT_URL": "https://studio.preview.vesact.com/account",
 				"VITE_RELAY_URL": "https://relay.preview.vesact.com",
 				"VITE_MARKETING_URL": "https://www.preview.vesact.com",
 				"AUTH_COOKIE_PREFIX": "vesact-preview",

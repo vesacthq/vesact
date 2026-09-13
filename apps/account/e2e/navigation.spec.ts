@@ -11,13 +11,13 @@ test.describe("as a member", () => {
 	test.use({ storageState: e2eUsers.member.statePath });
 
 	test("switches settings pages without a server round trip", async ({ page }) => {
-		await page.goto("/account");
+		await page.goto("account");
 		await waitForHydration(page);
 
 		const serverCalls: string[] = [];
 		page.on("request", (request) => {
 			const { pathname } = new URL(request.url());
-			if (pathname.startsWith("/_serverFn/") || pathname === "/api/auth/get-session") {
+			if (pathname.includes("/_serverFn/") || pathname.endsWith("/api/auth/get-session")) {
 				serverCalls.push(pathname);
 			}
 		});

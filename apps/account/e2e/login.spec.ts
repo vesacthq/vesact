@@ -7,7 +7,7 @@ async function waitForAuthPageHydration(page: import("@playwright/test").Page) {
 
 test.describe("login page", () => {
 	test("should load and show all relevant login form components", async ({ page }) => {
-		await page.goto("/login");
+		await page.goto("login");
 		await waitForAuthPageHydration(page);
 
 		// Main heading and subtitle
@@ -44,7 +44,7 @@ test.describe("login page", () => {
 	});
 
 	test("should switch between magic link and password auth modes", async ({ page }) => {
-		await page.goto("/login");
+		await page.goto("login");
 		await waitForAuthPageHydration(page);
 
 		const passwordInput = page.locator('input[autocomplete="current-password"]');
@@ -78,7 +78,7 @@ test.describe("login page", () => {
 			},
 		]);
 
-		await page.goto("/login");
+		await page.goto("login");
 		await waitForAuthPageHydration(page);
 
 		await expect(page.getByRole("button", { name: /google/i })).toContainText("Last used");

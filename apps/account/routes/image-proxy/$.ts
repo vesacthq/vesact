@@ -4,10 +4,8 @@ import { createFileRoute } from "@tanstack/react-router";
 
 const SAFE_IMAGE_KEY = /^[a-zA-Z0-9._-]+\.(png|jpe?g|webp|gif)$/i;
 
-function parseImageProxyPath(request: Request) {
-	const pathname = new URL(request.url).pathname;
-	const rawPath = pathname.replace(/^\/image-proxy\/?/, "");
-	const [bucket, ...filePathParts] = rawPath.split("/");
+function parseImageProxyPath(splat: string | undefined) {
+	const [bucket, ...filePathParts] = (splat ?? "").split("/");
 
 	if (!(bucket && filePathParts.length === 1)) {
 		return null;
@@ -29,8 +27,8 @@ function parseImageProxyPath(request: Request) {
 export const Route = createFileRoute("/image-proxy/$")({
 	server: {
 		handlers: {
-			GET: async ({ request }) => {
-				const filePath = parseImageProxyPath(request);
+			GET: async ({ params }) => {
+				const filePath = parseImageProxyPath(params._splat);
 
 				if (!filePath) {
 					return new Response("Invalid path", { status: 400 });

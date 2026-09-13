@@ -24,7 +24,7 @@ reviewed: 2026-09-13
 
 ## 2. 上下文与主机名
 
-`apps/account`，独立的应用和进程，挂在 Studio 主机名的 `/account` 路径下：prod `studio.vesact.com/account`，preview `studio.preview.vesact.com/account`，dev `localhost:3004/account`。它同时提供 Better Auth 端点（`/account/api/auth/*`），`VITE_ACCOUNT_URL` 是它的地址，应用的 base path 从这个地址来。（草稿：现状是 `account.vesact.com` 独立主机名加父域 cookie，切换在 #120。）
+`apps/account`，独立的应用和进程，挂在 Studio 主机名的 `/account` 路径下：prod `studio.vesact.com/account`，preview `studio.preview.vesact.com/account`，dev `localhost:3004/account`。它同时提供 Better Auth 端点（`/account/api/auth/*`），`VITE_ACCOUNT_URL` 是它的地址，应用的 base path 从这个地址来：Vite 的 `base`、Router 的 `basepath`、Better Auth 的 `basePath`、`@repo/api` 的挂载点都由它推出。prod 在 #121 切换前仍是 `account.vesact.com` 独立主机名加父域 cookie，`packages/auth` 按两个地址是否同源决定 cookie 域。
 
 路由：
 

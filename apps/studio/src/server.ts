@@ -25,7 +25,7 @@ export default createServerEntry({
 		const url = new URL(req.url);
 
 		if (legacyAuthPath.test(url.pathname)) {
-			return Response.redirect(new URL(`${url.pathname}${url.search}`, accountUrl).toString(), 302);
+			return Response.redirect(`${accountUrl}${url.pathname}${url.search}`, 302);
 		}
 
 		const { redirect, setCookie } = handleLocaleMiddleware(req);

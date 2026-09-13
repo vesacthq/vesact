@@ -37,7 +37,7 @@ async function expectSecurityPage(page: Page) {
 }
 
 async function signOut(page: Page, origin: string) {
-	const response = await page.request.post("/api/auth/sign-out", {
+	const response = await page.request.post("api/auth/sign-out", {
 		headers: { Origin: origin },
 		data: {},
 	});
@@ -77,7 +77,7 @@ function totpCode(totpURI: string) {
 
 test.describe("signing in returns to the requested page in this app", () => {
 	test("with a password", async ({ page }) => {
-		await page.goto("/login?redirectTo=%2Faccount%2Fsecurity");
+		await page.goto("login?redirectTo=%2Faccount%2Fsecurity");
 		await waitForHydration(page);
 		const loads = watchDocumentLoads(page);
 
@@ -91,18 +91,18 @@ test.describe("signing in returns to the requested page in this app", () => {
 		const origin = baseURL ?? "http://localhost:3004";
 		const user = e2eUsers.totp;
 
-		await page.goto("/login?redirectTo=%2Faccount");
+		await page.goto("login?redirectTo=%2Faccount");
 		await waitForHydration(page);
 		await signInWithPassword(page, user);
 		await expect(page).toHaveURL(/\/account(\?|$)/);
 
-		const enabled = await page.request.post("/api/auth/two-factor/enable", {
+		const enabled = await page.request.post("api/auth/two-factor/enable", {
 			headers: { Origin: origin },
 			data: { password: user.password },
 		});
 		expect(enabled.ok(), await enabled.text()).toBe(true);
 		const { totpURI } = (await enabled.json()) as { totpURI: string };
-		const verified = await page.request.post("/api/auth/two-factor/verify-totp", {
+		const verified = await page.request.post("api/auth/two-factor/verify-totp", {
 			headers: { Origin: origin },
 			data: { code: totpCode(totpURI) },
 		});
@@ -110,7 +110,7 @@ test.describe("signing in returns to the requested page in this app", () => {
 		await signOut(page, origin);
 
 		try {
-			await page.goto("/login?redirectTo=%2Faccount%2Fsecurity");
+			await page.goto("login?redirectTo=%2Faccount%2Fsecurity");
 			await waitForHydration(page);
 			const loads = watchDocumentLoads(page);
 
@@ -121,7 +121,7 @@ test.describe("signing in returns to the requested page in this app", () => {
 			await expectSecurityPage(page);
 			expect(loads).toEqual([]);
 		} finally {
-			await page.request.post("/api/auth/two-factor/disable", {
+			await page.request.post("api/auth/two-factor/disable", {
 				headers: { Origin: origin },
 				data: { password: user.password },
 			});
@@ -147,7 +147,7 @@ test.describe("signing in with a passkey", () => {
 			},
 		});
 
-		await page.goto("/login?redirectTo=%2Faccount%2Fsecurity");
+		await page.goto("login?redirectTo=%2Faccount%2Fsecurity");
 		await waitForHydration(page);
 		await signInWithPassword(page, user);
 		await expectSecurityPage(page);
@@ -155,7 +155,7 @@ test.describe("signing in with a passkey", () => {
 		await expect(page.getByText("Passkey added")).toBeVisible();
 		await signOut(page, origin);
 
-		await page.goto("/login?redirectTo=%2Faccount%2Fsecurity");
+		await page.goto("login?redirectTo=%2Faccount%2Fsecurity");
 		await waitForHydration(page);
 		const loads = watchDocumentLoads(page);
 

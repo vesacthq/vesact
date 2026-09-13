@@ -1,5 +1,5 @@
 import { getBaseUrl } from "@repo/utils";
-import { withQuery } from "ufo";
+import { joinURL, withQuery } from "ufo";
 
 const accountUrl = getBaseUrl(import.meta.env.VITE_ACCOUNT_URL as string | undefined, 3004);
 const studioUrl = getBaseUrl(import.meta.env.VITE_STUDIO_URL as string | undefined, 3000);
@@ -14,11 +14,11 @@ function absolute(href: string) {
  * search and hash).
  */
 export function loginUrl(href: string): string {
-	return withQuery(new URL("/login", accountUrl).toString(), { redirectTo: absolute(href) });
+	return withQuery(joinURL(accountUrl, "/login"), { redirectTo: absolute(href) });
 }
 
 export function onboardingUrl(href: string): string {
-	return withQuery(new URL("/onboarding", accountUrl).toString(), { redirectTo: absolute(href) });
+	return withQuery(joinURL(accountUrl, "/onboarding"), { redirectTo: absolute(href) });
 }
 
 /**
@@ -26,7 +26,7 @@ export function onboardingUrl(href: string): string {
  * sits on; the account center's back button returns there.
  */
 export function accountCenterUrl(path: string, from?: string): string {
-	const url = new URL(path, accountUrl);
+	const url = new URL(joinURL(accountUrl, path));
 
 	if (from) {
 		url.searchParams.set("from", absolute(from));

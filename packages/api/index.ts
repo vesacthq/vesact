@@ -1,7 +1,7 @@
 import { auth } from "@repo/auth";
 import { logger } from "@repo/logs";
 import { webhookHandler as paymentsWebhookHandler } from "@repo/payments";
-import { getTrustedOrigins } from "@repo/utils";
+import { basePath, getTrustedOrigins } from "@repo/utils";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger as honoLogger } from "hono/logger";
@@ -15,8 +15,10 @@ const allowedOrigins = getTrustedOrigins();
 const isProduction = process.env.NODE_ENV === "production";
 const enableApiDocs = process.env.ENABLE_API_DOCS === "true" || !isProduction;
 
+// The account center serves this app under its mount path (`/account/api`);
+// Better Auth's own basePath is derived the same way in @repo/auth.
 export const app = new Hono()
-	.basePath("/api")
+	.basePath(`${basePath}/api`)
 	// Security headers — a reasonable default for API responses. Apps that
 	// need a stricter CSP can extend this stack.
 	.use(
@@ -51,7 +53,7 @@ export const app = new Hono()
 	.get("/health", (c) => c.text("OK"))
 	// oRPC handlers (both RPC and OpenAPI)
 	.use("*", async (c, next) => {
-		if (!enableApiDocs && c.req.path.startsWith("/api/docs")) {
+		if (!enableApiDocs && c.req.path.startsWith(`${basePath}/api/docs`)) {
 			return c.notFound();
 		}
 
@@ -61,7 +63,7 @@ export const app = new Hono()
 
 		const isRpc = c.req.path.includes("/rpc/");
 		const handler = isRpc ? rpcHandler : openApiHandler;
-		const prefix = isRpc ? "/api/rpc" : "/api";
+		const prefix = isRpc ? (`${basePath}/api/rpc` as const) : (`${basePath}/api` as const);
 
 		const { matched, response } = await handler.handle(c.req.raw, {
 			prefix,

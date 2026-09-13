@@ -5,6 +5,7 @@ import { Button } from "@repo/ui/components/button";
 import { Spinner } from "@repo/ui/components/spinner";
 import { toast } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
+import { appUrl } from "@shared/lib/app-url";
 import { useState } from "react";
 
 export function SetPasswordForm() {
@@ -22,7 +23,7 @@ export function SetPasswordForm() {
 		await authClient.requestPasswordReset(
 			{
 				email: user.email,
-				redirectTo: `${window.location.origin}/reset-password`,
+				redirectTo: appUrl("/reset-password"),
 			},
 			{
 				onSuccess: () => {

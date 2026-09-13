@@ -13,8 +13,12 @@ import { createAuthClient } from "better-auth/react";
 import type { auth } from ".";
 import { ac, roles } from "./lib/access";
 
+const accountUrl = import.meta.env.VITE_ACCOUNT_URL as string | undefined;
+
 export const authClient = createAuthClient({
-	baseURL: import.meta.env.VITE_ACCOUNT_URL as string | undefined,
+	// The account center's URL includes the path it is mounted on, so the auth
+	// endpoints sit under it rather than at the origin's /api/auth.
+	baseURL: accountUrl ? `${accountUrl}/api/auth` : undefined,
 	plugins: [
 		inferAdditionalFields<typeof auth>(),
 		magicLinkClient(),

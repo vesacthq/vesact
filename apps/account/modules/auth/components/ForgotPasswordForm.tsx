@@ -13,6 +13,7 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Spinner } from "@repo/ui/components/spinner";
+import { appUrl } from "@shared/lib/app-url";
 import { useForm, useStore } from "@tanstack/react-form";
 import { Link } from "@tanstack/react-router";
 import { AlertTriangleIcon, ArrowLeftIcon, MailboxIcon } from "lucide-react";
@@ -52,7 +53,7 @@ export function ForgotPasswordForm() {
 		},
 		onSubmit: async ({ value: { email }, formApi }) => {
 			try {
-				const redirectTo = new URL("/reset-password", window.location.origin).toString();
+				const redirectTo = appUrl("/reset-password");
 
 				const { error } = await authClient.requestPasswordReset({
 					email,

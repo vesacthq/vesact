@@ -6,6 +6,7 @@ import { Button } from "@repo/ui/components/button";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { toast } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
+import { appUrl } from "@shared/lib/app-url";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ComputerIcon, XIcon } from "lucide-react";
 
@@ -46,7 +47,7 @@ export function ActiveSessionsBlock() {
 							queryKey: sessionQueryKey,
 						});
 
-						window.location.href = new URL("/login", window.location.origin).toString();
+						window.location.href = appUrl("/login");
 					} else {
 						await queryClient.invalidateQueries({
 							queryKey: ["active-sessions"],

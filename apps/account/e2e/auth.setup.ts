@@ -9,7 +9,7 @@ async function signIn(
 	const context = await browser.newContext();
 	const page = await context.newPage();
 
-	await page.goto("/login?redirectTo=%2Faccount");
+	await page.goto("login?redirectTo=%2Faccount");
 	// LocaleSwitch is client-only; once it renders, the form handlers are attached.
 	await expect(page.getByRole("button", { name: "Language" })).toBeVisible();
 	await page.getByRole("tab", { name: "Password" }).click();

@@ -13,9 +13,10 @@ export function getBaseUrl(envValue?: string, defaultPort = 3000): string {
 }
 
 /**
- * The domain a session cookie must be set on so every product sees it: the
- * parent of the account center's hostname (`account.vesact.com` →
- * `.vesact.com`, `account.preview.vesact.com` → `.preview.vesact.com`).
+ * The domain a session cookie must be set on while the account center still
+ * answers on its own hostname: the parent of that hostname
+ * (`account.vesact.com` → `.vesact.com`). Once it is mounted under the Studio
+ * hostname the cookie stays host-only and this is unused.
  * `localhost` has no parent, so local cookies stay host-only.
  */
 export function getCookieDomain(url: string): string | undefined {
@@ -30,7 +31,8 @@ export function getCookieDomain(url: string): string | undefined {
  * single source of truth for both the API CORS allow-list and better-auth's
  * `trustedOrigins` (origin/CSRF and callback/redirect URL validation), so the
  * two never drift apart. Always includes the Studio, account center and Relay
- * origins and adds the marketing site when configured.
+ * origins and adds the marketing site when configured. The account center's
+ * URL may carry a path (`/account`); only origins are compared.
  */
 export function getTrustedOrigins(): string[] {
 	const studioUrl = getBaseUrl(process.env.VITE_STUDIO_URL, 3000);
@@ -38,6 +40,10 @@ export function getTrustedOrigins(): string[] {
 	const accountUrl = getBaseUrl(process.env.VITE_ACCOUNT_URL, 3004);
 	const relayUrl = getBaseUrl(process.env.VITE_RELAY_URL, 3005);
 	return [
-		...new Set([studioUrl, accountUrl, relayUrl, marketingUrl].filter((url) => url !== undefined)),
+		...new Set(
+			[studioUrl, accountUrl, relayUrl, marketingUrl]
+				.filter((url) => url !== undefined)
+				.map((url) => new URL(url).origin),
+		),
 	];
 }

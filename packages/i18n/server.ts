@@ -1,3 +1,5 @@
+import { stripBasePath, withBasePath } from "@repo/utils";
+
 import type { Locale } from "./config";
 import {
 	createLocaleCookieHeader,
@@ -19,7 +21,7 @@ interface LocaleMiddlewareResult {
 
 export function handleLocaleMiddleware(request: Request): LocaleMiddlewareResult {
 	const url = new URL(request.url);
-	const pathname = url.pathname;
+	const pathname = stripBasePath(url.pathname);
 
 	if (shouldIgnorePath(pathname)) {
 		return {};
@@ -28,7 +30,7 @@ export function handleLocaleMiddleware(request: Request): LocaleMiddlewareResult
 	const locale = extractLocaleFromPath(pathname);
 
 	if (locale === defaultLocale) {
-		url.pathname = stripLocaleFromPath(pathname);
+		url.pathname = withBasePath(stripLocaleFromPath(pathname));
 		return { redirect: Response.redirect(url.toString(), 301) };
 	}
 
@@ -38,7 +40,7 @@ export function handleLocaleMiddleware(request: Request): LocaleMiddlewareResult
 
 	const strippedPathname = stripLocaleFromPath(pathname);
 	if (shouldIgnorePath(strippedPathname)) {
-		url.pathname = strippedPathname;
+		url.pathname = withBasePath(strippedPathname);
 		return { redirect: Response.redirect(url.toString(), 301) };
 	}
 

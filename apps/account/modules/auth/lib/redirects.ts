@@ -1,3 +1,4 @@
+import { withBasePath } from "@repo/utils";
 import { withQuery } from "ufo";
 
 const accountOrigin = import.meta.env.VITE_ACCOUNT_URL;
@@ -104,15 +105,24 @@ export function onboardingUrl(redirectTo: string): string {
 }
 
 /**
- * Follows a resolved redirect. Cross-origin targets need a full navigation;
- * the router only knows this app.
+ * A resolved redirect as the browser shows it: relative targets are app paths
+ * and get the mount path, absolute targets stay as they are. For `redirect()`
+ * and `navigate()` with `href`, which take the address literally.
+ */
+export function browserHref(url: string): string {
+	return url.startsWith("/") ? withBasePath(url) : url;
+}
+
+/**
+ * Follows a resolved redirect. Relative targets go through the router;
+ * absolute targets need a full navigation.
  */
 export function navigateTo(
 	router: { navigate: (options: { href: string; replace?: boolean }) => unknown },
 	url: string,
 ) {
 	if (url.startsWith("/")) {
-		void router.navigate({ href: url, replace: true });
+		void router.navigate({ href: browserHref(url), replace: true });
 		return;
 	}
 

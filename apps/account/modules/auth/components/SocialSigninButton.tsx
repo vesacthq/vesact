@@ -6,7 +6,7 @@ import { toast } from "@repo/ui/components/toast";
 import { useSearch } from "@tanstack/react-router";
 
 import { oAuthProviders } from "../constants/oauth-providers";
-import { getSafeRedirectUrl, invitationUrl } from "../lib/redirects";
+import { browserHref, getSafeRedirectUrl, invitationUrl } from "../lib/redirects";
 import { LastUsedBadge } from "./LastUsedBadge";
 
 export function SocialSigninButton({
@@ -20,9 +20,12 @@ export function SocialSigninButton({
 	const search = useSearch({ strict: false }) as { invitationId?: string; redirectTo?: string };
 	const providerData = oAuthProviders[provider];
 
-	const callbackURL = search.invitationId
-		? invitationUrl(search.invitationId)
-		: getSafeRedirectUrl(search.redirectTo);
+	// Better Auth redirects to it as the browser would, so an app path needs the mount path.
+	const callbackURL = browserHref(
+		search.invitationId
+			? invitationUrl(search.invitationId)
+			: getSafeRedirectUrl(search.redirectTo),
+	);
 
 	const onSignin = async () => {
 		const { error } = await authClient.signIn.social({

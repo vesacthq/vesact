@@ -1,0 +1,27 @@
+# The edge of the Docker target: TLS, then the Studio hostname split by path.
+# SITE_ADDRESS is the public address of the Studio unit (`jp.vesact.com`,
+# `http://localhost` when running the compose file locally); MARKETING_ADDRESS
+# the marketing site's. Caddy provisions certificates for public hostnames.
+
+{$SITE_ADDRESS:http://localhost} {
+	encode zstd gzip
+
+	# Hashed build output; the same rule the Workers target gets from _headers.
+	header /assets/* Cache-Control "public, max-age=31536000, immutable"
+	header /account/assets/* Cache-Control "public, max-age=31536000, immutable"
+
+	@account path /account /account/*
+	handle @account {
+		reverse_proxy account:3000
+	}
+
+	handle {
+		reverse_proxy studio:3000
+	}
+}
+
+{$MARKETING_ADDRESS:http://localhost:3001} {
+	encode zstd gzip
+	header /assets/* Cache-Control "public, max-age=31536000, immutable"
+	reverse_proxy marketing:3000
+}

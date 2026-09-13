@@ -6,6 +6,7 @@ import { authClient } from "@repo/auth/client";
 import { ColorModeToggle, Logo } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import { LocaleSwitch } from "@shared/components/LocaleSwitch";
+import { appUrl } from "@shared/lib/app-url";
 import { useSearch } from "@tanstack/react-router";
 import { ArrowLeftIcon, LogOutIcon } from "lucide-react";
 
@@ -24,7 +25,7 @@ export function AccountHeader() {
 		await authClient.signOut({
 			fetchOptions: {
 				onSuccess: () => {
-					window.location.href = new URL("/login", window.location.origin).toString();
+					window.location.href = appUrl("/login");
 				},
 			},
 		});

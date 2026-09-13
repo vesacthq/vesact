@@ -9,6 +9,7 @@ import { Button } from "@repo/ui/components/button";
 import { Spinner } from "@repo/ui/components/spinner";
 import { Tabs, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 import { useLocaleCurrency } from "@shared/hooks/locale-currency";
+import { appUrl } from "@shared/lib/app-url";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation } from "@tanstack/react-query";
 import { ArrowRightIcon, BadgePercentIcon, CheckIcon, StarIcon } from "lucide-react";
@@ -58,7 +59,7 @@ export function PricingTable({
 				type: selection.type,
 				interval: selection.interval,
 				organizationId,
-				redirectUrl: withQuery(`${window.location.origin}/checkout-return`, {
+				redirectUrl: withQuery(appUrl("/checkout-return"), {
 					organizationId,
 					organizationSlug,
 				}),

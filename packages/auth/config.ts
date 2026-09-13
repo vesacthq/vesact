@@ -24,6 +24,7 @@ export const config = {
 		requireOrganization: false,
 		forbiddenOrganizationSlugs: [
 			"new-organization",
+			"account",
 			"admin",
 			"settings",
 			"ai-demo",

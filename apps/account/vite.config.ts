@@ -17,10 +17,22 @@ const nodeTarget = process.env.BUILD_TARGET === "node";
 export default defineConfig(({ mode }) => {
 	Object.assign(process.env, loadEnv(mode, monorepoRoot, ""));
 
+	// The app is mounted on the path of its public URL (`/account` under the
+	// Studio hostname). Vite's base drives the asset URLs and the router basepath;
+	// the Node target nests the client output the same way so srvx serves
+	// `<base>/assets/*` from disk. The Worker target hands those requests to the
+	// assets binding in server.ts.
+	const base = new URL(process.env.VITE_ACCOUNT_URL ?? "http://localhost:3004/account").pathname;
+
 	return {
+		base,
 		build: {
 			outDir: nodeTarget ? ".output/node" : ".output",
 		},
+		environments:
+			nodeTarget && base !== "/"
+				? { client: { build: { outDir: path.join(".output/node/client", base) } } }
+				: undefined,
 		envDir: monorepoRoot,
 		envPrefix: ["VITE_"],
 		server: {

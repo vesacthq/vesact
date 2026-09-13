@@ -4,7 +4,6 @@ import { authClient } from "@repo/auth/client";
 import { Progress } from "@repo/ui/components/progress";
 import { useRouter, useSearch } from "@tanstack/react-router";
 import { useMemo } from "react";
-import { withQuery } from "ufo";
 
 import { OnboardingAccountStep } from "./OnboardingAccountStep";
 
@@ -24,10 +23,8 @@ export function OnboardingForm() {
 	// oxlint-disable-next-line no-unused-vars -- used for redirecting to the next step
 	const setStep = (step: number) => {
 		void router.navigate({
-			to: withQuery(window.location.pathname, {
-				...search,
-				step,
-			}),
+			to: "/onboarding",
+			search: { ...search, step: String(step) },
 			replace: true,
 		});
 	};
