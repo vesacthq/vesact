@@ -269,7 +269,7 @@ Tencent Cloud Shanghai under `allcast.cc`. Three environments:
 
 `deploy.yml`: on a pull request one job per app deploys preview (build → `wrangler deploy` →
 `wrangler secret bulk`, the account job migrating the preview branch first, relay migrating its
-own); on `main` the relay job deploys Relay's production the same way, and `images` + `vps`
+own); on `main` the relay job deploys Relay's production the same way, and `images` + `machine`
 put the Docker target on the machine (below). It makes no HTTP check after a Worker deploy
 (Bot Fight Mode challenges the runner): verify by hand or through Workers versions.
 `VITE_STUDIO_URL`, `VITE_ACCOUNT_URL` and `VITE_MARKETING_URL` are read at build time, so a
@@ -292,7 +292,7 @@ from the compose environment. The Docker target only uses what both targets have
 stack (`validate-prs.yml` job "Docker target", `.github/scripts/smoke.sh`); a push to `main`
 builds `vesact-<app>:<sha>`, hands it to the production machine through a COS bucket (no
 registry is reachable from there), migrates through an SSH tunnel, syncs the files and runs
-`vps-deploy.sh` — up, smoke from the machine itself, roll back on failure. The machine and the procedure: `vesact-deploy-and-infra` skill.
+`machine-deploy.sh` — up, smoke from the machine itself, roll back on failure. The machine and the procedure: `vesact-deploy-and-infra` skill.
 
 ### Workflow
 

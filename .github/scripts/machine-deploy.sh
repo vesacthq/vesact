@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Runs on the machine, from the directory that holds docker-compose.prod.yml:
-#   vps-deploy.sh <image tag> <smoke studio url> <smoke marketing url> [smoke apex url]
+#   machine-deploy.sh <image tag> <smoke studio url> <smoke marketing url> [smoke apex url]
 # The tagged images were loaded by deploy.yml; this brings the stack up on them
 # and smokes it; on failure it puts the previous tag back so the site keeps
 # running. The running tag is kept in ./current-tag and mirrored as IMAGE_TAG

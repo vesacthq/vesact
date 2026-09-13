@@ -16,7 +16,7 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
    the `vars` of `apps/<app>/wrangler.jsonc` (`env.preview.vars` for preview).
    The Docker target (production) reads them twice: as build args of the `images`
    job in `deploy.yml` (and of `docker-compose.prod.yml`'s `build`), and at runtime
-   from `secrets/<app>.prod.env`, which the `vps` job writes to `env/<app>.env` on
+   from `secrets/<app>.prod.env`, which the `machine` job writes to `env/<app>.env` on
    the machine together with every server-side variable, `wrangler.jsonc` vars
    included. Anything secret goes in `secrets/<file>.env`, never in
    `wrangler.jsonc`, workflow files, or GitHub secrets.

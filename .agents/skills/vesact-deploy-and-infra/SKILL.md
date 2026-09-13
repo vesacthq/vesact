@@ -35,7 +35,7 @@ pull request the marketing, account, studio and relay jobs each build →
 Studio database migration first and the studio job waits for it; the relay job
 migrates Relay's own database (`pnpm --filter @repo/relay db:migrate`) and runs
 on its own. On `main` only relay deploys a Worker (its production); studio,
-account and marketing go to the machine through the `images` and `vps` jobs
+account and marketing go to the machine through the `images` and `machine` jobs
 (see "Docker target" and "The machine"). The relay Worker answers on two custom domains and dispatches by
 path (`docs/relay/architecture.md` §2). The Cloudflare Vite plugin flattens the selected environment into
 `.output/server/wrangler.json` at build time, so `CLOUDFLARE_ENV` is set for the
@@ -115,9 +115,9 @@ Production is one Tencent Cloud CVM in Shanghai (`118.89.171.81`, SA3.MEDIUM2:
 2 vCPU, 2 GB, 50 GB, Ubuntu 24.04). `ssh ubuntu@118.89.171.81` with your own
 key (password login and root login are off; `ubuntu` has passwordless sudo and
 is in the docker group); CI uses the ed25519 key in
-`secrets/files/vps-deploy-ssh-key.json`, whose public half is in
+`secrets/files/machine-deploy-ssh-key.json`, whose public half is in
 `~ubuntu/.ssh/authorized_keys`, against the host key pinned in
-`.github/vps_known_hosts`. Rotate it by generating a new pair, replacing the
+`.github/machine_known_hosts`. Rotate it by generating a new pair, replacing the
 line in `authorized_keys`, and re-encrypting the private key with
 `sops --encrypt --input-type binary --output-type json`. Docker Engine comes
 from `mirrors.cloud.tencent.com/docker-ce`; `/etc/docker/daemon.json` points
@@ -127,11 +127,11 @@ allows 22, 80 and 443; the security group mirrors that. 2 GB of RAM is enough
 to run the stack, never to build it — images are built in CI.
 
 Everything lives in `/srv/vesact/`: `docker-compose.prod.yml`, `Caddyfile`,
-`vps-deploy.sh`, `smoke.sh`, `machine-prune.sh`, `.env` (from
+`machine-deploy.sh`, `smoke.sh`, `machine-prune.sh`, `.env` (from
 `secrets/prod.env`: `SITE_ADDRESS`, `MARKETING_ADDRESS`, `APEX_ADDRESS`,
 `POSTGRES_PASSWORD`, `SMOKE_INSECURE`, plus `IMAGE_TAG` maintained by the
 deploy script), `env/<app>.env` (from `secrets/<app>.prod.env`) and
-`current-tag`. The `vps` job of `deploy.yml` rewrites all of them from the
+`current-tag`. The `machine` job of `deploy.yml` rewrites all of them from the
 repository on every push to `main` and installs `machine-prune.sh` as
 `/etc/cron.weekly/vesact-prune`, so edit the sops files, not the machine.
 
@@ -140,10 +140,10 @@ Deploy: each `images` job builds `vesact-<app>:<sha>`, uploads
 (ap-shanghai, global acceleration on — a stream straight from the runner ran
 at 40–1200 KB/s — objects expire after 7 days) and has the machine download it
 with a presigned URL over Tencent's network (100 MB/s) into `docker load`; then
-`vps` starts
+`machine` starts
 `postgres` if needed, migrates through `ssh -L` (`secrets/database.prod.env`
 points at the tunnel), copies the files and runs
-`./vps-deploy.sh <sha> https://studio.allcast.cc https://www.allcast.cc https://allcast.cc`:
+`./machine-deploy.sh <sha> https://studio.allcast.cc https://www.allcast.cc https://allcast.cc`:
 checks the three images are present, `up -d --wait`, `smoke.sh`; a failed
 smoke brings the previous tag back and fails the job. The script keeps the
 images of the running tag and its predecessor and removes older ones; the
@@ -162,7 +162,7 @@ in `secrets/infra.env`.
 
 After the ICP filing passes: drop `:8443` from the addresses in
 `secrets/prod.env`, the `VITE_*` URLs in `secrets/<app>.prod.env`, the build
-args of the `images` job and the smoke URLs of the `vps` job; remove
+args of the `images` job and the smoke URLs of the `machine` job; remove
 `local_certs` from the `Caddyfile` and `SMOKE_INSECURE` from `secrets/prod.env`
 (Let's Encrypt HTTP-01 then works on 80); take the `8443` port mapping out of
 the compose file and the security group; put the filing number in the
@@ -176,18 +176,21 @@ Google's token endpoint).
 - Cloudflare account `6a8e5373d12070c930f09f1a82541a0b`, workers.dev subdomain
   `vesact`. CI authenticates with the token in `secrets/ci.env`; manual
   operations use `wrangler login`.
-- Neon project `ancient-morning-26822519` (`vesact`, Singapore) for Studio and
-  the account center, branches `production` (default) and `preview`; Neon
+- Neon project `ancient-morning-26822519` (`vesact`, Singapore) for the Studio
+  unit's preview: branch `preview`, whose parent `production` (default) holds
+  the data from before the move to the machine and stays because a root branch
+  cannot be deleted; Neon
   project `purple-breeze-98513221` (`vesact-relay`, Singapore, Postgres 18) for
   Relay, same two branches, migrated by `@repo/relay` with the URLs in
   `secrets/relay-database.<env>.env`. Manage them with `neonctl` and
   `NEON_API_KEY` from `secrets/ci.env`; `secrets/infra.env` holds the Neon
   and Cloudflare tokens that create projects and Hyperdrive configs — CI never
   loads it.
-- Hyperdrive `vesact-db` and `vesact-preview` for studio and account (ids in
-  `apps/studio/wrangler.jsonc`) point at the `vesact` project; `vesact-relay-db`
-  and `vesact-relay-preview` for relay (ids in `apps/relay/wrangler.jsonc`)
-  point at `vesact-relay`. All four have query caching
+- Hyperdrive `vesact-preview` for studio and account (its id is the one
+  binding in `apps/studio/wrangler.jsonc`, top level and preview alike, since
+  production left Workers and `vesact-db` was deleted on 2026-09-13) points at
+  the `vesact` project; `vesact-relay-db` and `vesact-relay-preview` for relay
+  (ids in `apps/relay/wrangler.jsonc`) point at `vesact-relay`. All three have query caching
   disabled: Hyperdrive would otherwise serve a read for up to 60 seconds
   after a write, and nothing here tolerates that (an organization missing
   from its list after creation, a revoked key still verifying). Add a cached

@@ -29,8 +29,8 @@ jobs:
     permissions:
       contents: read
     env:
-      VPS_HOST: 118.89.171.81
-      VPS_USER: ubuntu
+      MACHINE_HOST: 118.89.171.81
+      MACHINE_USER: ubuntu
       COS_BUCKET: vesact-images-1300248116
       COS_REGION: ap-shanghai
       AWS_DEFAULT_REGION: ap-shanghai
@@ -61,9 +61,9 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
-          sops -d --input-type json --output-type binary secrets/files/vps-deploy-ssh-key.json > ~/.ssh/id_ed25519
+          sops -d --input-type json --output-type binary secrets/files/machine-deploy-ssh-key.json > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          cp .github/vps_known_hosts ~/.ssh/known_hosts
+          cp .github/machine_known_hosts ~/.ssh/known_hosts
       - name: Load on the machine
         env:
           AWS_ACCESS_KEY_ID: ${{ env.TENCENTCLOUD_SECRET_ID }}
@@ -75,13 +75,13 @@ jobs:
           aws s3 cp image.tar.zst "$OBJECT" --endpoint-url https://cos.accelerate.myqcloud.com --only-show-errors
           # The presigned URL travels on stdin, not in the remote command line.
           aws s3 presign "$OBJECT" --endpoint-url "https://cos.$COS_REGION.myqcloud.com" --expires-in 3600 |
-            ssh "$VPS_USER@$VPS_HOST" 'read -r url && curl -fsS "$url" | zstd -d | docker load'
+            ssh "$MACHINE_USER@$MACHINE_HOST" 'read -r url && curl -fsS "$url" | zstd -d | docker load'
 
-  vps:
+  machine:
     name: Machine
     # The Docker target on the machine (docs/studio/architecture.md §6): migrate
     # through an SSH tunnel, refresh the compose files and env, then bring the
-    # stack up on the images just loaded and smoke; vps-deploy.sh rolls back on
+    # stack up on the images just loaded and smoke; machine-deploy.sh rolls back on
     # a failed smoke.
     needs: images
     if: github.event_name == 'push'
@@ -89,8 +89,8 @@ jobs:
     permissions:
       contents: read
     env:
-      VPS_HOST: 118.89.171.81
-      VPS_USER: ubuntu
+      MACHINE_HOST: 118.89.171.81
+      MACHINE_USER: ubuntu
       SITE_URL: https://studio.allcast.cc:8443
       MARKETING_URL: https://www.allcast.cc:8443
       APEX_URL: https://allcast.cc:8443
@@ -106,9 +106,9 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
-          sops -d --input-type json --output-type binary secrets/files/vps-deploy-ssh-key.json > ~/.ssh/id_ed25519
+          sops -d --input-type json --output-type binary secrets/files/machine-deploy-ssh-key.json > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          cp .github/vps_known_hosts ~/.ssh/known_hosts
+          cp .github/machine_known_hosts ~/.ssh/known_hosts
       - name: Load database URL
         run: .github/scripts/load-env.sh secrets/database.prod.env
       - name: Install dependencies
@@ -122,20 +122,20 @@ jobs:
             sops -d "secrets/$app.prod.env" > "$RUNNER_TEMP/env/$app.env"
           done
           sops -d secrets/prod.env > "$RUNNER_TEMP/dotenv"
-          ssh "$VPS_USER@$VPS_HOST" 'mkdir -p /srv/vesact/env && chmod 700 /srv/vesact /srv/vesact/env'
-          scp -q docker-compose.prod.yml Caddyfile .github/scripts/vps-deploy.sh .github/scripts/smoke.sh .github/scripts/machine-prune.sh "$VPS_USER@$VPS_HOST:/srv/vesact/"
-          scp -q "$RUNNER_TEMP"/env/*.env "$VPS_USER@$VPS_HOST:/srv/vesact/env/"
-          scp -q "$RUNNER_TEMP/dotenv" "$VPS_USER@$VPS_HOST:/srv/vesact/.env"
+          ssh "$MACHINE_USER@$MACHINE_HOST" 'mkdir -p /srv/vesact/env && chmod 700 /srv/vesact /srv/vesact/env'
+          scp -q docker-compose.prod.yml Caddyfile .github/scripts/machine-deploy.sh .github/scripts/smoke.sh .github/scripts/machine-prune.sh "$MACHINE_USER@$MACHINE_HOST:/srv/vesact/"
+          scp -q "$RUNNER_TEMP"/env/*.env "$MACHINE_USER@$MACHINE_HOST:/srv/vesact/env/"
+          scp -q "$RUNNER_TEMP/dotenv" "$MACHINE_USER@$MACHINE_HOST:/srv/vesact/.env"
           rm -rf "$RUNNER_TEMP/env" "$RUNNER_TEMP/dotenv"
-          ssh "$VPS_USER@$VPS_HOST" 'sudo install -m 755 /srv/vesact/machine-prune.sh /etc/cron.weekly/vesact-prune'
+          ssh "$MACHINE_USER@$MACHINE_HOST" 'sudo install -m 755 /srv/vesact/machine-prune.sh /etc/cron.weekly/vesact-prune'
       - name: Migrate
         # The stack's Postgres is on the machine's loopback; the first deploy starts it before migrating.
         run: |
-          ssh "$VPS_USER@$VPS_HOST" 'cd /srv/vesact && docker compose -f docker-compose.prod.yml up -d --wait postgres'
-          ssh -f -N -o ExitOnForwardFailure=yes -L 55432:127.0.0.1:5432 "$VPS_USER@$VPS_HOST"
+          ssh "$MACHINE_USER@$MACHINE_HOST" 'cd /srv/vesact && docker compose -f docker-compose.prod.yml up -d --wait postgres'
+          ssh -f -N -o ExitOnForwardFailure=yes -L 55432:127.0.0.1:5432 "$MACHINE_USER@$MACHINE_HOST"
           pnpm --filter @repo/database migrate
       - name: Deploy
-        run: ssh "$VPS_USER@$VPS_HOST" "cd /srv/vesact && ./vps-deploy.sh '${{ github.sha }}' '$SITE_URL' '$MARKETING_URL' '$APEX_URL'"
+        run: ssh "$MACHINE_USER@$MACHINE_HOST" "cd /srv/vesact && ./machine-deploy.sh '${{ github.sha }}' '$SITE_URL' '$MARKETING_URL' '$APEX_URL'"
 
   marketing:
     name: Marketing
