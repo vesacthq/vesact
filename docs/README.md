@@ -27,7 +27,7 @@
 | ------------------------- | -------------------------------------------------------------------------------- |
 | `decisions.md`            | 定稿                                                                             |
 | `relay/product.md`        | 定稿                                                                             |
-| `relay/architecture.md`   | 定稿；§5.5 Messaging 领域是草稿，A2 产出；标（草稿）的段落是 #118 的目标形态     |
+| `relay/architecture.md`   | 定稿；§5.5 Messaging 领域是草稿，A2 产出                                         |
 | `account/architecture.md` | 定稿，已实现；标（草稿）的段落是 #118 的目标形态                                 |
 | `studio/product.md`       | 草稿                                                                             |
 | `studio/architecture.md`  | 草稿                                                                             |

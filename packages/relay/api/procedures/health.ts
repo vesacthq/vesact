@@ -1,5 +1,4 @@
-import { z } from "zod";
-
+import { healthOutput } from "../../contract";
 import { relayProcedure } from "../procedures";
 
 export const health = relayProcedure
@@ -11,5 +10,5 @@ export const health = relayProcedure
 		description: "Answers without a key; use it to check that the API is reachable.",
 		spec: (current) => ({ ...current, security: [] }),
 	})
-	.output(z.object({ status: z.literal("ok") }))
+	.output(healthOutput)
 	.handler(() => ({ status: "ok" as const }));

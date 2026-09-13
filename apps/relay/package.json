@@ -15,7 +15,6 @@
 		"format": "oxfmt"
 	},
 	"dependencies": {
-		"@repo/api": "workspace:*",
 		"@repo/i18n": "workspace:*",
 		"@repo/relay": "workspace:*",
 		"@repo/ui": "workspace:*",

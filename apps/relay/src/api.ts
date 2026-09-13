@@ -1,5 +1,4 @@
-import { relayApp } from "@repo/api/modules/relay/app";
-import { notFoundResponse } from "@repo/api/modules/relay/lib/errors";
+import { notFoundResponse, relayApp } from "@repo/relay/api";
 import { Hono } from "hono";
 
 export const api = new Hono()

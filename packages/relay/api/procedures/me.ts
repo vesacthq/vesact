@@ -1,5 +1,4 @@
-import { z } from "zod";
-
+import { apiKeyOutput } from "../../contract";
 import { relayKeyProcedure } from "../procedures";
 
 export const me = relayKeyProcedure
@@ -10,17 +9,7 @@ export const me = relayKeyProcedure
 		summary: "The calling key",
 		description: "The API key that made the request and the organization it belongs to.",
 	})
-	.output(
-		z.object({
-			id: z.string(),
-			name: z.string().nullable(),
-			organizationId: z.string(),
-			permissions: z.record(z.string(), z.array(z.string())),
-			rateLimit: z.object({ max: z.number(), windowMs: z.number() }).nullable(),
-			remaining: z.number().nullable(),
-			expiresAt: z.iso.datetime().nullable(),
-		}),
-	)
+	.output(apiKeyOutput)
 	.handler(({ context }) => {
 		const { key, permissions } = context.auth;
 

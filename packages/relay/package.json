@@ -3,29 +3,41 @@
 	"version": "0.0.0",
 	"private": true,
 	"exports": {
-		"./db": "./db/index.ts",
-		"./db/schema": "./db/schema.ts",
+		"./api": "./api/index.ts",
 		"./auth": "./auth/index.ts",
+		"./auth/access": "./auth/access.ts",
 		"./auth/client": "./auth/client.ts",
-		"./auth/access": "./auth/access.ts"
+		"./contract": "./contract/index.ts",
+		"./db": "./db/index.ts",
+		"./db/schema": "./db/schema.ts"
 	},
 	"scripts": {
 		"clean": "git clean -xdf .cache .turbo dist node_modules",
-		"db:push": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit push",
 		"db:generate": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit generate",
 		"db:migrate": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit migrate",
+		"db:push": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit push",
 		"db:studio": "dotenv -c -e ../../.env -e ../../.env.local -- drizzle-kit studio",
+		"test": "vitest run",
+		"test:watch": "vitest",
 		"type-check": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@better-auth/api-key": "catalog:",
+		"@orpc/client": "catalog:",
+		"@orpc/json-schema": "catalog:",
+		"@orpc/openapi": "catalog:",
+		"@orpc/server": "catalog:",
+		"@orpc/zod": "catalog:",
 		"@paralleldrive/cuid2": "^3.3.0",
 		"@repo/logs": "workspace:*",
 		"@repo/utils": "workspace:*",
 		"better-auth": "catalog:",
 		"drizzle-orm": "catalog:",
+		"hono": "catalog:",
 		"pg": "catalog:",
-		"react": "catalog:"
+		"react": "catalog:",
+		"ulid": "catalog:",
+		"zod": "catalog:"
 	},
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",
@@ -35,6 +47,7 @@
 		"dotenv-cli": "catalog:",
 		"drizzle-kit": "catalog:",
 		"typescript": "catalog:",
-		"vite": "catalog:"
+		"vite": "catalog:",
+		"vitest": "catalog:"
 	}
 }

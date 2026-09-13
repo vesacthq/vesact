@@ -1,4 +1,4 @@
-import { notFoundResponse } from "@repo/api/modules/relay/lib/errors";
+import { notFoundResponse } from "@repo/relay/api";
 import { getBaseUrl } from "@repo/utils";
 import type { Register } from "@tanstack/react-router";
 import type { RequestOptions } from "@tanstack/react-start/server";

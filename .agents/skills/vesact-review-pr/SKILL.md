@@ -14,7 +14,7 @@ repository; this skill is the procedure around it.
 ## When
 
 Every code PR that changes more than three files, or any file under
-`packages/auth`, `packages/permissions`, `packages/api/modules/relay`,
+`packages/auth`, `packages/permissions`, `packages/relay`,
 `secrets/`, `.github/`, or an app's `wrangler.jsonc`. Documentation-only PRs
 skip it. Run it before the PR is opened so the fixes land in the same PR.
 
