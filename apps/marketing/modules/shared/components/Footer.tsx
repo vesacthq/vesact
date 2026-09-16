@@ -14,6 +14,16 @@ export function Footer() {
 					<p className="mt-4 max-w-xs text-sm leading-relaxed">
 						© {new Date().getFullYear()} {config.appName}.
 					</p>
+					{config.icpFilingNumber && (
+						<a
+							href="https://beian.miit.gov.cn/"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="mt-2 text-sm block transition-colors hover:text-primary"
+						>
+							{config.icpFilingNumber}
+						</a>
+					)}
 				</div>
 
 				<div className="gap-2.5 flex flex-col">

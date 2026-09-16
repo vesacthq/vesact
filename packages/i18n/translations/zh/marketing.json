@@ -290,6 +290,9 @@
 		"subtitle": "产品笔记与发布动态——没有噪音。",
 		"title": "保持联系"
 	},
+	"placeholder": {
+		"description": "网站建设中。"
+	},
 	"notFound": {
 		"code": "404",
 		"title": "页面不存在",

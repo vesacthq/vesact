@@ -274,7 +274,7 @@ put the Docker target on the machine (below). It makes no HTTP check after a Wor
 (Bot Fight Mode challenges the runner): verify by hand or through Workers versions.
 `VITE_STUDIO_URL`, `VITE_ACCOUNT_URL` and `VITE_MARKETING_URL` are read at build time, so a
 change needs a rebuild. Google login is not configured in production: the machine cannot
-reach Google's token endpoint, and the domestic login methods come with the ICP filing.
+reach Google's token endpoint; the domestic login methods are #128.
 Hostnames, pipeline scripts, the machine, preview database, R2, Cloudflare, Neon, Hyperdrive and Access: `vesact-deploy-and-infra` skill.
 
 ### Docker target

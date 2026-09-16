@@ -10,6 +10,7 @@ interface ImportMetaEnv {
 	readonly VITE_STUDIO_URL?: string;
 	readonly VITE_MARKETING_URL?: string;
 	readonly VITE_AVATARS_BUCKET_NAME?: string;
+	readonly VITE_ICP_FILING_NUMBER?: string;
 }
 
 interface ImportMeta {

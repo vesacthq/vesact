@@ -92,7 +92,7 @@ reviewed: 2026-09-13
 | preview | worker `vesact-account-preview`   | `studio.preview.vesact.com/account` | Workers 路由 `/account/*`        |
 | dev     | `pnpm --filter account dev`       | `localhost:3004/account`            | 无，localhost 的 cookie 不分端口 |
 
-cookie 只在主机名上，不设域。secrets 在 `secrets/account.{prod,preview,dev}.env`；prod 那份是机器上 account 容器的运行时变量。生产没有配 Google 登录（机器够不到 Google 的 token 端点），国内登录方式随备案来。环境矩阵见 AGENTS.md，部署流程见 `.agents/skills/vesact-deploy-and-infra/SKILL.md`。
+cookie 只在主机名上，不设域。secrets 在 `secrets/account.{prod,preview,dev}.env`；prod 那份是机器上 account 容器的运行时变量。生产没有配 Google 登录（机器够不到 Google 的 token 端点），国内登录方式是 #128。环境矩阵见 AGENTS.md，部署流程见 `.agents/skills/vesact-deploy-and-infra/SKILL.md`。
 
 ## 7. 横切
 

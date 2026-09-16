@@ -2,6 +2,11 @@
 
 倒序。只写结论和理由，过程在对应的 issue 里。
 
+## 2026-09-16 备案通过，国内 marketing 先挂占位页
+
+- `allcast.cc` 的 ICP 备案通过（陕ICP备2026025839号-1，主办单位西安速准科技有限公司，备案的网站名称就是公司名）。备案号挂在 marketing 页脚和账号中心的登录页，`VITE_ICP_FILING_NUMBER` 只出现在国内镜像的构建参数里；Caddy 改用 Let's Encrypt。国内的 marketing 构建用 `VITE_PLACEHOLDER_SITE_NAME` 只渲染一页占位（公司名、© 行、备案号），其余路径 307 到首页；Allcast 站做出来后去掉这个变量。
+- 理由：备案的是公司站，现在跑的是模板落地页，内容和备案信息对不上，抽查会出问题；空白页又没有页脚可挂备案号。海外站不在备案义务内，所以两个变量都是构建期的，preview 和以后的 `allcast.ai` 构建不设。
+
 ## 2026-09-13 生产落在腾讯云，域名 allcast.cc
 
 - Studio 单元的正式版直接跑在腾讯云上海的一台机器上，域名 `allcast.cc`（DNSPod 注册，`studio.` 和 `www.`，裸域 301 到 `www`），与备案并行：备案通过前域名的 80/443 被拦，Caddy 先用自签证书，冒烟在机器本机做。库是机器上的 postgres 容器；Neon production 的数据不迁，URL 留档。镜像不经仓库：CI 构建后经 COS 全球加速桶送到机器（runner 直连上海只有几十到一千 KB/s）。Cloudflare 上 studio、account、marketing 的 prod Worker 和 `www.`、`studio.`、`account.`、`auth.vesact.com` 主机名退役；Relay 不动。生产不配 Google 登录。取代 2026-09-13「Studio 单元两个构建目标」里"先在海外 VPS，域名不变，橙云指向它；备案后搬腾讯云"、"库沿用 Neon production，搬腾讯云时再换"和"备案用哪个域名……在搬腾讯云前定"三句。

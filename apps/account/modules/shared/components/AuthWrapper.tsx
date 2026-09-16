@@ -37,6 +37,19 @@ export function AuthWrapper({
 				<div className="container flex flex-1 items-center justify-center">
 					<main className={cn("max-w-md w-full", contentClass)}>{children}</main>
 				</div>
+
+				{config.icpFilingNumber && (
+					<footer className="text-xs container text-center text-muted-foreground">
+						<a
+							href="https://beian.miit.gov.cn/"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="transition-colors hover:text-foreground"
+						>
+							{config.icpFilingNumber}
+						</a>
+					</footer>
+				)}
 			</div>
 		</div>
 	);

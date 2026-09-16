@@ -21,6 +21,17 @@ export interface MarketingConfig {
 	 */
 	accountUrl?: string;
 	/**
+	 * ICP filing number shown in the footer, linked to beian.miit.gov.cn. Set
+	 * `VITE_ICP_FILING_NUMBER` on the domestic build only; omitted, nothing is rendered.
+	 */
+	icpFilingNumber?: string;
+	/**
+	 * When set, the whole site is one placeholder page under this name and every other
+	 * path redirects to it. Set `VITE_PLACEHOLDER_SITE_NAME` on a build whose real site
+	 * does not exist yet.
+	 */
+	placeholderSiteName?: string;
+	/**
 	 * Theme options available on the marketing site.
 	 */
 	enabledThemes: readonly Theme[];

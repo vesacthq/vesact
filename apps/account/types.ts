@@ -16,6 +16,11 @@ export interface AccountAppConfig {
 	 * Absolute URL for the public marketing site. Set `VITE_MARKETING_URL`.
 	 */
 	marketingUrl?: string;
+	/**
+	 * ICP filing number shown under the auth pages, linked to beian.miit.gov.cn.
+	 * Set `VITE_ICP_FILING_NUMBER` on the domestic build only; omitted, nothing is rendered.
+	 */
+	icpFilingNumber?: string;
 	enabledThemes: readonly Theme[];
 	defaultTheme: Theme;
 }

@@ -18,10 +18,11 @@ The environment matrix (dev / preview / prod) is in `AGENTS.md` under
 | relay     | `relay.vesact.com` (console), `api.vesact.com` (API), Worker | `relay.preview.vesact.com`, `api.preview.vesact.com` |
 
 `allcast.cc` is registered at DNSPod (2026-09-13) and its DNS lives there: `@`, `www` and
-`studio` are A records to the machine. Until the ICP filing passes, Tencent Cloud intercepts
-the domain's traffic to the machine from the public internet (other ports included); the
-stack runs with Caddy's own certificate and the deploy smokes it from the machine itself
-(see "The machine"). `vesact.com` keeps
+`studio` are A records to the machine. The ICP filing (`陕ICP备2026025839号-1`) passed on
+2026-09-16; until then Tencent Cloud intercepted the domain's traffic to the machine from the
+public internet (other ports included) and the stack ran with Caddy's own certificate. Caddy
+now gets Let's Encrypt certificates over HTTP-01 on 80; the deploy still smokes from the
+machine itself (see "The machine"). `vesact.com` keeps
 Relay, `preview.vesact.com`, `e.vesact.com` (PostHog) and the R2 bucket; the `www.`,
 `studio.`, `account.` and `auth.` Workers and hostnames were retired on 2026-09-13.
 
@@ -86,7 +87,7 @@ published ports bypass ufw, and the entries trust `X-Forwarded-*`. Runtime
 variables come from `env/<app>.env` (gitignored; written from sops on the
 machine) — the Worker secrets plus what `wrangler.jsonc` `vars` carried
 (`VITE_*`, `S3_ENDPOINT`, `S3_REGION`) and `DATABASE_URL`; `POSTGRES_PASSWORD`,
-`SITE_ADDRESS`, `MARKETING_ADDRESS`, `APEX_ADDRESS` and `SMOKE_INSECURE` come
+`SITE_ADDRESS`, `MARKETING_ADDRESS` and `APEX_ADDRESS` come
 from the compose environment (`.env` next to the compose file). Images are
 `${IMAGE_REPO}-<app>:${IMAGE_TAG}`, `vesact` and `latest` by default (CI's
 smoke uses `vesact` / `ci`, the machine the commit sha); no registry is
@@ -102,7 +103,8 @@ third argument, the machine's deploy also checks that the apex redirects to
 the marketing site). The same script is the post-deploy check: run on
 the machine, it resolves the public hostnames to the local Caddy
 (`--resolve`), so it needs neither DNS nor the domain's 80/443 to be open,
-and accepts Caddy's own CA while `SMOKE_INSECURE=1`.
+and first waits up to a minute for each hostname to answer TLS, since Caddy
+is still obtaining a certificate after a first deploy or a changed issuer.
 
 The images are 1–1.5 GB unpacked (≈250 MB compressed), mostly production
 dependencies that `pnpm deploy` copies for the app, including `next` arriving
@@ -128,7 +130,7 @@ to run the stack, never to build it — images are built in CI.
 Everything lives in `/srv/vesact/`: `docker-compose.prod.yml`, `Caddyfile`,
 `machine-deploy.sh`, `smoke.sh`, `machine-prune.sh`, `.env` (from
 `secrets/prod.env`: `SITE_ADDRESS`, `MARKETING_ADDRESS`, `APEX_ADDRESS`,
-`POSTGRES_PASSWORD`, `SMOKE_INSECURE`, plus `IMAGE_TAG` maintained by the
+`POSTGRES_PASSWORD`, plus `IMAGE_TAG` maintained by the
 deploy script), `env/<app>.env` (from `secrets/<app>.prod.env`) and
 `current-tag`. The `machine` job of `deploy.yml` rewrites all of them from the
 repository on every push to `main` and installs `machine-prune.sh` as
@@ -159,12 +161,23 @@ first thing to add once there is data worth keeping). The Neon `production`
 branch still holds the pre-move data; its URL is `NEON_PRODUCTION_DATABASE_URL`
 in `secrets/infra.env`.
 
-After the ICP filing passes: remove `local_certs` from the `Caddyfile` and
-`SMOKE_INSECURE` from `secrets/prod.env` (Let's Encrypt HTTP-01 then works on
-80), and put the filing number in the marketing footer. Deferred with it:
-uploads to COS instead of R2, mail and brand on `allcast.cc`, the domestic
-login methods (Google login is off in production: the machine cannot reach
-Google's token endpoint).
+The ICP filing number (`陕ICP备2026025839号-1`, `allcast.cc`, approved 2026-09-16)
+is `VITE_ICP_FILING_NUMBER` in the `images` job's build args: the marketing footer
+and the account center's auth pages link it to `beian.miit.gov.cn` when set, and
+nothing else (preview, a future overseas build) sets it. The rule (Tencent Cloud doc
+243/61412): the number at the bottom of the homepage, linked to that site, with both
+`allcast.cc` and `www.` reachable; the login page carries it for `studio.`. The
+public-security filing (`beian.mps.gov.cn`) is due within 30 days of going live.
+`VITE_PLACEHOLDER_SITE_NAME` in the same build args (the filed site name, the
+company's legal name) makes the marketing build one placeholder page with that
+name, the © line and the filing number, every other path redirecting to it:
+the filed content is a company site and the Allcast site does not exist yet, so
+the template landing page must not show there. Unset it when that site ships.
+
+Still deferred from the filing interim (#156): uploads to COS instead of R2,
+a nightly dump to COS, mail and brand on `allcast.cc`, the domestic login
+methods (Google login is off in production: the machine cannot reach Google's
+token endpoint).
 
 ## Accounts and resources
 
