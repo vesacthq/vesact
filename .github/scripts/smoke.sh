@@ -4,7 +4,6 @@
 # itself, after a deploy; only the answers that need no data are asserted.
 # Public hostnames are resolved to the local Caddy so the check does not
 # depend on DNS or on the domain's 80/443 being reachable from outside.
-# SMOKE_INSECURE=1 accepts Caddy's own CA (before the ICP filing).
 set -euo pipefail
 
 studio="${1:?studio url}"
@@ -19,8 +18,22 @@ curl_local() {
 	if [ "$host" = "localhost" ]; then
 		curl -sS "$@" "$url"
 	else
-		curl -sS ${SMOKE_INSECURE:+-k} --resolve "$host:$port:127.0.0.1" "$@" "$url"
+		curl -sS --resolve "$host:$port:127.0.0.1" "$@" "$url"
 	fi
+}
+
+# Caddy serves a hostname's TLS only once it holds a certificate; a first
+# deploy or a changed issuer needs the ACME round trip, so wait for each host.
+wait_up() {
+	local url="$1" attempt
+	for attempt in $(seq 1 12); do
+		if curl_local "$url" -o /dev/null --max-time 30; then
+			return 0
+		fi
+		sleep 5
+	done
+	echo "FAIL $url does not answer"
+	exit 1
 }
 
 check() {
@@ -32,6 +45,10 @@ check() {
 	fi
 	echo "ok   $url -> $status"
 }
+
+wait_up "$studio/"
+wait_up "$marketing/"
+[ -z "$apex" ] || wait_up "$apex/"
 
 # A signed-out visitor is sent to the account center; the login page renders.
 check 307 "$studio/"

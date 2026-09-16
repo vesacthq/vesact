@@ -281,7 +281,7 @@ reviewed: 2026-09-13
 | preview | worker `vesact-studio-preview`，`/account/*` 由 Workers 路由分给 account worker                                                           | `studio.preview.vesact.com`，Access 后面                                 |
 | dev     | `pnpm dev`                                                                                                                                | `localhost:3000`                                                         |
 
-正式版在腾讯云上海的一台机器上，域名 `allcast.cc`，库是机器上的 postgres 容器（../decisions.md 2026-09-13「生产落在腾讯云」）。部署：CI 构建镜像后经 COS 桶送到机器（机器够不到镜像仓库，runner 直连太慢），迁移在切换前跑，冒烟在机器本机做（#151）。备案通过前域名的 80/443 被腾讯拦，Caddy 先用自签证书。环境矩阵见 AGENTS.md。
+正式版在腾讯云上海的一台机器上，域名 `allcast.cc`，库是机器上的 postgres 容器（../decisions.md 2026-09-13「生产落在腾讯云」）。部署：CI 构建镜像后经 COS 桶送到机器（机器够不到镜像仓库，runner 直连太慢），迁移在切换前跑，冒烟在机器本机做（#151）。`allcast.cc` 的 ICP 备案 2026-09-16 通过（陕ICP备2026025839号-1，国内构建的页脚挂它），证书由 Caddy 向 Let's Encrypt 申请。环境矩阵见 AGENTS.md。
 
 ## 7. 横切
 

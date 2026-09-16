@@ -14,10 +14,6 @@ studio_url="${2:?studio url}"
 marketing_url="${3:?marketing url}"
 apex_url="${4:-}"
 
-# Set in the compose .env while Caddy signs its own certificates (Caddyfile).
-SMOKE_INSECURE=$(sed -n 's/^SMOKE_INSECURE=//p' .env)
-export SMOKE_INSECURE
-
 compose() {
 	docker compose -f docker-compose.prod.yml "$@"
 }
