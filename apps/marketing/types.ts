@@ -21,6 +21,11 @@ export interface MarketingConfig {
 	 */
 	accountUrl?: string;
 	/**
+	 * ICP filing number shown in the footer, linked to beian.miit.gov.cn. Set
+	 * `VITE_ICP_FILING_NUMBER` on the domestic build only; omitted, nothing is rendered.
+	 */
+	icpFilingNumber?: string;
+	/**
 	 * Theme options available on the marketing site.
 	 */
 	enabledThemes: readonly Theme[];

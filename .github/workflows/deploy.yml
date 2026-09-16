@@ -54,6 +54,7 @@ jobs:
             VITE_MARKETING_URL=https://www.allcast.cc
             VITE_POSTHOG_HOST=https://e.vesact.com
             VITE_POSTHOG_KEY=phc_uLUk93bEHjHERp7hMxbDRiRPG4PefxhnzTkSGWYscgjR
+            VITE_ICP_FILING_NUMBER=陕ICP备2026025839号-1
       - name: Install sops
         run: .github/scripts/install-sops.sh
       - name: Load CI secrets

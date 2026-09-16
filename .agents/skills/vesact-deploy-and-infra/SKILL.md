@@ -159,9 +159,17 @@ first thing to add once there is data worth keeping). The Neon `production`
 branch still holds the pre-move data; its URL is `NEON_PRODUCTION_DATABASE_URL`
 in `secrets/infra.env`.
 
+The ICP filing number (`陕ICP备2026025839号-1`, `allcast.cc`, approved 2026-09-16)
+is `VITE_ICP_FILING_NUMBER` in the `images` job's build args: the marketing footer
+and the account center's auth pages link it to `beian.miit.gov.cn` when set, and
+nothing else (preview, a future overseas build) sets it. The rule (Tencent Cloud doc
+243/61412): the number at the bottom of the homepage, linked to that site, with both
+`allcast.cc` and `www.` reachable; the login page carries it for `studio.`. The
+public-security filing (`beian.mps.gov.cn`) is due within 30 days of going live.
+
 After the ICP filing passes: remove `local_certs` from the `Caddyfile` and
 `SMOKE_INSECURE` from `secrets/prod.env` (Let's Encrypt HTTP-01 then works on
-80), and put the filing number in the marketing footer. Deferred with it:
+80). Deferred with it:
 uploads to COS instead of R2, mail and brand on `allcast.cc`, the domestic
 login methods (Google login is off in production: the machine cannot reach
 Google's token endpoint).
