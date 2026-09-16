@@ -168,6 +168,11 @@ nothing else (preview, a future overseas build) sets it. The rule (Tencent Cloud
 243/61412): the number at the bottom of the homepage, linked to that site, with both
 `allcast.cc` and `www.` reachable; the login page carries it for `studio.`. The
 public-security filing (`beian.mps.gov.cn`) is due within 30 days of going live.
+`VITE_PLACEHOLDER_SITE_NAME` in the same build args (the filed site name, the
+company's legal name) makes the marketing build one placeholder page with that
+name, the © line and the filing number, every other path redirecting to it:
+the filed content is a company site and the Allcast site does not exist yet, so
+the template landing page must not show there. Unset it when that site ships.
 
 Still deferred from the filing interim (#156): uploads to COS instead of R2,
 a nightly dump to COS, mail and brand on `allcast.cc`, the domestic login

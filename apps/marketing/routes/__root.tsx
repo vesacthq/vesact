@@ -1,15 +1,18 @@
 import { AnalyticsScript } from "@analytics";
+import { config } from "@config";
 import { I18nProvider } from "@i18n/provider";
 import { getCurrentLocale } from "@repo/i18n/runtime";
 import { BrandHead, ThemeProvider } from "@repo/ui";
 import { Footer } from "@shared/components/Footer";
 import { NavBar } from "@shared/components/NavBar";
 import { NotFoundPage } from "@shared/components/NotFoundPage";
+import { PlaceholderPage } from "@shared/components/PlaceholderPage";
 import { documentTitle } from "@shared/lib/document-title";
 import {
 	createRootRoute,
 	HeadContent,
 	Outlet,
+	redirect,
 	Scripts,
 	useRouterState,
 } from "@tanstack/react-router";
@@ -18,6 +21,11 @@ import appCss from "./globals.css?url";
 
 export const Route = createRootRoute({
 	notFoundComponent: NotFoundPage,
+	beforeLoad: ({ location }) => {
+		if (config.placeholderSiteName && location.pathname !== "/") {
+			throw redirect({ to: "/" });
+		}
+	},
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -25,7 +33,7 @@ export const Route = createRootRoute({
 				name: "viewport",
 				content: "width=device-width, initial-scale=1",
 			},
-			{ title: documentTitle() },
+			{ title: config.placeholderSiteName || documentTitle() },
 		],
 		links: [
 			{
@@ -55,12 +63,16 @@ function RootLayout() {
 				<ThemeProvider>
 					<I18nProvider>
 						<AnalyticsScript />
-						{/* Isolate stacking so portaled Base UI popups (menu, select, tooltip) paint above sticky chrome (e.g. z-50 nav). */}
-						<div className="isolate min-h-screen">
-							<NavBar />
-							<Outlet />
-							<Footer />
-						</div>
+						{config.placeholderSiteName ? (
+							<PlaceholderPage />
+						) : (
+							/* Isolate stacking so portaled Base UI popups (menu, select, tooltip) paint above sticky chrome (e.g. z-50 nav). */
+							<div className="isolate min-h-screen">
+								<NavBar />
+								<Outlet />
+								<Footer />
+							</div>
+						)}
 					</I18nProvider>
 					<Scripts />
 				</ThemeProvider>

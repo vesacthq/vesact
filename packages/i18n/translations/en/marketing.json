@@ -290,6 +290,9 @@
 		"subtitle": "Product notes and launch updates — no noise.",
 		"title": "Stay in the loop"
 	},
+	"placeholder": {
+		"description": "This site is under construction."
+	},
 	"notFound": {
 		"code": "404",
 		"title": "This page does not exist",

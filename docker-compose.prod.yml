@@ -59,6 +59,7 @@ services:
         VITE_POSTHOG_KEY: ${VITE_POSTHOG_KEY:-}
         VITE_POSTHOG_HOST: ${VITE_POSTHOG_HOST:-}
         VITE_ICP_FILING_NUMBER: ${VITE_ICP_FILING_NUMBER:-}
+        VITE_PLACEHOLDER_SITE_NAME: ${VITE_PLACEHOLDER_SITE_NAME:-}
     env_file: env/studio.env
     healthcheck: &health
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]

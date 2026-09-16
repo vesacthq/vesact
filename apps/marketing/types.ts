@@ -26,6 +26,12 @@ export interface MarketingConfig {
 	 */
 	icpFilingNumber?: string;
 	/**
+	 * When set, the whole site is one placeholder page under this name and every other
+	 * path redirects to it. Set `VITE_PLACEHOLDER_SITE_NAME` on a build whose real site
+	 * does not exist yet.
+	 */
+	placeholderSiteName?: string;
+	/**
 	 * Theme options available on the marketing site.
 	 */
 	enabledThemes: readonly Theme[];
