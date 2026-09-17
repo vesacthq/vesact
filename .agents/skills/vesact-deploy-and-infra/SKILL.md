@@ -69,9 +69,13 @@ with `sops set`, and deploying.
 
 The root `Dockerfile` builds one image per app (`--build-arg APP=<app>` and the
 public `VITE_*` URLs, which are inlined into the client bundle): a Node 22
-Alpine build stage runs `pnpm install`, `pnpm --filter <app> build:node` and
-`pnpm --filter <app> deploy --prod --legacy /app`; the runtime stage runs
-`srvx --prod` on port 3000 as the `node` user. `.dockerignore` keeps `.env*`,
+Alpine build stage runs `pnpm install` and `pnpm --filter <app> build:node`, then
+copies `.output/` and `node_modules/srvx` into `/app`; the runtime stage runs
+`srvx --prod` on port 3000 as the `node` user. There is no production
+dependency tree in the image: the node target bundles its server dependencies
+(`environments.ssr.resolve.noExternal`), which took the payload from roughly a
+gigabyte per app to about 15 MB and is what makes the hand-over to the machine
+cheap. `.dockerignore` keeps `.env*`,
 `env/`, `secrets/` and `.dev.vars` out of the context.
 
 `docker-compose.prod.yml` is the whole Studio unit: `postgres`, `studio`,
@@ -106,9 +110,11 @@ the machine, it resolves the public hostnames to the local Caddy
 and first waits up to a minute for each hostname to answer TLS, since Caddy
 is still obtaining a certificate after a first deploy or a changed issuer.
 
-The images are 1–1.5 GB unpacked (≈250 MB compressed), mostly production
-dependencies that `pnpm deploy` copies for the app, including `next` arriving
-as an optional peer of better-auth; trimming them is a separate task.
+An image is about 250 MB unpacked and 58 MiB through `docker save | zstd -3`,
+of which `node:22-alpine` is 232 MB: the app's own layer is roughly 17 MB, so
+the base is now the bulk of every transfer. Taking it off the wire as well
+means letting the machine pull it from `mirror.ccs.tencentyun.com` and
+assembling the image there, which is #166's remaining item.
 
 ## The machine
 
@@ -138,8 +144,7 @@ repository on every push to `main` and installs `machine-prune.sh` as
 
 Deploy: each `images` job builds `vesact-<app>:<sha>`, uploads
 `docker save | zstd` of it to the COS bucket `vesact-images-1300248116`
-(ap-shanghai, global acceleration on — a stream straight from the runner ran
-at 40–1200 KB/s — objects expire after 7 days) and has the machine download it
+(ap-shanghai, objects expire after 7 days) and has the machine download it
 with a presigned URL over Tencent's network (100 MB/s) into `docker load`; then
 `machine` starts
 `postgres` if needed, migrates through `ssh -L` (`secrets/database.prod.env`

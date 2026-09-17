@@ -273,7 +273,7 @@ reviewed: 2026-09-13
 
 ## 6. 部署
 
-每个 app 两个构建目标：Worker（`@cloudflare/vite-plugin`，preview）和 Docker（Node 入口，正式版）。两个目标同一份 `src/server.ts`，`BUILD_TARGET=node` 去掉 Cloudflare 插件、由 srvx 服务；根目录 `Dockerfile` 和 `docker-compose.prod.yml` 是 Docker 目标的打包和运行形态，每个 PR 的 CI 两个目标都构建。
+每个 app 两个构建目标：Worker（`@cloudflare/vite-plugin`，preview）和 Docker（Node 入口，正式版）。两个目标同一份 `src/server.ts`，`BUILD_TARGET=node` 去掉 Cloudflare 插件、由 srvx 服务，并和 Worker 目标一样把服务端依赖打进 bundle（`environments.ssr.resolve.noExternal`），所以镜像里只有 `.output/` 和 srvx，没有生产依赖树；根目录 `Dockerfile` 和 `docker-compose.prod.yml` 是 Docker 目标的打包和运行形态，每个 PR 的 CI 两个目标都构建。
 
 | 环境    | 形态                                                                                                                                      | 主机                                                                     |
 | ------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |

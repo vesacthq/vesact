@@ -21,6 +21,9 @@ export default defineConfig(({ mode }) => {
 		build: {
 			outDir: nodeTarget ? ".output/node" : ".output",
 		},
+		// The Workers target has to bundle its server dependencies; the node target
+		// does the same, so the image carries the bundle instead of a node_modules.
+		environments: nodeTarget ? { ssr: { resolve: { noExternal: true } } } : undefined,
 		envDir: monorepoRoot,
 		envPrefix: ["VITE_"],
 		server: {

@@ -2,6 +2,11 @@
 
 倒序。只写结论和理由，过程在对应的 issue 里。
 
+## 2026-09-17 生产镜像只装构建产物，上传不走全球加速
+
+- Docker 目标的 node 构建改成打包服务端依赖（`environments.ssr.resolve.noExternal`，Workers 目标本来就得这么做），镜像里只有 `.output/` 和 srvx，没有生产依赖树：`/app` 从 928 MB 降到 14 MB，镜像 1.38 GB 降到 249 MB，`docker save | zstd -3` 后每个应用 238 MiB 降到 58 MiB、一次发布 714 降到 178 MiB。剩下的大头是 `node:22-alpine` 自己的 232 MB。`images` job 的上传随之从 `cos.accelerate.myqcloud.com` 换回 `cos.ap-shanghai.myqcloud.com`，并把字节数和耗时打进日志。
+- 理由：跨境加速流量是这条流水线唯一计费的一段（机器侧的下载解析到内网，从来不计费），而 928 MB 里绝大部分是没有任何代码 import 的包——`next` + `@next/swc` 267 MB 是 better-auth、nuqs、permix 的可选 peer 被装了进来，其余是 vite/rolldown/esbuild 这类构建期工具。压缩解决不了这个，打包才能：没被 `provider/index.ts` 导出的支付适配器现在直接被摇掉，studio 的 bundle 里连 stripe 都没有。体积降下来之后加速端点就不值那个钱了；普通端点的实际速度由日志里的数字说话，慢到不能接受再换回去。落地在 #166。取代 2026-09-13「生产落在腾讯云，域名 allcast.cc」里「镜像不经仓库：CI 构建后经 COS 全球加速桶送到机器」一句里的「全球加速」。
+
 ## 2026-09-16 备案通过，国内 marketing 先挂占位页
 
 - `allcast.cc` 的 ICP 备案通过（陕ICP备2026025839号-1，主办单位西安速准科技有限公司，备案的网站名称就是公司名）。备案号挂在 marketing 页脚和账号中心的登录页，`VITE_ICP_FILING_NUMBER` 只出现在国内镜像的构建参数里；Caddy 改用 Let's Encrypt。国内的 marketing 构建用 `VITE_PLACEHOLDER_SITE_NAME` 只渲染一页占位（公司名、© 行、备案号），其余路径 307 到首页；Allcast 站做出来后去掉这个变量。

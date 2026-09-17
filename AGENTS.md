@@ -281,8 +281,16 @@ Hostnames, pipeline scripts, the machine, preview database, R2, Cloudflare, Neon
 
 `pnpm --filter <app> build:node` builds studio, account or marketing without the Cloudflare
 plugin (`BUILD_TARGET=node`, output in `.output/node/`, the app's own `src/server.ts` as the
-entry) and `pnpm --filter <app> start:node` serves it with srvx. The root `Dockerfile`
-(`docker build --build-arg APP=<app> --build-arg VITE_STUDIO_URL=… .`) packages that build;
+entry) and `pnpm --filter <app> start:node` serves it with srvx. The node target bundles
+its server dependencies (`environments.ssr.resolve.noExternal` in the app's `vite.config.ts`,
+the same thing the Workers target has to do), so the root `Dockerfile`
+(`docker build --build-arg APP=<app> --build-arg VITE_STUDIO_URL=… .`) packages `.output/`
+and srvx alone: an image carries no production dependency tree, and the three come to about
+15 MB of app content each instead of a gigabyte, and a dependency no route reaches is
+dropped instead of shipped; `node:22-alpine` under it is the bulk of what a deploy still
+moves, which the `vesact-deploy-and-infra` skill has the figures for. A package the bundle cannot swallow (a native `.node` binary, a runtime
+`require` of a computed path) has to go back to being external and into the image by hand,
+the same way the Workers target already forces the question;
 `docker-compose.prod.yml` runs the three containers behind Caddy (`Caddyfile`: `/account/*` to
 account, the rest of the Studio hostname to studio, the marketing hostname to marketing, the
 bare domain redirected to it) with one Postgres, reading each app's runtime variables from

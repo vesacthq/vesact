@@ -20,8 +20,12 @@ ARG VITE_POSTHOG_KEY VITE_POSTHOG_HOST
 ARG VITE_ICP_FILING_NUMBER VITE_PLACEHOLDER_SITE_NAME
 RUN test -n "$APP" && test -n "$VITE_STUDIO_URL" && test -n "$VITE_ACCOUNT_URL" && test -n "$VITE_MARKETING_URL"
 RUN pnpm --filter "$APP" build:node
-# --legacy: the workspace links packages instead of injecting them (pnpm 10 default).
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm --filter "$APP" deploy --prod --legacy /app
+# The node target bundles its server dependencies (see the app's vite.config.ts),
+# so the image carries the build output and srvx, not a production dependency
+# tree; srvx has no dependencies of its own.
+RUN mkdir -p /app/node_modules \
+	&& cp -r "apps/$APP/.output" /app/.output \
+	&& cp -rL "apps/$APP/node_modules/srvx" /app/node_modules/srvx
 
 FROM node:22-alpine
 ENV NODE_ENV=production PORT=3000
