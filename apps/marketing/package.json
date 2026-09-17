@@ -29,11 +29,9 @@
 		"@repo/payments": "workspace:*",
 		"@repo/ui": "workspace:*",
 		"@repo/utils": "workspace:*",
-		"@tailwindcss/vite": "catalog:",
 		"@tanstack/react-form": "catalog:",
 		"@tanstack/react-router": "catalog:",
 		"@tanstack/react-start": "catalog:",
-		"@vitejs/plugin-react": "catalog:",
 		"date-fns": "catalog:",
 		"lucide-react": "catalog:",
 		"react": "catalog:",
@@ -41,7 +39,6 @@
 		"slugify": "catalog:",
 		"srvx": "catalog:",
 		"use-intl": "catalog:",
-		"vite": "catalog:",
 		"zod": "catalog:"
 	},
 	"devDependencies": {
@@ -56,10 +53,12 @@
 		"@repo/tsconfig": "workspace:*",
 		"@shikijs/rehype": "catalog:",
 		"@tailwindcss/typography": "^0.5.20",
+		"@tailwindcss/vite": "catalog:",
 		"@types/mdx": "catalog:",
 		"@types/node": "catalog:",
 		"@types/react": "catalog:",
 		"@types/react-dom": "catalog:",
+		"@vitejs/plugin-react": "catalog:",
 		"autoprefixer": "catalog:",
 		"dotenv": "catalog:",
 		"shadcn": "catalog:",
@@ -67,6 +66,7 @@
 		"tailwindcss": "catalog:",
 		"tw-animate-css": "catalog:",
 		"typescript": "catalog:",
+		"vite": "catalog:",
 		"vitest": "catalog:",
 		"wrangler": "catalog:"
 	}

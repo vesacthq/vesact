@@ -8,11 +8,9 @@
 		"type-check": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@ai-sdk/anthropic": "catalog:",
 		"@ai-sdk/openai": "catalog:",
 		"@ai-sdk/react": "catalog:",
-		"ai": "catalog:",
-		"openai": "catalog:"
+		"ai": "catalog:"
 	},
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",

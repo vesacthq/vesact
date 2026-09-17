@@ -29,10 +29,16 @@ export default defineConfig(({ mode }) => {
 		build: {
 			outDir: nodeTarget ? ".output/node" : ".output",
 		},
-		environments:
-			nodeTarget && base !== "/"
-				? { client: { build: { outDir: path.join(".output/node/client", base) } } }
-				: undefined,
+		// The Workers target has to bundle its server dependencies; the node target
+		// does the same, so the image carries the bundle instead of a node_modules.
+		environments: nodeTarget
+			? {
+					ssr: { resolve: { noExternal: true } },
+					...(base !== "/"
+						? { client: { build: { outDir: path.join(".output/node/client", base) } } }
+						: {}),
+				}
+			: undefined,
 		envDir: monorepoRoot,
 		envPrefix: ["VITE_"],
 		server: {
