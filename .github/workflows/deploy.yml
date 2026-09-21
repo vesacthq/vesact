@@ -14,6 +14,7 @@ env:
   TURBO_TEAM: jinl0ngs-projects
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+  GH_TOKEN: ${{ github.token }}
 
 jobs:
   images:
