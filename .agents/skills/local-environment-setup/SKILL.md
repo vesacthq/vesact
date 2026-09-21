@@ -14,10 +14,9 @@ Use for a fresh clone or broken local prerequisites. Do not provision cloud reso
 1. Use Node `22` from `.nvmrc` (the engine allows `>=22`) and pnpm `11.3.0` from root `packageManager`; let Corepack/pnpm honor that declaration.
 2. Create local configuration:
    ```bash
-   cp .env.local.example .env.local
-   openssl rand -hex 32
+   pnpm secrets:pull   # writes .env.local and apps/*/.dev.vars from secrets/dev.env
    ```
-   Set `DATABASE_URL=postgresql://postgres:postgres@localhost:5433/vesact`, paste the generated value into `BETTER_AUTH_SECRET`, and keep `VITE_STUDIO_URL`, `VITE_MARKETING_URL`, and `VITE_DOCS_URL` at `3000`, `3001`, and `3002`. Leave provider values blank unless exercising that integration.
+   The local `DATABASE_URL` (`localhost:5433/vesact`), the `VITE_*` localhost URLs and the dev auth values come with it; provider values stay blank unless exercising that integration (`sops secrets/dev.env` to change them).
 3. Start PostgreSQL and wait for its health check:
    ```bash
    docker compose up -d postgres
@@ -27,7 +26,7 @@ Use for a fresh clone or broken local prerequisites. Do not provision cloud reso
    ```bash
    docker compose up -d minio minio-setup
    ```
-   Use the commented MinIO values in `.env.local.example`; the compose setup creates the `avatars` bucket.
+   The MinIO values are already in `secrets/dev.env`; the compose setup creates the `avatars` bucket.
 5. Install exactly as CI does:
    ```bash
    pnpm install --frozen-lockfile

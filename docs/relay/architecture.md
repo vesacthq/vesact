@@ -363,7 +363,7 @@ Content-Type: application/json
 每个环境一个 worker，两个 custom domain（§2 的表）。`wrangler.jsonc` 是 prod 加 `env.preview`；`server.ts` 照 Studio 做 Hyperdrive 延迟加载加路径分发。
 
 - vars：`VITE_RELAY_URL`、`VITE_RELAY_API_URL`、`VITE_MARKETING_URL`、`META_APP_ID`；preview 段重新声明全部。cookie 只在控制台主机名上，`trustedOrigins` 只有自己。
-- secrets：`secrets/relay.{prod,preview,dev}.env` 自足：Relay 自己的 `BETTER_AUTH_SECRET`、Google OAuth 的 client id 和 secret（回调 `<VITE_RELAY_URL>/api/auth/callback/google`）、`META_APP_SECRET`、`META_WEBHOOK_VERIFY_TOKEN`；迁移用的连接串在 `secrets/relay-database.{prod,preview}.env`。`pnpm secrets:pull` 同时产出 `apps/relay/.dev.vars`。
+- secrets：`secrets/relay.{prod,preview}.env` 自足：Relay 自己的 `BETTER_AUTH_SECRET`、Google OAuth 的 client id 和 secret（回调 `<VITE_RELAY_URL>/api/auth/callback/google`）、`META_APP_SECRET`、`META_WEBHOOK_VERIFY_TOKEN`；迁移用的连接串在 `secrets/relay-database.{prod,preview}.env`。本地开发的值在 `secrets/dev.env`，`secrets/relay.dev.env` 只放 Relay 自己的 `BETTER_AUTH_SECRET` 和 `META_*`，`pnpm secrets:pull` 叠加后写出 `apps/relay/.dev.vars`。
 - CI：`deploy.yml` 的 `relay` job 自己跑 `@repo/relay` 的 migrate，不再 `needs: account`；`select-target.sh` 给出 relay 的 URL。部署后没有 HTTP 探测：zone 的 Bot Fight Mode 会挑战 runner 的 curl。
 - Cloudflare：preview 的 Access 由 `*.preview.vesact.com` 通配应用覆盖，另有一个路径为 `api.preview.vesact.com/webhooks` 的 Access 应用，策略 Bypass Everyone，Meta 才打得到。Meta 一个 App 只能一个回调 URL，指向 prod；preview 只靠 curl 验证。
 - `/v1/health`、`/v1/openapi.json`、`/v1/docs` 无鉴权。spec 由 `OpenAPIReferencePlugin` 每次请求从 router 生成，没有手写副本：`info.title` 是 `Relay API`，`servers` 是 `VITE_RELAY_API_URL` + `/v1`，`components.securitySchemes.bearerAuth` 配全局 `security`，`/health` 用 route 的 `spec` 覆盖成无需鉴权。docs 页是 Scalar，spec 内联，脚本从 jsDelivr 加载，页面里填 key 可以直接调接口；要在 `api.` 域打开，`servers` 指向那里而 `/v1` 不设 CORS，从 `relay.` 域打开的页面调不到接口。

@@ -28,7 +28,8 @@ the same `updatekeys`.
 | `secrets/infra.env`                | Operator tokens (Neon, Cloudflare Hyperdrive, the Tencent Cloud `cicd` sub-account) and the Neon `production` URL from before the move; never loaded by CI                                                                       |
 | `secrets/studio.<env>.env`         | `preview`: Worker secrets, synced on every deploy; `prod`: see `<app>.prod.env`                                                                                                                                                  |
 | `secrets/relay.<env>.env`          | The Relay Worker: its own `BETTER_AUTH_SECRET`, the Google client, `META_APP_SECRET` and `META_WEBHOOK_VERIFY_TOKEN`                                                                                                             |
-| `secrets/<app>.dev.env`            | `apps/<app>/.dev.vars` via `pnpm secrets:pull`                                                                                                                                                                                   |
+| `secrets/dev.env`                  | Local dev, the one source: `pnpm secrets:pull` writes it to `.env.local` and to every Worker's `apps/<app>/.dev.vars` (local `DATABASE_URL`, the `VITE_*` localhost URLs, MinIO, dev auth/mail values) |
+| `secrets/<app>.dev.env`            | Values one Worker needs different from `dev.env`, merged on top into its `.dev.vars`; today only `relay` (its own `BETTER_AUTH_SECRET`, `META_*`) |
 | `secrets/meta.env`                 | The Meta app "Vesact": ids, secrets, test tokens; keys explained in `docs/reference/meta.md`; copied into `relay.<target>.env` when Relay deploys                                                                                |
 | `secrets/company.yaml`             | Company facts: legal entity, registration numbers, Meta Business ID (keys visible, values encrypted)                                                                                                                             |
 | `secrets/files/*`                  | Documents and archives encrypted whole (`sops --encrypt --input-type binary --output-type json`); decrypt with `sops -d --input-type json --output-type binary`; `machine-deploy-ssh-key.json` is the `machine` job's deploy key |
@@ -46,8 +47,9 @@ Decrypted values never go into docs, issues, commit messages or chat replies.
 
 ## Local configuration
 
-Local configuration reaches two runtimes. `.env.local` (copy it from
-`.env.local.example`) feeds the Vite build and the Node-side scripts: `DATABASE_URL`
+Local configuration reaches two runtimes; `pnpm secrets:pull` (`scripts/secrets-pull.ts`)
+writes both from `secrets/dev.env`. `.env.local` (`.env.local.example` documents the keys)
+feeds the Vite build and the Node-side scripts: `DATABASE_URL`
 for `pnpm --filter @repo/database push | generate | migrate | studio`,
 `RELAY_DATABASE_URL` for `pnpm --filter @repo/relay db:*` (local database
 `vesact_relay`, create it once with `create database vesact_relay`), and the

@@ -32,9 +32,9 @@ date; do it when the trigger in the first line of the issue is met".
 
 Secrets are committed encrypted under `secrets/` with sops + age: read with `sops -d secrets/<file>`,
 edit with `sops secrets/<file>`, never commit a decrypted file, and decrypted values never go
-into docs, issues, commit messages or chat replies. `.env.local` feeds the Vite build and the
-Node-side scripts; `apps/<app>/.dev.vars` (from `pnpm secrets:pull`) is what the Worker reads
-at runtime. File map, keys, ports, first user and the e2e setup: `vesact-secrets-and-local-env` skill.
+into docs, issues, commit messages or chat replies. `secrets/dev.env` is the one local-dev source: `pnpm secrets:pull` writes it to
+`.env.local` (Vite build, Node-side scripts) and to every Worker's `apps/<app>/.dev.vars`;
+`secrets/<app>.dev.env` layers the few values one Worker needs different (Relay's own auth secret). File map, keys, ports, first user and the e2e setup: `vesact-secrets-and-local-env` skill.
 
 ```bash
 docker compose up -d postgres   # PostgreSQL 16 on host port 5433
@@ -246,8 +246,8 @@ the platform-admin module (gated by `admin.access`) is the account center's `/ad
 
 ## Config & environment variables
 
-Keep server-only variables unprefixed. Browser-visible variables use `VITE_`. Use `.env.local`
-for local values and never commit it; secrets live encrypted under `secrets/`. Vite app configuration uses the monorepo root as its environment directory.
+Keep server-only variables unprefixed. Browser-visible variables use `VITE_`. `.env.local` comes from
+`pnpm secrets:pull` (`secrets/dev.env`) and is never committed; secrets live encrypted under `secrets/`. Vite app configuration uses the monorepo root as its environment directory.
 
 ## Environments & deployment
 
