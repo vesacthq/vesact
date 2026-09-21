@@ -12,6 +12,7 @@ const monorepoRoot = path.resolve(appRoot, "../..");
 
 export default defineConfig(({ mode }) => {
 	Object.assign(process.env, loadEnv(mode, monorepoRoot, ""));
+	const port = Number.parseInt(process.env.PORT ?? "3005", 10);
 
 	return {
 		build: {
@@ -20,11 +21,11 @@ export default defineConfig(({ mode }) => {
 		envDir: monorepoRoot,
 		envPrefix: ["VITE_"],
 		server: {
-			port: Number.parseInt(process.env.PORT ?? "3005", 10),
+			port,
 			fs: { allow: [monorepoRoot] },
 		},
 		plugins: [
-			cloudflare({ viteEnvironment: { name: "ssr" } }),
+			cloudflare({ viteEnvironment: { name: "ssr" }, inspectorPort: port + 6229 }),
 			tanstackStart({
 				srcDirectory: ".",
 			}),

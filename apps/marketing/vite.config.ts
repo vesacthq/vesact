@@ -17,6 +17,7 @@ const nodeTarget = process.env.BUILD_TARGET === "node";
 
 export default defineConfig(({ mode }) => {
 	Object.assign(process.env, loadEnv(mode, monorepoRoot, ""));
+	const port = Number.parseInt(process.env.PORT ?? "3001", 10);
 
 	return {
 		build: {
@@ -28,12 +29,14 @@ export default defineConfig(({ mode }) => {
 		envDir: monorepoRoot,
 		envPrefix: ["VITE_"],
 		server: {
-			port: Number.parseInt(process.env.PORT ?? "3001", 10),
+			port,
 			fs: { allow: [monorepoRoot] },
 		},
 		plugins: [
 			contentCollections(),
-			nodeTarget ? [] : cloudflare({ viteEnvironment: { name: "ssr" } }),
+			nodeTarget
+				? []
+				: cloudflare({ viteEnvironment: { name: "ssr" }, inspectorPort: port + 6229 }),
 			tanstackStart({
 				srcDirectory: ".",
 				server: nodeTarget ? { entry: "./src/server.ts" } : undefined,

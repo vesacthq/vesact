@@ -16,6 +16,7 @@ const nodeTarget = process.env.BUILD_TARGET === "node";
 
 export default defineConfig(({ mode }) => {
 	Object.assign(process.env, loadEnv(mode, monorepoRoot, ""));
+	const port = Number.parseInt(process.env.PORT ?? "3004", 10);
 
 	// The app is mounted on the path of its public URL (`/account` under the
 	// Studio hostname). Vite's base drives the asset URLs and the router basepath;
@@ -42,14 +43,16 @@ export default defineConfig(({ mode }) => {
 		envDir: monorepoRoot,
 		envPrefix: ["VITE_"],
 		server: {
-			port: Number.parseInt(process.env.PORT ?? "3004", 10),
+			port,
 			fs: { allow: [monorepoRoot] },
 			// The dev server would answer the products' preflights itself, without
 			// credentials; the app's own CORS middleware must see them, as in production.
 			cors: false,
 		},
 		plugins: [
-			nodeTarget ? [] : cloudflare({ viteEnvironment: { name: "ssr" } }),
+			nodeTarget
+				? []
+				: cloudflare({ viteEnvironment: { name: "ssr" }, inspectorPort: port + 6229 }),
 			tanstackStart({
 				srcDirectory: ".",
 				server: nodeTarget ? { entry: "./src/server.ts" } : undefined,
