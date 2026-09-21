@@ -10,13 +10,13 @@ The environment matrix (dev / preview / prod) is in `AGENTS.md` under
 
 ## Hostnames
 
-| App        | prod                                                           | preview                                                |
-| ---------- | -------------------------------------------------------------- | ------------------------------------------------------ |
-| marketing  | `www.allcast.cc` (`allcast.cc` redirects to it), machine       | `www.preview.allcast.ai`                               |
-| account    | `studio.allcast.cc/account`, machine (Caddy path split)        | `app.preview.allcast.ai/account` (Workers route)       |
-| studio     | `studio.allcast.cc`, machine                                   | `app.preview.allcast.ai`                               |
-| relay      | `console.vesact.com` (console), `api.vesact.com` (API), Worker | `console.preview.vesact.com`, `api.preview.vesact.com` |
-| vesact-www | `www.vesact.com`, Worker                                       | `www.preview.vesact.com`                               |
+| App        | prod                                                                                                              | preview                                                |
+| ---------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| marketing  | `www.allcast.cc` (`allcast.cc` redirects to it), machine; `www.allcast.ai` (`allcast.ai` redirects to it), Worker | `www.preview.allcast.ai`                               |
+| account    | `app.allcast.cc/account`, machine (Caddy path split)                                                              | `app.preview.allcast.ai/account` (Workers route)       |
+| studio     | `app.allcast.cc`, machine                                                                                         | `app.preview.allcast.ai`                               |
+| relay      | `console.vesact.com` (console), `api.vesact.com` (API), Worker                                                    | `console.preview.vesact.com`, `api.preview.vesact.com` |
+| vesact-www | `www.vesact.com`, Worker                                                                                          | `www.preview.vesact.com`                               |
 
 Allcast (studio, account, marketing) previews live under `preview.allcast.ai` since #160 so
 that `preview.vesact.com` is Vesact's alone; the zone `allcast.ai` is in the same Cloudflare
@@ -27,7 +27,9 @@ hostnames (see "Accounts and resources": wrangler never removes a custom domain)
 one has to go before the Vesact website's preview (`vesact-www`, `www.preview.vesact.com`) can take it.
 
 `allcast.cc` is registered at DNSPod (2026-09-13) and its DNS lives there: `@`, `www` and
-`studio` are A records to the machine. The ICP filing (`陕ICP备2026025839号-1`) passed on
+`app` are A records to the machine (`studio` was the product hostname until #160). `allcast.ai`
+is a Cloudflare zone: `www` is the marketing Worker's custom domain, the overseas site, and the
+apex has a proxied `AAAA 100::` record for the Redirect Rule to `www` (the rule itself is #163: the CI token cannot edit rulesets; until it exists the apex answers 522). The ICP filing (`陕ICP备2026025839号-1`) passed on
 2026-09-16; until then Tencent Cloud intercepted the domain's traffic to the machine from the
 public internet (other ports included) and the stack ran with Caddy's own certificate. Caddy
 now gets Let's Encrypt certificates over HTTP-01 on 80; the deploy still smokes from the
@@ -48,7 +50,8 @@ when a newer one arrives is cancelled (re-run it to put that pull request on pre
 preview migrations never overlap; the account job runs the
 Studio database migration first and the studio job waits for it; the relay job
 migrates Relay's own database (`pnpm --filter @repo/relay db:migrate`) and runs
-on its own. On `main` relay and the Vesact website (`www`, no database, no secrets) deploy their production Workers; studio,
+on its own. On `main` relay, the Vesact website (`www`, no database, no secrets) and marketing (the
+overseas `www.allcast.ai`, built with that `VITE_MARKETING_URL`) deploy their production Workers; studio,
 account and marketing go to the machine through the `images` and `machine` jobs
 (see "Docker target" and "The machine"). The relay Worker answers on two custom domains and dispatches by
 path (`docs/relay/architecture.md` §2). The Cloudflare Vite plugin flattens the selected environment into
@@ -69,8 +72,8 @@ workflow to copy it fresh from its parent, the Neon `production` branch (the
 pre-move data, kept until it is deleted). Preview shares the production R2
 bucket, and so does production on the machine until uploads move to COS after
 the filing. The `avatars` bucket's CORS rule allows `PUT` from
-`studio.allcast.cc` and `app.preview.allcast.ai`, the origins the account
-center uploads from; a new origin has to be added there or the presigned PUT
+`app.allcast.cc` (and `studio.allcast.cc` until that hostname is gone) and
+`app.preview.allcast.ai`, the origins the account center uploads from; a new origin has to be added there or the presigned PUT
 fails with a CORS error.
 The `S3_*` credentials in the studio and account secrets are an account-owned
 API token named "vesact avatars bucket (account and studio workers)", scoped to
@@ -94,7 +97,7 @@ cheap. `.dockerignore` keeps `.env*`,
 
 `docker-compose.prod.yml` is the whole Studio unit: `postgres`, `studio`,
 `account`, `marketing` and `caddy`. Caddy owns 80/443, obtains the certificates
-for the three addresses (scheme included: `https://studio.allcast.cc`,
+for the three addresses (scheme included: `https://app.allcast.cc`,
 `http://localhost` locally), sends `/account` and `/account/*` of
 `SITE_ADDRESS` to the account container and everything else on that hostname
 to studio, serves `MARKETING_ADDRESS` from the marketing container
@@ -165,7 +168,7 @@ SSH session; then
 `machine` starts
 `postgres` if needed, migrates through `ssh -L` (`secrets/database.prod.env`
 points at the tunnel), copies the files and runs
-`./machine-deploy.sh <sha> https://studio.allcast.cc https://www.allcast.cc https://allcast.cc`:
+`./machine-deploy.sh <sha> https://app.allcast.cc https://www.allcast.cc https://allcast.cc`:
 checks the three images are present, `up -d --wait`, `smoke.sh`; a failed
 smoke brings the previous tag back and fails the job. The script keeps the
 images of the running tag and its predecessor and removes older ones; the
@@ -173,7 +176,7 @@ weekly cron removes untagged layers, stopped containers and journal beyond
 200 MB. Roll back by hand to the predecessor with
 `cd /srv/vesact && IMAGE_TAG=<sha> docker compose -f docker-compose.prod.yml up -d --wait`
 (`docker image ls` shows the two tags), then
-`./smoke.sh https://studio.allcast.cc https://www.allcast.cc https://allcast.cc`
+`./smoke.sh https://app.allcast.cc https://www.allcast.cc https://allcast.cc`
 and write the tag to `current-tag` and `IMAGE_TAG` in `.env`. Logs:
 `docker compose -f docker-compose.prod.yml logs -f <service>` (json-file,
 3 × 10 MB per container). The database is the `postgres` container's volume
@@ -187,7 +190,7 @@ is `VITE_ICP_FILING_NUMBER` in the `images` job's build args: the marketing foot
 and the account center's auth pages link it to `beian.miit.gov.cn` when set, and
 nothing else (preview, a future overseas build) sets it. The rule (Tencent Cloud doc
 243/61412): the number at the bottom of the homepage, linked to that site, with both
-`allcast.cc` and `www.` reachable; the login page carries it for `studio.`. The
+`allcast.cc` and `www.` reachable; the login page (`app.allcast.cc/account/login`) carries it for `app.`. The
 public-security filing (`beian.mps.gov.cn`) is due within 30 days of going live.
 `VITE_PLACEHOLDER_SITE_NAME` in the same build args (the filed site name, the
 company's legal name) makes the marketing build one placeholder page with that

@@ -6,8 +6,8 @@ if [ "${GITHUB_EVENT_NAME:-}" = "push" ]; then
 	# The PostHog key is public: it is compiled into the client bundle by design.
 	cat >> "$GITHUB_ENV" <<'ENV'
 TARGET=prod
-VITE_STUDIO_URL=https://studio.allcast.cc
-VITE_ACCOUNT_URL=https://studio.allcast.cc/account
+VITE_STUDIO_URL=https://app.allcast.cc
+VITE_ACCOUNT_URL=https://app.allcast.cc/account
 VITE_RELAY_URL=https://console.vesact.com
 VITE_RELAY_API_URL=https://api.vesact.com
 VITE_VESACT_WWW_URL=https://www.vesact.com
