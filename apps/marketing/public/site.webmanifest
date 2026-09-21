@@ -1,11 +1,11 @@
 {
 	"id": "/",
-	"name": "Vesact",
-	"short_name": "Vesact",
+	"name": "Allcast",
+	"short_name": "Allcast",
 	"start_url": "/",
 	"scope": "/",
 	"display": "standalone",
-	"theme_color": "#006AFE",
+	"theme_color": "#3B8FFF",
 	"background_color": "#FFFFFF",
 	"icons": [
 		{

@@ -36,7 +36,7 @@ export function AccountHeader() {
 			<div className="gap-4 flex flex-wrap items-center justify-between">
 				<div className="gap-4 flex items-center">
 					<a href={config.marketingUrl ?? "/"} className="block">
-						<Logo withLabel={false} />
+						<Logo brand="allcast" withLabel={false} />
 					</a>
 					{returnUrl !== "/" && (
 						<Button
