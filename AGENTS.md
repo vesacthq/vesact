@@ -186,7 +186,7 @@ the platform-admin module (gated by `admin.access`) is the account center's `/ad
   follows its own origins (`getSafeRedirectUrl`, `getReturnUrl`). Sidebar entries
   that lead there are plain links marked `external` in `use-app-nav.ts`.
 - `VITE_ACCOUNT_URL` is the account center's full address, path included
-  (`https://studio.preview.vesact.com/account`, `http://localhost:3004/account`): Vite's
+  (`https://app.preview.allcast.ai/account`, `http://localhost:3004/account`): Vite's
   `base`, the router basepath, Better Auth's `basePath` and the `@repo/api` mount all derive
   from it (`basePath` in `@repo/utils`), so Studio and the account center share one hostname
   and a host-only session cookie in every environment (`packages/auth` would set a parent-domain
@@ -256,17 +256,17 @@ Relay is a Cloudflare Worker in every environment. Studio, account and marketing
 in dev and preview and run their Docker target (below) in production, on one machine in
 Tencent Cloud Shanghai under `allcast.cc`. Three environments:
 
-|               | dev                                        | preview                                                                                   | prod                                                                                             |
-| ------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| Trigger       | `pnpm dev`                                 | pull request from this repository                                                         | push to `main`                                                                                   |
-| Build         | `vite dev`                                 | `CLOUDFLARE_ENV=preview vite build`                                                       | `BUILD_TARGET=node vite build` inside the `Dockerfile` (Relay: `vite build`)                     |
-| Worker        | —                                          | `vesact-<app>-preview`                                                                    | Relay only: `vesact-relay`                                                                       |
-| Host          | `localhost:300x`                           | `<app>.preview.vesact.com`, behind Access; account at `studio.preview.vesact.com/account` | `studio.allcast.cc` (account at `/account`), `www.allcast.cc`; Relay `relay.` / `api.vesact.com` |
-| Vars          | `.dev.vars`                                | `env.preview.vars` in `wrangler.jsonc`                                                    | `secrets/<app>.prod.env` → `env/<app>.env` on the machine (Relay: top-level `vars`)              |
-| Secrets       | `.dev.vars`                                | `secrets/<app>.preview.env`                                                               | `secrets/<app>.prod.env`                                                                         |
-| Database      | local postgres via `localConnectionString` | Hyperdrive `vesact-preview` → Neon branch `preview`                                       | the `postgres` container on the machine (Relay: its own Neon project)                            |
-| Migrations    | `push`                                     | `migrate` against the preview branch before deploy                                        | `migrate` through the SSH tunnel before the stack switches                                       |
-| Cookie domain | host-only                                  | host-only (studio and account share the hostname), prefix `vesact-preview`                | host-only                                                                                        |
+|               | dev                                        | preview                                                                                                                              | prod                                                                                             |
+| ------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| Trigger       | `pnpm dev`                                 | pull request from this repository                                                                                                    | push to `main`                                                                                   |
+| Build         | `vite dev`                                 | `CLOUDFLARE_ENV=preview vite build`                                                                                                  | `BUILD_TARGET=node vite build` inside the `Dockerfile` (Relay: `vite build`)                     |
+| Worker        | —                                          | `vesact-<app>-preview`                                                                                                               | Relay only: `vesact-relay`                                                                       |
+| Host          | `localhost:300x`                           | `app.preview.allcast.ai` (account at `/account`), `www.preview.allcast.ai`; Relay `relay.` / `api.preview.vesact.com`; behind Access | `studio.allcast.cc` (account at `/account`), `www.allcast.cc`; Relay `relay.` / `api.vesact.com` |
+| Vars          | `.dev.vars`                                | `env.preview.vars` in `wrangler.jsonc`                                                                                               | `secrets/<app>.prod.env` → `env/<app>.env` on the machine (Relay: top-level `vars`)              |
+| Secrets       | `.dev.vars`                                | `secrets/<app>.preview.env`                                                                                                          | `secrets/<app>.prod.env`                                                                         |
+| Database      | local postgres via `localConnectionString` | Hyperdrive `vesact-preview` → Neon branch `preview`                                                                                  | the `postgres` container on the machine (Relay: its own Neon project)                            |
+| Migrations    | `push`                                     | `migrate` against the preview branch before deploy                                                                                   | `migrate` through the SSH tunnel before the stack switches                                       |
+| Cookie domain | host-only                                  | host-only (studio and account share the hostname), prefix `vesact-preview`                                                           | host-only                                                                                        |
 
 `deploy.yml`: on a pull request one job per app deploys preview (build → `wrangler deploy` →
 `wrangler secret bulk`, the account job migrating the preview branch first, relay migrating its

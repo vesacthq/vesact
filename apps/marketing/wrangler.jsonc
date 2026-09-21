@@ -12,7 +12,7 @@
 		"preview": {
 			"workers_dev": false,
 			"observability": { "enabled": true },
-			"routes": [{ "pattern": "www.preview.vesact.com", "custom_domain": true }],
+			"routes": [{ "pattern": "www.preview.allcast.ai", "custom_domain": true }],
 		},
 	},
 }
