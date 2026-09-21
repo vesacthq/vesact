@@ -127,13 +127,13 @@ function Sidebar() {
 	return (
 		<aside className="w-52 p-3 md:flex hidden shrink-0 flex-col border-r border-border/60">
 			<div className="mb-3 flex items-center justify-between">
-				<Logo withLabel={false} className="[&>svg]:size-6" />
+				<Logo brand="allcast" withLabel={false} className="[&>svg]:size-6" />
 				<PanelLeftIcon className="size-3.5 text-foreground/35" />
 			</div>
 
 			<div className="gap-2 px-2 py-1.5 mb-4 flex items-center rounded-lg border border-border/70 bg-background">
 				<span className="size-6 flex items-center justify-center rounded-md bg-foreground/8">
-					<Logo withLabel={false} className="[&>svg]:size-3.5" />
+					<Logo brand="allcast" withLabel={false} className="[&>svg]:size-3.5" />
 				</span>
 				<span className="min-w-0 font-medium text-xs flex-1 truncate">{t("organization")}</span>
 				<ChevronsUpDownIcon className="size-3 text-foreground/35" />

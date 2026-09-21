@@ -2,7 +2,7 @@ import { getBaseUrl } from "@repo/utils";
 import React, { type PropsWithChildren } from "react";
 import { Container, Font, Head, Html, Img, Section, Tailwind } from "react-email";
 
-const logoUrl = `${getBaseUrl(process.env.VITE_MARKETING_URL, 3001)}/brand/vesact-horizontal-color-512.png`;
+const logoUrl = `${getBaseUrl(process.env.VITE_MARKETING_URL, 3001)}/brand/allcast-horizontal-color-512.png`;
 
 // Keep email design tokens aligned with tooling/tailwind/theme.css.
 const mailTailwindTheme = {
@@ -85,7 +85,7 @@ export default function Wrapper({ children }: PropsWithChildren) {
 						className="p-8 rounded-lg bg-card text-card-foreground"
 						style={{ maxWidth: "640px" }}
 					>
-						<Img src={logoUrl} alt="Vesact" width={136} height={24} className="mb-6" />
+						<Img src={logoUrl} alt="Allcast" width={136} height={31} className="mb-6" />
 						{children}
 					</Container>
 				</Section>

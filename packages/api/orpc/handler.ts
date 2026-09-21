@@ -35,7 +35,7 @@ export const openApiHandler = new OpenAPIHandler(router, {
 				return {
 					...(authSchema as Record<string, unknown>),
 					info: {
-						title: "vesact API",
+						title: "Allcast API",
 						version: "1.0.0",
 					},
 					servers: [
