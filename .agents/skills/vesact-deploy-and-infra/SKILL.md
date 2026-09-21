@@ -200,10 +200,18 @@ the template landing page must not show there. The overseas marketing Worker bui
 (`www.allcast.ai`) sets it to `Allcast` for the same reason. Unset it in both places when that
 site ships (#80).
 
-Still deferred from the filing interim (#156): uploads to COS instead of R2,
-a nightly dump to COS, mail and brand on `allcast.cc`, the domestic login
+Still open from the filing interim (#156): where uploads and a nightly dump land
+(the machine cannot use R2 for the domestic site the way preview does), and the domestic login
 methods (Google login is off in production: the machine cannot reach Google's
 token endpoint).
+
+Mail goes out through Resend. Allcast (studio and account) sends from
+`noreply@mails.allcast.ai`; Vesact sends nothing yet (the console shares invitation links
+instead), its `MAIL_FROM` is `noreply@mails.vesact.com` for the day it does. One sending
+subdomain per product, verified in Resend with the DKIM, SPF and return-path records it
+hands out (`mails.allcast.ai`'s are in the Cloudflare zone; `mails.allcast.cc` exists in Resend
+too, unverified, for the day the domestic site needs to send). `MAIL_FROM` is in each app's
+secrets file.
 
 ## Accounts and resources
 
