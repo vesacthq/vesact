@@ -299,8 +299,8 @@ bare domain redirected to it) with one Postgres, reading each app's runtime vari
 from the compose environment. The Docker target only uses what both targets have
 (`docs/studio/architecture.md` §5.4). Every pull request builds the images and smokes the
 stack (`validate-prs.yml` job "Docker target", `.github/scripts/smoke.sh`); a push to `main`
-builds `vesact-<app>:<sha>`, hands it to the production machine through a COS bucket (no
-registry is reachable from there), migrates through an SSH tunnel, syncs the files and runs
+builds `vesact-<app>:<sha>`, hands it to the production machine through the R2 bucket
+`vesact-images` (no registry is reachable from there), migrates through an SSH tunnel, syncs the files and runs
 `machine-deploy.sh` — up, smoke from the machine itself, roll back on failure. The machine and the procedure: `vesact-deploy-and-infra` skill.
 
 ### Workflow

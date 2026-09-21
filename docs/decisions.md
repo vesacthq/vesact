@@ -2,6 +2,11 @@
 
 倒序。只写结论和理由，过程在对应的 issue 里。
 
+## 2026-09-22 生产镜像经 Cloudflare R2 送到机器，不再走 COS
+
+- `deploy.yml` 的 `images` job 把 `docker save | zstd` 传到 R2 桶 `vesact-images`（7 天过期），机器用 presigned URL 从 Cloudflare 边缘下载后 `docker load`；机器拿不到时回退为把文件顺着 SSH 会话推过去。COS 桶 `vesact-images-1300248116` 和腾讯云 `cicd` 子账号密钥退役。
+- 理由：跨境方向不对称。9 月 21 日晚 runner 推上海 35 KB/s，COS 普通端点对分片上传有最低速率要求，连续四次 `UserNetworkTooSlow` 掐断；同一晚生产机器从 Cloudflare 边缘拉 30 MB 用 3 秒（9.4–10.6 MB/s），runner 到 R2 在美国境内。R2 出流量免费，全球加速端点境外上传 1.25 元/GB 也够便宜，但要多一套云。SSH 直推测过：60 MiB 用了 29 分钟，能到但只配当回退。
+
 ## 2026-09-17 生产镜像只装构建产物，上传不走全球加速
 
 - Docker 目标的 node 构建改成打包服务端依赖（`environments.ssr.resolve.noExternal`，Workers 目标本来就得这么做），镜像里只有 `.output/` 和 srvx，没有生产依赖树：`/app` 从 928 MB 降到 14 MB，镜像 1.38 GB 降到 249 MB，`docker save | zstd -3` 后每个应用 238 MiB 降到 58 MiB、一次发布 714 降到 178 MiB。剩下的大头是 `node:22-alpine` 自己的 232 MB。`images` job 的上传随之从 `cos.accelerate.myqcloud.com` 换回 `cos.ap-shanghai.myqcloud.com`，并把字节数和耗时打进日志。

@@ -20,14 +20,13 @@ jobs:
   images:
     name: Image ${{ matrix.app }}
     # The Docker target of the Studio unit, built here and handed to the
-    # production machine through a COS bucket: the machine reaches no registry.
-    # The upload goes to the plain ap-shanghai endpoint, whose inbound traffic is
-    # not metered; the global-acceleration endpoint is, and it was the whole of
-    # the pipeline's bill. Acceleration was worth paying for while the images
-    # carried a production dependency tree; they carry the bundle alone now
-    # (Dockerfile), so there is little left to accelerate. The machine's download
-    # already resolved to the internal network and was never billed. Objects expire
-    # after 7 days. The public URLs are the machine's (docs/studio/architecture.md §6).
+    # production machine through the R2 bucket vesact-images: the machine reaches
+    # no registry. Runner -> R2 stays in the US; the machine pulls from
+    # Cloudflare's edge at ~10 MB/s on nights when runner -> Shanghai does
+    # 35 KB/s and COS drops the upload (#166, docs/decisions.md 2026-09-22).
+    # Objects expire after 7 days; egress is free. If the machine cannot reach
+    # R2, the image goes down the SSH session instead: slow, but it arrives.
+    # The public URLs are the machine's (docs/studio/architecture.md §6).
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
@@ -35,11 +34,6 @@ jobs:
     env:
       MACHINE_HOST: 118.89.171.81
       MACHINE_USER: ubuntu
-      COS_BUCKET: vesact-images-1300248116
-      COS_REGION: ap-shanghai
-      AWS_DEFAULT_REGION: ap-shanghai
-      AWS_REQUEST_CHECKSUM_CALCULATION: when_required
-      AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
     strategy:
       matrix:
         app: [studio, account, marketing]
@@ -72,20 +66,25 @@ jobs:
           cp .github/machine_known_hosts ~/.ssh/known_hosts
       - name: Load on the machine
         env:
-          AWS_ACCESS_KEY_ID: ${{ env.TENCENTCLOUD_SECRET_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ env.TENCENTCLOUD_SECRET_KEY }}
-          OBJECT: s3://${{ env.COS_BUCKET }}/${{ github.sha }}/${{ matrix.app }}.tar.zst
+          AWS_ACCESS_KEY_ID: ${{ env.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+          AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
+          OBJECT: s3://vesact-images/${{ github.sha }}/${{ matrix.app }}.tar.zst
         run: |
-          aws configure set default.s3.addressing_style virtual
           docker save "vesact-${{ matrix.app }}:${{ github.sha }}" | zstd -T0 -3 > image.tar.zst
           # The bytes that cross the border, and how fast: #166 wants both in the log.
           bytes=$(stat -c %s image.tar.zst)
           started=$SECONDS
-          aws s3 cp image.tar.zst "$OBJECT" --endpoint-url "https://cos.$COS_REGION.myqcloud.com" --only-show-errors
-          echo "uploaded $((bytes / 1024 / 1024)) MiB in $((SECONDS - started))s"
+          aws s3 cp image.tar.zst "$OBJECT" --endpoint-url "$R2_ENDPOINT" --only-show-errors
           # The presigned URL travels on stdin, not in the remote command line.
-          aws s3 presign "$OBJECT" --endpoint-url "https://cos.$COS_REGION.myqcloud.com" --expires-in 3600 |
-            ssh "$MACHINE_USER@$MACHINE_HOST" 'read -r url && curl -fsS "$url" | zstd -d | docker load'
+          if ! aws s3 presign "$OBJECT" --endpoint-url "$R2_ENDPOINT" --expires-in 3600 |
+            ssh "$MACHINE_USER@$MACHINE_HOST" 'read -r url && curl -fsS --retry 3 "$url" | zstd -d | docker load'; then
+            echo "the machine could not fetch from R2, piping over SSH"
+            ssh -o ServerAliveInterval=30 "$MACHINE_USER@$MACHINE_HOST" 'zstd -d | docker load' < image.tar.zst
+          fi
+          echo "sent $((bytes / 1024 / 1024)) MiB in $((SECONDS - started))s"
 
   machine:
     name: Machine
