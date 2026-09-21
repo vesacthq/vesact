@@ -6,8 +6,15 @@
 	"compatibility_flags": ["nodejs_compat"],
 	"main": "./server.ts",
 	"observability": { "enabled": true },
-	// No production Worker: production is the Docker target (AGENTS.md).
+	// Production here is the overseas site, www.allcast.ai; the domestic www.allcast.cc
+	// is the Docker target on the machine (AGENTS.md).
 	"workers_dev": false,
+	"routes": [{ "pattern": "www.allcast.ai", "custom_domain": true }],
+	"vars": {
+		"VITE_STUDIO_URL": "https://app.allcast.cc",
+		"VITE_ACCOUNT_URL": "https://app.allcast.cc/account",
+		"VITE_MARKETING_URL": "https://www.allcast.ai",
+	},
 	"env": {
 		"preview": {
 			"workers_dev": false,

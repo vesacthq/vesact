@@ -1,6 +1,6 @@
 # The edge of the Docker target: TLS, then the Studio hostname split by path.
 # SITE_ADDRESS is the public address of the Studio unit, scheme included
-# (`https://studio.allcast.cc`, `http://localhost` when running the compose
+# (`https://app.allcast.cc`, `http://localhost` when running the compose
 # file locally), MARKETING_ADDRESS the marketing site's, APEX_ADDRESS the bare
 # domain that only redirects to it. Caddy provisions certificates for public
 # hostnames.

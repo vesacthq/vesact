@@ -2,13 +2,13 @@
 
 跨境卖家的社媒聊单产品 Studio，以及给它供渠道能力、也对外售卖的消息 API 平台 Relay。
 
-| 目录             | 内容                                                          |
-| ---------------- | ------------------------------------------------------------- |
-| `apps/account`   | 账号中心：登录、资料、组织、计费，`studio.allcast.cc/account` |
-| `apps/studio`    | Studio，`studio.allcast.cc`                                   |
-| `apps/marketing` | 官网，`www.allcast.cc`                                        |
-| `apps/docs`      | 开发者文档，留给 Relay                                        |
-| `packages/*`     | 共享的 api、auth、database、ui 等                             |
+| 目录             | 内容                                                       |
+| ---------------- | ---------------------------------------------------------- |
+| `apps/account`   | 账号中心：登录、资料、组织、计费，`app.allcast.cc/account` |
+| `apps/studio`    | Studio，`app.allcast.cc`                                   |
+| `apps/marketing` | 官网，`www.allcast.cc`                                     |
+| `apps/docs`      | 开发者文档，留给 Relay                                     |
+| `packages/*`     | 共享的 api、auth、database、ui 等                          |
 
 ```bash
 docker compose up -d postgres

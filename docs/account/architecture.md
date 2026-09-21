@@ -24,7 +24,7 @@ reviewed: 2026-09-13
 
 ## 2. 上下文与主机名
 
-`apps/account`，独立的应用和进程，挂在 Studio 主机名的 `/account` 路径下：prod `studio.allcast.cc/account`，preview `app.preview.allcast.ai/account`，dev `localhost:3004/account`。它同时提供 Better Auth 端点（`/account/api/auth/*`），`VITE_ACCOUNT_URL` 是它的地址，应用的 base path 从这个地址来：Vite 的 `base`、Router 的 `basepath`、Better Auth 的 `basePath`、`@repo/api` 的挂载点都由它推出。`packages/auth` 按两个地址是否同源决定 cookie 域，现在三个环境都同源、都是 host-only。
+`apps/account`，独立的应用和进程，挂在 Studio 主机名的 `/account` 路径下：prod `app.allcast.cc/account`，preview `app.preview.allcast.ai/account`，dev `localhost:3004/account`。它同时提供 Better Auth 端点（`/account/api/auth/*`），`VITE_ACCOUNT_URL` 是它的地址，应用的 base path 从这个地址来：Vite 的 `base`、Router 的 `basepath`、Better Auth 的 `basePath`、`@repo/api` 的挂载点都由它推出。`packages/auth` 按两个地址是否同源决定 cookie 域，现在三个环境都同源、都是 host-only。
 
 路由：
 
@@ -88,7 +88,7 @@ reviewed: 2026-09-13
 
 | 环境    | 形态                              | 地址                             | 分发                             |
 | ------- | --------------------------------- | -------------------------------- | -------------------------------- |
-| prod    | Docker 目标，和 studio 同一台机器 | `studio.allcast.cc/account`      | Caddy 按路径分到 account 容器    |
+| prod    | Docker 目标，和 studio 同一台机器 | `app.allcast.cc/account`         | Caddy 按路径分到 account 容器    |
 | preview | worker `vesact-account-preview`   | `app.preview.allcast.ai/account` | Workers 路由 `/account/*`        |
 | dev     | `pnpm --filter account dev`       | `localhost:3004/account`         | 无，localhost 的 cookie 不分端口 |
 
