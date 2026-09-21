@@ -53,8 +53,8 @@ feeds the Vite build and the Node-side scripts: `DATABASE_URL`
 for `pnpm --filter @repo/database push | generate | migrate | studio`,
 `RELAY_DATABASE_URL` for `pnpm --filter @repo/relay db:*` (local database
 `vesact_relay`, create it once with `create database vesact_relay`), and the
-`VITE_*` URLs inlined into the client bundle. `apps/studio/.dev.vars` (from
-`pnpm secrets:pull`) is what the Worker reads at runtime; `.env.local` never
+`VITE_*` URLs inlined into the client bundle. `apps/studio/.dev.vars` (the same
+values, plus the app's override file) is what the Worker reads at runtime; `.env.local` never
 reaches it. Without `.dev.vars` the local server has no `VITE_*` URLs at all
 (`wrangler.jsonc` `vars` only carry the R2 endpoint) and falls back to
 `http://localhost:<port>` for Better Auth's `baseURL`, the OAuth callbacks, the
@@ -88,7 +88,8 @@ pnpm dev
 ## Running locally
 
 `pnpm dev` starts studio on 3000, marketing on 3001, docs on 3002, account on 3004, relay on
-3005 and the mail preview on 3003. A fresh database has no seed data: register the first account
+3005 and the mail preview on 3003. All six together need more than 8 GB of RAM (each Worker app's
+Vite server sits at 0.5–1.6 GB); on mac-mini pass `--filter=<app>` for the apps you are working on. A fresh database has no seed data: register the first account
 through the sign-up page. `push` applies the schema to the local database and
 `studio` opens Drizzle Studio against it. Without `RESEND_API_KEY` mail is
 logged to the console, so verification and magic-link URLs show up in the

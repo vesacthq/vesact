@@ -40,6 +40,7 @@ into docs, issues, commit messages or chat replies. `secrets/dev.env` is the one
 docker compose up -d postgres   # PostgreSQL 16 on host port 5433
 pnpm install
 pnpm dev                        # studio 3000, marketing 3001, docs 3002, mail preview 3003, account 3004, relay 3005
+pnpm dev --filter=studio --filter=account   # on an 8 GB machine: the full set gets OOM-killed, run the apps you need
 ```
 
 ### Root commands
