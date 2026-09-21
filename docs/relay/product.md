@@ -3,27 +3,27 @@ status: final
 reviewed: 2026-09-11
 ---
 
-# Relay 产品
+# Vesact 产品
 
-本文回答 Relay 做什么、给谁。怎么做见 architecture.md。
+本文回答 Vesact 做什么、给谁。怎么做见 architecture.md。
 
 ## 1. 定位与用户
 
-消息 API 平台：对海外开发者是产品，对 Studio 是渠道层。所有平台能力由 Relay 自己的应用直连各平台。
+消息 API 平台：对海外开发者是产品，对 Allcast 是渠道层。所有平台能力由 Vesact 自己的应用直连各平台。
 
 ```text
-Vesact
-├── Relay
+西安速准科技有限公司（仓库 vesact）
+├── Vesact（原 Relay）
 │   面向开发者及需要独立使用渠道接入能力的用户
 │   提供账号连接、统一 API、执行结果与事件通知
 │
-└── Studio
+└── Allcast（原 Studio）
     面向普通用户的聚合应用
-    使用 Relay 的渠道能力
+    使用 Vesact 的渠道能力
     最终业务定位继续验证
 ```
 
-Relay 可以有自己的控制台，用于连接账号、管理密钥、查看用量和诊断操作。它不等于纯后端项目，但也不应该因此长成另一个 Studio。
+Vesact 可以有自己的控制台，用于连接账号、管理密钥、查看用量和诊断操作。它不等于纯后端项目，但也不应该因此长成另一个 Allcast。
 
 计费按接入的账号收。价格在 A6（#70）定。
 
@@ -31,11 +31,11 @@ Relay 可以有自己的控制台，用于连接账号、管理密钥、查看�
 
 ### 2.1 API
 
-六类：posting、comments、messaging、analytics、ads、comment to DM。业务顺序：Messaging → Publishing（含 comments）→ Analytics → Ads，comment to DM 随 Messaging。平台优先：Meta 系 → TikTok → Google。契约用 oRPC 的 zod schema 定义，生成 OpenAPI。Studio 按同一套接口调用。
+六类：posting、comments、messaging、analytics、ads、comment to DM。业务顺序：Messaging → Publishing（含 comments）→ Analytics → Ads，comment to DM 随 Messaging。平台优先：Meta 系 → TikTok → Google。契约用 oRPC 的 zod schema 定义，生成 OpenAPI。Allcast 按同一套接口调用。
 
 ### 2.2 申请阶段：控制台就是审核载体
 
-申请各平台权限要一个用到全部权限的完整应用。审核看的是 Meta App ID，UI 不限，所以载体是 Relay 自己的控制台——连主页、看会话、发消息、发帖子、看广告账户，这些页面本来就是控制台的诊断页。Relay 的 API 从第一天就是自己的，不做 Zernio 形状的兼容层。
+申请各平台权限要一个用到全部权限的完整应用。审核看的是 Meta App ID，UI 不限，所以载体是 Vesact 自己的控制台——连主页、看会话、发消息、发帖子、看广告账户，这些页面本来就是控制台的诊断页。Vesact 的 API 从第一天就是自己的，不做 Zernio 形状的兼容层。
 
 Zernio 的开源客户端（MIT）只搬组件，不运行：
 
@@ -48,17 +48,18 @@ Zernio 的开源客户端（MIT）只搬组件，不运行：
 
 [openapi-specs](https://github.com/zernio-dev/openapi-specs) 是 13 个平台自己的 API 规范（Facebook、Instagram、TikTok…），写原生实现时用。
 
-### 2.3 三个界面
+### 2.3 四个界面
 
-| 界面       | 主机                    | 内容                                       |
-| ---------- | ----------------------- | ------------------------------------------ |
-| 控制台     | `console.vesact.com`    | 连接账号、API key、用量、诊断              |
-| API        | `api.vesact.com`        | `/v1`、平台 webhook、OAuth 回调            |
-| 开发者文档 | `developers.vesact.com` | A1 阶段文档先挂在 `api.vesact.com/v1/docs` |
+| 界面       | 主机                 | 内容                                                                               |
+| ---------- | -------------------- | ---------------------------------------------------------------------------------- |
+| 官网       | `www.vesact.com`     | 定位、联系方式，Meta 审核要的隐私政策、服务条款、数据删除说明（`apps/vesact-www`） |
+| 控制台     | `console.vesact.com` | 连接账号、API key、用量、诊断                                                      |
+| API        | `api.vesact.com`     | `/v1`、平台 webhook、OAuth 回调                                                    |
+| 开发者文档 | `docs.vesact.com`    | A1 阶段文档先挂在 `api.vesact.com/v1/docs`                                         |
 
 ## 3. 边界
 
-不接 Zernio 托管：所有平台能力由 Relay 自己的应用直连各平台，Zernio 的开源客户端只搬组件。
+不接 Zernio 托管：所有平台能力由 Vesact 自己的应用直连各平台，Zernio 的开源客户端只搬组件。
 
 不重新选择 SaaS 模板，不迁移 Neon 到 D1，不重做现有认证和组织系统；不先实现完整 CRM、销售流程、AI 员工系统；不先做全部平台、全部权限、全部消息类型；不先建设微服务、插件市场、通用 Saga、事件溯源、动态 schema 引擎或自动供应商故障切换。
 
@@ -68,13 +69,13 @@ Zernio 的开源客户端（MIT）只搬组件，不运行：
 
 | 概念           | 含义                                                                |
 | -------------- | ------------------------------------------------------------------- |
-| **客户组织**   | 使用 Relay 的开发者或团队，优先映射到已有组织模型。                 |
+| **客户组织**   | 使用 Vesact 的开发者或团队，优先映射到已有组织模型。                |
 | **代管客户**   | 开发者自己的终端企业；需要时增加轻量归属，不新建另一套认证体系。    |
 | **Account**    | 可操作的渠道资产，例如 Facebook Page、IG 账号或 WhatsApp 业务号码。 |
 | **Connection** | 授权关系、凭据、授予的权限、健康状态。一次授权可能关联多个资产。    |
 | **Binding**    | Account 使用的接入实现、Connection 与外部资产引用之间的绑定。       |
 
-直接使用 Relay 的客户可以映射到默认代管分组，不必把多层概念都强加给前端用户。
+直接使用 Vesact 的客户可以映射到默认代管分组，不必把多层概念都强加给前端用户。
 
 ## 5. 分期
 
@@ -88,7 +89,7 @@ Zernio 的开源客户端（MIT）只搬组件，不运行：
 | A3   | #67   | 第一批权限：Messenger 与 Instagram 私信原生跑通，控制台收件箱，录屏提交                      |
 | A4   | #68   | 分批申请：评论与 comment to DM、发布、广告                                                   |
 | A5   | #69   | 企业验证通过后：WhatsApp Embedded Signup                                                     |
-| A6   | #70   | 权限齐后：计费、租户与 API key 对外开放（#27）、Studio 换地址                                |
+| A6   | #70   | 权限齐后：计费、租户与 API key 对外开放（#27）、Allcast 换地址                               |
 
 领域的第一轮范围：
 

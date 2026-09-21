@@ -3,9 +3,9 @@ status: final
 reviewed: 2026-09-13
 ---
 
-# Relay 架构
+# Vesact 架构
 
-本文回答 Relay 怎么做。定位、术语和分期见 product.md；每个阶段的范围与验收在 #26 下的 issue 里；为什么这么定见 ../decisions.md。§5.5 的 Messaging 领域是草稿。
+本文回答 Vesact 怎么做。定位、术语和分期见 product.md；每个阶段的范围与验收在 #26 下的 issue 里；为什么这么定见 ../decisions.md。§5.5 的 Messaging 领域是草稿。
 
 ## 1. 目标与约束
 
@@ -13,13 +13,13 @@ reviewed: 2026-09-13
 
 第一轮交付目标：
 
-> Relay 能在一个 Meta 渠道上完成真实的文字消息收发，保存自己的记录，查询操作结果，并能够定位和解释失败。
+> Vesact 能在一个 Meta 渠道上完成真实的文字消息收发，保存自己的记录，查询操作结果，并能够定位和解释失败。
 
-第一轮的成功不是“架构看起来完整”，而是：在现有 Vesact 工程里，Relay 的边界清楚、公开语义可解释、第一条聊天链路可靠可用。做到这里，就进入业务迭代。后续 Publishing、Analytics 和 Ads 复用已经被验证的基础，而不是继续为未来建设基础。
+第一轮的成功不是“架构看起来完整”，而是：在现有仓库里，Vesact 的边界清楚、公开语义可解释、第一条聊天链路可靠可用。做到这里，就进入业务迭代。后续 Publishing、Analytics 和 Ads 复用已经被验证的基础，而不是继续为未来建设基础。
 
 ### 1.1 基建指什么
 
-不是部署、数据库、登录页面或整套 SaaS 模板，而是 Relay 的公共业务基础：
+不是部署、数据库、登录页面或整套 SaaS 模板，而是 Vesact 的公共业务基础：
 
 | 公共支撑域        | 要解决的问题                                                    |
 | ----------------- | --------------------------------------------------------------- |
@@ -31,19 +31,19 @@ reviewed: 2026-09-13
 
 ### 1.2 技术栈约束：继承现状，只补缺口
 
-| 能力                | 决策                                                                                                         |
-| ------------------- | ------------------------------------------------------------------------------------------------------------ |
-| **基础工程**        | 保留 Supastarter 改造版、Cloudflare 部署和 Neon，不换模板、不换数据库。                                      |
-| **API 框架**        | 以仓库为准。仍使用 Hono/oRPC 就沿用；已改成其他实现，不为本文件迁回去。                                      |
-| **契约与校验**      | 复用当前 schema 工具，明确导出 Relay 公共契约，生成 OpenAPI。                                                |
-| **数据库与迁移**    | 复用当前 ORM、Neon 连接方式和迁移流程；需要事务的路径必须实际验证驱动能力。                                  |
-| **认证、组织、Key** | Relay 自己的 Better Auth 实例（`@repo/relay/auth`），只装 Google、organization、apiKey；不另外部署认证平台。 |
-| **任务执行**        | 优先复用已存在方案；缺失时，CF Queues + Neon 持久化任务 + Cron 补偿是默认增量方案。 Execution 动工时定稿。   |
-| **媒体**            | 复用当前存储；需要新建对象存储能力时优先评估 R2，不能假定已配置。                                            |
-| **长流程**          | 到多步骤发布确实需要时再加入 Workflows，不给每条聊天消息套一个 Workflow。                                    |
-| **协调与实时**      | 不默认为每个账号建 DO。遇到明确跨实例协调或实时连接问题时再设计。                                            |
-| **测试与 SDK**      | 复用当前测试链，补真实 CF 环境验证、契约检查；对外需要时再生成客户端。                                       |
-| **Effect**          | 暂不上全栈 Effect，也不自己仿造一套；将来只在具体执行模块验证收益。                                          |
+| 能力                | 决策                                                                                                          |
+| ------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **基础工程**        | 保留 Supastarter 改造版、Cloudflare 部署和 Neon，不换模板、不换数据库。                                       |
+| **API 框架**        | 以仓库为准。仍使用 Hono/oRPC 就沿用；已改成其他实现，不为本文件迁回去。                                       |
+| **契约与校验**      | 复用当前 schema 工具，明确导出 Vesact 公共契约，生成 OpenAPI。                                                |
+| **数据库与迁移**    | 复用当前 ORM、Neon 连接方式和迁移流程；需要事务的路径必须实际验证驱动能力。                                   |
+| **认证、组织、Key** | Vesact 自己的 Better Auth 实例（`@repo/relay/auth`），只装 Google、organization、apiKey；不另外部署认证平台。 |
+| **任务执行**        | 优先复用已存在方案；缺失时，CF Queues + Neon 持久化任务 + Cron 补偿是默认增量方案。 Execution 动工时定稿。    |
+| **媒体**            | 复用当前存储；需要新建对象存储能力时优先评估 R2，不能假定已配置。                                             |
+| **长流程**          | 到多步骤发布确实需要时再加入 Workflows，不给每条聊天消息套一个 Workflow。                                     |
+| **协调与实时**      | 不默认为每个账号建 DO。遇到明确跨实例协调或实时连接问题时再设计。                                             |
+| **测试与 SDK**      | 复用当前测试链，补真实 CF 环境验证、契约检查；对外需要时再生成客户端。                                        |
+| **Effect**          | 暂不上全栈 Effect，也不自己仿造一套；将来只在具体执行模块验证收益。                                           |
 
 新依赖要回答：它解决了当前哪个问题，现有工具为什么不够，带来了什么维护成本。不得把“库支持”当成“仓库已经集成”。
 
@@ -83,7 +83,7 @@ Relay 公共契约：REST API + Webhook
 
 一个 worker 每个环境挂两个 custom domain，按路径前缀分发：`/v1/*`、`/webhooks/*`、`/oauth/*` 进 Hono，其余进 TanStack Start 控制台。API 主机名上的非 API 路径返回 404 JSON，其他情况不看主机名。开发者文档 `developers.vesact.com` 启用前挂在 `api.vesact.com/v1/docs`。
 
-认证是 Relay 自己的：Better Auth 的 handler 挂在 relay worker 的 `/api/auth/*` 上（`packages/relay/auth`，只装 Google、organization、apiKey），用户、组织、成员、key 都在 Relay 的库里，控制台自带登录、建组织、成员与邀请页（邀请是链接，由邀请人自己分享，Relay 不发邮件）；cookie 只在控制台主机名上，不设父域，前缀 `relay`，和 Studio 设在父域的 cookie 不同名。Studio 对 Relay 是一个客户组织：每个 Studio 部署一个组织、一把 key，所有卖家的渠道挂在这个组织下，渠道带 `externalId`（Studio 侧的组织 id），连接会话带回跳地址；Relay 不知道卖家。
+认证是 Vesact 自己的：Better Auth 的 handler 挂在 relay worker 的 `/api/auth/*` 上（`packages/relay/auth`，只装 Google、organization、apiKey），用户、组织、成员、key 都在 Vesact 的库里，控制台自带登录、建组织、成员与邀请页（邀请是链接，由邀请人自己分享，Vesact 不发邮件）；cookie 只在控制台主机名上，不设父域，前缀 `relay`，和 Allcast 设在父域的 cookie 不同名。Allcast 对 Vesact 是一个客户组织：每个 Allcast 部署一个组织、一把 key，所有卖家的渠道挂在这个组织下，渠道带 `externalId`（Allcast 侧的组织 id），连接会话带回跳地址；Vesact 不知道卖家。
 
 ## 3. 原则
 
@@ -91,7 +91,7 @@ Relay 公共契约：REST API + Webhook
 
 ### 3.1 公共业务身份稳定，外部连接可以更换
 
-Relay 使用自己的账号、会话、消息、发布和事件 ID。平台原生 ID 作为带作用域的外部引用保存。
+Vesact 使用自己的账号、会话、消息、发布和事件 ID。平台原生 ID 作为带作用域的外部引用保存。
 
 更换接入实现，主要影响连接、映射和执行路径，不应迫使 API 客户更换整套业务接口。能够保持哪些历史关联，要以实际平台身份映射能力为准，不承诺无法验证的无感迁移。
 
@@ -107,7 +107,7 @@ Relay 使用自己的账号、会话、消息、发布和事件 ID。平台原�
 
 ### 3.4 自己保存必要业务记录，不做平台全量镜像
 
-Relay 保存自己承诺提供的数据、执行状态与关联；不依赖查询时全部透传供应商。与此同时，不为未来可能的需求复制全部原始数据，也不承诺上游没有提供的历史或状态。
+Vesact 保存自己承诺提供的数据、执行状态与关联；不依赖查询时全部透传供应商。与此同时，不为未来可能的需求复制全部原始数据，也不承诺上游没有提供的历史或状态。
 
 ### 3.5 边界提前定，抽象从第二个真实实现中提炼
 
@@ -144,12 +144,12 @@ Relay 保存自己承诺提供的数据、执行状态与关联；不依赖查�
 
 ### 4.2 层的职责
 
-| 部分               | 负责                                                    | 不负责                            |
-| ------------------ | ------------------------------------------------------- | --------------------------------- |
-| **入口层**         | 解析请求、认证、建立调用上下文、返回响应或接收事件。    | 平台专属调用流程和整套重试规则。  |
-| **领域用例**       | 业务状态、资源归属、有效能力、操作规则、事务。          | 平台的原始字段格式。              |
-| **执行与事件支撑** | 持久化工作、尝试记录、补偿、投递与诊断。                | 所有领域共用的万能状态机。        |
-| **接入实现**       | 授权协议差异、请求转换、原生 API 调用、错误和事件转换。 | 套餐、组织成员、Studio 销售流程。 |
+| 部分               | 负责                                                    | 不负责                             |
+| ------------------ | ------------------------------------------------------- | ---------------------------------- |
+| **入口层**         | 解析请求、认证、建立调用上下文、返回响应或接收事件。    | 平台专属调用流程和整套重试规则。   |
+| **领域用例**       | 业务状态、资源归属、有效能力、操作规则、事务。          | 平台的原始字段格式。               |
+| **执行与事件支撑** | 持久化工作、尝试记录、补偿、投递与诊断。                | 所有领域共用的万能状态机。         |
+| **接入实现**       | 授权协议差异、请求转换、原生 API 调用、错误和事件转换。 | 套餐、组织成员、Allcast 销售流程。 |
 
 执行模块应依赖一个受控的派发接口或显式注册表，不要让各领域和执行器互相导入形成循环依赖。普通函数组合即可，不为此建立插件平台。
 
@@ -173,11 +173,11 @@ packages/
 
 ### 4.4 依赖规则
 
-公共契约不能导入数据库、密钥、CF 服务端 bindings 或平台 SDK。Studio 可以使用契约和客户端，但不能直接读写 Relay 业务表、调用平台 Adapter。
+公共契约不能导入数据库、密钥、CF 服务端 bindings 或平台 SDK。Allcast 可以使用契约和客户端，但不能直接读写 Vesact 业务表、调用平台 Adapter。
 
-服务端领域依赖自己定义的接入能力，具体实现由运行入口组装。平台特有代码留在对应集成目录中，不散落到公共路由和 Studio 页面。
+服务端领域依赖自己定义的接入能力，具体实现由运行入口组装。平台特有代码留在对应集成目录中，不散落到公共路由和 Allcast 页面。
 
-内部调用不必强制跨 HTTP，但必须进入同一应用服务边界，经过相同的归属、能力、状态和执行规则。不要把共享 package 当作绕过 Relay 的后门。
+内部调用不必强制跨 HTTP，但必须进入同一应用服务边界，经过相同的归属、能力、状态和执行规则。不要把共享 package 当作绕过 Vesact 的后门。
 
 ### 4.5 命名与变更约定
 
@@ -213,7 +213,7 @@ packages/
 更新结果；必要时等待回执或进行核实
 ```
 
-数据库是“Relay 已接收哪些工作、它们现在是什么状态”的事实来源；队列只是传递执行机会。不要在持久化前返回“已接受”，也不要把入队成功等同于业务成功。
+数据库是“Vesact 已接收哪些工作、它们现在是什么状态”的事实来源；队列只是传递执行机会。不要在持久化前返回“已接受”，也不要把入队成功等同于业务成功。
 
 待执行记录可以同时承担 outbox 的角色。是否拆表取决于实现需要，不为模式名称多造表。数据库提交后入队失败，由 dispatcher/Cron 补投；已经派发但长期未完成的任务也必须可诊断。
 
@@ -263,7 +263,7 @@ Relay 事件
 
 每条业务链先确定输入、输出、状态、错误、事件及实例，再补保存和执行方案。不要先建所有表再自动暴露，也不要只画接口而忽略执行可行性。
 
-公共契约应独立于 Studio 的页面结构。OpenAPI 来自仓库中的契约事实来源；手写示例用于解释语义，不成为另一份需要人工同步的完整规范。契约用 zod，`.route({ method, path, summary, tags })`，`.errors({...})` 声明每个端点可能的错误码；`OpenAPIHandler` 前缀 `/v1`，`OpenAPIReferencePlugin` 出 `/v1/openapi.json` 和 `/v1/docs`。
+公共契约应独立于 Allcast 的页面结构。OpenAPI 来自仓库中的契约事实来源；手写示例用于解释语义，不成为另一份需要人工同步的完整规范。契约用 zod，`.route({ method, path, summary, tags })`，`.errors({...})` 声明每个端点可能的错误码；`OpenAPIHandler` 前缀 `/v1`，`OpenAPIReferencePlugin` 出 `/v1/openapi.json` 和 `/v1/docs`。
 
 #### 5.4.2 第一批资源候选
 
@@ -286,7 +286,7 @@ OAuth callback 和上游 Webhook 是专用入口，不与普通 API Key 请求�
 
 | 事项               | 决定                                                                                                                                                                                                                                                                                                                                                                                             |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **认证与归属**     | `Authorization: Bearer <key>`；key 前缀 `relay_`，属于组织；Studio 服务端用自己组织的 key 调 `/v1`；浏览器不持有 key。                                                                                                                                                                                                                                                                           |
+| **认证与归属**     | `Authorization: Bearer <key>`；key 前缀 `relay_`，属于组织；Allcast 服务端用自己组织的 key 调 `/v1`；浏览器不持有 key。                                                                                                                                                                                                                                                                          |
 | **公共 ID**        | `<类型>_<ULID>`：`acct_`、`conn_`、`conv_`、`msg_`、`evt_`、`req_`；text 主键；不暴露供应商 ID 作为业务身份。                                                                                                                                                                                                                                                                                    |
 | **请求与响应**     | JSON；输入、输出、PATCH 各自 schema；凭据和内部字段不进响应。                                                                                                                                                                                                                                                                                                                                    |
 | **异步写入**       | 202 加资源本体，`status: "queued"`；结果查资源本身；结果未知返回 `RESULT_UNKNOWN`。                                                                                                                                                                                                                                                                                                              |
@@ -330,9 +330,9 @@ Content-Type: application/json
 }
 ```
 
-这里的承诺是“Relay 已持久化接收请求”，不是“消息已送达”。状态字段是否拆成提交状态与投递状态，在正式 schema 中决定；不能用一个模糊状态掩盖两者区别。
+这里的承诺是“Vesact 已持久化接收请求”，不是“消息已送达”。状态字段是否拆成提交状态与投递状态，在正式 schema 中决定；不能用一个模糊状态掩盖两者区别。
 
-同一个幂等 key 与相同请求应关联同一业务操作，不因重试新增消息。客户端 key 在 Relay 生效，不代表下游天然具备同样的幂等保证。
+同一个幂等 key 与相同请求应关联同一业务操作，不因重试新增消息。客户端 key 在 Vesact 生效，不代表下游天然具备同样的幂等保证。
 
 平台独有能力使用明确、可验证的扩展结构。Merge 的 Supplemental Data 值得学习“原始数据、额外字段、原生操作”的边界，但本轮不实现任意带凭据 HTTP 代理。[R6]
 
@@ -340,19 +340,19 @@ Content-Type: application/json
 
 #### 必须先定的语义
 
-**会话保持渠道内语义。**同一买家在 WhatsApp 和 IG 上联系，不自动合成一个 Relay 会话。跨渠道 CRM 客户合并留给 Studio。
+**会话保持渠道内语义。**同一买家在 WhatsApp 和 IG 上联系，不自动合成一个 Vesact 会话。跨渠道 CRM 客户合并留给 Allcast。
 
 **参与者与渠道地址分开。**内部客户身份、平台用户标识和联系地址不是同一概念。外部标识要保留平台/App/连接作用域，不能假定跨 App 通用。Twilio Conversations Classic 的参与者与 messaging binding 可作为建模参考，而不是全量复制对象。[R5]
 
 **提交与投递分开。**本地已排队、下游接受、接收者送达、已读分别建模。不能把缺少回执表示为 `false` 或伪造成功，也不能让迟到事件机械覆盖更可靠的已知状态。
 
-**渠道状态与业务工作流分开。**平台的已读回执属于 Relay 能力；销售负责人、内部备注、客户阶段，以及某个 Studio 员工是否查看过，属于上层应用。
+**渠道状态与业务工作流分开。**平台的已读回执属于 Vesact 能力；销售负责人、内部备注、客户阶段，以及某个 Allcast 员工是否查看过，属于上层应用。
 
 **回复与主动发起分开考虑。**首轮可只做已有会话回复；契约不能永远假设必须先有会话。未来平台允许的首触达/模板消息单独设计并检查条件，不能默认任意平台可主动发信。
 
 #### 领域模型
 
-待写：租户与 API key 的归属链；connection、conversation、message、event 与 Relay 自己的 ID；状态；幂等；webhook 事件。资源和字段词汇以 Zernio OpenAPI 为草稿，取舍见附录 [R13]。
+待写：租户与 API key 的归属链；connection、conversation、message、event 与 Vesact 自己的 ID；状态；幂等；webhook 事件。资源和字段词汇以 Zernio OpenAPI 为草稿，取舍见附录 [R13]。
 
 #### 契约
 
@@ -360,10 +360,10 @@ Content-Type: application/json
 
 ## 6. 部署
 
-每个环境一个 worker，两个 custom domain（§2 的表）。`wrangler.jsonc` 是 prod 加 `env.preview`；`server.ts` 照 Studio 做 Hyperdrive 延迟加载加路径分发。
+每个环境一个 worker，两个 custom domain（§2 的表）。`wrangler.jsonc` 是 prod 加 `env.preview`；`server.ts` 照 Allcast 做 Hyperdrive 延迟加载加路径分发。
 
 - vars：`VITE_RELAY_URL`、`VITE_RELAY_API_URL`、`VITE_MARKETING_URL`、`META_APP_ID`；preview 段重新声明全部。cookie 只在控制台主机名上，`trustedOrigins` 只有自己。
-- secrets：`secrets/relay.{prod,preview}.env` 自足：Relay 自己的 `BETTER_AUTH_SECRET`、Google OAuth 的 client id 和 secret（回调 `<VITE_RELAY_URL>/api/auth/callback/google`）、`META_APP_SECRET`、`META_WEBHOOK_VERIFY_TOKEN`；迁移用的连接串在 `secrets/relay-database.{prod,preview}.env`。本地开发的值在 `secrets/dev.env`，`secrets/relay.dev.env` 只放 Relay 自己的 `BETTER_AUTH_SECRET` 和 `META_*`，`pnpm secrets:pull` 叠加后写出 `apps/relay/.dev.vars`。
+- secrets：`secrets/relay.{prod,preview}.env` 自足：Vesact 自己的 `BETTER_AUTH_SECRET`、Google OAuth 的 client id 和 secret（回调 `<VITE_RELAY_URL>/api/auth/callback/google`）、`META_APP_SECRET`、`META_WEBHOOK_VERIFY_TOKEN`；迁移用的连接串在 `secrets/relay-database.{prod,preview}.env`。本地开发的值在 `secrets/dev.env`，`secrets/relay.dev.env` 只放 Vesact 自己的 `BETTER_AUTH_SECRET` 和 `META_*`，`pnpm secrets:pull` 叠加后写出 `apps/relay/.dev.vars`。
 - CI：`deploy.yml` 的 `relay` job 自己跑 `@repo/relay` 的 migrate，不再 `needs: account`；`select-target.sh` 给出 relay 的 URL。部署后没有 HTTP 探测：zone 的 Bot Fight Mode 会挑战 runner 的 curl。
 - Cloudflare：preview 的 Access 由 `*.preview.vesact.com` 通配应用覆盖，另有一个路径为 `api.preview.vesact.com/webhooks` 的 Access 应用，策略 Bypass Everyone，Meta 才打得到。Meta 一个 App 只能一个回调 URL，指向 prod；preview 只靠 curl 验证。
 - `/v1/health`、`/v1/openapi.json`、`/v1/docs` 无鉴权。spec 由 `OpenAPIReferencePlugin` 每次请求从 router 生成，没有手写副本：`info.title` 是 `Relay API`，`servers` 是 `VITE_RELAY_API_URL` + `/v1`，`components.securitySchemes.bearerAuth` 配全局 `security`，`/health` 用 route 的 `spec` 覆盖成无需鉴权。docs 页是 Scalar，spec 内联，脚本从 jsDelivr 加载，页面里填 key 可以直接调接口；要在 `api.` 域打开，`servers` 指向那里而 `/v1` 不设 CORS，从 `relay.` 域打开的页面调不到接口。
@@ -390,7 +390,7 @@ Content-Type: application/json
 
 ### 7.3 测试
 
-测试按当前项目惯例放置，确保每个 Connector 有可找到的脱敏 fixtures 和行为测试。验收脚本进仓库。i18n scope `relay`，locale 集合与 Studio 相同。
+测试按当前项目惯例放置，确保每个 Connector 有可找到的脱敏 fixtures 和行为测试。验收脚本进仓库。i18n scope `relay`，locale 集合与 Allcast 相同。
 
 跨切片最低验证矩阵：
 
@@ -415,7 +415,7 @@ Content-Type: application/json
 - 正常路径、明确失败、重复请求/事件和结果不确定路径有测试。
 - 有运行环境测试结果；真实平台验证已完成，或明确列为阻塞而非默认为通过。
 - 能通过 request/message/task/event 等关联 ID 定位执行过程。
-- 本轮变更没有让 Studio 直接依赖平台实现或 Relay 数据库内部结构。
+- 本轮变更没有让 Allcast 直接依赖平台实现或 Vesact 数据库内部结构。
 - 文档、测试与实现同批更新，剩余限制已经写明。
 
 ## 8. 风险
@@ -423,7 +423,7 @@ Content-Type: application/json
 - 插件限流每次校验写一次 key 行。单库扛不住时在前面加 Workers Rate Limiting binding，契约不变。
 - Hyperdrive 的查询缓存全部关闭（../decisions.md 2026-09-11）。插件先读 key 行再带条件更新，读到缓存就会一直更新失败、重读缓存，直到缓存过期；吊销的 key 也会在缓存期内继续有效。
 - Meta 一个 App 只能一个回调 URL，指向 prod；preview 只靠 curl 验证。
-- `packages/database` 不再含 Relay 的表；它的 `client.ts` 仍导入 `./schema`（index 只剩 `postgres`），和模板的 `./schema/postgres` 不同，同步上游时留意。
+- `packages/database` 不再含 Vesact 的表；它的 `client.ts` 仍导入 `./schema`（index 只剩 `postgres`），和模板的 `./schema/postgres` 不同，同步上游时留意。
 
 ## 附录：参考资料
 
