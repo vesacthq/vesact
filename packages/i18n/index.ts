@@ -19,6 +19,7 @@ export type {
 	AccountMessages,
 	MailMessages,
 	MarketingMessages,
+	VesactWwwMessages,
 	RelayMessages,
 	StudioMessages,
 	SharedMessages,

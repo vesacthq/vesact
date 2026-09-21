@@ -10,12 +10,13 @@ The environment matrix (dev / preview / prod) is in `AGENTS.md` under
 
 ## Hostnames
 
-| App       | prod                                                           | preview                                                |
-| --------- | -------------------------------------------------------------- | ------------------------------------------------------ |
-| marketing | `www.allcast.cc` (`allcast.cc` redirects to it), machine       | `www.preview.allcast.ai`                               |
-| account   | `studio.allcast.cc/account`, machine (Caddy path split)        | `app.preview.allcast.ai/account` (Workers route)       |
-| studio    | `studio.allcast.cc`, machine                                   | `app.preview.allcast.ai`                               |
-| relay     | `console.vesact.com` (console), `api.vesact.com` (API), Worker | `console.preview.vesact.com`, `api.preview.vesact.com` |
+| App        | prod                                                           | preview                                                |
+| ---------- | -------------------------------------------------------------- | ------------------------------------------------------ |
+| marketing  | `www.allcast.cc` (`allcast.cc` redirects to it), machine       | `www.preview.allcast.ai`                               |
+| account    | `studio.allcast.cc/account`, machine (Caddy path split)        | `app.preview.allcast.ai/account` (Workers route)       |
+| studio     | `studio.allcast.cc`, machine                                   | `app.preview.allcast.ai`                               |
+| relay      | `console.vesact.com` (console), `api.vesact.com` (API), Worker | `console.preview.vesact.com`, `api.preview.vesact.com` |
+| vesact-www | `www.vesact.com`, Worker                                       | `www.preview.vesact.com`                               |
 
 Allcast (studio, account, marketing) previews live under `preview.allcast.ai` since #160 so
 that `preview.vesact.com` is Vesact's alone; the zone `allcast.ai` is in the same Cloudflare
@@ -23,7 +24,7 @@ account and `wrangler deploy` creates the custom domains there. The old custom d
 `studio.preview.vesact.com` (studio) and `www.preview.vesact.com` (marketing) stay attached
 until someone deletes them through the Workers domains API after the first deploy on the new
 hostnames (see "Accounts and resources": wrangler never removes a custom domain); the second
-one has to go before the Vesact website's preview can take it.
+one has to go before the Vesact website's preview (`vesact-www`, `www.preview.vesact.com`) can take it.
 
 `allcast.cc` is registered at DNSPod (2026-09-13) and its DNS lives there: `@`, `www` and
 `studio` are A records to the machine. The ICP filing (`陕ICP备2026025839号-1`) passed on
@@ -38,16 +39,16 @@ Relay, `preview.vesact.com`, `e.vesact.com` (PostHog) and the R2 bucket; the `ww
 
 `deploy.yml`: `select-target.sh` picks the target from the event and
 `load-env.sh` decrypts what a job needs into masked environment variables. On a
-pull request the marketing, account, studio and relay jobs each build →
-`wrangler deploy --secrets-file` to preview (the secrets go up with the version, so two pull
-requests deploying the same shared preview Worker cannot leave one of them failing on a
-separate secrets step). Preview runs of all pull requests share one concurrency group and
-queue: preview shows the last pull request pushed, a run still pending when a newer one arrives
-is cancelled (re-run it to put that pull request on preview), and two preview migrations never
-overlap; the account job runs the
+pull request the marketing, account, studio, relay and www jobs each build →
+`wrangler deploy --secrets-file` to preview (www has no secrets; the secrets go up with the
+version, so two pull requests deploying the same shared preview Worker cannot leave one of
+them failing on a separate secrets step). Preview runs of all pull requests share one
+concurrency group and queue: preview shows the last pull request pushed, a run still pending
+when a newer one arrives is cancelled (re-run it to put that pull request on preview), and two
+preview migrations never overlap; the account job runs the
 Studio database migration first and the studio job waits for it; the relay job
 migrates Relay's own database (`pnpm --filter @repo/relay db:migrate`) and runs
-on its own. On `main` only relay deploys a Worker (its production); studio,
+on its own. On `main` relay and the Vesact website (`www`, no database, no secrets) deploy their production Workers; studio,
 account and marketing go to the machine through the `images` and `machine` jobs
 (see "Docker target" and "The machine"). The relay Worker answers on two custom domains and dispatches by
 path (`docs/relay/architecture.md` §2). The Cloudflare Vite plugin flattens the selected environment into
@@ -260,8 +261,8 @@ token endpoint).
   `http://localhost:3005/...`).
 - `vesact.com` and `preview.vesact.com` redirect to their `www` hostnames through
   Cloudflare Redirect Rules on a proxied `AAAA 100::` record each; since
-  `www.vesact.com` was retired, and until the Vesact website (#160 item 2) takes
-  `www.vesact.com` and `www.preview.vesact.com`, both rules point at nothing.
+  `www.vesact.com` was retired both rules pointed at nothing; the Vesact website
+  (`vesact-www`) takes `www.vesact.com` and `www.preview.vesact.com` back.
 
 ## Public URLs
 

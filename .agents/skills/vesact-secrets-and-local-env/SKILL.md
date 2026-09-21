@@ -88,7 +88,7 @@ pnpm dev
 ## Running locally
 
 `pnpm dev` starts studio on 3000, marketing on 3001, docs on 3002, account on 3004, relay on
-3005 and the mail preview on 3003. All six together need more than 8 GB of RAM (each Worker app's
+3005, the Vesact website on 3006 and the mail preview on 3003. All seven together need more than 8 GB of RAM (each Worker app's
 Vite server sits at 0.5–1.6 GB); on mac-mini pass `--filter=<app>` for the apps you are working on. A fresh database has no seed data: register the first account
 through the sign-up page. `push` applies the schema to the local database and
 `studio` opens Drizzle Studio against it. Without `RESEND_API_KEY` mail is
@@ -119,9 +119,9 @@ and `.github/scripts/smoke.sh http://localhost http://localhost:3001`. The dev `
 
 The root test task runs Vitest in `apps/account`, `apps/marketing`, `apps/relay`,
 `apps/studio`, `packages/api`, `packages/permissions`, `packages/relay` and `packages/utils`. Playwright tests are in
-`apps/marketing/tests`, `apps/account/e2e` and `apps/studio/e2e`; run them per
+`apps/marketing/tests`, `apps/vesact-www/tests`, `apps/account/e2e` and `apps/studio/e2e`; run them per
 app with `pnpm --filter <app> e2e` (UI) or `e2e:ci`. Each config starts its own
-dev server (marketing 3001, studio 3100, account 3200). The account suite signs
+dev server (marketing 3001, vesact-www 3006, studio 3100, account 3200). The account suite signs
 in through the login page as two users that `e2e/auth.setup.ts` seeds straight
 into the database (`e2e/fixtures/users.ts`), so it needs Postgres with the
 schema pushed. Its config serves the app on the port and under the path

@@ -39,25 +39,25 @@ into docs, issues, commit messages or chat replies. `secrets/dev.env` is the one
 ```bash
 docker compose up -d postgres   # PostgreSQL 16 on host port 5433
 pnpm install
-pnpm dev                        # studio 3000, marketing 3001, docs 3002, mail preview 3003, account 3004, relay 3005
+pnpm dev                        # studio 3000, marketing 3001, docs 3002, mail preview 3003, account 3004, relay 3005, vesact-www 3006
 pnpm dev --filter=studio --filter=account   # on an 8 GB machine: the full set gets OOM-killed, run the apps you need
 ```
 
 ### Root commands
 
-| Command                             | Purpose                                                      |
-| ----------------------------------- | ------------------------------------------------------------ |
-| `pnpm dev`                          | Start development tasks                                      |
-| `pnpm build`                        | Build the workspace                                          |
-| `pnpm start`                        | Start built applications                                     |
-| `pnpm lint` / `pnpm lint:fix`       | Check / fix Oxlint issues                                    |
-| `pnpm format` / `pnpm format:check` | Write / check Oxfmt formatting                               |
-| `pnpm type-check`                   | Run workspace type checks                                    |
-| `pnpm test`                         | Run Vitest workspace tests                                   |
-| `pnpm verify`                       | Generate marketing content, then run Oxlint and Oxfmt checks |
-| `pnpm check`                        | Apply Oxlint and Oxfmt fixes                                 |
-| `pnpm clean`                        | Clear Turbo outputs                                          |
-| `pnpm status`                       | Tracks, stages, the Now issue and what is next, from GitHub  |
+| Command                             | Purpose                                                              |
+| ----------------------------------- | -------------------------------------------------------------------- |
+| `pnpm dev`                          | Start development tasks                                              |
+| `pnpm build`                        | Build the workspace                                                  |
+| `pnpm start`                        | Start built applications                                             |
+| `pnpm lint` / `pnpm lint:fix`       | Check / fix Oxlint issues                                            |
+| `pnpm format` / `pnpm format:check` | Write / check Oxfmt formatting                                       |
+| `pnpm type-check`                   | Run workspace type checks                                            |
+| `pnpm test`                         | Run Vitest workspace tests                                           |
+| `pnpm verify`                       | Generate the two websites' content, then run Oxlint and Oxfmt checks |
+| `pnpm check`                        | Apply Oxlint and Oxfmt fixes                                         |
+| `pnpm clean`                        | Clear Turbo outputs                                                  |
+| `pnpm status`                       | Tracks, stages, the Now issue and what is next, from GitHub          |
 
 Required gates:
 
@@ -79,7 +79,8 @@ apps/
 ├── mail-preview/  # React Email preview
 ├── marketing/     # Public site, blog, and content
 ├── relay/         # Relay: the API platform's Worker, `/v1` + webhooks on api., console on console.
-└── studio/        # Authenticated product
+├── studio/        # Authenticated product
+└── vesact-www/    # Vesact's website: home, contact, the legal pages Meta reviews; Worker on www.vesact.com
 packages/          # ai, api, auth, database, i18n, logs, mail, notifications, payments, permissions (Permix definitions + rule builder), relay (Relay's own api, auth, db and contract), storage, ui, utils
 tooling/           # scripts, tailwind, typescript
 brand/             # Brand kit: logos, app icons, per-site favicon sets; `brand/README.md` explains the files
@@ -115,9 +116,9 @@ Relay has its own database and package: `packages/relay/db` (`RELAY_DATABASE_URL
 database `vesact_relay`) with `pnpm --filter @repo/relay db:push | db:generate | db:migrate | db:studio`.
 
 Do not hand-edit generated Drizzle migration files or route trees:
-`apps/marketing/routeTree.gen.ts`, `apps/studio/routeTree.gen.ts`,
-`apps/account/routeTree.gen.ts`, and `apps/docs/src/routeTree.gen.ts` are generated. Marketing content collections under
-`apps/marketing/.content-collections/` are also generated.
+`apps/marketing/routeTree.gen.ts`, `apps/vesact-www/routeTree.gen.ts`, `apps/studio/routeTree.gen.ts`,
+`apps/account/routeTree.gen.ts`, and `apps/docs/src/routeTree.gen.ts` are generated. The content collections under
+`apps/marketing/.content-collections/` and `apps/vesact-www/.content-collections/` are also generated.
 
 ### Notifications
 
@@ -239,7 +240,7 @@ the platform-admin module (gated by `admin.access`) is the account center's `/ad
 - Locales are `en` and `zh`, configured with the `locale` cookie in `packages/i18n/config.ts`;
   a new one is a folder under `packages/i18n/translations/` plus entries in `config.ts`
   and `messages.ts`. Messages are scoped per app (`studio.json`, `account.json`,
-  `relay.json`, `marketing.json`, `mail.json`) plus `shared.json`, which every scope
+  `relay.json`, `marketing.json`, `vesact-www.json`, `mail.json`) plus `shared.json`, which every scope
   receives; the settings menu labels both apps show live in `shared.json` under `settings.menu`.
 - Document titles use `documentTitle()` from `@shared/lib/document-title`
   (`{page} – ${config.appName}`, en dash) in every Studio route `head()`;
@@ -252,28 +253,29 @@ Keep server-only variables unprefixed. Browser-visible variables use `VITE_`. `.
 
 ## Environments & deployment
 
-Relay is a Cloudflare Worker in every environment. Studio, account and marketing are Workers
+Relay and the Vesact website are Cloudflare Workers in every environment. Studio, account and marketing are Workers
 in dev and preview and run their Docker target (below) in production, on one machine in
 Tencent Cloud Shanghai under `allcast.cc`. Three environments:
 
-|               | dev                                        | preview                                                                                                                                | prod                                                                                               |
-| ------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| Trigger       | `pnpm dev`                                 | pull request from this repository                                                                                                      | push to `main`                                                                                     |
-| Build         | `vite dev`                                 | `CLOUDFLARE_ENV=preview vite build`                                                                                                    | `BUILD_TARGET=node vite build` inside the `Dockerfile` (Relay: `vite build`)                       |
-| Worker        | —                                          | `vesact-<app>-preview`                                                                                                                 | Relay only: `vesact-relay`                                                                         |
-| Host          | `localhost:300x`                           | `app.preview.allcast.ai` (account at `/account`), `www.preview.allcast.ai`; Relay `console.` / `api.preview.vesact.com`; behind Access | `studio.allcast.cc` (account at `/account`), `www.allcast.cc`; Relay `console.` / `api.vesact.com` |
-| Vars          | `.dev.vars`                                | `env.preview.vars` in `wrangler.jsonc`                                                                                                 | `secrets/<app>.prod.env` → `env/<app>.env` on the machine (Relay: top-level `vars`)                |
-| Secrets       | `.dev.vars`                                | `secrets/<app>.preview.env`                                                                                                            | `secrets/<app>.prod.env`                                                                           |
-| Database      | local postgres via `localConnectionString` | Hyperdrive `vesact-preview` → Neon branch `preview`                                                                                    | the `postgres` container on the machine (Relay: its own Neon project)                              |
-| Migrations    | `push`                                     | `migrate` against the preview branch before deploy                                                                                     | `migrate` through the SSH tunnel before the stack switches                                         |
-| Cookie domain | host-only                                  | host-only (studio and account share the hostname), prefix `vesact-preview`                                                             | host-only                                                                                          |
+|               | dev                                        | preview                                                                                                                                        | prod                                                                                                       |
+| ------------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Trigger       | `pnpm dev`                                 | pull request from this repository                                                                                                              | push to `main`                                                                                             |
+| Build         | `vite dev`                                 | `CLOUDFLARE_ENV=preview vite build`                                                                                                            | `BUILD_TARGET=node vite build` inside the `Dockerfile` (Relay: `vite build`)                               |
+| Worker        | —                                          | `vesact-<app>-preview`                                                                                                                         | Relay and the Vesact website: `vesact-relay`, `vesact-www`                                                 |
+| Host          | `localhost:300x`                           | `app.preview.allcast.ai` (account at `/account`), `www.preview.allcast.ai`; Vesact `www.`, `console.`, `api.preview.vesact.com`; behind Access | `studio.allcast.cc` (account at `/account`), `www.allcast.cc`; Vesact `www.`, `console.`, `api.vesact.com` |
+| Vars          | `.dev.vars`                                | `env.preview.vars` in `wrangler.jsonc`                                                                                                         | `secrets/<app>.prod.env` → `env/<app>.env` on the machine (Relay: top-level `vars`)                        |
+| Secrets       | `.dev.vars`                                | `secrets/<app>.preview.env`                                                                                                                    | `secrets/<app>.prod.env`                                                                                   |
+| Database      | local postgres via `localConnectionString` | Hyperdrive `vesact-preview` → Neon branch `preview`                                                                                            | the `postgres` container on the machine (Relay: its own Neon project)                                      |
+| Migrations    | `push`                                     | `migrate` against the preview branch before deploy                                                                                             | `migrate` through the SSH tunnel before the stack switches                                                 |
+| Cookie domain | host-only                                  | host-only (studio and account share the hostname), prefix `vesact-preview`                                                                     | host-only                                                                                                  |
 
 `deploy.yml`: on a pull request one job per app deploys preview (build → `wrangler deploy
 --secrets-file`, the account job migrating the preview branch first, relay migrating its
-own); on `main` the relay job deploys Relay's production the same way, and `images` + `machine`
+own, the `www` job having no secrets); on `main` the relay and `www` jobs deploy their
+production Workers the same way, and `images` + `machine`
 put the Docker target on the machine (below). It makes no HTTP check after a Worker deploy
 (Bot Fight Mode challenges the runner): verify by hand or through Workers versions.
-`VITE_STUDIO_URL`, `VITE_ACCOUNT_URL` and `VITE_MARKETING_URL` are read at build time, so a
+`VITE_STUDIO_URL`, `VITE_ACCOUNT_URL`, `VITE_MARKETING_URL`, `VITE_RELAY_URL` and `VITE_VESACT_WWW_URL` are read at build time, so a
 change needs a rebuild. Google login is not configured in production: the machine cannot
 reach Google's token endpoint; the domestic login methods are #128.
 Hostnames, pipeline scripts, the machine, preview database, R2, Cloudflare, Neon, Hyperdrive and Access: `vesact-deploy-and-infra` skill.

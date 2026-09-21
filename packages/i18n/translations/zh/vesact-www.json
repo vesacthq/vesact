@@ -1,0 +1,100 @@
+{
+	"common": {
+		"menu": {
+			"product": "产品",
+			"howItWorks": "接入方式",
+			"docs": "文档",
+			"contact": "联系",
+			"signIn": "登录"
+		},
+		"footer": {
+			"product": "产品",
+			"howItWorks": "接入方式",
+			"contact": "联系",
+			"console": "控制台",
+			"privacyPolicy": "隐私政策",
+			"terms": "服务条款",
+			"dataDeletion": "数据删除说明",
+			"operatedBy": "运营主体：{company}"
+		},
+		"colorMode": {
+			"system": "跟随系统",
+			"light": "浅色",
+			"dark": "深色"
+		},
+		"aria": {
+			"menu": "打开菜单",
+			"language": "语言"
+		}
+	},
+	"home": {
+		"hero": {
+			"eyebrow": "面向开发者的消息与社交平台 API",
+			"title": "一套 API，接入客户已经在用的渠道",
+			"subtitle": "一次连接 Facebook 主页、Instagram 账号和 WhatsApp 号码，之后通过同一套 REST API 和 webhook 收发消息、发布内容、读取数据。",
+			"getStarted": "打开控制台",
+			"documentation": "查看文档"
+		},
+		"features": {
+			"eyebrow": "产品",
+			"title": "平台对接的事，做一次就够",
+			"description": "平台应用、权限和审核记录在 Vesact 这边，你只需要一把 API key。",
+			"items": {
+				"channels": {
+					"title": "连接账号",
+					"description": "你的客户通过 Vesact 的 Meta 应用授权自己的 Facebook 主页、Instagram 账号和 WhatsApp 商业号码。TikTok 和 YouTube 随后接入。"
+				},
+				"api": {
+					"title": "统一的 REST API",
+					"description": "会话、消息、帖子和指标在各平台上共用同一套结构，版本在 /v1 下，有 OpenAPI 文档。"
+				},
+				"webhooks": {
+					"title": "Webhook",
+					"description": "新消息、评论和投递结果以带签名的事件送到你的端点，请求 id 用于追踪，幂等键让重试安全。"
+				},
+				"keys": {
+					"title": "密钥、限流与用量",
+					"description": "API key 属于你的组织。限流、配额和用量在控制台可见，计费按接入的账号计。"
+				}
+			}
+		},
+		"how": {
+			"eyebrow": "接入方式",
+			"title": "从注册到上线三步",
+			"steps": {
+				"connect": {
+					"title": "连接账号",
+					"description": "在控制台创建组织、签发 API key，让客户通过托管的授权页连接自己的平台账号。"
+				},
+				"call": {
+					"title": "调用 API",
+					"description": "用同一套请求结构在各平台发消息、发帖子、读指标。"
+				},
+				"receive": {
+					"title": "接收事件",
+					"description": "登记 webhook 端点，新消息、评论和执行结果实时送达。"
+				}
+			}
+		},
+		"cta": {
+			"eyebrow": "开始",
+			"title": "在 Vesact 上开始构建",
+			"description": "用 Google 登录，创建组织，几分钟内签发第一把 API key。",
+			"primary": "打开控制台",
+			"secondary": "联系我们"
+		}
+	},
+	"contact": {
+		"eyebrow": "联系",
+		"title": "联系我们",
+		"description": "关于 API、你需要的平台或你的数据的问题，写邮件给我们，两个工作日内回复。",
+		"emailLabel": "邮箱",
+		"companyLabel": "运营主体",
+		"legalLabel": "法务"
+	},
+	"notFound": {
+		"code": "404",
+		"title": "页面不存在",
+		"goToHomepage": "回到首页"
+	}
+}

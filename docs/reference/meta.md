@@ -109,16 +109,16 @@ A3 的消息功能不在表里，权限已经全批。ads_management、TikTok、
 
 liaodan 是上一个产品，要关掉；应用保留。下面这些从 liaodan 改成 Relay：
 
-| 项目                                  | 现在                                                    | 改成                          | 什么时候                             |
-| ------------------------------------- | ------------------------------------------------------- | ----------------------------- | ------------------------------------ |
-| 隐私政策、服务条款、数据删除 URL      | liaodan.ai/privacy、/terms、/data-deletion              | www.allcast.cc 的三页         | A0 法务页做好后；关 liaodan 前必须改 |
-| Site URL、联系邮箱                    | liaodan.ai、work@liaodan.ai                             | www.allcast.cc、vesact 的邮箱 | 同上                                 |
-| Messenger、IG、WhatsApp 的 webhook    | liaodan.ai/bot、/webhooks/instagram、/webhooks/whatsapp | api.vesact.com/webhooks/meta  | #37                                  |
-| Facebook Login 与 IG OAuth 回调       | liaodan.ai/instagram/callback 等                        | api.vesact.com/oauth/…        | A2、A3                               |
-| 两个 Page、IG 账号、WhatsApp 号的订阅 | 指向 liaodan                                            | Relay 接手后重新订阅          | A3                                   |
-| liaodan 生产服务器与数据库            | 存着上面的 token                                        | 已抄到 `secrets/meta.env`     | 关机时不用再取                       |
+| 项目                                  | 现在                                                    | 改成                                                                    | 什么时候                                |
+| ------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------- |
+| 隐私政策、服务条款、数据删除 URL      | liaodan.ai/privacy、/terms、/data-deletion              | www.vesact.com/legal/privacy-policy、/legal/terms、/legal/data-deletion | #160 第 2 条上线后；关 liaodan 前必须改 |
+| Site URL、联系邮箱                    | liaodan.ai、work@liaodan.ai                             | www.vesact.com、vesact.com 的邮箱                                       | 同上                                    |
+| Messenger、IG、WhatsApp 的 webhook    | liaodan.ai/bot、/webhooks/instagram、/webhooks/whatsapp | api.vesact.com/webhooks/meta                                            | #37                                     |
+| Facebook Login 与 IG OAuth 回调       | liaodan.ai/instagram/callback 等                        | api.vesact.com/oauth/…                                                  | A2、A3                                  |
+| 两个 Page、IG 账号、WhatsApp 号的订阅 | 指向 liaodan                                            | Relay 接手后重新订阅                                                    | A3                                      |
+| liaodan 生产服务器与数据库            | 存着上面的 token                                        | 已抄到 `secrets/meta.env`                                               | 关机时不用再取                          |
 
-顺序：www.allcast.cc 法务三页 → 改应用的 URL 与邮箱 → Human Agent 审核结束 → Relay 的 webhook 上线 → 关 liaodan。审核进行中改 URL 没有问题，但审核员会打开网站，liaodan.ai 至少活到这次审核结束。
+顺序：www.vesact.com 法务三页 → 改应用的 URL 与邮箱 → Human Agent 审核结束 → Relay 的 webhook 上线 → 关 liaodan。审核进行中改 URL 没有问题，但审核员会打开网站，liaodan.ai 至少活到这次审核结束。
 
 ## 7. 到期与提醒
 
