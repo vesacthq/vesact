@@ -19,12 +19,14 @@ env:
 jobs:
   images:
     name: Image ${{ matrix.app }}
-    # The Docker target of the Studio unit, built here and piped straight into
-    # the production machine's docker over SSH: the machine reaches no registry.
-    # The image is the bundle alone (Dockerfile), ~55 MiB compressed, so the
-    # cross-border hop is one SSH stream; the COS bucket that used to sit in
-    # between enforced a minimum upload speed and dropped the transfer on slow
-    # nights (#166). The public URLs are the machine's (docs/studio/architecture.md §6).
+    # The Docker target of the Studio unit, built here and handed to the
+    # production machine through the R2 bucket vesact-images: the machine reaches
+    # no registry. Runner -> R2 stays in the US; the machine pulls from
+    # Cloudflare's edge at ~10 MB/s on nights when runner -> Shanghai does
+    # 35 KB/s and COS drops the upload (#166, docs/decisions.md 2026-09-22).
+    # Objects expire after 7 days; egress is free. If the machine cannot reach
+    # R2, the image goes down the SSH session instead: slow, but it arrives.
+    # The public URLs are the machine's (docs/studio/architecture.md §6).
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
@@ -54,6 +56,8 @@ jobs:
             VITE_PLACEHOLDER_SITE_NAME=西安速准科技有限公司
       - name: Install sops
         run: .github/scripts/install-sops.sh
+      - name: Load CI secrets
+        run: .github/scripts/load-env.sh secrets/ci.env
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
@@ -61,12 +65,25 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           cp .github/machine_known_hosts ~/.ssh/known_hosts
       - name: Load on the machine
+        env:
+          AWS_ACCESS_KEY_ID: ${{ env.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+          AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
+          OBJECT: s3://vesact-images/${{ github.sha }}/${{ matrix.app }}.tar.zst
         run: |
           docker save "vesact-${{ matrix.app }}:${{ github.sha }}" | zstd -T0 -3 > image.tar.zst
           # The bytes that cross the border, and how fast: #166 wants both in the log.
           bytes=$(stat -c %s image.tar.zst)
           started=$SECONDS
-          ssh -o ServerAliveInterval=30 "$MACHINE_USER@$MACHINE_HOST" 'zstd -d | docker load' < image.tar.zst
+          aws s3 cp image.tar.zst "$OBJECT" --endpoint-url "$R2_ENDPOINT" --only-show-errors
+          # The presigned URL travels on stdin, not in the remote command line.
+          if ! aws s3 presign "$OBJECT" --endpoint-url "$R2_ENDPOINT" --expires-in 3600 |
+            ssh "$MACHINE_USER@$MACHINE_HOST" 'read -r url && curl -fsS --retry 3 "$url" | zstd -d | docker load'; then
+            echo "the machine could not fetch from R2, piping over SSH"
+            ssh -o ServerAliveInterval=30 "$MACHINE_USER@$MACHINE_HOST" 'zstd -d | docker load' < image.tar.zst
+          fi
           echo "sent $((bytes / 1024 / 1024)) MiB in $((SECONDS - started))s"
 
   machine:

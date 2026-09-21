@@ -95,7 +95,7 @@ machine) — the Worker secrets plus what `wrangler.jsonc` `vars` carried
 from the compose environment (`.env` next to the compose file). Images are
 `${IMAGE_REPO}-<app>:${IMAGE_TAG}`, `vesact` and `latest` by default (CI's
 smoke uses `vesact` / `ci`, the machine the commit sha); no registry is
-involved, the images reach the machine through COS (see "The machine"). Postgres is published on the machine's loopback interface only
+involved, the images reach the machine through R2 (see "The machine"). Postgres is published on the machine's loopback interface only
 (`127.0.0.1:5432`); migrations reach it through an SSH tunnel.
 
 CI: the "Docker target" job of `validate-prs.yml` builds the three images,
@@ -143,9 +143,11 @@ repository on every push to `main` and installs `machine-prune.sh` as
 `/etc/cron.weekly/vesact-prune`, so edit the sops files, not the machine.
 
 Deploy: each `images` job builds `vesact-<app>:<sha>`, uploads
-`docker save | zstd` of it to the COS bucket `vesact-images-1300248116`
-(ap-shanghai, objects expire after 7 days) and has the machine download it
-with a presigned URL over Tencent's network (100 MB/s) into `docker load`; then
+`docker save | zstd` of it to the R2 bucket `vesact-images` (objects expire
+after 7 days; credentials `R2_*` in `secrets/ci.env`, a token scoped to that
+bucket) and has the machine download it with a presigned URL from Cloudflare's
+edge (~10 MB/s) into `docker load`, falling back to piping the file down the
+SSH session; then
 `machine` starts
 `postgres` if needed, migrates through `ssh -L` (`secrets/database.prod.env`
 points at the tunnel), copies the files and runs
