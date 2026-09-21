@@ -1,0 +1,50 @@
+# Temporary: measures the runner -> machine SSH image handoff on this PR. Delete before merge.
+name: Probe SSH handoff
+
+on:
+  pull_request:
+    branches: [main]
+
+env:
+  SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  probe:
+    name: Probe
+    if: github.head_ref == 'ci/ssh-image-handoff'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      MACHINE_HOST: 118.89.171.81
+      MACHINE_USER: ubuntu
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: vesact-marketing:probe-${{ github.sha }}
+          build-args: |
+            APP=marketing
+            VITE_STUDIO_URL=https://studio.allcast.cc
+            VITE_ACCOUNT_URL=https://studio.allcast.cc/account
+            VITE_MARKETING_URL=https://www.allcast.cc
+      - name: Install sops
+        run: .github/scripts/install-sops.sh
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          sops -d --input-type json --output-type binary secrets/files/machine-deploy-ssh-key.json > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          cp .github/machine_known_hosts ~/.ssh/known_hosts
+      - name: Pipe the image over SSH
+        run: |
+          docker save "vesact-marketing:probe-${{ github.sha }}" | zstd -T0 -3 > image.tar.zst
+          bytes=$(stat -c %s image.tar.zst)
+          started=$SECONDS
+          ssh -o ServerAliveInterval=30 "$MACHINE_USER@$MACHINE_HOST" 'zstd -d | docker load' < image.tar.zst
+          echo "sent $((bytes / 1024 / 1024)) MiB in $((SECONDS - started))s"
+          ssh "$MACHINE_USER@$MACHINE_HOST" "docker image inspect vesact-marketing:probe-${{ github.sha }} --format '{{.Id}} {{.Size}}' && docker rmi vesact-marketing:probe-${{ github.sha }} >/dev/null"
