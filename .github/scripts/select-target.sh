@@ -8,7 +8,7 @@ if [ "${GITHUB_EVENT_NAME:-}" = "push" ]; then
 TARGET=prod
 VITE_STUDIO_URL=https://studio.allcast.cc
 VITE_ACCOUNT_URL=https://studio.allcast.cc/account
-VITE_RELAY_URL=https://relay.vesact.com
+VITE_RELAY_URL=https://console.vesact.com
 VITE_RELAY_API_URL=https://api.vesact.com
 VITE_MARKETING_URL=https://www.allcast.cc
 VITE_POSTHOG_HOST=https://e.vesact.com
@@ -21,7 +21,7 @@ TARGET=preview
 CLOUDFLARE_ENV=preview
 VITE_STUDIO_URL=https://app.preview.allcast.ai
 VITE_ACCOUNT_URL=https://app.preview.allcast.ai/account
-VITE_RELAY_URL=https://relay.preview.vesact.com
+VITE_RELAY_URL=https://console.preview.vesact.com
 VITE_RELAY_API_URL=https://api.preview.vesact.com
 VITE_MARKETING_URL=https://www.preview.allcast.ai
 ENV

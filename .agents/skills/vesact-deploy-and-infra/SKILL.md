@@ -10,12 +10,12 @@ The environment matrix (dev / preview / prod) is in `AGENTS.md` under
 
 ## Hostnames
 
-| App       | prod                                                         | preview                                              |
-| --------- | ------------------------------------------------------------ | ---------------------------------------------------- |
-| marketing | `www.allcast.cc` (`allcast.cc` redirects to it), machine     | `www.preview.allcast.ai`                             |
-| account   | `studio.allcast.cc/account`, machine (Caddy path split)      | `app.preview.allcast.ai/account` (Workers route)     |
-| studio    | `studio.allcast.cc`, machine                                 | `app.preview.allcast.ai`                             |
-| relay     | `relay.vesact.com` (console), `api.vesact.com` (API), Worker | `relay.preview.vesact.com`, `api.preview.vesact.com` |
+| App       | prod                                                           | preview                                                |
+| --------- | -------------------------------------------------------------- | ------------------------------------------------------ |
+| marketing | `www.allcast.cc` (`allcast.cc` redirects to it), machine       | `www.preview.allcast.ai`                               |
+| account   | `studio.allcast.cc/account`, machine (Caddy path split)        | `app.preview.allcast.ai/account` (Workers route)       |
+| studio    | `studio.allcast.cc`, machine                                   | `app.preview.allcast.ai`                               |
+| relay     | `console.vesact.com` (console), `api.vesact.com` (API), Worker | `console.preview.vesact.com`, `api.preview.vesact.com` |
 
 Allcast (studio, account, marketing) previews live under `preview.allcast.ai` since #160 so
 that `preview.vesact.com` is Vesact's alone; the zone `allcast.ai` is in the same Cloudflare
@@ -256,7 +256,7 @@ token endpoint).
   (`https://app.preview.allcast.ai/account/api/auth/callback/google`,
   `http://localhost:3004/account/api/auth/callback/google`) and
   `<VITE_RELAY_URL>/api/auth/callback/google` for Relay
-  (`https://relay.vesact.com/...`, `https://relay.preview.vesact.com/...`,
+  (`https://console.vesact.com/...`, `https://console.preview.vesact.com/...`,
   `http://localhost:3005/...`).
 - `vesact.com` and `preview.vesact.com` redirect to their `www` hostnames through
   Cloudflare Redirect Rules on a proxied `AAAA 100::` record each; since

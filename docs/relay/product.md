@@ -52,7 +52,7 @@ Zernio 的开源客户端（MIT）只搬组件，不运行：
 
 | 界面       | 主机                    | 内容                                       |
 | ---------- | ----------------------- | ------------------------------------------ |
-| 控制台     | `relay.vesact.com`      | 连接账号、API key、用量、诊断              |
+| 控制台     | `console.vesact.com`    | 连接账号、API key、用量、诊断              |
 | API        | `api.vesact.com`        | `/v1`、平台 webhook、OAuth 回调            |
 | 开发者文档 | `developers.vesact.com` | A1 阶段文档先挂在 `api.vesact.com/v1/docs` |
 

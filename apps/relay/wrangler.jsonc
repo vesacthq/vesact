@@ -9,11 +9,11 @@
 	"placement": { "mode": "smart" },
 	"workers_dev": false,
 	"routes": [
-		{ "pattern": "relay.vesact.com", "custom_domain": true },
+		{ "pattern": "console.vesact.com", "custom_domain": true },
 		{ "pattern": "api.vesact.com", "custom_domain": true },
 	],
 	"vars": {
-		"VITE_RELAY_URL": "https://relay.vesact.com",
+		"VITE_RELAY_URL": "https://console.vesact.com",
 		"VITE_RELAY_API_URL": "https://api.vesact.com",
 		"VITE_MARKETING_URL": "https://www.allcast.cc",
 		"META_APP_ID": "2027645691445350",
@@ -31,11 +31,11 @@
 			"observability": { "enabled": true },
 			"placement": { "mode": "smart" },
 			"routes": [
-				{ "pattern": "relay.preview.vesact.com", "custom_domain": true },
+				{ "pattern": "console.preview.vesact.com", "custom_domain": true },
 				{ "pattern": "api.preview.vesact.com", "custom_domain": true },
 			],
 			"vars": {
-				"VITE_RELAY_URL": "https://relay.preview.vesact.com",
+				"VITE_RELAY_URL": "https://console.preview.vesact.com",
 				"VITE_RELAY_API_URL": "https://api.preview.vesact.com",
 				"VITE_MARKETING_URL": "https://www.preview.vesact.com",
 				"META_APP_ID": "2027645691445350",
