@@ -3,9 +3,9 @@ status: draft
 reviewed: 2026-09-13
 ---
 
-# Studio 架构
+# Allcast 架构
 
-本文回答 Studio 怎么做。定位、术语和分期见 product.md。
+本文回答 Allcast 怎么做。定位、术语和分期见 product.md。
 
 ## 1. 目标与约束
 
@@ -13,7 +13,7 @@ reviewed: 2026-09-13
 
 ## 2. 上下文与主机名
 
-`apps/studio`。prod `app.allcast.cc`，preview `app.preview.allcast.ai`，dev 端口 3000。登录和组织在账号中心，它挂在同一个主机名的 `/account` 路径下（../account/architecture.md §2）；渠道层是 Relay 的 `/v1` 和 webhook（§5.3），Studio 是 Relay 的一个客户组织。部署形态见 §6。
+`apps/studio`。prod `app.allcast.cc`，preview `app.preview.allcast.ai`，dev 端口 3000。登录和组织在账号中心，它挂在同一个主机名的 `/account` 路径下（../account/architecture.md §2）；渠道层是 Vesact 的 `/v1` 和 webhook（§5.3），Allcast 是 Vesact 的一个客户组织。部署形态见 §6。
 
 导航一级是侧栏，二级是页内导航或子页面，三级是页面区块。角色可见性见 §7.1。
 
@@ -204,7 +204,7 @@ reviewed: 2026-09-13
 
 页面：
 
-- 成员：组、渠道权限、接待上限、在线状态（列表、邀请、组织角色和 Studio 访问在账号中心）
+- 成员：组、渠道权限、接待上限、在线状态（列表、邀请、组织角色和 Allcast 访问在账号中心）
 - 组：聊单组、社媒组，新增组，默认分配类型
 - 分配规则：私信和评论会话的默认去向、自动分配开关、按渠道规则
 - 翻译：成员语言、默认客户语言、自动翻译开关
@@ -255,21 +255,21 @@ reviewed: 2026-09-13
 - 消息保存原文和译文。
 - 会话分私信和评论两种类型。
 - 平台原始报文全部保存。
-- 平台的媒体链接会过期，Studio 保存媒体副本。
+- 平台的媒体链接会过期，Allcast 保存媒体副本。
 
 ### 5.3 渠道层
 
-- Relay 是唯一的渠道层。Studio 服务端用一把属于自己组织的 key 调 `/v1`，只 import `@repo/relay/contract` 的 schema 和类型，运行时是 oRPC 客户端加 fetch；环境变量 `RELAY_API_URL`、`RELAY_API_KEY`、`RELAY_WEBHOOK_SECRET`。浏览器不持有 key。
-- 渠道表记 Relay 的渠道 id 和所属组织。接入渠道：Studio 建一个 Relay 连接会话，带 `externalId`（本组织 id）和回跳地址，把用户送到 Relay 的连接页；回来后按渠道 id 落表。
+- Vesact 是唯一的渠道层。Allcast 服务端用一把属于自己组织的 key 调 `/v1`，只 import `@repo/relay/contract` 的 schema 和类型，运行时是 oRPC 客户端加 fetch；环境变量 `RELAY_API_URL`、`RELAY_API_KEY`、`RELAY_WEBHOOK_SECRET`。浏览器不持有 key。
+- 渠道表记 Vesact 的渠道 id 和所属组织。接入渠道：Allcast 建一个 Vesact 连接会话，带 `externalId`（本组织 id）和回跳地址，把用户送到 Vesact 的连接页；回来后按渠道 id 落表。
 - 入站走 `/webhooks/relay`：按 Standard Webhooks 验签，按渠道 id 找到组织，写会话和消息，再推给在线成员。webhook 负责快，定时拉 `/v1/events?since=` 负责全。
 - 出站（发消息、发帖）先在本地记一行带状态的记录和幂等键，界面按状态渲染，实际调用由 job 完成，结果由 webhook 回来。页面上的读只到自己的库。
-- 媒体：入站从 Relay 给的地址拷到自己的存储；出站给 Relay 自己存储的地址。
+- 媒体：入站从 Vesact 给的地址拷到自己的存储；出站给 Vesact 自己存储的地址。
 
 ### 5.4 后台任务与实时
 
 - 后台任务和定时（发送、发帖、拷媒体、拉指标、工作流）走 Postgres 的 job 表：执行时间、状态、payload、幂等键。Docker 目标里一个 job 进程循环领取（`SKIP LOCKED`），Worker 目标里 Cron Trigger 每分钟领一批；处理函数同一份。
 - 实时用 SSE，轮询兜底，不用 websocket。
-- 只用两个目标都有的东西：Durable Objects、Queues、Workflows、原生模块、常驻进程和 Redis 不进 Studio。
+- 只用两个目标都有的东西：Durable Objects、Queues、Workflows、原生模块、常驻进程和 Redis 不进 Allcast。
 
 ## 6. 部署
 

@@ -8,6 +8,11 @@
 - 理由：MDX 运行时用 `new Function` 求值，Workers 不允许，页面在服务端渲染为空，只靠水合补上；而 Meta、Stripe、Paddle 的审核和爬虫读的是服务端 HTML。国内站跑 Node，所以一直没暴露，marketing 上海外 Worker 后才成为问题。MDX 组件里实际接上的只有链接改写，博客还没有文章，改成 Markdown 没有损失。
 - 海外官网 `www.allcast.ai` 的构建也设 `VITE_PLACEHOLDER_SITE_NAME=Allcast`，和国内一样只显示占位页；Allcast 官网（#79、#80）做出来后两处一起去掉。理由同 2026-09-16 那条：模板落地页不能出现在生产域名上。
 
+## 2026-09-22 两个产品的名字与域名
+
+- **Vesact** 是 API 产品（原 Relay）：官网 `www.vesact.com`（`apps/vesact-www`，含 Meta 审核要的隐私政策、服务条款、数据删除说明），控制台 `console.vesact.com`，API `api.vesact.com`，文档 `docs.vesact.com`，preview 在 `*.preview.vesact.com`；邮件从 `noreply@mails.vesact.com` 发。**Allcast** 是原 Studio，含账号中心和官网：国内 `app.allcast.cc`（账号中心在 `/account`）与 `www.allcast.cc`（机器），海外官网 `www.allcast.ai`（Worker），preview 在 `*.preview.allcast.ai`；`app.allcast.ai` 留给以后的海外部署；邮件从 `noreply@mails.allcast.ai` 发。两套品牌资产在 `brand/vesact/` 与 `brand/allcast/`，共用双勾图形，字标和颜色不同（`#006AFE` / `#3B8FFF`）。公司、GitHub org 和仓库仍叫 vesact；目录、包名、Worker 名、环境变量名照旧，分别在 #161、#162 改。决定在 #159（2026-09-14），对外这一层落地在 #160。取代 2026-09-11「Relay 定稿的几项」里「主机名：`relay.vesact.com` 控制台、`api.vesact.com` API、`developers.vesact.com` 文档」一句，和 2026-09-11「Relay API 约定与骨架」里「preview 迁到 `*.preview.vesact.com`（`studio.preview`、`account.preview`、`www.preview`）」一句里 Studio 侧的部分；2026-09-13「生产落在腾讯云，域名 allcast.cc」里的 `studio.` 改为 `app.`。
+- 理由：一个名字下面卖两样东西，审核方和客户都分不清谁是谁。Meta 审核看的是 API 产品的主体和网站，收款审核看的是面向卖家的产品，法务页各写各的比一份两用的清楚。`preview.vesact.com` 让给 Vesact，是因为 `www.preview.vesact.com` 要给它的官网。
+
 ## 2026-09-22 生产镜像经 Cloudflare R2 送到机器，不再走 COS
 
 - `deploy.yml` 的 `images` job 把 `docker save | zstd` 传到 R2 桶 `vesact-images`（7 天过期），机器用 presigned URL 从 Cloudflare 边缘下载后 `docker load`；机器拿不到时回退为把文件顺着 SSH 会话推过去。COS 桶 `vesact-images-1300248116` 和腾讯云 `cicd` 子账号密钥退役。
