@@ -13,7 +13,7 @@ reviewed: 2026-09-13
 
 ## 2. 上下文与主机名
 
-`apps/studio`。prod `studio.allcast.cc`，preview `studio.preview.vesact.com`，dev 端口 3000。登录和组织在账号中心，它挂在同一个主机名的 `/account` 路径下（../account/architecture.md §2）；渠道层是 Relay 的 `/v1` 和 webhook（§5.3），Studio 是 Relay 的一个客户组织。部署形态见 §6。
+`apps/studio`。prod `studio.allcast.cc`，preview `app.preview.allcast.ai`，dev 端口 3000。登录和组织在账号中心，它挂在同一个主机名的 `/account` 路径下（../account/architecture.md §2）；渠道层是 Relay 的 `/v1` 和 webhook（§5.3），Studio 是 Relay 的一个客户组织。部署形态见 §6。
 
 导航一级是侧栏，二级是页内导航或子页面，三级是页面区块。角色可见性见 §7.1。
 
@@ -278,7 +278,7 @@ reviewed: 2026-09-13
 | 环境    | 形态                                                                                                                                      | 主机                                                                     |
 | ------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | prod    | Docker 目标：studio、account、marketing 三个容器加 Caddy 和 postgres，compose 管理，Caddy 把 `/account/*` 分给 account；job 进程等 job 表 | `studio.allcast.cc`、`www.allcast.cc`，DNSPod 直接解析到腾讯云上海的机器 |
-| preview | worker `vesact-studio-preview`，`/account/*` 由 Workers 路由分给 account worker                                                           | `studio.preview.vesact.com`，Access 后面                                 |
+| preview | worker `vesact-studio-preview`，`/account/*` 由 Workers 路由分给 account worker                                                           | `app.preview.allcast.ai`，Access 后面                                    |
 | dev     | `pnpm dev`                                                                                                                                | `localhost:3000`                                                         |
 
 正式版在腾讯云上海的一台机器上，域名 `allcast.cc`，库是机器上的 postgres 容器（../decisions.md 2026-09-13「生产落在腾讯云」）。部署：CI 构建镜像后经 R2 桶 `vesact-images` 送到机器（机器够不到镜像仓库；runner 直连上海慢，机器从 Cloudflare 边缘下载快，../decisions.md 2026-09-22），迁移在切换前跑，冒烟在机器本机做（#151）。`allcast.cc` 的 ICP 备案 2026-09-16 通过（陕ICP备2026025839号-1，国内构建的页脚挂它），证书由 Caddy 向 Let's Encrypt 申请。环境矩阵见 AGENTS.md。

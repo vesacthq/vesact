@@ -31,13 +31,13 @@
 			// Mounted under the Studio hostname; the studio Worker's custom domain
 			// answers everything else on it.
 			"routes": [
-				{ "pattern": "studio.preview.vesact.com/account", "zone_name": "vesact.com" },
-				{ "pattern": "studio.preview.vesact.com/account/*", "zone_name": "vesact.com" },
+				{ "pattern": "app.preview.allcast.ai/account", "zone_name": "allcast.ai" },
+				{ "pattern": "app.preview.allcast.ai/account/*", "zone_name": "allcast.ai" },
 			],
 			"vars": {
-				"VITE_ACCOUNT_URL": "https://studio.preview.vesact.com/account",
-				"VITE_STUDIO_URL": "https://studio.preview.vesact.com",
-				"VITE_MARKETING_URL": "https://www.preview.vesact.com",
+				"VITE_ACCOUNT_URL": "https://app.preview.allcast.ai/account",
+				"VITE_STUDIO_URL": "https://app.preview.allcast.ai",
+				"VITE_MARKETING_URL": "https://www.preview.allcast.ai",
 				"AUTH_COOKIE_PREFIX": "vesact-preview",
 				"S3_ENDPOINT": "https://6a8e5373d12070c930f09f1a82541a0b.r2.cloudflarestorage.com",
 				"S3_REGION": "auto",

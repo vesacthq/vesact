@@ -43,7 +43,8 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
 ## Adding an app or a preview target
 
 1. `env.preview` in the app's `wrangler.jsonc`: `workers_dev: false`, a
-   `custom_domain` route on `<app>.preview.vesact.com`, its own `vars`, its own
+   `custom_domain` route on the product's preview hostname (Allcast `<role>.preview.allcast.ai`,
+   Vesact `<role>.preview.vesact.com`), its own `vars`, its own
    bindings. Attach the hostname to the Worker in the dashboard or through the
    API before the first deploy; the certificate takes a few minutes and the
    smoke check will not wait for it.
@@ -52,8 +53,8 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
 3. Secrets files under `secrets/` for the new Worker and, if it has a database,
    a Neon branch, a Hyperdrive config and a `database.<target>.env`.
 4. The Google OAuth callback for the new `VITE_ACCOUNT_URL`, if it signs users in.
-5. Nothing for Access: the `*.preview.vesact.com` application already covers
-   the hostname. A path that outside services must reach (a webhook) needs its
+5. Nothing for Access: the `preview` application covers `*.preview.vesact.com`
+   and `*.preview.allcast.ai`. A path that outside services must reach (a webhook) needs its
    own, more specific application with a Bypass policy.
 
 ## Pitfalls
