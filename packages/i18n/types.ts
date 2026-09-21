@@ -4,6 +4,7 @@ import type marketingMessages from "./translations/en/marketing.json";
 import type relayMessages from "./translations/en/relay.json";
 import type sharedMessages from "./translations/en/shared.json";
 import type studioMessages from "./translations/en/studio.json";
+import type vesactWwwMessages from "./translations/en/vesact-www.json";
 
 export interface LocaleDefinition {
 	/**
@@ -39,6 +40,7 @@ export interface I18nConfig {
 
 export type SharedMessages = typeof sharedMessages;
 export type MarketingMessages = typeof marketingMessages & SharedMessages;
+export type VesactWwwMessages = typeof vesactWwwMessages & SharedMessages;
 export type StudioMessages = typeof studioMessages & SharedMessages;
 export type AccountMessages = typeof accountMessages & SharedMessages;
 export type RelayMessages = typeof relayMessages & SharedMessages;

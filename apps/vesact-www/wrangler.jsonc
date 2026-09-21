@@ -1,0 +1,27 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "vesact-www",
+	"account_id": "6a8e5373d12070c930f09f1a82541a0b",
+	"compatibility_date": "2026-09-03",
+	"compatibility_flags": ["nodejs_compat"],
+	"main": "./server.ts",
+	"observability": { "enabled": true },
+	"workers_dev": false,
+	// Vesact's website is a Worker in production too; no database, no secrets.
+	"routes": [{ "pattern": "www.vesact.com", "custom_domain": true }],
+	"vars": {
+		"VITE_VESACT_WWW_URL": "https://www.vesact.com",
+		"VITE_RELAY_URL": "https://console.vesact.com",
+	},
+	"env": {
+		"preview": {
+			"workers_dev": false,
+			"observability": { "enabled": true },
+			"routes": [{ "pattern": "www.preview.vesact.com", "custom_domain": true }],
+			"vars": {
+				"VITE_VESACT_WWW_URL": "https://www.preview.vesact.com",
+				"VITE_RELAY_URL": "https://console.preview.vesact.com",
+			},
+		},
+	},
+}

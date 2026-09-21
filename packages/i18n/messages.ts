@@ -10,12 +10,14 @@ import enMarketing from "./translations/en/marketing.json";
 import enRelay from "./translations/en/relay.json";
 import enShared from "./translations/en/shared.json";
 import enStudio from "./translations/en/studio.json";
+import enVesactWww from "./translations/en/vesact-www.json";
 import zhAccount from "./translations/zh/account.json";
 import zhMail from "./translations/zh/mail.json";
 import zhMarketing from "./translations/zh/marketing.json";
 import zhRelay from "./translations/zh/relay.json";
 import zhShared from "./translations/zh/shared.json";
 import zhStudio from "./translations/zh/studio.json";
+import zhVesactWww from "./translations/zh/vesact-www.json";
 
 type Messages = Record<string, unknown>;
 
@@ -26,6 +28,7 @@ const scopedMessages = {
 		marketing: enMarketing,
 		relay: enRelay,
 		studio: enStudio,
+		"vesact-www": enVesactWww,
 		shared: enShared,
 	},
 	zh: {
@@ -34,6 +37,7 @@ const scopedMessages = {
 		marketing: zhMarketing,
 		relay: zhRelay,
 		studio: zhStudio,
+		"vesact-www": zhVesactWww,
 		shared: zhShared,
 	},
 } as const satisfies Record<Locale, Record<TranslationScope | "shared", Messages>>;

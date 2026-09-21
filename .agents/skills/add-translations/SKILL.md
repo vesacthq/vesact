@@ -11,7 +11,7 @@ Use for user-visible strings or locale behavior. Do not translate logs, stable A
 
 ## Procedure
 
-1. Choose the owning scope: `studio.json`, `account.json`, `relay.json`, `marketing.json`, `mail.json`, or cross-surface `shared.json` under `packages/i18n/translations/<locale>/`.
+1. Choose the owning scope: `studio.json`, `account.json`, `relay.json`, `marketing.json`, `vesact-www.json`, `mail.json`, or cross-surface `shared.json` under `packages/i18n/translations/<locale>/`.
 2. Add the same nested key and compatible placeholders to `en` and `zh`, the only locales for now. English is the fallback, not permission to omit `zh`.
 3. In Studio, import `useTranslations`/`useFormatter` through `@i18n/intl` (`apps/studio/modules/i18n/intl.tsx`). Marketing components currently import from `use-intl`.
 4. For route metadata or non-React code, use `createTranslatorForLocale(locale, scope)` from `@repo/i18n`, as in `apps/marketing/routes/contact/index.tsx`.
@@ -24,7 +24,7 @@ Use for user-visible strings or locale behavior. Do not translate logs, stable A
    import { readFile } from "node:fs/promises";
 
    const locales = ["en", "zh"];
-   const scopes = ["shared", "studio", "account", "relay", "marketing", "mail"];
+   const scopes = ["shared", "studio", "account", "relay", "marketing", "vesact-www", "mail"];
    const flattenKeys = (value, prefix = "") =>
      Object.entries(value).flatMap(([key, child]) => {
        const path = prefix ? `${prefix}.${key}` : key;

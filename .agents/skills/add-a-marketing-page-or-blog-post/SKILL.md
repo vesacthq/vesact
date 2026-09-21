@@ -7,7 +7,7 @@ description: "Use when adding a TanStack Router marketing page or localized MDX 
 
 ## Scope
 
-Use for public marketing routes and repository-owned blog/legal content. Do not place product documentation here or edit generated content collections.
+Use for public marketing routes and repository-owned blog/legal content, on the Allcast site (`apps/marketing`) or the Vesact site (`apps/vesact-www`, the same shell without blog and changelog; its messages are the `vesact-www` scope). Do not place product documentation here or edit generated content collections.
 
 ## Procedure
 
