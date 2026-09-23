@@ -11,10 +11,10 @@ Use when records, routes, or actions belong to an organization. Do not infer ten
 
 ## Procedure
 
-1. Add `organizationId` and an indexed foreign key to tenant-owned tables in active `packages/database/drizzle/schema/postgres.ts`; choose nullability, uniqueness, and cascade behavior deliberately.
+1. Add `organizationId` and an indexed foreign key to tenant-owned tables in the product's own schema file under `packages/database/drizzle/schema/`, never `postgres.ts` (see the `database-schema-change` skill); choose nullability, uniqueness, and cascade behavior deliberately.
 2. Require organization scope in database query signatures and include it in every read/update/delete predicate.
 3. Accept a stable `organizationId` in the oRPC Zod input, use `protectedProcedure`, then call `verifyOrganizationMembership()` or the owner/admin-only `verifyOrganizationBillingManagement()` before reading/mutating protected data.
-4. Enforce roles server-side. Use owner/admin checks for management writes; never trust `isOrganizationAdmin` from React.
+4. Enforce roles server-side with `checkPermission` from `@repo/permissions` on the verified membership role (`studio.manage` for owner/admin management writes); never trust a client-side `usePermissions` check.
 5. Place organization UI routes under `apps/studio/routes/_authenticated/_main/$organizationSlug/`. The slug selects UI context; resolve it through authenticated loader/context or `useActiveOrganizationQuery({ slug }, { enabled: true })` and handle loading/missing/error states.
 6. Use `useActiveOrganization()` only for display, navigation, and optimistic affordances. Include ID/slug in every TanStack Query key (`activeOrganizationQueryKey()` is the model).
 7. Add tests proving a member of organization A cannot access organization B, and that denied calls do not perform database/provider effects.

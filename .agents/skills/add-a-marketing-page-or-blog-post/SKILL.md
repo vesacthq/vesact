@@ -27,7 +27,7 @@ Use for public marketing routes and repository-owned blog/legal content. Do not 
    pnpm --filter marketing build
    ```
 
-Canonical references: `apps/marketing/routes/contact/index.tsx`, `apps/marketing/content-collections.ts`, `apps/marketing/content/posts/first-post.mdx`, `apps/marketing/modules/blog/lib/posts.ts`, and `apps/marketing/routes/sitemap[.]xml.ts`.
+Canonical references: `apps/marketing/routes/contact/index.tsx`, `apps/marketing/content-collections.ts`, `apps/marketing/modules/blog/lib/posts.ts`, and `apps/marketing/routes/sitemap[.]xml.ts`.
 
 ## Done
 
