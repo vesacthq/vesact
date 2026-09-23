@@ -6,8 +6,13 @@ on:
   # Every pull request deploys preview, stacked ones included; production is push to main.
   pull_request:
 
+# Every pull request deploys the same preview Workers and migrates the same preview
+# database, so preview runs queue behind each other instead of racing: what preview
+# shows is the last pull request pushed, and two migrations never overlap. GitHub
+# keeps one pending run per group; an older pending one is cancelled (re-run it to
+# put that pull request back on preview). Production has its own queue.
 concurrency:
-  group: deploy-${{ github.ref }}
+  group: deploy-${{ github.event_name == 'push' && github.ref || 'preview' }}
   cancel-in-progress: false
 
 env:
