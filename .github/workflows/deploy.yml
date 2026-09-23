@@ -3,11 +3,16 @@ name: Deploy
 on:
   push:
     branches: [main]
+  # Every pull request deploys preview, stacked ones included; production is push to main.
   pull_request:
-    branches: [main]
 
+# Every pull request deploys the same preview Workers and migrates the same preview
+# database, so preview runs queue behind each other instead of racing: what preview
+# shows is the last pull request pushed, and two migrations never overlap. GitHub
+# keeps one pending run per group; an older pending one is cancelled (re-run it to
+# put that pull request back on preview). Production has its own queue.
 concurrency:
-  group: deploy-${{ github.ref }}
+  group: deploy-${{ github.event_name == 'push' && github.ref || 'preview' }}
   cancel-in-progress: false
 
 env:
@@ -197,12 +202,12 @@ jobs:
       - name: Build
         run: pnpm --filter account build
       - name: Deploy
-        run: pnpm exec wrangler deploy
-        working-directory: apps/account
-      - name: Sync secrets
+        # The secrets ride on the version being deployed. A separate `wrangler secret bulk`
+        # after the deploy fails whenever another pull request deploys the same preview
+        # Worker in between ("the latest version of your Worker isn't currently deployed").
         run: |
           sops -d "../../secrets/account.$TARGET.env" > "$RUNNER_TEMP/account.env"
-          pnpm exec wrangler secret bulk "$RUNNER_TEMP/account.env" --name "$ACCOUNT_WORKER"
+          pnpm exec wrangler deploy --secrets-file "$RUNNER_TEMP/account.env"
           rm "$RUNNER_TEMP/account.env"
         working-directory: apps/account
 
@@ -229,12 +234,12 @@ jobs:
       - name: Build
         run: pnpm --filter studio build
       - name: Deploy
-        run: pnpm exec wrangler deploy
-        working-directory: apps/studio
-      - name: Sync secrets
+        # The secrets ride on the version being deployed. A separate `wrangler secret bulk`
+        # after the deploy fails whenever another pull request deploys the same preview
+        # Worker in between ("the latest version of your Worker isn't currently deployed").
         run: |
           sops -d "../../secrets/studio.$TARGET.env" > "$RUNNER_TEMP/studio.env"
-          pnpm exec wrangler secret bulk "$RUNNER_TEMP/studio.env" --name "$STUDIO_WORKER"
+          pnpm exec wrangler deploy --secrets-file "$RUNNER_TEMP/studio.env"
           rm "$RUNNER_TEMP/studio.env"
         working-directory: apps/studio
 
@@ -264,11 +269,11 @@ jobs:
       - name: Build
         run: pnpm --filter relay build
       - name: Deploy
-        run: pnpm exec wrangler deploy
-        working-directory: apps/relay
-      - name: Sync secrets
+        # The secrets ride on the version being deployed. A separate `wrangler secret bulk`
+        # after the deploy fails whenever another pull request deploys the same preview
+        # Worker in between ("the latest version of your Worker isn't currently deployed").
         run: |
           sops -d "../../secrets/relay.$TARGET.env" > "$RUNNER_TEMP/relay.env"
-          pnpm exec wrangler secret bulk "$RUNNER_TEMP/relay.env" --name "$RELAY_WORKER"
+          pnpm exec wrangler deploy --secrets-file "$RUNNER_TEMP/relay.env"
           rm "$RUNNER_TEMP/relay.env"
         working-directory: apps/relay

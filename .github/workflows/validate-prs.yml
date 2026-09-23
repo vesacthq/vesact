@@ -1,8 +1,9 @@
 name: Validate PRs
 
 on:
+  # Every pull request, whatever its base: a stacked PR (base = the previous
+  # branch) gets the same checks as one against main.
   pull_request:
-    branches: [main]
 
 env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}

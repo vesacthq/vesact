@@ -6,7 +6,6 @@ if [ "${GITHUB_EVENT_NAME:-}" = "push" ]; then
 	# The PostHog key is public: it is compiled into the client bundle by design.
 	cat >> "$GITHUB_ENV" <<'ENV'
 TARGET=prod
-RELAY_WORKER=vesact-relay
 VITE_STUDIO_URL=https://studio.allcast.cc
 VITE_ACCOUNT_URL=https://studio.allcast.cc/account
 VITE_RELAY_URL=https://relay.vesact.com
@@ -20,13 +19,10 @@ else
 	cat >> "$GITHUB_ENV" <<'ENV'
 TARGET=preview
 CLOUDFLARE_ENV=preview
-STUDIO_WORKER=vesact-studio-preview
-ACCOUNT_WORKER=vesact-account-preview
-RELAY_WORKER=vesact-relay-preview
-VITE_STUDIO_URL=https://studio.preview.vesact.com
-VITE_ACCOUNT_URL=https://studio.preview.vesact.com/account
+VITE_STUDIO_URL=https://app.preview.allcast.ai
+VITE_ACCOUNT_URL=https://app.preview.allcast.ai/account
 VITE_RELAY_URL=https://relay.preview.vesact.com
 VITE_RELAY_API_URL=https://api.preview.vesact.com
-VITE_MARKETING_URL=https://www.preview.vesact.com
+VITE_MARKETING_URL=https://www.preview.allcast.ai
 ENV
 fi
