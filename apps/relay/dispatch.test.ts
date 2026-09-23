@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { dispatch, isApiPath } from "./dispatch";
 
-const prod = { consoleHost: "relay.vesact.com", apiHost: "api.vesact.com" };
+const prod = { consoleHost: "console.vesact.com", apiHost: "api.vesact.com" };
 const dev = { consoleHost: "localhost:3005", apiHost: "localhost:3005" };
 
 describe("isApiPath", () => {
@@ -20,12 +20,12 @@ describe("isApiPath", () => {
 describe("dispatch", () => {
 	it("sends API paths to the API on either host", () => {
 		expect(dispatch(new URL("https://api.vesact.com/v1/health"), prod)).toBe("api");
-		expect(dispatch(new URL("https://relay.vesact.com/v1/health"), prod)).toBe("api");
+		expect(dispatch(new URL("https://console.vesact.com/v1/health"), prod)).toBe("api");
 	});
 
 	it("serves the console on the console host", () => {
-		expect(dispatch(new URL("https://relay.vesact.com/"), prod)).toBe("console");
-		expect(dispatch(new URL("https://relay.vesact.com/keys"), prod)).toBe("console");
+		expect(dispatch(new URL("https://console.vesact.com/"), prod)).toBe("console");
+		expect(dispatch(new URL("https://console.vesact.com/keys"), prod)).toBe("console");
 	});
 
 	it("has no pages on the API host", () => {
