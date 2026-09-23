@@ -174,9 +174,12 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Build
         # The Worker's own address; select-target.sh's VITE_MARKETING_URL is the machine's.
+        # The placeholder keeps the template landing page off a production hostname until
+        # the Allcast site exists (#80), as on www.allcast.cc; unset it in both places then.
         run: |
           if [ "$TARGET" = prod ]; then
             export VITE_MARKETING_URL=https://www.allcast.ai
+            export VITE_PLACEHOLDER_SITE_NAME=Allcast
           fi
           pnpm --filter marketing build
       - name: Deploy

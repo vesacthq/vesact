@@ -196,7 +196,9 @@ public-security filing (`beian.mps.gov.cn`) is due within 30 days of going live.
 company's legal name) makes the marketing build one placeholder page with that
 name, the © line and the filing number, every other path redirecting to it:
 the filed content is a company site and the Allcast site does not exist yet, so
-the template landing page must not show there. Unset it when that site ships.
+the template landing page must not show there. The overseas marketing Worker build
+(`www.allcast.ai`) sets it to `Allcast` for the same reason. Unset it in both places when that
+site ships (#80).
 
 Still deferred from the filing interim (#156): uploads to COS instead of R2,
 a nightly dump to COS, mail and brand on `allcast.cc`, the domestic login
