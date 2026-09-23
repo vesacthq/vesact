@@ -1,6 +1,6 @@
 ---
 name: deploy-and-env-vars
-description: "Use when changing environment variables or secrets, adding a deploy target, or inspecting how preview (Cloudflare Workers) and production (the Docker target on the machine, Relay on Workers) get built and deployed."
+description: "Use when changing environment variables or secrets, adding a deploy target, or inspecting how preview (Cloudflare Workers) and production (the Docker target on the machine, Relay and the Vesact website on Workers) get built and deployed."
 triggers: ["user"]
 ---
 
@@ -49,7 +49,7 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
    API before the first deploy; the certificate takes a few minutes and the
    smoke check will not wait for it.
 2. Its URLs in `.github/scripts/select-target.sh`, and a job in `deploy.yml`
-   modelled on the relay one.
+   modelled on the relay one (or on the `www` one for an app without a database or secrets).
 3. Secrets files under `secrets/` for the new Worker and, if it has a database,
    a Neon branch, a Hyperdrive config and a `database.<target>.env`.
 4. The Google OAuth callback for the new `VITE_ACCOUNT_URL`, if it signs users in.

@@ -7,17 +7,17 @@ description: "Use when a change affects documentation: repository conventions, p
 
 ## Where each kind of documentation lives
 
-| Content                                                                     | File                                 | Owner of the wording                                        |
-| --------------------------------------------------------------------------- | ------------------------------------ | ----------------------------------------------------------- |
-| Conventions, environments, commands, aliases                                | `AGENTS.md`                          | whoever changes the convention                              |
-| What a product does, for whom, its terms, stages                            | `docs/<app>/product.md`              | product; ask before changing a term or the scope            |
-| How a product is built: context, principles, modules, contracts, deployment | `docs/<app>/architecture.md`         | engineering                                                 |
-| Scope, acceptance and order of a piece of work                              | the GitHub issue                     | engineering; never a doc                                    |
-| Visual and component rules                                                  | `docs/shared/design-system.md`       | product                                                     |
-| Platform facts, research conclusions                                        | `docs/reference/*.md`                | whoever verified the fact                                   |
-| Decisions                                                                   | `docs/decisions.md`                  | append one dated entry: conclusion and reason, newest first |
-| Relay developer docs                                                        | `apps/docs/content/*.mdx` (Fumadocs) | engineering                                                 |
-| Public copy, legal pages                                                    | `apps/marketing/content/`            | product; legal pages are also platform-review material      |
+| Content                                                                     | File                                                                     | Owner of the wording                                                                     |
+| --------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| Conventions, environments, commands, aliases                                | `AGENTS.md`                                                              | whoever changes the convention                                                           |
+| What a product does, for whom, its terms, stages                            | `docs/<app>/product.md`                                                  | product; ask before changing a term or the scope                                         |
+| How a product is built: context, principles, modules, contracts, deployment | `docs/<app>/architecture.md`                                             | engineering                                                                              |
+| Scope, acceptance and order of a piece of work                              | the GitHub issue                                                         | engineering; never a doc                                                                 |
+| Visual and component rules                                                  | `docs/shared/design-system.md`                                           | product                                                                                  |
+| Platform facts, research conclusions                                        | `docs/reference/*.md`                                                    | whoever verified the fact                                                                |
+| Decisions                                                                   | `docs/decisions.md`                                                      | append one dated entry: conclusion and reason, newest first                              |
+| Relay developer docs                                                        | `apps/docs/content/*.mdx` (Fumadocs)                                     | engineering                                                                              |
+| Public copy, legal pages                                                    | `apps/marketing/content/` (Allcast), `apps/vesact-www/content/` (Vesact) | product; Vesact's legal pages are what Meta reviews, Allcast's what Stripe/Paddle review |
 
 ## Procedure
 

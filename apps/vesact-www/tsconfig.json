@@ -1,0 +1,21 @@
+{
+	"extends": "@repo/tsconfig/base.json",
+	"compilerOptions": {
+		"noEmit": true,
+		"jsx": "react-jsx",
+		"module": "ESNext",
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
+		"types": ["vite/client"],
+		"paths": {
+			"@config": ["./config"],
+			"@analytics": ["./modules/analytics"],
+			"@home/*": ["./modules/home/*"],
+			"@i18n/*": ["./modules/i18n/*"],
+			"@legal/*": ["./modules/legal/*"],
+			"@shared/*": ["./modules/shared/*"],
+			"content-collections": ["./.content-collections/generated"]
+		}
+	},
+	"include": ["**/*.ts", "**/*.tsx", "**/*.mts"],
+	"exclude": ["node_modules", "dist"]
+}

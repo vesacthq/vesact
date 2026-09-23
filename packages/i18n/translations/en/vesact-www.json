@@ -1,0 +1,100 @@
+{
+	"common": {
+		"menu": {
+			"product": "Product",
+			"howItWorks": "How it works",
+			"docs": "Docs",
+			"contact": "Contact",
+			"signIn": "Sign in"
+		},
+		"footer": {
+			"product": "Product",
+			"howItWorks": "How it works",
+			"contact": "Contact",
+			"console": "Console",
+			"privacyPolicy": "Privacy policy",
+			"terms": "Terms of service",
+			"dataDeletion": "Data deletion",
+			"operatedBy": "Operated by {company}."
+		},
+		"colorMode": {
+			"system": "System",
+			"light": "Light",
+			"dark": "Dark"
+		},
+		"aria": {
+			"menu": "Open menu",
+			"language": "Language"
+		}
+	},
+	"home": {
+		"hero": {
+			"eyebrow": "Messaging and social APIs for developers",
+			"title": "One API for the channels your customers already use",
+			"subtitle": "Connect Facebook Pages, Instagram accounts and WhatsApp numbers once, then send and receive messages, publish posts and read insights through a single REST API with webhooks.",
+			"getStarted": "Open the console",
+			"documentation": "Read the docs"
+		},
+		"features": {
+			"eyebrow": "Product",
+			"title": "The platform work, done once",
+			"description": "Vesact holds the platform apps, the permissions and the review history. You hold an API key.",
+			"items": {
+				"channels": {
+					"title": "Connected accounts",
+					"description": "Your customers authorize their Facebook Pages, Instagram accounts and WhatsApp business numbers through Vesact's Meta app. TikTok and YouTube follow."
+				},
+				"api": {
+					"title": "One REST API",
+					"description": "Conversations, messages, posts and metrics share one shape across platforms. Versioned under /v1, described by an OpenAPI document."
+				},
+				"webhooks": {
+					"title": "Webhooks",
+					"description": "Incoming messages, comments and delivery results arrive at your endpoint as signed events, with request ids for tracing and idempotency keys for safe retries."
+				},
+				"keys": {
+					"title": "Keys, limits and usage",
+					"description": "API keys belong to your organization. Rate limits, quotas and usage are visible in the console, and billing follows the accounts you connect."
+				}
+			}
+		},
+		"how": {
+			"eyebrow": "How it works",
+			"title": "Three steps from sign-up to production",
+			"steps": {
+				"connect": {
+					"title": "Connect accounts",
+					"description": "Create an organization in the console, issue an API key and let your customers connect their platform accounts through the hosted authorization flow."
+				},
+				"call": {
+					"title": "Call the API",
+					"description": "Send messages, publish posts and read metrics with the same request shapes on every platform."
+				},
+				"receive": {
+					"title": "Receive events",
+					"description": "Register a webhook endpoint and process incoming messages, comments and results as they happen."
+				}
+			}
+		},
+		"cta": {
+			"eyebrow": "Get started",
+			"title": "Start building on Vesact",
+			"description": "Sign in with Google, create an organization and issue your first API key in a few minutes.",
+			"primary": "Open the console",
+			"secondary": "Talk to us"
+		}
+	},
+	"contact": {
+		"eyebrow": "Contact",
+		"title": "Talk to us",
+		"description": "Questions about the API, a platform you need, or your data: write to us and we answer within two business days.",
+		"emailLabel": "Email",
+		"companyLabel": "Operator",
+		"legalLabel": "Legal"
+	},
+	"notFound": {
+		"code": "404",
+		"title": "This page does not exist",
+		"goToHomepage": "Back to the homepage"
+	}
+}

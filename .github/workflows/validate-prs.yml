@@ -217,6 +217,8 @@ jobs:
           VARS
       - name: Run Playwright tests for the marketing app
         run: pnpm --filter marketing e2e:ci
+      - name: Run Playwright tests for the Vesact website
+        run: pnpm --filter vesact-www e2e:ci
       - name: Run Playwright tests for the account app
         run: pnpm --filter account e2e:ci
       - name: Run Playwright tests for the Studio app
@@ -227,6 +229,7 @@ jobs:
           name: playwright-report
           path: |
             apps/marketing/playwright-report/
+            apps/vesact-www/playwright-report/
             apps/account/playwright-report/
             apps/account/test-results/
             apps/studio/playwright-report/

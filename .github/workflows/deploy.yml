@@ -277,3 +277,30 @@ jobs:
           pnpm exec wrangler deploy --secrets-file "$RUNNER_TEMP/relay.env"
           rm "$RUNNER_TEMP/relay.env"
         working-directory: apps/relay
+
+  www:
+    name: Vesact website
+    # Vesact's website is a Worker in every environment, like relay; it has no
+    # database and no secrets, so the job is build and deploy.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Select target
+        run: .github/scripts/select-target.sh
+      - name: Install sops
+        run: .github/scripts/install-sops.sh
+      - name: Load CI secrets
+        run: .github/scripts/load-env.sh secrets/ci.env
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm --filter vesact-www build
+      - name: Deploy
+        run: pnpm exec wrangler deploy
+        working-directory: apps/vesact-www
