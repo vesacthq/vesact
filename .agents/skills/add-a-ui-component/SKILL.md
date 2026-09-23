@@ -13,7 +13,7 @@ Use for reusable, app-agnostic primitives in `packages/ui`. Do not move feature 
 
 Prefer installing from a registry over hand-writing when an official or ReUI item exists.
 
-1. Run from `packages/ui`: `pnpm dlx shadcn@latest add <name>` (or `@reui/<name>`; the `@reui` registry and its auth are configured in `components.json`). Never pass `--overwrite` by default; when the CLI prompts about an existing file, answer no and resolve deliberately (`yes n | pnpm dlx shadcn@latest add ... --yes` for non-interactive runs).
+1. Run from `packages/ui`: `pnpm dlx shadcn@latest add <name>` (or `@reui/<name>`; the `@reui` registry is configured in `components.json` and reads its token from `REUI_TOKEN` in the environment). Never pass `--overwrite` by default; when the CLI prompts about an existing file, answer no and resolve deliberately (`yes n | pnpm dlx shadcn@latest add ... --yes` for non-interactive runs).
 2. Audit CLI side effects with `git status` and `git diff` before anything else. Known offenders, all to roll back unless intended:
    - `tooling/tailwind/theme.css`: the CLI rewrites theme tokens to upstream defaults.
    - `packages/ui/package.json`: the CLI pins versions that should stay `catalog:` and adds dependencies the code may not need after adaptation.
