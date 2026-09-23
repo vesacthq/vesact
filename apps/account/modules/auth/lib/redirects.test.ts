@@ -3,15 +3,15 @@ import { describe, expect, it } from "vitest";
 import { getReturnUrl, getSafeRedirectUrl, productNameForUrl } from "./redirects";
 
 const options = {
-	fallback: "https://studio.vesact.com/",
-	allowedOrigins: ["https://studio.vesact.com", "https://second.vesact.com"],
-	base: "https://account.vesact.com",
+	fallback: "https://app.allcast.cc/",
+	allowedOrigins: ["https://app.allcast.cc", "https://second.allcast.cc"],
+	base: "https://app.allcast.cc/account",
 };
 
 describe("getSafeRedirectUrl", () => {
 	it.each([
-		["https://studio.vesact.com/inbox?x=1#y", "https://studio.vesact.com/inbox?x=1#y"],
-		["https://second.vesact.com/settings/api-keys", "https://second.vesact.com/settings/api-keys"],
+		["https://app.allcast.cc/inbox?x=1#y", "https://app.allcast.cc/inbox?x=1#y"],
+		["https://second.allcast.cc/settings/api-keys", "https://second.allcast.cc/settings/api-keys"],
 		["/account", "/account"],
 		["/account/../login", "/login"],
 	])("allows %s", (value, expected) => {
@@ -20,7 +20,7 @@ describe("getSafeRedirectUrl", () => {
 
 	it.each([
 		"https://attacker.example",
-		"https://studio.vesact.com.attacker.example/",
+		"https://app.allcast.cc.attacker.example/",
 		"//attacker.example",
 		"/\\attacker.example",
 		"/..//attacker.example",
@@ -28,13 +28,13 @@ describe("getSafeRedirectUrl", () => {
 		"javascript:alert(1)",
 		"data:text/html,malicious",
 		"inbox",
-		"http://studio.vesact.com/",
+		"http://app.allcast.cc/",
 	])("rejects %s", (value) => {
-		expect(getSafeRedirectUrl(value, options)).toBe("https://studio.vesact.com/");
+		expect(getSafeRedirectUrl(value, options)).toBe("https://app.allcast.cc/");
 	});
 
 	it("uses the fallback when nothing is given", () => {
-		expect(getSafeRedirectUrl(undefined, options)).toBe("https://studio.vesact.com/");
+		expect(getSafeRedirectUrl(undefined, options)).toBe("https://app.allcast.cc/");
 	});
 
 	it("falls back to the app root when the fallback is unsafe too", () => {
@@ -46,23 +46,23 @@ describe("getSafeRedirectUrl", () => {
 
 describe("getReturnUrl", () => {
 	it("returns to the product the user came from, or to Studio", () => {
-		expect(getReturnUrl("https://second.vesact.com/keys", options)).toBe(
-			"https://second.vesact.com/keys",
+		expect(getReturnUrl("https://second.allcast.cc/keys", options)).toBe(
+			"https://second.allcast.cc/keys",
 		);
-		expect(getReturnUrl("https://attacker.example/", options)).toBe("https://studio.vesact.com/");
-		expect(getReturnUrl(undefined, options)).toBe("https://studio.vesact.com/");
+		expect(getReturnUrl("https://attacker.example/", options)).toBe("https://app.allcast.cc/");
+		expect(getReturnUrl(undefined, options)).toBe("https://app.allcast.cc/");
 	});
 });
 
 describe("productNameForUrl", () => {
 	const products = [
-		{ name: "Studio", url: "https://studio.vesact.com" },
-		{ name: "Vesact", url: undefined },
+		{ name: "Allcast", url: "https://app.allcast.cc" },
+		{ name: "Website", url: undefined },
 	];
 
 	it("names the product by origin", () => {
-		expect(productNameForUrl("https://studio.vesact.com/inbox", products)).toBe("Studio");
-		expect(productNameForUrl("https://www.vesact.com/", products)).toBe("Vesact");
-		expect(productNameForUrl("not a url", products)).toBe("Vesact");
+		expect(productNameForUrl("https://app.allcast.cc/inbox", products)).toBe("Allcast");
+		expect(productNameForUrl("https://www.allcast.cc/", products)).toBe("Allcast");
+		expect(productNameForUrl("not a url", products)).toBe("Website");
 	});
 });

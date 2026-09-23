@@ -22,7 +22,7 @@ function AppLogo() {
 		<SidebarMenu>
 			<SidebarMenuItem>
 				<SidebarMenuButton size="lg" tooltip={config.appName} render={<Link to="/" />}>
-					<Logo withLabel={false} className="[&_svg]:size-8" />
+					<Logo brand="allcast" withLabel={false} className="[&_svg]:size-8" />
 					<div className="text-sm leading-tight grid flex-1 text-left">
 						<span className="font-medium truncate">{config.appName}</span>
 					</div>

@@ -14,7 +14,7 @@
 	},
 	"auth": {
 		"login": {
-			"title": "登录 Relay",
+			"title": "登录 Vesact",
 			"subtitle": "使用你所在组织的 Google 账号。",
 			"continueWith": "使用 {provider} 继续",
 			"failed": "登录失败，请重试。"
@@ -42,7 +42,7 @@
 			"subtitle": "所有者和管理员管理 key、成员和邀请；成员使用控制台并查看 key。",
 			"list": {
 				"title": "成员",
-				"description": "在 Relay 中可以访问这个组织的所有人。",
+				"description": "在 Vesact 中可以访问这个组织的所有人。",
 				"empty": "还没有成员。",
 				"you": "你",
 				"role": "角色"
@@ -78,7 +78,7 @@
 		"invitations": {
 			"list": {
 				"title": "待接受邀请",
-				"description": "Relay 不发送邮件：把链接发给被邀请的人。",
+				"description": "Vesact 不发送邮件：把链接发给被邀请的人。",
 				"empty": "没有待接受的邀请。",
 				"expires": "{date} 过期",
 				"expired": "已于 {date} 过期",
@@ -131,7 +131,7 @@
 		}
 	},
 	"overview": {
-		"subtitle": "调用 Relay API 的请求带这个组织的 key。",
+		"subtitle": "调用 Vesact API 的请求带这个组织的 key。",
 		"quickStart": {
 			"title": "快速开始",
 			"description": "创建一个 key，作为 bearer token 发送。",

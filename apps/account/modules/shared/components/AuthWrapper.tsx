@@ -17,7 +17,7 @@ export function AuthWrapper({
 				<div className="container">
 					<div className="flex items-center justify-between">
 						<a href={config.marketingUrl ?? "/"} className="block">
-							<Logo withLabel={false} />
+							<Logo brand="allcast" withLabel={false} />
 						</a>
 
 						<div className="gap-2 flex items-center justify-end">
