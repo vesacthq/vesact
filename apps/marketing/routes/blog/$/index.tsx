@@ -93,7 +93,7 @@ function BlogPostPage() {
 			)}
 
 			<div className="pb-8">
-				<PostContent content={body} />
+				<PostContent html={body} />
 			</div>
 		</div>
 	);

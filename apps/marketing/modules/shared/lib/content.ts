@@ -1,5 +1,3 @@
-import slugify from "slugify";
-
 export type ContentStructureItem = {
 	label: string;
 	path: string;
@@ -13,8 +11,8 @@ export function getActivePathFromUrlParam(path: string | string[]) {
 
 /**
  * Resolves a document for a given path and locale.
- * - Prefers exact locale match (e.g. first-post.zh.mdx for locale "zh")
- * - Falls back to default locale (e.g. first-post.mdx) when no localized version exists
+ * - Prefers exact locale match (e.g. first-post.zh.md for locale "zh")
+ * - Falls back to default locale (e.g. first-post.md) when no localized version exists
  * - Base files without locale suffix are always included as default-language content
  */
 export function getLocalizedDocumentWithFallback<T extends { path: string; locale: string }>(
@@ -45,18 +43,8 @@ export function getLocalizedDocumentWithFallback<T extends { path: string; local
 
 /**
  * Returns unique base paths from documents. Each path represents one content item;
- * localized variants (e.g. .de.mdx) share the same base path as the default file.
+ * localized variants (e.g. .de.md) share the same base path as the default file.
  */
 export function getUniqueBasePaths<T extends { path: string }>(documents: T[]): string[] {
 	return [...new Set(documents.map((doc) => doc.path))];
-}
-
-export function slugifyHeadline(headline: string) {
-	return slugify(headline, {
-		lower: true,
-		replacement: "-",
-		trim: true,
-		strict: true,
-		remove: /[*+~.()'"!:@]/g,
-	});
 }

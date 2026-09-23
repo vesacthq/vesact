@@ -39,7 +39,7 @@ function LegalPage() {
 				</h1>
 			</div>
 
-			<PostContent content={body} />
+			<PostContent html={body} />
 		</div>
 	);
 }

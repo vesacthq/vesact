@@ -52,8 +52,8 @@ jobs:
           tags: vesact-${{ matrix.app }}:${{ github.sha }}
           build-args: |
             APP=${{ matrix.app }}
-            VITE_STUDIO_URL=https://studio.allcast.cc
-            VITE_ACCOUNT_URL=https://studio.allcast.cc/account
+            VITE_STUDIO_URL=https://app.allcast.cc
+            VITE_ACCOUNT_URL=https://app.allcast.cc/account
             VITE_MARKETING_URL=https://www.allcast.cc
             VITE_POSTHOG_HOST=https://e.vesact.com
             VITE_POSTHOG_KEY=phc_uLUk93bEHjHERp7hMxbDRiRPG4PefxhnzTkSGWYscgjR
@@ -105,7 +105,7 @@ jobs:
     env:
       MACHINE_HOST: 118.89.171.81
       MACHINE_USER: ubuntu
-      SITE_URL: https://studio.allcast.cc
+      SITE_URL: https://app.allcast.cc
       MARKETING_URL: https://www.allcast.cc
       APEX_URL: https://allcast.cc
     steps:
@@ -153,7 +153,9 @@ jobs:
 
   marketing:
     name: Marketing
-    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    # Preview on a pull request; on main the same Worker is Allcast's overseas
+    # website, www.allcast.ai. The domestic www.allcast.cc is the Docker target.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -171,7 +173,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Build
-        run: pnpm --filter marketing build
+        # The Worker's own address; select-target.sh's VITE_MARKETING_URL is the machine's.
+        # The placeholder keeps the template landing page off a production hostname until
+        # the Allcast site exists (#80), as on www.allcast.cc; unset it in both places then.
+        run: |
+          if [ "$TARGET" = prod ]; then
+            export VITE_MARKETING_URL=https://www.allcast.ai
+            export VITE_PLACEHOLDER_SITE_NAME=Allcast
+          fi
+          pnpm --filter marketing build
       - name: Deploy
         run: pnpm exec wrangler deploy
         working-directory: apps/marketing

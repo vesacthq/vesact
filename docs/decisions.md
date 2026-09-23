@@ -2,6 +2,12 @@
 
 倒序。只写结论和理由，过程在对应的 issue 里。
 
+## 2026-09-23 官网内容在构建期编译成 HTML；海外官网先挂占位页
+
+- 两个官网（`apps/marketing`、`apps/vesact-www`）的法务页和博客用 Markdown，content-collections 在构建期编译成 HTML，页面直接输出，不再用 MDX；`.oxlintrc.json` 禁止导入 MDX 运行时，两边的 e2e 关掉 JavaScript 检查法务页。
+- 理由：MDX 运行时用 `new Function` 求值，Workers 不允许，页面在服务端渲染为空，只靠水合补上；而 Meta、Stripe、Paddle 的审核和爬虫读的是服务端 HTML。国内站跑 Node，所以一直没暴露，marketing 上海外 Worker 后才成为问题。MDX 组件里实际接上的只有链接改写，博客还没有文章，改成 Markdown 没有损失。
+- 海外官网 `www.allcast.ai` 的构建也设 `VITE_PLACEHOLDER_SITE_NAME=Allcast`，和国内一样只显示占位页；Allcast 官网（#79、#80）做出来后两处一起去掉。理由同 2026-09-16 那条：模板落地页不能出现在生产域名上。
+
 ## 2026-09-22 生产镜像经 Cloudflare R2 送到机器，不再走 COS
 
 - `deploy.yml` 的 `images` job 把 `docker save | zstd` 传到 R2 桶 `vesact-images`（7 天过期），机器用 presigned URL 从 Cloudflare 边缘下载后 `docker load`；机器拿不到时回退为把文件顺着 SSH 会话推过去。COS 桶 `vesact-images-1300248116` 和腾讯云 `cicd` 子账号密钥退役。
