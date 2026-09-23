@@ -21,7 +21,7 @@
 	},
 	"dependencies": {
 		"@bprogress/react": "catalog:",
-		"@content-collections/mdx": "^0.2.2",
+		"@content-collections/markdown": "^0.1.4",
 		"@fontsource/noto-serif-sc": "^5.3.0",
 		"@repo/analytics": "workspace:*",
 		"@repo/i18n": "workspace:*",
@@ -36,7 +36,6 @@
 		"lucide-react": "catalog:",
 		"react": "catalog:",
 		"react-dom": "catalog:",
-		"slugify": "catalog:",
 		"srvx": "catalog:",
 		"use-intl": "catalog:",
 		"zod": "catalog:"
@@ -46,7 +45,6 @@
 		"@content-collections/cli": "^0.1.9",
 		"@content-collections/core": "^0.15.2",
 		"@content-collections/vite": "^0.3.0",
-		"@mdx-js/mdx": "catalog:",
 		"@playwright/test": "catalog:",
 		"@repo/auth": "workspace:*",
 		"@repo/tailwind-config": "workspace:*",
@@ -54,7 +52,6 @@
 		"@shikijs/rehype": "catalog:",
 		"@tailwindcss/typography": "^0.5.20",
 		"@tailwindcss/vite": "catalog:",
-		"@types/mdx": "catalog:",
 		"@types/node": "catalog:",
 		"@types/react": "catalog:",
 		"@types/react-dom": "catalog:",

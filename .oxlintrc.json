@@ -10,6 +10,19 @@
 		}
 	},
 	"ignorePatterns": ["**/.content-collections/**", "**/routeTree.gen.ts"],
+	"rules": {
+		"no-restricted-imports": [
+			"error",
+			{
+				"paths": [
+					{
+						"name": "@content-collections/mdx/react",
+						"message": "The MDX runtime evaluates code with `new Function`, which the Workers runtime refuses: the page renders empty on the server. Compile content to HTML at build time (`compileMarkdown` from @content-collections/markdown) and render that."
+					}
+				]
+			}
+		]
+	},
 	"options": {
 		"typeAware": true,
 		"typeCheck": true

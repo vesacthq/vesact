@@ -1,5 +1,5 @@
 import { defineCollection, defineConfig } from "@content-collections/core";
-import { compileMDX } from "@content-collections/mdx";
+import { compileMarkdown } from "@content-collections/markdown";
 import rehypeShiki from "@shikijs/rehype";
 import { z } from "zod";
 
@@ -23,7 +23,7 @@ function getLocaleFromFilePath(path: string) {
 const posts = defineCollection({
 	name: "posts",
 	directory: "content/posts",
-	include: "**/*.{mdx,md}",
+	include: "**/*.md",
 	schema: z.object({
 		title: z.string(),
 		date: z.string(),
@@ -36,8 +36,10 @@ const posts = defineCollection({
 		published: z.boolean(),
 		content: z.string(),
 	}),
+	// HTML at build time: an MDX runtime evaluates code with `new Function`, which
+	// the Workers runtime refuses, so pages would render empty on the server.
 	transform: async (document, context) => {
-		const body = await compileMDX(context, document, {
+		const body = await compileMarkdown(context, document, {
 			rehypePlugins: [
 				[
 					rehypeShiki,
@@ -60,13 +62,13 @@ const posts = defineCollection({
 const legalPages = defineCollection({
 	name: "legalPages",
 	directory: "content/legal",
-	include: "**/*.{mdx,md}",
+	include: "**/*.md",
 	schema: z.object({
 		title: z.string(),
 		content: z.string(),
 	}),
 	transform: async (document, context) => {
-		const body = await compileMDX(context, document);
+		const body = await compileMarkdown(context, document);
 
 		return {
 			...document,
