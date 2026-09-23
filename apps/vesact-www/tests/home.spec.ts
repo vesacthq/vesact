@@ -16,6 +16,11 @@ test.describe("home page", () => {
 });
 
 test.describe("legal pages", () => {
+	// What Meta's URL check and crawlers get: the server-rendered HTML, no JavaScript.
+	// The Workers runtime refuses code generated from strings (an MDX runtime's
+	// `new Function`), and hydration would hide an empty server render from a test with JS.
+	test.use({ javaScriptEnabled: false });
+
 	for (const [slug, title] of [
 		["privacy-policy", "Privacy Policy"],
 		["terms", "Terms of Service"],
@@ -24,6 +29,7 @@ test.describe("legal pages", () => {
 		test(`${slug} renders in both locales`, async ({ page }) => {
 			await page.goto(`/legal/${slug}`);
 			await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
+			await expect(page.getByRole("heading", { level: 2 }).first()).toBeVisible();
 
 			await page.goto(`/zh/legal/${slug}`);
 			await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
