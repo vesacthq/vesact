@@ -217,7 +217,10 @@ secrets file.
 
 - Cloudflare account `6a8e5373d12070c930f09f1a82541a0b`, workers.dev subdomain
   `vesact`. CI authenticates with the token in `secrets/ci.env`; manual
-  operations use `wrangler login`.
+  operations use `wrangler login`. The CI token can edit Workers (scripts, routes,
+  custom domains), DNS records, Access applications (with `PUT`; `PATCH` is refused for
+  this token type), R2 buckets and their CORS; it cannot edit rulesets (Redirect Rules)
+  or Email Routing, which stay manual in the dashboard.
 - Neon project `ancient-morning-26822519` (`vesact`, Singapore) for the Studio
   unit's preview: branch `preview`, whose parent `production` (default) holds
   the data from before the move to the machine and stays because a root branch
@@ -261,7 +264,11 @@ secrets file.
   the Free plan; it challenges curl from the GitHub runner, which is why the
   deploy makes no HTTP check after `wrangler deploy` (the earlier smoke check
   failed with 403 and `cf-mitigated: challenge`). Verify a deploy by hand or
-  through Workers versions instead.
+  through Workers versions instead. From a workstation, Playwright or curl gets
+  through Access with the `CF-Access-Client-Id` / `CF-Access-Client-Secret` headers from
+  `secrets/ci.env`; add them only to requests for the preview hosts (a page also loads
+  Google Fonts and PostHog, which must never see the service token), and load content pages
+  once with JavaScript off, since that is what a crawler or Meta's URL check reads.
 - Preview hostnames live under `preview.vesact.com` / `preview.allcast.ai` rather than
   `workers.dev` because `workers.dev` is on the Public Suffix List: no cookie can span two
   Workers there, so products could not share a login.
