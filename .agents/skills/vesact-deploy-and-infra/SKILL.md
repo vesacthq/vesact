@@ -20,11 +20,11 @@ The environment matrix (dev / preview / prod) is in `AGENTS.md` under
 
 Allcast (studio, account, marketing) previews live under `preview.allcast.ai` since #160 so
 that `preview.vesact.com` is Vesact's alone; the zone `allcast.ai` is in the same Cloudflare
-account and `wrangler deploy` creates the custom domains there. The old custom domains
-`studio.preview.vesact.com` (studio) and `www.preview.vesact.com` (marketing) stay attached
-until someone deletes them through the Workers domains API after the first deploy on the new
-hostnames (see "Accounts and resources": wrangler never removes a custom domain); the second
-one has to go before the Vesact website's preview (`vesact-www`, `www.preview.vesact.com`) can take it.
+account and `wrangler deploy` creates the custom domains there. The first deploy on the new
+hostnames (2026-09-22, wrangler 4.129, non-interactive) also removed `studio.preview.vesact.com`
+and `www.preview.vesact.com` from the Workers, DNS records included: a `custom_domain` route
+list replaces the script's set. Check the Workers domains list after a hostname change anyway
+(see "Accounts and resources").
 
 `allcast.cc` is registered at DNSPod (2026-09-13) and its DNS lives there: `@`, `www` and
 `app` are A records to the machine (`studio` was the product hostname until #160). `allcast.ai`
@@ -217,7 +217,10 @@ secrets file.
 
 - Cloudflare account `6a8e5373d12070c930f09f1a82541a0b`, workers.dev subdomain
   `vesact`. CI authenticates with the token in `secrets/ci.env`; manual
-  operations use `wrangler login`.
+  operations use `wrangler login`. The CI token can edit Workers (scripts, routes,
+  custom domains), DNS records, Access applications (with `PUT`; `PATCH` is refused for
+  this token type), R2 buckets and their CORS; it cannot edit rulesets (Redirect Rules)
+  or Email Routing, which stay manual in the dashboard.
 - Neon project `ancient-morning-26822519` (`vesact`, Singapore) for the Studio
   unit's preview: branch `preview`, whose parent `production` (default) holds
   the data from before the move to the machine and stays because a root branch
@@ -251,16 +254,21 @@ secrets file.
   reach the preview webhook. `account.preview.vesact.com/api/auth` was another,
   from when the products called the auth endpoints cross-origin; the account
   center now answers under `app.preview.allcast.ai/account`, same origin as
-  Studio, so that application is unused. `wrangler deploy` adds routes but never
-  removes custom domains: `account.preview.vesact.com` and
-  `auth.preview.vesact.com` were detached from `vesact-account-preview` through
-  the Workers domains API on 2026-09-13; a hostname that comes back after a
-  deploy has to be detached the same way.
+  Studio, so that application is unused. A `custom_domain` route list replaces
+  the script's custom domains on deploy (seen 2026-09-22), but a domain the config no
+  longer mentions at all is not always gone: `account.preview.vesact.com` and
+  `auth.preview.vesact.com` had to be detached from `vesact-account-preview` through
+  the Workers domains API on 2026-09-13. Check the list after a hostname change and
+  detach the same way.
   The zone's Bot Fight Mode stays on and cannot be skipped by a WAF rule on
   the Free plan; it challenges curl from the GitHub runner, which is why the
   deploy makes no HTTP check after `wrangler deploy` (the earlier smoke check
   failed with 403 and `cf-mitigated: challenge`). Verify a deploy by hand or
-  through Workers versions instead.
+  through Workers versions instead. From a workstation, Playwright or curl gets
+  through Access with the `CF-Access-Client-Id` / `CF-Access-Client-Secret` headers from
+  `secrets/ci.env`; add them only to requests for the preview hosts (a page also loads
+  Google Fonts and PostHog, which must never see the service token), and load content pages
+  once with JavaScript off, since that is what a crawler or Meta's URL check reads.
 - Preview hostnames live under `preview.vesact.com` / `preview.allcast.ai` rather than
   `workers.dev` because `workers.dev` is on the Public Suffix List: no cookie can span two
   Workers there, so products could not share a login.

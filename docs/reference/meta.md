@@ -18,7 +18,7 @@ reviewed: 2026-09-11
 
 ## 2. 应用
 
-一个应用，之前给 liaodan 用，现在给 Relay 用。App Review 的批准跟着 App ID 走，改名、改域名、改回调都不影响已批的权限。
+一个应用，之前给 liaodan 用，现在给 Vesact 用。App Review 的批准跟着 App ID 走，改名、改域名、改回调都不影响已批的权限。
 
 | 项目             | 值                                                                              |
 | ---------------- | ------------------------------------------------------------------------------- |
@@ -34,13 +34,13 @@ reviewed: 2026-09-11
 
 ## 3. 授权入口
 
-三条入口，一条对一个渠道，终点都是一个 token 加几个资产 ID，落在 Relay 的 Connection 上（A2 设计）。Facebook Login（个人账号）不用，登录走 Google。
+三条入口，一条对一个渠道，终点都是一个 token 加几个资产 ID，落在 Vesact 的 Connection 上（A2 设计）。Facebook Login（个人账号）不用，登录走 Google。
 
-| 渠道              | 入口                        | 应用那边                                         | Relay 代码 |
-| ----------------- | --------------------------- | ------------------------------------------------ | ---------- |
-| Messenger（Page） | Facebook Login for Business | 已配好；§4 两个 Page 的 token 就是这么来的       | A3         |
-| Instagram         | Instagram Login             | `instagram_business_*` 已批；§4 的 IG token 同上 | A3         |
-| WhatsApp          | Embedded Signup             | Tech Provider 已过，configuration ID 在 secrets  | A5         |
+| 渠道              | 入口                        | 应用那边                                         | Vesact 代码 |
+| ----------------- | --------------------------- | ------------------------------------------------ | ----------- |
+| Messenger（Page） | Facebook Login for Business | 已配好；§4 两个 Page 的 token 就是这么来的       | A3          |
+| Instagram         | Instagram Login             | `instagram_business_*` 已批；§4 的 IG token 同上 | A3          |
+| WhatsApp          | Embedded Signup             | Tech Provider 已过，configuration ID 在 secrets  | A5          |
 
 Embedded Signup 是 Facebook Login for Business 的 WhatsApp 专用版：Meta 托管的弹窗，客户选企业、建 WABA、加号码、授权，返回一个 code 换 token。
 
@@ -48,23 +48,23 @@ Embedded Signup 是 Facebook Login for Business 的 WhatsApp 专用版：Meta �
 
 Instagram 用的是 `instagram_business_*` 这一族（Instagram API with Instagram Login）。`instagram_*` 是经 Facebook Login 的另一族，两族名字不能互推。
 
-| 权限                                       | 用途                                     | 状态                                                  | Relay 哪一步用 |
-| ------------------------------------------ | ---------------------------------------- | ----------------------------------------------------- | -------------- |
-| pages_show_list                            | 列出用户管理的 Page                      | 已批，2026-09-05 续期                                 | A3 连主页      |
-| pages_manage_metadata                      | 订阅 Page 的 webhook，改 Page 设置       | 已批，续期                                            | A3             |
-| pages_messaging                            | Messenger 收发                           | 已批，续期                                            | A3             |
-| public_profile                             | 基本资料                                 | 已批，续期                                            | 登录           |
-| instagram_business_basic                   | IG 专业账号资料与媒体                    | 已批，2026-09-05                                      | A3             |
-| instagram_business_manage_messages         | IG 私信                                  | 已批，2026-09-05                                      | A3             |
-| whatsapp_business_messaging                | WhatsApp 发消息                          | 已批，续期                                            | A5             |
-| whatsapp_business_management               | WABA 资产管理                            | 已批，续期                                            | A5             |
-| Human Agent（功能）                        | 24 小时窗口外的人工回复                  | 两次未批，第三次审核中（submission 2072236193652966） | A3             |
-| business_management、pages_read_engagement | 现有 token 的 scope 里有，审核记录里没有 | 访问级别待核对                                        | —              |
-| pages_manage_engagement                    | Page 评论                                | 未申请                                                | A4             |
-| pages_manage_posts                         | Page 发帖                                | 未申请                                                | A4             |
-| instagram_business_manage_comments         | IG 评论                                  | 未申请                                                | A4             |
-| instagram_business_content_publish         | IG 发帖                                  | 未申请                                                | A4             |
-| ads_read                                   | 广告报表                                 | 未申请，Marketing API 用例未加                        | A4             |
+| 权限                                       | 用途                                     | 状态                                                  | Vesact 哪一步用 |
+| ------------------------------------------ | ---------------------------------------- | ----------------------------------------------------- | --------------- |
+| pages_show_list                            | 列出用户管理的 Page                      | 已批，2026-09-05 续期                                 | A3 连主页       |
+| pages_manage_metadata                      | 订阅 Page 的 webhook，改 Page 设置       | 已批，续期                                            | A3              |
+| pages_messaging                            | Messenger 收发                           | 已批，续期                                            | A3              |
+| public_profile                             | 基本资料                                 | 已批，续期                                            | 登录            |
+| instagram_business_basic                   | IG 专业账号资料与媒体                    | 已批，2026-09-05                                      | A3              |
+| instagram_business_manage_messages         | IG 私信                                  | 已批，2026-09-05                                      | A3              |
+| whatsapp_business_messaging                | WhatsApp 发消息                          | 已批，续期                                            | A5              |
+| whatsapp_business_management               | WABA 资产管理                            | 已批，续期                                            | A5              |
+| Human Agent（功能）                        | 24 小时窗口外的人工回复                  | 两次未批，第三次审核中（submission 2072236193652966） | A3              |
+| business_management、pages_read_engagement | 现有 token 的 scope 里有，审核记录里没有 | 访问级别待核对                                        | —               |
+| pages_manage_engagement                    | Page 评论                                | 未申请                                                | A4              |
+| pages_manage_posts                         | Page 发帖                                | 未申请                                                | A4              |
+| instagram_business_manage_comments         | IG 评论                                  | 未申请                                                | A4              |
+| instagram_business_content_publish         | IG 发帖                                  | 未申请                                                | A4              |
+| ads_read                                   | 广告报表                                 | 未申请，Marketing API 用例未加                        | A4              |
 
 A3（#67）要的五个权限已经全部批了，A3 不用再提交审核。A4 的五个要申请。
 
@@ -107,7 +107,7 @@ A3 的消息功能不在表里，权限已经全批。ads_management、TikTok、
 
 ## 6. 旧项目残留（liaodan）
 
-liaodan 是上一个产品，要关掉；应用保留。下面这些从 liaodan 改成 Relay：
+liaodan 是上一个产品，要关掉；应用保留。下面这些从 liaodan 改成 Vesact：
 
 | 项目                                  | 现在                                                    | 改成                                                                    | 什么时候                                |
 | ------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------- |
@@ -115,10 +115,10 @@ liaodan 是上一个产品，要关掉；应用保留。下面这些从 liaodan 
 | Site URL、联系邮箱                    | liaodan.ai、work@liaodan.ai                             | www.vesact.com、vesact.com 的邮箱                                       | 同上                                    |
 | Messenger、IG、WhatsApp 的 webhook    | liaodan.ai/bot、/webhooks/instagram、/webhooks/whatsapp | api.vesact.com/webhooks/meta                                            | #37                                     |
 | Facebook Login 与 IG OAuth 回调       | liaodan.ai/instagram/callback 等                        | api.vesact.com/oauth/…                                                  | A2、A3                                  |
-| 两个 Page、IG 账号、WhatsApp 号的订阅 | 指向 liaodan                                            | Relay 接手后重新订阅                                                    | A3                                      |
+| 两个 Page、IG 账号、WhatsApp 号的订阅 | 指向 liaodan                                            | Vesact 接手后重新订阅                                                   | A3                                      |
 | liaodan 生产服务器与数据库            | 存着上面的 token                                        | 已抄到 `secrets/meta.env`                                               | 关机时不用再取                          |
 
-顺序：www.vesact.com 法务三页 → 改应用的 URL 与邮箱 → Human Agent 审核结束 → Relay 的 webhook 上线 → 关 liaodan。审核进行中改 URL 没有问题，但审核员会打开网站，liaodan.ai 至少活到这次审核结束。
+顺序：www.vesact.com 法务三页 → 改应用的 URL 与邮箱 → Human Agent 审核结束 → Vesact 的 webhook 上线 → 关 liaodan。审核进行中改 URL 没有问题，但审核员会打开网站，liaodan.ai 至少活到这次审核结束。
 
 ## 7. 到期与提醒
 
@@ -136,15 +136,15 @@ Facebook Login 的回调白名单、后台各 webhook 配置页、App roles 名�
 
 ## 9. `secrets/meta.env` 的键
 
-| 键                                                     | 是什么                                                    |
-| ------------------------------------------------------ | --------------------------------------------------------- |
-| `META_APP_ID`、`META_APP_SECRET`                       | 主应用。Messenger、WhatsApp 共用                          |
-| `META_INSTAGRAM_APP_ID`、`META_INSTAGRAM_APP_SECRET`   | Instagram Login 用的应用                                  |
-| `META_WHATSAPP_CONFIGURATION_ID`                       | Embedded Signup 配置                                      |
-| `META_GRAPH_API_VERSION`                               | 当前 v25.0                                                |
-| `LIAODAN_*_VERIFY_TOKEN`                               | liaodan 各 webhook 的握手 token；Relay 上线时自己生成新的 |
-| `META_PAGE_TOKEN_<pageId>`、`META_USER_TOKEN_<pageId>` | §4 两个 Page                                              |
-| `META_INSTAGRAM_TOKEN_<igId>`                          | §4 的 IG 账号                                             |
-| `META_WHATSAPP_SYSTEM_USER_TOKEN`                      | §4 的测试号                                               |
+| 键                                                     | 是什么                                                     |
+| ------------------------------------------------------ | ---------------------------------------------------------- |
+| `META_APP_ID`、`META_APP_SECRET`                       | 主应用。Messenger、WhatsApp 共用                           |
+| `META_INSTAGRAM_APP_ID`、`META_INSTAGRAM_APP_SECRET`   | Instagram Login 用的应用                                   |
+| `META_WHATSAPP_CONFIGURATION_ID`                       | Embedded Signup 配置                                       |
+| `META_GRAPH_API_VERSION`                               | 当前 v25.0                                                 |
+| `LIAODAN_*_VERIFY_TOKEN`                               | liaodan 各 webhook 的握手 token；Vesact 上线时自己生成新的 |
+| `META_PAGE_TOKEN_<pageId>`、`META_USER_TOKEN_<pageId>` | §4 两个 Page                                               |
+| `META_INSTAGRAM_TOKEN_<igId>`                          | §4 的 IG 账号                                              |
+| `META_WHATSAPP_SYSTEM_USER_TOKEN`                      | §4 的测试号                                                |
 
-Relay 部署时（#34）把 `META_APP_ID`、`META_APP_SECRET` 抄进 `secrets/relay.<target>.env`，`META_WEBHOOK_VERIFY_TOKEN` 新生成。
+Vesact 部署时（#34）把 `META_APP_ID`、`META_APP_SECRET` 抄进 `secrets/relay.<target>.env`，`META_WEBHOOK_VERIFY_TOKEN` 新生成。

@@ -31,7 +31,7 @@ Meta 的 Click-to-WhatsApp / Messenger / Instagram 广告是一条闭环：
 
 - 建广告默认按会话优化，按购买优化的字段未暴露。
 - Messenger / Instagram 回传无公开时间表，联系 support@zernio.com。
-- Zernio 是 Meta Tech Provider，用其 Meta 应用授权，Studio 不用自己过 App Review。Meta 消息费直接扣用户 WABA。
+- Zernio 是 Meta Tech Provider，用其 Meta 应用授权，Allcast 不用自己过 App Review。Meta 消息费直接扣用户 WABA。
 - 相关能力 2026-08 上线，多次 breaking change。
 
 ## Meta App Review 看什么

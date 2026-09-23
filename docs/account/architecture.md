@@ -9,7 +9,7 @@ reviewed: 2026-09-13
 
 ## 1. 目标与约束
 
-一条规则：凡是脱离产品仍然存在的东西，放账号中心；需要产品数据才有意义的东西，放产品里。账号中心属于 Studio 单元；Relay 有自己的登录、组织和成员（../relay/architecture.md §2、§7.1），不经这里。
+一条规则：凡是脱离产品仍然存在的东西，放账号中心；需要产品数据才有意义的东西，放产品里。账号中心属于 Allcast 单元；Vesact 有自己的登录、组织和成员（../relay/architecture.md §2、§7.1），不经这里。
 
 | 在账号中心                                               | 在产品里                                     |
 | -------------------------------------------------------- | -------------------------------------------- |
@@ -24,7 +24,7 @@ reviewed: 2026-09-13
 
 ## 2. 上下文与主机名
 
-`apps/account`，独立的应用和进程，挂在 Studio 主机名的 `/account` 路径下：prod `app.allcast.cc/account`，preview `app.preview.allcast.ai/account`，dev `localhost:3004/account`。它同时提供 Better Auth 端点（`/account/api/auth/*`），`VITE_ACCOUNT_URL` 是它的地址，应用的 base path 从这个地址来：Vite 的 `base`、Router 的 `basepath`、Better Auth 的 `basePath`、`@repo/api` 的挂载点都由它推出。`packages/auth` 按两个地址是否同源决定 cookie 域，现在三个环境都同源、都是 host-only。
+`apps/account`，独立的应用和进程，挂在 Allcast 主机名的 `/account` 路径下：prod `app.allcast.cc/account`，preview `app.preview.allcast.ai/account`，dev `localhost:3004/account`。它同时提供 Better Auth 端点（`/account/api/auth/*`），`VITE_ACCOUNT_URL` 是它的地址，应用的 base path 从这个地址来：Vite 的 `base`、Router 的 `basepath`、Better Auth 的 `basePath`、`@repo/api` 的挂载点都由它推出。`packages/auth` 按两个地址是否同源决定 cookie 域，现在三个环境都同源、都是 host-only。
 
 路由：
 
@@ -43,7 +43,7 @@ reviewed: 2026-09-13
 ## 3. 原则
 
 1. 同一件事只在一处可改。
-2. 从产品指向账号中心的链接带 `from=<绝对地址>`；账号中心每页右上角"返回"回 `from`，按钮上写出产品名，没有 `from` 回默认产品（Studio）。账号中心内部的链接把 `from` 一路带下去。身份流程（登录、注册、onboarding）用 `redirectTo`：那是流程结束后要去的地方，不是返回。只认自家产品的地址，其他一律回 Studio。
+2. 从产品指向账号中心的链接带 `from=<绝对地址>`；账号中心每页右上角"返回"回 `from`，按钮上写出产品名，没有 `from` 回默认产品（Allcast）。账号中心内部的链接把 `from` 一路带下去。身份流程（登录、注册、onboarding）用 `redirectTo`：那是流程结束后要去的地方，不是返回。只认自家产品的地址，其他一律回 Allcast。
 3. 账号中心和产品同一套设计 token、同一个 Logo 和头部；标题 `<页面> – Vesact`。
 4. 产品的"设置"菜单把账号中心条目列进去，视觉和站内条目一致；用户感知到的是设置的某一页。
 
@@ -64,7 +64,7 @@ reviewed: 2026-09-13
 
 第一层用 Better Auth organization 的 access control 表达（`packages/auth/lib/access.ts`），第二层是产品的业务数据，由产品的权限规则结合第一层判断。
 
-`member.role` 只存一个组织角色。`@repo/permissions` 从同一个值推出 `studio.*` 规则（`parseMemberRole`）：每个成员都有 `studio.access`，owner 和 admin 有 `studio.manage`；Studio 在进入组织前检查 `studio.access`。旧数据里带产品前缀的值由迁移 `0006_drop_member_product_roles` 改成组织角色，解析时也只认组织角色。
+`member.role` 只存一个组织角色。`@repo/permissions` 从同一个值推出 `studio.*` 规则（`parseMemberRole`）：每个成员都有 `studio.access`，owner 和 admin 有 `studio.manage`；Allcast 在进入组织前检查 `studio.access`。旧数据里带产品前缀的值由迁移 `0006_drop_member_product_roles` 改成组织角色，解析时也只认组织角色。
 
 ### 5.2 每个操作在哪
 
@@ -96,7 +96,7 @@ cookie 只在主机名上，不设域。secrets 在 `secrets/account.{prod,previ
 
 ## 7. 横切
 
-- 认证：Better Auth 只在这个 app 上挂 handler，Studio 共用同一个 `packages/auth` 实例读会话。Google OAuth 的回调是 `<VITE_ACCOUNT_URL>/api/auth/callback/google`。`from`、`redirectTo` 与 Studio 同源；`getSafeRedirectUrl` 只认自家产品的地址，相对路径按账号中心自己的页面解释。
+- 认证：Better Auth 只在这个 app 上挂 handler，Allcast 共用同一个 `packages/auth` 实例读会话。Google OAuth 的回调是 `<VITE_ACCOUNT_URL>/api/auth/callback/google`。`from`、`redirectTo` 与 Allcast 同源；`getSafeRedirectUrl` 只认自家产品的地址，相对路径按账号中心自己的页面解释。
 - 权限：§5.1；平台管理路由要求 `user.role = admin`，组织的读改删走 `adminProcedure`。
 - i18n scope `account`；`settings.menu` 等跨产品文案在 `shared`。
 - 测试：`apps/account/e2e`（Playwright），`pnpm --filter account e2e`。

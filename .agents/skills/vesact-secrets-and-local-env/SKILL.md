@@ -43,7 +43,11 @@ is public. When a task needs what is in there, decrypt and read it:
 for documents. Add a document with
 `sops --encrypt --input-type binary --output-type json --filename-override secrets/files/<name>.json <path> > secrets/files/<name>.json`;
 the file name is the index, so make it say what the document is and its date.
-Decrypted values never go into docs, issues, commit messages or chat replies.
+Decrypted values never go into docs, issues, commit messages or chat replies, and an agent's
+tool output is a transcript that is kept, so it counts too. Look at a file's shape by key
+names (`sops -d secrets/<file> | cut -d= -f1`) and read one value by its exact key into a
+variable (`V=$(sops -d secrets/ci.env | grep '^KEY=' | cut -d= -f2-)`); a loose filter such as
+`grep URL` also prints `DATABASE_URL`, password included.
 
 ## Local configuration
 
@@ -129,5 +133,13 @@ schema pushed. Its config serves the app on the port and under the path
 the only address at which the client bundle, the Worker and the server agree,
 and its specs navigate with paths relative to that base (`login`, not `/login`);
 stop a running account dev server first or set `PW_REUSE_SERVER=1`. CI's e2e job starts Postgres and MinIO, pushes the schema
-and runs all three suites with generated `.dev.vars` and job-level `VITE_*`
+and runs all the suites with generated `.dev.vars` and job-level `VITE_*`
 URLs for the ports it serves.
+
+Playwright's headless Chromium needs the system's accessibility and X libraries. Debian or
+Ubuntu: `pnpm exec playwright install --with-deps chromium`. Fedora: `sudo dnf install atk
+at-spi2-core libXcomposite libXdamage libXfixes`, plus `at-spi2-atk cups-libs` for the full
+Chromium that agent-browser drives; on Linux arm64 agent-browser has no Chrome of its own, so
+point `AGENT_BROWSER_EXECUTABLE_PATH` at `~/.cache/ms-playwright/chromium-*/chrome-linux-arm64/chrome`.
+Without a CJK font (`google-noto-sans-cjk-fonts` on Fedora) Chinese renders as boxes in local
+screenshots; that is the machine, not the site.

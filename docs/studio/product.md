@@ -3,9 +3,9 @@ status: draft
 reviewed: 2026-09-13
 ---
 
-# Studio 产品
+# Allcast 产品
 
-本文回答 Studio 做什么、给谁。怎么做见 architecture.md。
+本文回答 Allcast 做什么、给谁。怎么做见 architecture.md。
 
 ## 1. 定位与用户
 
@@ -34,13 +34,13 @@ reviewed: 2026-09-13
 
 ## 3. 边界
 
-- 渠道层是 Relay：Studio 按 Relay 的 `/v1` 和 webhook 接入，是 Relay 的一个客户组织。
-- 接待、分配、接管由 Studio 管理，不依赖渠道层。
+- 渠道层是 Vesact：Allcast 按 Vesact 的 `/v1` 和 webhook 接入，是 Vesact 的一个客户组织。
+- 接待、分配、接管由 Allcast 管理，不依赖渠道层。
 - 不建广告。
 - 第一版不回传。保存 PSID、ad_id、ctwa_clid。
 - 翻译不做术语库。
 - AI 只占位。
-- 工作流第一版只有跟进一种。调度由 Studio 做，渠道层只负责发送。
+- 工作流第一版只有跟进一种。调度由 Allcast 做，渠道层只负责发送。
 - TikTok 只发布不聊天。
 - 定价：每渠道每月 18 元，翻译和 AI 按量。收款方式未定。
 
