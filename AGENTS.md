@@ -268,8 +268,8 @@ Tencent Cloud Shanghai under `allcast.cc`. Three environments:
 | Migrations    | `push`                                     | `migrate` against the preview branch before deploy                                                                                   | `migrate` through the SSH tunnel before the stack switches                                       |
 | Cookie domain | host-only                                  | host-only (studio and account share the hostname), prefix `vesact-preview`                                                           | host-only                                                                                        |
 
-`deploy.yml`: on a pull request one job per app deploys preview (build → `wrangler deploy` →
-`wrangler secret bulk`, the account job migrating the preview branch first, relay migrating its
+`deploy.yml`: on a pull request one job per app deploys preview (build → `wrangler deploy
+--secrets-file`, the account job migrating the preview branch first, relay migrating its
 own); on `main` the relay job deploys Relay's production the same way, and `images` + `machine`
 put the Docker target on the machine (below). It makes no HTTP check after a Worker deploy
 (Bot Fight Mode challenges the runner): verify by hand or through Workers versions.

@@ -75,8 +75,8 @@ Environments and the deploy pipeline are defined in `AGENTS.md` under
 - `CLOUDFLARE_ENV` selects the environment at build time; `wrangler deploy` takes
   no `--env` because the Vite plugin already flattened the config.
 - Preview builds must not carry `VITE_POSTHOG_KEY`.
-- A new Worker has no secrets until the first `wrangler secret bulk`; the
-  pipeline runs it right after deploy.
+- Secrets go up with the deploy (`wrangler deploy --secrets-file`), additively: a key
+  removed from the sops file stays on the Worker until `wrangler secret delete`.
 - Adding a recipient: add the age public key to `.sops.yaml`, then
   `sops updatekeys secrets/*.env`.
 - Anything a browser calls cross-origin on preview (a future `api.preview`

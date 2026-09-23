@@ -39,7 +39,9 @@ Relay, `preview.vesact.com`, `e.vesact.com` (PostHog) and the R2 bucket; the `ww
 `deploy.yml`: `select-target.sh` picks the target from the event and
 `load-env.sh` decrypts what a job needs into masked environment variables. On a
 pull request the marketing, account, studio and relay jobs each build →
-`wrangler deploy` → `wrangler secret bulk` to preview; the account job runs the
+`wrangler deploy --secrets-file` to preview (the secrets go up with the version, so two pull
+requests deploying the same shared preview Worker cannot leave one of them failing on a
+separate secrets step; whichever deploys last is what preview shows); the account job runs the
 Studio database migration first and the studio job waits for it; the relay job
 migrates Relay's own database (`pnpm --filter @repo/relay db:migrate`) and runs
 on its own. On `main` only relay deploys a Worker (its production); studio,
