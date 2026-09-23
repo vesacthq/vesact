@@ -7,7 +7,7 @@ const defaultLocale = i18nConfig.defaultLocale;
 
 /**
  * Returns all posts for the given locale. Always includes default-language posts;
- * localized versions (e.g. .de.mdx) overwrite content only when they exist.
+ * localized versions (e.g. .de.md) overwrite content only when they exist.
  */
 export async function getAllPosts(locale?: string): Promise<Post[]> {
 	const resolvedLocale = locale ?? defaultLocale;
