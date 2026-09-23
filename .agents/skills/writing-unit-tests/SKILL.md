@@ -1,6 +1,6 @@
 ---
 name: writing-unit-tests
-description: "Use when adding Vitest unit or procedure tests for Studio modules and the shared oRPC API package."
+description: "Use when adding Vitest unit or procedure tests for app modules, the shared oRPC API package, or another workspace that runs Vitest."
 ---
 
 # Writing unit tests
@@ -11,7 +11,7 @@ Use for deterministic functions, authorization boundaries, schemas, and oRPC han
 
 ## Procedure
 
-1. Co-locate `*.test.ts` beside the implementation. Existing Vitest workspaces are `apps/studio` and `packages/api`.
+1. Co-locate `*.test.ts` beside the implementation. Existing Vitest workspaces are `apps/account`, `apps/marketing`, `apps/relay`, `apps/studio`, `packages/api`, `packages/permissions`, `packages/relay`, and `packages/utils`.
 2. Test behavior at the narrowest public boundary. For an oRPC procedure, call the exported procedure itself:
    ```ts
    import { call } from "@orpc/server";
@@ -19,7 +19,7 @@ Use for deterministic functions, authorization boundaries, schemas, and oRPC han
    const context = { context: { headers: new Headers() } };
    const result = await call(procedure, input, context);
    ```
-   The outer `context` option is required because `publicProcedure` declares `{ headers: Headers }`; `protectedProcedure` then calls `auth.api.getSession({ headers })` and adds `user`/`session`.
+   The outer `context` option is required because `publicProcedure` declares `{ headers: Headers }`; `protectedProcedure` then calls `auth.api.getSession({ headers })`, reads the active organization's role with `getOrganizationMembership` when the session has one, and adds `user`/`session` plus the Permix context.
 3. Declare `vi.mock()` factories before importing mocked exports and the procedure. Vitest hoists these calls, but keeping imports after factories makes the boundary explicit. Mock `@repo/auth`, `@repo/database`, providers, and membership helpers; keep real oRPC middleware, Zod input/output, and handler code.
 4. Return a typed auth fixture with `satisfies Session`, configure with `vi.mocked(auth.api.getSession).mockResolvedValue(...)`, and use `vi.mocked()` for dependency behavior. Reset calls/implementations with `vi.clearAllMocks()` in `beforeEach`.
 5. Cover success, invalid input, unauthenticated/forbidden paths, provider failures, and side-effect suppression as applicable. Assert denied calls do not reach database/provider mutations.
@@ -29,7 +29,7 @@ Use for deterministic functions, authorization boundaries, schemas, and oRPC han
    pnpm --filter @repo/api exec vitest run modules/payments/procedures/create-checkout-link.test.ts
    pnpm --filter studio exec vitest run modules/auth/lib/redirects.test.ts
    ```
-8. Run the owning workspace test, then `pnpm test` for shared behavior or CI parity. The root Turbo task currently discovers tests only where a workspace defines `test`: `apps/studio` and `packages/api`.
+8. Run the owning workspace test, then `pnpm test` for shared behavior or CI parity. The root Turbo task currently discovers tests only where a workspace defines `test`: the eight workspaces in step 1.
 
 Canonical references: `packages/api/modules/payments/procedures/create-checkout-link.test.ts` demonstrates `call`, typed session/context, hoisted dependency mocks, authorization, and suppressed effects; `packages/api/modules/ai/procedures/stream-message.test.ts` demonstrates validation rejection.
 

@@ -8,8 +8,7 @@ description: "Use before opening a code pull request: an independent review of t
 The person who wrote the branch reviews it with the same blind spots; a
 subagent with fresh context does not. Unverified LLM findings are mostly
 noise, so every candidate is checked by another fresh agent before anyone
-reads it. `reviewing-a-pr` lists what a reviewer looks at in this
-repository; this skill is the procedure around it.
+reads it.
 
 ## When
 
@@ -36,9 +35,14 @@ skip it. Run it before the PR is opened so the fixes land in the same PR.
      without saying so.
    - Correctness and invariants: bugs and edge cases on the changed paths,
      stale query caches after mutations, SSR and client mismatches, races,
-     permission and tenancy checks.
+     permission and tenancy checks. Trace each changed export to its
+     callers, tests, translations and configuration; auth, payments,
+     webhooks, uploads and server/client boundaries first.
    - Repository rules and security: `AGENTS.md`, `docs/`, the skills; quote
-     the rule that is broken. Secrets, data loss, cross-tenant access.
+     the rule that is broken. Secrets, data loss, cross-tenant access. Hand
+     edits to generated files (route trees, `.content-collections/`, Drizzle
+     migrations). A change to paths, scripts, exports, env variables or ports
+     that leaves `AGENTS.md` or a skill pointing at the old structure.
 2. Verify. One subagent with fresh context per candidate, without the
    hunter's reasoning. Its default position is "false positive"; it
    disproves by reading the code or running a targeted test and answers

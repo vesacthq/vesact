@@ -1,6 +1,6 @@
 ---
 name: vesact-deploy-and-infra
-description: "Use when deploying, debugging deploy.yml or validate-prs.yml, rotating the R2 credentials, or touching the Cloudflare, Neon, Hyperdrive, Access, R2 or DNS resources behind the dev, preview and prod environments."
+description: "Use when deploying, adding an environment variable, secret or deploy target, debugging deploy.yml or validate-prs.yml, rotating the R2 credentials, or touching the Cloudflare, Neon, Hyperdrive, Access, R2 or DNS resources behind the dev, preview and prod environments."
 ---
 
 # Deployment and infrastructure
@@ -64,6 +64,40 @@ that bucket: the access key id is the token id, the secret is the SHA-256 hex
 of the token value. Rotate by creating a new token the same way
 (`POST /accounts/{id}/tokens`), editing the four `<app>.<target>.env` files
 with `sops set`, and deploying.
+
+## Variables and new targets
+
+A public build-time value (`VITE_*`) goes in `.github/scripts/select-target.sh`
+per target and, for the Worker runtime, in the `vars` of `apps/<app>/wrangler.jsonc`
+(`env.preview.vars` for preview). The Docker target reads it twice: as a build
+arg of the `images` job in `deploy.yml` (and of `docker-compose.prod.yml`'s
+`build`), and at runtime from `secrets/<app>.prod.env`. Anything secret goes in
+a file under `secrets/` (the map is in `vesact-secrets-and-local-env`), never in
+`wrangler.jsonc`, workflow files or GitHub secrets; `deploy.yml` syncs Worker
+secrets and the machine's env files on the next deploy. `vars` and bindings are
+not inherited by `env.preview`: redeclare them. After a binding change run
+`pnpm --filter <app> exec wrangler types`, then `pnpm type-check`. Check with
+the pipeline's own build: `CLOUDFLARE_ENV=preview pnpm --filter <app> build`
+and `pnpm --filter <app> exec wrangler deploy --dry-run` for preview,
+`pnpm --filter <app> build:node` for the Docker target, `pnpm --filter relay build`
+for Relay; the pull request's preview deploy is the real check.
+
+Adding an app or a preview target:
+
+1. `env.preview` in the app's `wrangler.jsonc`: `workers_dev: false`, a
+   `custom_domain` route on `<app>.preview.vesact.com`, its own `vars` and
+   bindings. Attach the hostname to the Worker in the dashboard or through the
+   API before the first deploy (Relay has two, `relay.` and `api.`, in the same
+   `routes` array); the certificate takes a few minutes.
+2. Its URLs in `.github/scripts/select-target.sh`, and a job in `deploy.yml`
+   modelled on the relay one.
+3. Secrets files under `secrets/` for the new Worker and, if it has a database,
+   a Neon branch, a Hyperdrive config and a `database.<target>.env`. A new
+   Worker has no secrets until the pipeline's first `wrangler secret bulk`.
+4. The Google OAuth callback for its `VITE_ACCOUNT_URL`, if it signs users in
+   (see "Accounts and resources").
+5. Nothing for Access: the `*.preview.vesact.com` application already covers
+   the hostname.
 
 ## Docker target
 

@@ -11,7 +11,7 @@ Use for persistent model, relation, enum, index, or constraint changes. This rep
 
 ## Procedure
 
-1. Edit the active source of truth at `packages/database/drizzle/schema/postgres.ts`. PostgreSQL is selected independently by:
+1. Put product tables in their own file, `packages/database/drizzle/schema/<name>.ts`, re-export it from `packages/database/drizzle/schema/index.ts`, and add it to `schema` in `packages/database/drizzle.config.ts` (today only `postgres.ts`; make it an array). `postgres.ts` holds the template's tables (auth, organizations, notifications, purchases) and changes only when one of those does, so upstream template changes to it apply cleanly. Relay's tables live in its own database, `packages/relay/db` (`pnpm --filter @repo/relay db:*`). PostgreSQL is selected independently by:
    - `packages/database/drizzle/schema/index.ts` (package schema barrel)
    - `packages/database/drizzle/client.ts` (`drizzle-orm/node-postgres`)
    - `packages/database/drizzle.config.ts` (`dialect: "postgresql"` and migration output)
@@ -21,21 +21,21 @@ Use for persistent model, relation, enum, index, or constraint changes. This rep
 4. Update `packages/database/drizzle/zod.ts` when consumers need select/insert/update schemas. Add data access under `packages/database/drizzle/queries/` and export it from `packages/database/drizzle/queries/index.ts`; keep Drizzle out of app components and oRPC handlers.
 5. Use the scripts defined by `packages/database/package.json`:
    - `push`: diff the active schema directly against a disposable local database.
-   - `db:generate`: generate migration SQL and metadata under `packages/database/drizzle/migrations/`.
-   - `db:migrate`: apply already-generated migrations to `DATABASE_URL`.
-   - `db:studio`: inspect the configured database.
+   - `generate`: generate migration SQL and metadata under `packages/database/drizzle/migrations/`.
+   - `migrate`: apply already-generated migrations to `DATABASE_URL`.
+   - `studio`: inspect the configured database.
 6. For disposable local synchronization only:
    ```bash
    pnpm --filter @repo/database push
    ```
 7. For a reviewable, deployable change, generate from the schema:
    ```bash
-   pnpm --filter @repo/database db:generate
+   pnpm --filter @repo/database generate
    ```
    Inspect the generated SQL/metadata for destructive changes and locks. Correct the schema and regenerate instead of editing generated artifacts. Commit the generated migration; do not generate an empty migration or use `push` as a production migration.
 8. Apply it only to the intended local/test database:
    ```bash
-   pnpm --filter @repo/database db:migrate
+   pnpm --filter @repo/database migrate
    ```
    For non-null/destructive changes, plan expand/backfill/contract ordering before migration.
 9. Test affected queries/procedures, then run:
@@ -58,6 +58,6 @@ Canonical references: `notification` and `userNotificationPreference` plus their
 
 - Updating `sqlite.ts` or `mysql.ts` as though all three schemas are synchronized and active.
 - Using Prisma commands or expecting a Prisma schema; this repository is Drizzle-only.
-- Treating `db:generate` as applying a migration, or using `push` in production.
+- Treating `generate` as applying a migration, or using `push` in production.
 - Hand-editing generated SQL/metadata instead of fixing the PostgreSQL schema and regenerating.
 - Adding a tenant-owned table without an organization/user index and scoped query.

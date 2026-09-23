@@ -12,7 +12,7 @@ Use for transactional React Email templates and mail dispatch. Do not hardcode p
 ## Procedure
 
 1. Create or edit `packages/mail/emails/<Template>.tsx` with React Email primitives and shared `Wrapper`/`PrimaryButton` components.
-2. Accept `BaseMailProps`, resolve `getMailTranslator(locale)`, and source user-visible copy from `packages/i18n/translations/{en,de,es,fr}/mail.json`.
+2. Accept `BaseMailProps`, resolve `getMailTranslator(locale)`, and source user-visible copy from `packages/i18n/translations/{en,zh}/mail.json`.
 3. Set realistic `<Template>.PreviewProps`, including `locale: defaultLocale`, so the React Email preview can render without application state.
 4. Register the component key in `mailTemplates` at `packages/mail/emails/index.ts`.
 5. Add that key's translated subject path to `mailSubjects` in `packages/mail/lib/templates.ts`. `TemplateId` derives from `mailTemplates`, while `getTemplate()`/`sendEmail()` infer the template context.
