@@ -128,6 +128,6 @@ schema pushed. Its config serves the app on the port and under the path
 `VITE_ACCOUNT_URL` names (`localhost:3004/account` locally, from `.env.local`),
 the only address at which the client bundle, the Worker and the server agree,
 and its specs navigate with paths relative to that base (`login`, not `/login`);
-stop a running account dev server first or set `PW_REUSE_SERVER=1`. CI's e2e job starts Postgres and MinIO, pushes the schema
+stop a running account dev server first or set `PW_REUSE_SERVER=1`. CI's e2e job starts Postgres only (no spec uploads; add MinIO to that step with the first one that does), pushes the schema
 and runs all three suites with generated `.dev.vars` and job-level `VITE_*`
 URLs for the ports it serves.
