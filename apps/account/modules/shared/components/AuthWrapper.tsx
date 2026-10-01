@@ -1,6 +1,6 @@
 import { config } from "@config";
 import { useTranslations } from "@i18n/intl";
-import { cn, ColorModeToggle, Logo } from "@repo/ui";
+import { cn, ColorModeToggle, FilingNumbers, Logo } from "@repo/ui";
 import type { PropsWithChildren } from "react";
 
 import { LocaleSwitch } from "./LocaleSwitch";
@@ -40,14 +40,12 @@ export function AuthWrapper({
 
 				{config.icpFilingNumber && (
 					<footer className="text-xs container text-center text-muted-foreground">
-						<a
-							href="https://beian.miit.gov.cn/"
-							target="_blank"
-							rel="noopener noreferrer"
-							className="transition-colors hover:text-foreground"
-						>
-							{config.icpFilingNumber}
-						</a>
+						<FilingNumbers
+							icp={config.icpFilingNumber}
+							publicSecurity={config.publicSecurityFilingNumber}
+							className="justify-center"
+							linkClassName="transition-colors hover:text-foreground"
+						/>
 					</footer>
 				)}
 			</div>

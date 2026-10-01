@@ -5,6 +5,7 @@ export const config = {
 	studioUrl: import.meta.env.VITE_STUDIO_URL as string | undefined,
 	marketingUrl: import.meta.env.VITE_MARKETING_URL as string | undefined,
 	icpFilingNumber: import.meta.env.VITE_ICP_FILING_NUMBER as string | undefined,
+	publicSecurityFilingNumber: import.meta.env.VITE_PSB_FILING_NUMBER as string | undefined,
 	enabledThemes: ["light", "dark"],
 	defaultTheme: "light",
 } as const satisfies AccountAppConfig;
