@@ -11,8 +11,8 @@ export interface ProductUrl {
 }
 
 const products: ProductUrl[] = [
-	{ name: "Studio", url: studioUrl },
-	{ name: "Vesact", url: marketingUrl },
+	{ name: "Allcast", url: studioUrl },
+	{ name: "Allcast", url: marketingUrl },
 ];
 
 function toOrigin(value: string | undefined): string | null {
@@ -95,7 +95,7 @@ export function getReturnUrl(
 
 export function productNameForUrl(url: string, knownProducts: ProductUrl[] = products): string {
 	const origin = toOrigin(url);
-	return knownProducts.find((product) => toOrigin(product.url) === origin)?.name ?? "Vesact";
+	return knownProducts.find((product) => toOrigin(product.url) === origin)?.name ?? "Allcast";
 }
 
 export function invitationUrl(invitationId: string): string {

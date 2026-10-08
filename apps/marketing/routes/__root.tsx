@@ -57,7 +57,7 @@ function RootLayout() {
 		<html lang={lang} suppressHydrationWarning>
 			<head>
 				<HeadContent />
-				<BrandHead />
+				<BrandHead brand="allcast" />
 			</head>
 			<body className="font-sans min-h-screen bg-background text-foreground antialiased">
 				<ThemeProvider>

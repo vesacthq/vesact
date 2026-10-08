@@ -14,7 +14,7 @@
 	},
 	"auth": {
 		"login": {
-			"title": "Sign in to Relay",
+			"title": "Sign in to Vesact",
 			"subtitle": "Use the Google account of your organization.",
 			"continueWith": "Continue with {provider}",
 			"failed": "Could not sign in. Please try again."
@@ -42,7 +42,7 @@
 			"subtitle": "Owners and admins manage keys, members and invitations; members use the console and read the keys.",
 			"list": {
 				"title": "Members",
-				"description": "Everyone with access to this organization in Relay.",
+				"description": "Everyone with access to this organization in Vesact.",
 				"empty": "No members.",
 				"you": "You",
 				"role": "Role"
@@ -78,7 +78,7 @@
 		"invitations": {
 			"list": {
 				"title": "Pending invitations",
-				"description": "Relay sends no email: share the link with the person you invited.",
+				"description": "Vesact sends no email: share the link with the person you invited.",
 				"empty": "No pending invitations.",
 				"expires": "Expires {date}",
 				"expired": "Expired {date}",
@@ -131,7 +131,7 @@
 		}
 	},
 	"overview": {
-		"subtitle": "Requests to the Relay API carry one of this organization's keys.",
+		"subtitle": "Requests to the Vesact API carry one of this organization's keys.",
 		"quickStart": {
 			"title": "Quick start",
 			"description": "Create a key, then send it as the bearer token.",

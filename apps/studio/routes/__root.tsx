@@ -64,7 +64,7 @@ function RootLayout() {
 		<html lang={locale} suppressHydrationWarning>
 			<head>
 				<HeadContent />
-				<BrandHead />
+				<BrandHead brand="allcast" />
 			</head>
 			<body className={cn("font-sans min-h-screen bg-background text-foreground antialiased")}>
 				<NuqsAdapter>
