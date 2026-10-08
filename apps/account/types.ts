@@ -21,6 +21,11 @@ export interface AccountAppConfig {
 	 * Set `VITE_ICP_FILING_NUMBER` on the domestic build only; omitted, nothing is rendered.
 	 */
 	icpFilingNumber?: string;
+	/**
+	 * Public-security filing number (`陕公网安备…号`) shown next to the ICP number with its
+	 * badge. `VITE_PSB_FILING_NUMBER`, domestic build only, like the ICP number.
+	 */
+	publicSecurityFilingNumber?: string;
 	enabledThemes: readonly Theme[];
 	defaultTheme: Theme;
 }

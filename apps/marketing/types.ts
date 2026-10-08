@@ -26,6 +26,11 @@ export interface MarketingConfig {
 	 */
 	icpFilingNumber?: string;
 	/**
+	 * Public-security filing number (`陕公网安备…号`) shown next to the ICP number with its
+	 * badge. `VITE_PSB_FILING_NUMBER`, domestic build only, like the ICP number.
+	 */
+	publicSecurityFilingNumber?: string;
+	/**
 	 * When set, the whole site is one placeholder page under this name and every other
 	 * path redirects to it. Set `VITE_PLACEHOLDER_SITE_NAME` on a build whose real site
 	 * does not exist yet.

@@ -15,9 +15,9 @@ ARG APP
 # Inlined into the client bundle; a missing URL makes the app link to localhost.
 ARG VITE_STUDIO_URL VITE_ACCOUNT_URL VITE_MARKETING_URL VITE_DOCS_URL
 ARG VITE_POSTHOG_KEY VITE_POSTHOG_HOST
-# The ICP filing number for the footer and the placeholder site name; only the
-# domestic build sets them.
-ARG VITE_ICP_FILING_NUMBER VITE_PLACEHOLDER_SITE_NAME
+# The ICP and public-security filing numbers for the footer and the placeholder
+# site name; only the domestic build sets them.
+ARG VITE_ICP_FILING_NUMBER VITE_PSB_FILING_NUMBER VITE_PLACEHOLDER_SITE_NAME
 RUN test -n "$APP" && test -n "$VITE_STUDIO_URL" && test -n "$VITE_ACCOUNT_URL" && test -n "$VITE_MARKETING_URL"
 RUN pnpm --filter "$APP" build:node
 # The node target bundles its server dependencies (see the app's vite.config.ts),

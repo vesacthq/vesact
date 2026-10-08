@@ -182,10 +182,10 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Start the database and object storage
-        run: |
-          docker compose up -d --wait postgres
-          docker compose up -d minio minio-setup
+      # Only what the suites use: no spec uploads, so no object storage. Starting MinIO
+      # anyway failed every pull request the day its images went private.
+      - name: Start the database
+        run: docker compose up -d --wait postgres
       - name: Apply the schema
         run: pnpm --filter @repo/database push
       - name: Write the local Worker vars

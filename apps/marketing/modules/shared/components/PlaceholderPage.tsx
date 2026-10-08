@@ -1,4 +1,5 @@
 import { config } from "@config";
+import { FilingNumbers } from "@repo/ui";
 import { LocaleSwitch } from "@shared/components/LocaleSwitch";
 import { useTranslations } from "use-intl";
 
@@ -22,16 +23,12 @@ export function PlaceholderPage() {
 				<p>
 					© {new Date().getFullYear()} {config.placeholderSiteName}
 				</p>
-				{config.icpFilingNumber && (
-					<a
-						href="https://beian.miit.gov.cn/"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="mt-1 block transition-colors hover:text-primary"
-					>
-						{config.icpFilingNumber}
-					</a>
-				)}
+				<FilingNumbers
+					icp={config.icpFilingNumber}
+					publicSecurity={config.publicSecurityFilingNumber}
+					className="mt-1 justify-center"
+					linkClassName="transition-colors hover:text-primary"
+				/>
 			</footer>
 		</div>
 	);

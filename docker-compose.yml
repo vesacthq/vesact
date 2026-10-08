@@ -20,8 +20,10 @@ services:
       timeout: 5s
       retries: 5
 
+  # MinIO's own images on quay.io turned private (401) in 2026-10; Chainguard's build is
+  # public and carries both the server and `mc`, so one image serves both services.
   minio:
-    image: quay.io/minio/minio:latest
+    image: cgr.dev/chainguard/minio:latest
     container_name: vesact-minio
     restart: unless-stopped
     command: server /data --console-address ":9001"
@@ -41,7 +43,7 @@ services:
 
   # Creates the default bucket on startup
   minio-setup:
-    image: quay.io/minio/mc:latest
+    image: cgr.dev/chainguard/minio:latest
     container_name: vesact-minio-setup
     depends_on:
       minio:

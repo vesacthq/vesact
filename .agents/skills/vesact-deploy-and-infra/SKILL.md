@@ -208,7 +208,10 @@ and the account center's auth pages link it to `beian.miit.gov.cn` when set, and
 nothing else (preview, a future overseas build) sets it. The rule (Tencent Cloud doc
 243/61412): the number at the bottom of the homepage, linked to that site, with both
 `allcast.cc` and `www.` reachable; the login page carries it for `studio.`. The
-public-security filing (`beian.mps.gov.cn`) is due within 30 days of going live.
+public-security filing number (`陕公网安备61019702000749号`, approved 2026-10) is
+`VITE_PSB_FILING_NUMBER` in the same build args and renders next to it with the badge
+(`public/beian-mps.png` in marketing and account), linked to its page on
+`beian.mps.gov.cn`; both go through `FilingNumbers` in `@repo/ui`.
 `VITE_PLACEHOLDER_SITE_NAME` in the same build args (the filed site name, the
 company's legal name) makes the marketing build one placeholder page with that
 name, the © line and the filing number, every other path redirecting to it:
