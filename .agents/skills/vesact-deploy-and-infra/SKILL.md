@@ -98,7 +98,8 @@ for Relay; the pull request's preview deploy is the real check.
 Adding an app or a preview target:
 
 1. `env.preview` in the app's `wrangler.jsonc`: `workers_dev: false`, a
-   `custom_domain` route on `<app>.preview.vesact.com`, its own `vars` and
+   `custom_domain` route on the product's preview hostname (Allcast `<role>.preview.allcast.ai`,
+   Vesact `<role>.preview.vesact.com`), its own `vars` and
    bindings. Attach the hostname to the Worker in the dashboard or through the
    API before the first deploy (Relay has two, `relay.` and `api.`, in the same
    `routes` array); the certificate takes a few minutes.
@@ -106,11 +107,12 @@ Adding an app or a preview target:
    modelled on the relay one.
 3. Secrets files under `secrets/` for the new Worker and, if it has a database,
    a Neon branch, a Hyperdrive config and a `database.<target>.env`. A new
-   Worker has no secrets until the pipeline's first `wrangler secret bulk`.
+   Worker gets its secrets with its first deploy (`wrangler deploy --secrets-file`, additive:
+   a key removed from the sops file stays until `wrangler secret delete`).
 4. The Google OAuth callback for its `VITE_ACCOUNT_URL`, if it signs users in
    (see "Accounts and resources").
-5. Nothing for Access: the `*.preview.vesact.com` application already covers
-   the hostname.
+5. Nothing for Access: the `preview` application covers `*.preview.vesact.com`
+   and `*.preview.allcast.ai`.
 
 ## Docker target
 
