@@ -6,10 +6,14 @@ Explicit user instructions win; if a documented command fails, report it rather 
 
 ## Product context
 
-Studio (`apps/studio`) is the first product; Relay (`apps/relay`, `packages/relay`), an API
-platform, is the second and independent: its own login, organizations, database and deployment,
-with Studio as one of its customer organizations. The account center (`apps/account`) serves
-Studio. Design docs live
+Two products, named in #159. **Allcast** is the first: the product in `apps/studio`, its
+account center in `apps/account` and its website in `apps/marketing`, on `allcast.cc` (domestic)
+and `allcast.ai` (overseas). **Vesact** is the API platform: `apps/relay` and `packages/relay`
+(the console on `console.vesact.com`, `/v1` on `api.vesact.com`) and its website `apps/vesact-www`
+on `www.vesact.com`; it is independent, with its own login, organizations, database and deployment,
+and Allcast is one of its customer organizations. The directories, packages, Worker names and
+identifiers still say `studio` and `relay`, and so does the rest of this file where it means the
+code; the rename of those is #161 and #162. Design docs live
 under `docs/`, one file per question (`product.md`, `architecture.md`,
 `decisions.md`, `reference/`); `docs/README.md` is the map and the rules. A
 file's frontmatter carries `status: draft | final`; a draft means use its terms,
