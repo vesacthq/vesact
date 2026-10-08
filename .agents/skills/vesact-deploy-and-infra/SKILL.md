@@ -12,10 +12,18 @@ The environment matrix (dev / preview / prod) is in `AGENTS.md` under
 
 | App       | prod                                                         | preview                                              |
 | --------- | ------------------------------------------------------------ | ---------------------------------------------------- |
-| marketing | `www.allcast.cc` (`allcast.cc` redirects to it), machine     | `www.preview.vesact.com`                             |
-| account   | `studio.allcast.cc/account`, machine (Caddy path split)      | `studio.preview.vesact.com/account` (Workers route)  |
-| studio    | `studio.allcast.cc`, machine                                 | `studio.preview.vesact.com`                          |
+| marketing | `www.allcast.cc` (`allcast.cc` redirects to it), machine     | `www.preview.allcast.ai`                             |
+| account   | `studio.allcast.cc/account`, machine (Caddy path split)      | `app.preview.allcast.ai/account` (Workers route)     |
+| studio    | `studio.allcast.cc`, machine                                 | `app.preview.allcast.ai`                             |
 | relay     | `relay.vesact.com` (console), `api.vesact.com` (API), Worker | `relay.preview.vesact.com`, `api.preview.vesact.com` |
+
+Allcast (studio, account, marketing) previews live under `preview.allcast.ai` since #160 so
+that `preview.vesact.com` is Vesact's alone; the zone `allcast.ai` is in the same Cloudflare
+account and `wrangler deploy` creates the custom domains there. The old custom domains
+`studio.preview.vesact.com` (studio) and `www.preview.vesact.com` (marketing) stay attached
+until someone deletes them through the Workers domains API after the first deploy on the new
+hostnames (see "Accounts and resources": wrangler never removes a custom domain); the second
+one has to go before the Vesact website's preview can take it.
 
 `allcast.cc` is registered at DNSPod (2026-09-13) and its DNS lives there: `@`, `www` and
 `studio` are A records to the machine. The ICP filing (`陕ICP备2026025839号-1`) passed on
@@ -31,7 +39,12 @@ Relay, `preview.vesact.com`, `e.vesact.com` (PostHog) and the R2 bucket; the `ww
 `deploy.yml`: `select-target.sh` picks the target from the event and
 `load-env.sh` decrypts what a job needs into masked environment variables. On a
 pull request the marketing, account, studio and relay jobs each build →
-`wrangler deploy` → `wrangler secret bulk` to preview; the account job runs the
+`wrangler deploy --secrets-file` to preview (the secrets go up with the version, so two pull
+requests deploying the same shared preview Worker cannot leave one of them failing on a
+separate secrets step). Preview runs of all pull requests share one concurrency group and
+queue: preview shows the last pull request pushed, a run still pending when a newer one arrives
+is cancelled (re-run it to put that pull request on preview), and two preview migrations never
+overlap; the account job runs the
 Studio database migration first and the studio job waits for it; the relay job
 migrates Relay's own database (`pnpm --filter @repo/relay db:migrate`) and runs
 on its own. On `main` only relay deploys a Worker (its production); studio,
@@ -55,7 +68,7 @@ workflow to copy it fresh from its parent, the Neon `production` branch (the
 pre-move data, kept until it is deleted). Preview shares the production R2
 bucket, and so does production on the machine until uploads move to COS after
 the filing. The `avatars` bucket's CORS rule allows `PUT` from
-`studio.allcast.cc` and `studio.preview.vesact.com`, the origins the account
+`studio.allcast.cc` and `app.preview.allcast.ai`, the origins the account
 center uploads from; a new origin has to be added there or the presigned PUT
 fails with a CORS error.
 The `S3_*` credentials in the studio and account secrets are an account-owned
@@ -85,7 +98,8 @@ for Relay; the pull request's preview deploy is the real check.
 Adding an app or a preview target:
 
 1. `env.preview` in the app's `wrangler.jsonc`: `workers_dev: false`, a
-   `custom_domain` route on `<app>.preview.vesact.com`, its own `vars` and
+   `custom_domain` route on the product's preview hostname (Allcast `<role>.preview.allcast.ai`,
+   Vesact `<role>.preview.vesact.com`), its own `vars` and
    bindings. Attach the hostname to the Worker in the dashboard or through the
    API before the first deploy (Relay has two, `relay.` and `api.`, in the same
    `routes` array); the certificate takes a few minutes.
@@ -93,11 +107,12 @@ Adding an app or a preview target:
    modelled on the relay one.
 3. Secrets files under `secrets/` for the new Worker and, if it has a database,
    a Neon branch, a Hyperdrive config and a `database.<target>.env`. A new
-   Worker has no secrets until the pipeline's first `wrangler secret bulk`.
+   Worker gets its secrets with its first deploy (`wrangler deploy --secrets-file`, additive:
+   a key removed from the sops file stays until `wrangler secret delete`).
 4. The Google OAuth callback for its `VITE_ACCOUNT_URL`, if it signs users in
    (see "Accounts and resources").
-5. Nothing for Access: the `*.preview.vesact.com` application already covers
-   the hostname.
+5. Nothing for Access: the `preview` application covers `*.preview.vesact.com`
+   and `*.preview.allcast.ai`.
 
 ## Docker target
 
@@ -251,15 +266,16 @@ token endpoint).
   The studio, account and relay Workers run with Smart Placement
   (`placement.mode: "smart"`), so a request's queries run next to the
   database instead of at the visitor's edge location.
-- One Cloudflare Access application covers `*.preview.vesact.com` with two
+- One Cloudflare Access application (`preview`) covers `*.preview.vesact.com` and
+  `*.preview.allcast.ai` with two
   policies: Allow for the owner's email, and Service Auth for the service token
   whose credentials are `CF_ACCESS_CLIENT_ID` / `CF_ACCESS_CLIENT_SECRET` in
-  `secrets/ci.env`. A new preview hostname is covered automatically; a path
+  `secrets/ci.env`. A new preview hostname under either is covered automatically; a path
   that outside services must reach gets its own, more specific application
   with a Bypass policy. `api.preview.vesact.com/webhooks` is one, so Meta can
   reach the preview webhook. `account.preview.vesact.com/api/auth` was another,
   from when the products called the auth endpoints cross-origin; the account
-  center now answers under `studio.preview.vesact.com/account`, same origin as
+  center now answers under `app.preview.allcast.ai/account`, same origin as
   Studio, so that application is unused. `wrangler deploy` adds routes but never
   removes custom domains: `account.preview.vesact.com` and
   `auth.preview.vesact.com` were detached from `vesact-account-preview` through
@@ -270,21 +286,21 @@ token endpoint).
   deploy makes no HTTP check after `wrangler deploy` (the earlier smoke check
   failed with 403 and `cf-mitigated: challenge`). Verify a deploy by hand or
   through Workers versions instead.
-- Preview hostnames live under `preview.vesact.com` rather than `workers.dev`
-  because `workers.dev` is on the Public Suffix List: no cookie can span two
+- Preview hostnames live under `preview.vesact.com` / `preview.allcast.ai` rather than
+  `workers.dev` because `workers.dev` is on the Public Suffix List: no cookie can span two
   Workers there, so products could not share a login.
 - One Google OAuth client serves every environment that has Google login
   (production has none); each needs its callback registered in Google Cloud:
   `<VITE_ACCOUNT_URL>/api/auth/callback/google` for the account center
-  (`https://studio.preview.vesact.com/account/api/auth/callback/google`,
+  (`https://app.preview.allcast.ai/account/api/auth/callback/google`,
   `http://localhost:3004/account/api/auth/callback/google`) and
   `<VITE_RELAY_URL>/api/auth/callback/google` for Relay
   (`https://relay.vesact.com/...`, `https://relay.preview.vesact.com/...`,
   `http://localhost:3005/...`).
 - `vesact.com` and `preview.vesact.com` redirect to their `www` hostnames through
   Cloudflare Redirect Rules on a proxied `AAAA 100::` record each; since
-  `www.vesact.com` was retired the `vesact.com` rule points at nothing until it
-  is repointed or removed.
+  `www.vesact.com` was retired, and until the Vesact website (#160 item 2) takes
+  `www.vesact.com` and `www.preview.vesact.com`, both rules point at nothing.
 
 ## Public URLs
 
