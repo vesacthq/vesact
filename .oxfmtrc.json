@@ -31,6 +31,7 @@
 	],
 	"ignorePatterns": [
 		"apps/marketing/routeTree.gen.ts",
+		"apps/vesact-www/routeTree.gen.ts",
 		"apps/studio/routeTree.gen.ts",
 		"apps/account/routeTree.gen.ts",
 		"apps/relay/routeTree.gen.ts",

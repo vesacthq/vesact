@@ -9,7 +9,7 @@
 		"test": "dotenv -c -- turbo test",
 		"lint": "oxlint",
 		"lint:fix": "oxlint --fix",
-		"verify": "pnpm --filter marketing run generate && oxlint && oxfmt --check",
+		"verify": "pnpm --filter marketing --filter vesact-www run generate && oxlint && oxfmt --check",
 		"check": "oxlint --fix && oxfmt --write",
 		"clean": "turbo clean",
 		"format": "oxfmt --write",
